@@ -16,14 +16,15 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
 // Routes
-app.use('/', webRouters);
-
 app.use(session({
   secret: 'topSecretKey',
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false }
 }));
+app.use('/', webRouters);
+
+
 
 // Check database connection
 // connection.query(
