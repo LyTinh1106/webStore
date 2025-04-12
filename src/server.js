@@ -1,4 +1,5 @@
 const express = require('express');
+const session = require('express-session');
 require('dotenv').config();
 const configViewEngine = require('./config/ViewEngine');
 const webRouters = require('./routes/web');
@@ -17,7 +18,12 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use('/', webRouters);
 
-
+app.use(session({
+  secret: 'topSecretKey',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
+}));
 
 // Check database connection
 // connection.query(
