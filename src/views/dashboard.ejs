@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - PCWorld</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --sidebar-width: 250px;
+            --primary-color: #2c3e50;
+            --secondary-color: #34495e;
+            --accent-color: #3498db;
+            --light-bg: #f8f9fa;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            overflow-x: hidden;
+        }
+        
+        #sidebar {
+            width: var(--sidebar-width);
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: var(--primary-color);
+            transition: all 0.3s;
+            z-index: 1000;
+            overflow-y: auto;
+        }
+        
+        #sidebar.active {
+            margin-left: -var(--sidebar-width);
+        }
+        
+        #content {
+            width: calc(100% - var(--sidebar-width));
+            min-height: 100vh;
+            margin-left: var(--sidebar-width);
+            transition: all 0.3s;
+        }
+        
+        #content.active {
+            width: 100%;
+            margin-left: 0;
+        }
+        
+        .sidebar-header {
+            padding: 20px;
+            background-color: var(--secondary-color);
+        }
+        
+        .sidebar-header h3 {
+            color: white;
+            margin: 0;
+        }
+        
+        .components {
+            padding: 20px 0;
+        }
+        
+        .sidebar-item {
+            padding: 10px 20px;
+            display: block;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        
+        .sidebar-item:hover {
+            color: white;
+            background-color: var(--secondary-color);
+        }
+        
+        .sidebar-item.active {
+            color: white;
+            background-color: var(--accent-color);
+        }
+        
+        .sidebar-item i {
+            margin-right: 10px;
+        }
+        
+        .navbar {
+            background-color: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card {
+            border: none;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stats-card {
+            border-left: 5px solid var(--accent-color);
+        }
+        
+        .chart-container {
+            height: 300px;
+        }
+        
+        .dashboard-icon {
+            font-size: 2rem;
+            color: var(--accent-color);
+        }
+        
+        .page-content {
+            display: none;
+        }
+        
+        .page-content.active {
+            display: block;
+        }
+        
+        .table-container {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+        
+        .breadcrumb {
+            margin-bottom: 20px;
+        }
+        
+        .form-section {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .product-image {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        
+        .status-badge {
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 5px;
+        }
+        
+        #currentDate {
+            font-weight: bold;
+        }
+        
+        .user-avatar {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>PCWorld Admin</h3>
+        </div>
+        
+        <ul class="list-unstyled components">
+            <li>
+                <a href="#" class="sidebar-item active" data-page="dashboard">
+                    <i class="fas fa-tachometer-alt"></i> Tổng quan
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="products">
+                    <i class="fas fa-microchip"></i> Quản lý sản phẩm
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="categories">
+                    <i class="fas fa-folder"></i> Quản lý danh mục
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="brands">
+                    <i class="fas fa-tag"></i> Quản lý nhãn hàng
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="orders">
+                    <i class="fas fa-shopping-cart"></i> Quản lý đơn hàng
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="customers">
+                    <i class="fas fa-users"></i> Quản lý khách hàng
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="shipping">
+                    <i class="fas fa-truck"></i> Quản lý giao hàng
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="promotions">
+                    <i class="fas fa-percent"></i> Quản lý khuyến mãi
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="vouchers">
+                    <i class="fas fa-ticket-alt"></i> Quản lý voucher
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="users">
+                    <i class="fas fa-user-cog"></i> Quản lý tài khoản
+                </a>
+            </li>
+            <li>
+                <a href="#" class="sidebar-item" data-page="settings">
+                    <i class="fas fa-cog"></i> Cài đặt hệ thống
+                </a>
+            </li>
+        </ul>
+    </nav>
+    
+    <!-- Page Content -->
+    <div id="content">
+        <!-- Top Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container-fluid">
+                <button type="button" id="sidebarCollapse" class="btn btn-primary">
+                    <i class="fas fa-bars"></i>
+                </button>
+                
+                <div class="ms-auto d-flex align-items-center">
+                    <div class="me-4">
+                        <span id="currentDate"></span>
+                    </div>
+                    <div class="dropdown">
+                        <a href="#" class="d-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img src="/api/placeholder/50/50" alt="Admin" class="user-avatar me-2">
+                            <span>Admin</span>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+        
+        <!-- Dashboard Page -->
+        <div class="container-fluid page-content active" id="dashboard-page">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <h2 class="mb-4">Tổng quan</h2>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3">
+                    <div class="card stats-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted">Tổng doanh thu</h6>
+                                    <h3 class="fw-bold">1,250,000,000 ₫</h3>
+                                </div>
+                                <div class="dashboard-icon">
+                                    <i class="fas fa-money-bill-wave"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <span class="text-success">
+                                    <i class="fas fa-arrow-up"></i> 12.5%
+                                </span>
+                                <span class="text-muted ms-2">so với tháng trước</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card stats-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted">Đơn hàng</h6>
+                                    <h3 class="fw-bold">358</h3>
+                                </div>
+                                <div class="dashboard-icon">
+                                    <i class="fas fa-shopping-cart"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <span class="text-success">
+                                    <i class="fas fa-arrow-up"></i> 8.2%
+                                </span>
+                                <span class="text-muted ms-2">so với tháng trước</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card stats-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted">Sản phẩm</h6>
+                                    <h3 class="fw-bold">1,560</h3>
+                                </div>
+                                <div class="dashboard-icon">
+                                    <i class="fas fa-microchip"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <span class="text-success">
+                                    <i class="fas fa-arrow-up"></i> 5.3%
+                                </span>
+                                <span class="text-muted ms-2">so với tháng trước</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3">
+                    <div class="card stats-card">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h6 class="text-muted">Khách hàng</h6>
+                                    <h3 class="fw-bold">12,842</h3>
+                                </div>
+                                <div class="dashboard-icon">
+                                    <i class="fas fa-users"></i>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <span class="text-success">
+                                    <i class="fas fa-arrow-up"></i> 3.7%
+                                </span>
+                                <span class="text-muted ms-2">so với tháng trước</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Charts -->
+            <div class="row mb-4">
+                <div class="col-lg-8">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Doanh thu theo thời gian</h5>
+                                <div>
+                                    <select class="form-select form-select-sm" id="revenueTimeRange">
+                                        <option value="week">7 ngày qua</option>
+                                        <option value="month" selected>30 ngày qua</option>
+                                        <option value="quarter">Quý này</option>
+                                        <option value="year">Năm nay</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="revenueChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-4">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Doanh thu theo danh mục</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="categoryChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Đơn hàng gần đây</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Mã đơn</th>
+                                            <th scope="col">Khách hàng</th>
+                                            <th scope="col">Tổng tiền</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col">Ngày đặt</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>#ORD-2025-0458</td>
+                                            <td>Nguyễn Văn A</td>
+                                            <td>5,800,000 ₫</td>
+                                            <td><span class="badge bg-success">Hoàn thành</span></td>
+                                            <td>10/04/2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-2025-0457</td>
+                                            <td>Trần Thị B</td>
+                                            <td>12,500,000 ₫</td>
+                                            <td><span class="badge bg-warning text-dark">Đang giao</span></td>
+                                            <td>10/04/2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-2025-0456</td>
+                                            <td>Lê Văn C</td>
+                                            <td>7,200,000 ₫</td>
+                                            <td><span class="badge bg-info">Đã xác nhận</span></td>
+                                            <td>09/04/2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-2025-0455</td>
+                                            <td>Phạm Thị D</td>
+                                            <td>3,500,000 ₫</td>
+                                            <td><span class="badge bg-success">Hoàn thành</span></td>
+                                            <td>09/04/2025</td>
+                                        </tr>
+                                        <tr>
+                                            <td>#ORD-2025-0454</td>
+                                            <td>Hoàng Văn E</td>
+                                            <td>22,400,000 ₫</td>
+                                            <td><span class="badge bg-primary">Chờ thanh toán</span></td>
+                                            <td>08/04/2025</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="#" class="btn btn-outline-primary btn-sm" data-page="orders">Xem tất cả đơn hàng</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-header bg-white">
+                            <h5 class="mb-0">Sản phẩm bán chạy</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Sản phẩm</th>
+                                            <th scope="col">Danh mục</th>
+                                            <th scope="col">Giá</th>
+                                            <th scope="col">Đã bán</th>
+                                            <th scope="col">Tồn kho</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/api/placeholder/50/50" alt="CPU" class="product-image me-2">
+                                                    Intel Core i9-12900K
+                                                </div>
+                                            </td>
+                                            <td>CPU</td>
+                                            <td>14,500,000 ₫</td>
+                                            <td>58</td>
+                                            <td>12</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/api/placeholder/50/50" alt="RAM" class="product-image me-2">
+                                                    Kingston Fury 32GB DDR5
+                                                </div>
+                                            </td>
+                                            <td>RAM</td>
+                                            <td>3,800,000 ₫</td>
+                                            <td>45</td>
+                                            <td>35</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/api/placeholder/50/50" alt="GPU" class="product-image me-2">
+                                                    NVIDIA RTX 4080
+                                                </div>
+                                            </td>
+                                            <td>Card đồ họa</td>
+                                            <td>25,800,000 ₫</td>
+                                            <td>32</td>
+                                            <td>8</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/api/placeholder/50/50" alt="SSD" class="product-image me-2">
+                                                    Samsung 980 Pro 1TB
+                                                </div>
+                                            </td>
+                                            <td>SSD</td>
+                                            <td>4,200,000 ₫</td>
+                                            <td>67</td>
+                                            <td>24</td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/api/placeholder/50/50" alt="Mainboard" class="product-image me-2">
+                                                    ASUS ROG Maximus Z690
+                                                </div>
+                                            </td>
+                                            <td>Bo mạch chủ</td>
+                                            <td>12,900,000 ₫</td>
+                                            <td>29</td>
+                                            <td>14</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="text-center mt-3">
+                                <a href="#" class="btn btn-outline-primary btn-sm" data-page="products">Xem tất cả sản phẩm</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Products Page -->
+        <div class="container-fluid page-content" id="products-page">
+            <div class="row mb-4">
+                <div class="col-12">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#" data-page="dashboard">Tổng quan</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">Quản lý sản phẩm</li>
+                        </ol>
+                    </nav>
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h2>Quản lý sản phẩm</h2>
+                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                            <i class="fas fa-plus-circle me-2"></i>Thêm sản phẩm mới
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row mb-4">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-3">
+                                    <select class="form-select form-select-sm">
+                                        <option selected>Tất cả danh mục</option>
+                                        <option>CPU</option>
+                                        <option>Card đồ họa</option>
+                                        <option>Bo mạch chủ</option>
+                                        <option>RAM</option>
+                                        <option>SSD</option>
+                                        <option>Nguồn</option>
+                                        <option>Tản nhiệt</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select form-select-sm">
+                                        <option selected>Tất cả nhãn hàng</option>
+                                        <option>Intel</option>
+                                        <option>AMD</option>
+                                        <option>NVIDIA</option>
+                                        <option>ASUS</option>
+                                        <option>MSI</option>
+                                        <option>Gigabyte</option>
+                                        <option>Samsung</option>
+                                        <option>Kingston</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select form-select-sm">
+                                        <option selected>Trạng thái</option>
+                                        <option>Còn hàng</option>
+                                        <option>Hết hàng</option>
+                                        <option>Đang nhập</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" class="form-control" placeholder="Tìm kiếm sản phẩm">
+                                        <button class="btn btn-outline-secondary" type="button">
+                                            <i class="fas fa-search"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox" id="selectAllProducts">
+                                                </div>
+                                            </th>
+                                            <th scope="col">Mã SP</th>
+                                            <th scope="col">Sản phẩm</th>
+                                            <th scope="col">Danh mục</th>
+                                            <th scope="col">Nhãn hàng</th>
+                                            <th scope="col">Giá bán</th>
+                                            <th scope="col">Tồn kho</th>
+                                            <th scope="col">Trạng thái</th>
+                                            <th scope="col">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox">
+                                                </div>
+                                            </td>
+                                            <td>SP00125</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/api/placeholder/50/50" alt="CPU" class="product-image me-2">
+                                                    <span>Intel Core i9-12900K</span>
+                                                </div>
+                                            </td>
+                                            <td>CPU</td>
+                                            <td>Intel</td>
+                                            <td>14,500,000 ₫</td>
+                                            <td>12</td>
+                                            <td><span class="badge bg-success">Còn hàng</span></td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <button class="btn btn-sm btn-icon btn-outline-primary me-1">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-icon btn-outline-info me-1">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-icon btn-outline-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class="form-check-input" type="checkbox">
+                                                </div>
+                                            </td>
+                                            <td>SP00214</td>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <img src="/api/placeholder/50/50" alt="RAM" class="product-image me-2">
+                                                    <span>Kingston Fury 32GB DDR5</span>
+                                                </div>
+                                            </td>
+                                            <td>RAM</td>
+                                            <td>Kingston</td>
+                                            <td>3,800,000 ₫</td>
+                                            <td>35</td>
+                                            <td><span class="badge bg-success">Còn hàng</span></td>
+                                            <td>
+                                                <div class="d-flex">
+                                                    <button class="btn btn-sm btn-icon btn-outline-primary me-1">
+                                                        <i class="fas fa-eye"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-icon btn-outline-info me-1">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
+                                                    <button class="btn btn-sm btn-icon btn-outline-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="form-check">
+                                                    <input class

@@ -76,8 +76,14 @@ const handleUserLogin = async (email, password) => {
     }
 };
 
+const isAdmin = async (email) =>{
+    const query = `SELECT role FROM account WHERE email = ?`;
+    const [rows] = await connection.promise().query(query, [email]);
+    if(rows.length > 0 && rows[0].role === "admin")
+        return true;
+    return false
+}
 
 
 
-
-module.exports = { createNewUser,handleUserLogin };
+module.exports = { createNewUser,handleUserLogin, isAdmin };

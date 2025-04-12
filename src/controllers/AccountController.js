@@ -3,7 +3,6 @@ const accountServices = require('../services/accountServices')
 
 
 
-
 const getHomePage = (req,res) => {
     res.render('HomePage')
 }
@@ -13,6 +12,9 @@ const getRegister = (req,res) => {
 const getLogin = (req,res) => {
     res.render('login')
  }
+ const getDashboard = (req,res) => {
+    res.render('dashboard')
+ } 
 
  const postRegister = async (req, res) => {
     try {
@@ -32,21 +34,30 @@ const getLogin = (req,res) => {
 
  const postLogin = async (req, res) => {
     try {
+        
         console.log("Dữ liệu form gửi lên:", req.body);
+        console.log('Session:', req.session);
         const { email, password } = req.body;
         const result = await accountServices.handleUserLogin(email, password);
         
 
         if (result.success) {
-            // ✅ Đăng nhập thành công, chuyển đến trang homepage
-            return res.redirect('HomePage');
+            req.session.user = {
+                email: result.user.email,
+                role: result.user.role 
+            };
+            console.log('Session after login:', req.session); // Debug
+            if (result.user.role === 'admin') {
+                return res.redirect('/dashboard');
+            } else {
+                return res.redirect('/HomePage');
+            }
         } else {
-            // ❌ Sai thông tin
             return res.send(`<script>alert("${result.message}"); window.history.back();</script>`);
         }
-
     } catch (error) {
-        return res.status(500).send("Lỗi server khi đăng nhập.");
+        console.error("Lỗi server khi đăng nhập:", error);
+         return res.status(500).send("Lỗi server khi đăng nhập.");
     }
 };
 
@@ -58,6 +69,7 @@ module.exports = {
     getRegister,
     getLogin,
     postRegister,
-    postLogin
+    postLogin,
+    getDashboard
 
 }
