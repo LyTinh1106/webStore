@@ -1,0 +1,32 @@
+{
+  "name": "webbanlinhkienmaytinh",
+  "version": "1.0.0",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon src/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tri107/WebLinhKienMayTinh.git"
+  },
+  "keywords": [
+    "dacs"
+  ],
+  "author": "tri",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Tri107/WebLinhKienMayTinh/issues"
+  },
+  "homepage": "https://github.com/Tri107/WebLinhKienMayTinh#readme",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^5.1.1",
+    "dotenv": "^16.4.7",
+    "ejs": "^3.1.10",
+    "express": "^5.1.0",
+    "mysql2": "^3.14.0",
+    "nodemon": "^3.1.9",
+    "sequelize": "^6.37.7"
+  }
+}

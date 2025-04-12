@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Form</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <div class="body-login">
+    <div class="login-container">
+        <h1>Login</h1>
+
+        <form action="/login" method="post">
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="text" id="email" placeholder="Type your email" name="email">
+            </div>
+
+            <div class="input-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Type your password" name="password">
+            </div>
+
+            <div class="forgot-password">
+                <a href="#">Forgot password?</a>
+            </div>
+
+            <button type="submit" class="login-btn">LOGIN</button>
+        </form>
+
+        <div class="or-divider">Or Sign Up Using</div>
+
+        <div class="social-login">
+            <div class="social-btn facebook">f</div>
+            <div class="social-btn twitter">t</div>
+            <div class="social-btn google">G</div>
+        </div>
+
+        <div class="sign-up-text">Have not account yet?</div>
+        <a href="#" class="sign-up-link">SIGN UP</a>
+    </div>
+</div>
+</body>
+</html>
