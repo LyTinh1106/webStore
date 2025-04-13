@@ -39,12 +39,20 @@ passport.deserializeUser((user, done) => done(null, user));
 
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 app.get("/auth/google/callback", passport.authenticate('google', { failureRedirect: "/login" }), (req, res) => {
-  res.redirect('/profile')
+  res.redirect('/HomePage')
 });
+app.get('/HomePage', (req, res) => {
+  if (!req.user) {
+    return res.redirect('/login');
+  }
 
-app.get("/profile", (req, res) => {
-  res.send(`name: ${req.user.displayName}`)
+  res.render('HomePage', {
+    user: req.user // 👈 truyền user vào view
+  });
 });
+// app.get("/HomePage", (req, res) => {
+//   res.send(`name: ${req.user.displayName}`)
+// });
 
 
 
