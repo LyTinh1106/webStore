@@ -142,12 +142,16 @@
 								</div>
 								<!-- /Cart -->
 								 <!--Account-->
-								<div class="Account">
+								 <div class="Account">
 									<a href="#">
-										<i class="fa fa-user-o"></i>
-										<span><%=user.displayName %></span>
+									  <i class="fa fa-user-o"></i>
+									  <% if (user) { %>
+										<span><%= user.displayName %></span>
+									  <% } else { %>
+										<span>Guest</span>
+									  <% } %>
 									</a>
-								</div>
+								  </div>
 								 <!--/Account-->
 
 	

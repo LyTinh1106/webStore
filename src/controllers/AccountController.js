@@ -3,9 +3,11 @@ const accountServices = require('../services/accountServices')
 
 
 
-const getHomePage = (req,res) => {
-    res.render('HomePage')
-}
+const getHomePage = (req, res) => {
+    res.render('HomePage', {
+      user: req.user || null 
+    });
+  }
 const getRegister = (req,res) => {
     res.render('register')
 }
