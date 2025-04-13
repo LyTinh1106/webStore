@@ -140,6 +140,7 @@ textarea.input {
 }
 
 .input-number input[type="number"] {
+  appearance: none; /*notice here*/
   -moz-appearance: textfield;
   height: 40px;
   width: 100%;
@@ -2301,14 +2302,26 @@ textarea.input {
 }
 
 .social-btn {
-  width: 40px;
+
   height: 40px;
-  border-radius: 50%;
+  border-radius: 50px;
   display: flex;
+  padding-left: 4%;
+  padding-right: 4%;
   justify-content: center;
   align-items: center;
   color: white;
   cursor: pointer;
+}
+
+.social-btn:hover {
+  opacity: 0.8;
+}
+
+.social-btn a {
+  text-decoration: none;
+  color: inherit; 
+  font-weight: normal; 
 }
 
 .facebook {
@@ -2320,7 +2333,8 @@ textarea.input {
 }
 
 .google {
-  background-color: #dd4b39;
+  background-color: #db4437;
+  text-decoration: none;
 }
 
 .sign-up-text {
@@ -2444,16 +2458,6 @@ textarea.input {
   margin-bottom: 30px;
 }
 
-.social-btn {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: white;
-  cursor: pointer;
-}
 
 .facebook {
   background-color: #3b5998;
