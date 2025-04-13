@@ -46,7 +46,7 @@ const getLogin = (req,res) => {
                 email: result.user.email,
                 role: result.user.role 
             };
-            console.log('Session after login:', req.session); // Debug
+            // console.log('Session after login:', req.session); // Debug
             if (result.user.role === 'admin') {
                 return res.redirect('/dashboard');
             } else {

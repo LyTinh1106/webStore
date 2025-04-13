@@ -31,23 +31,17 @@ passport.use(new googleStrategy({
   callbackURL: "http://localhost:9000/auth/google/callback",
 }, (accessToken, refreshToken, profile, done) => {
   return done(null, profile);
-}
-));
+}));
 
 passport.serializeUser((user, done) => done(null, user));
 passport.deserializeUser((user, done) => done(null, user));
 
-app.get("/test", (req, res) =>{
-  res.send("<a href ='/auth/google'> login with google</a>")
-});
-
-
-app.get("/auth/google", passport.authenticate("google", {scope: ["profile", "email"]}));
-app.get("/auth/google/callback", passport.authenticate('google', {failureRedirect: "/login"}), (req, res) => {
+app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+app.get("/auth/google/callback", passport.authenticate('google', { failureRedirect: "/login" }), (req, res) => {
   res.redirect('/profile')
 });
 
-app.get("/profile",(req, res) => {
+app.get("/profile", (req, res) => {
   res.send(`name: ${req.user.displayName}`)
 });
 
