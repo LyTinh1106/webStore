@@ -12,6 +12,23 @@
 		e.stopPropagation();
 	});
 
+	$('.dropdown').hover(
+        function (e) {
+            $(this).find('.cart-dropdown').stop(true, true).slideDown(100);
+        },
+        function (e) {
+            $(this).find('.cart-dropdown').stop(true, true).slideUp(100);
+        }
+    );
+
+	$('.dropdown').hover(
+		function () {
+			$(this).addClass('open');
+		},
+		function () {
+			$(this).removeClass('open');
+		}
+	);
 	/////////////////////////////////////////
 
 	// Products Slick
