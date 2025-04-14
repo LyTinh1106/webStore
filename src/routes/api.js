@@ -1,18 +1,34 @@
 const express = require('express');
-const router = express.Router();
-const AccountController = require('../controllers/AccountController');
-const ProductController = require('../controllers/ProductController');
-const CheckoutController = require('../controllers/CheckoutController');
+const apiRouters = express.Router();
 
-// Tài khoản
-router.post('/register', AccountController.register);
-router.post('/login', AccountController.login);
+const Brand = require('./brand');
+const Product = require('./product');
+const Voucher = require('./voucher');
+const Supplier = require('./supplier');
+const Cart = require('./cart');
+const Category = require('./category');
+const Order = require('./order');
+const ProductDetail = require('./productdetail');
+const ProductImage = require('./productimage');
+const Importing = require('./importing');
+const ImportingDetail = require('./importingdetail');
+const Shipping = require('./shipping');
+const Customer = require('./customer');
 
-// Sản phẩm
-router.get('/product', ProductController.getProduct);
-router.get('/store', ProductController.getStore);
+// ✅ Dùng đúng biến apiRouters
+apiRouters.use('/brand', Brand);
+apiRouters.use('/product', Product);
+apiRouters.use('/voucher', Voucher);
+apiRouters.use('/supplier', Supplier);
+apiRouters.use('/cart', Cart);
+//apiRouters.use('/account', Account);  
+apiRouters.use('/category', Category);
+apiRouters.use('/order', Order);
+apiRouters.use('/product-detail', ProductDetail);
+apiRouters.use('/product-image', ProductImage);
+apiRouters.use('/importing', Importing);
+apiRouters.use('/importing-detail', ImportingDetail);
+apiRouters.use('/shipping', Shipping);
+apiRouters.use('/customer', Customer);
 
-// Thanh toán
-router.get('/checkout', CheckoutController.getCheckout); // hoặc POST tùy logic
-
-module.exports = router;
+module.exports = apiRouters;

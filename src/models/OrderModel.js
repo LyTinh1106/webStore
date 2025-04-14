@@ -3,7 +3,7 @@ const sql = require('../config/database');
 const Order = function(order) {
   this.created_at = order.created_at;
   this.payment_method = order.payment_method;
-  this.status = order.status;
+  this.order_status = order.order_status;
   this.product_id = order.product_id;
   this.account_id = order.account_id;
 };
@@ -49,8 +49,8 @@ Order.getAll = (result) => {
 
 Order.updateById = (id, order, result) => {
   sql.query(
-    "UPDATE order_table SET created_at = ?, payment_method = ?, status = ?, product_id = ?, account_id = ? WHERE id = ?",
-    [order.created_at, order.payment_method, order.status, order.product_id, order.account_id, id],
+    "UPDATE order_table SET created_at = ?, payment_method = ?, order_status = ?, product_id = ?, account_id = ? WHERE id = ?",
+    [order.created_at, order.payment_method, order.order_status, order.product_id, order.account_id, id],
     (err, res) => {
       if (err) {
         result(null, err);

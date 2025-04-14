@@ -5,7 +5,6 @@ const TechnicalSpecification = function(detail) {
   this.product_id = detail.product_id;
 };
 
-
 TechnicalSpecification.create = (newDetail, result) => {
   sql.query("INSERT INTO technical_specification SET ?", newDetail, (err, res) => {
     if (err) {
@@ -29,7 +28,17 @@ TechnicalSpecification.findById = (id, result) => {
 
     if (res.length) {
       const row = res[0];
-      row.specs = JSON.parse(row.specs);  // parse lại JSON trước khi trả về
+
+      if (typeof row.specs === 'string') {
+        try {
+          row.specs = JSON.parse(row.specs);
+        } catch (err) {
+          console.error("Lỗi khi parse specs trong findById:", err);
+          result(err, null);
+          return;
+        }
+      }
+
       result(null, row);
       return;
     }
@@ -48,7 +57,17 @@ TechnicalSpecification.findByProductId = (productId, result) => {
 
     if (res.length) {
       const row = res[0];
-      row.specs = JSON.parse(row.specs);
+
+      if (typeof row.specs === 'string') {
+        try {
+          row.specs = JSON.parse(row.specs);
+        } catch (err) {
+          console.error("Lỗi khi parse specs trong findByProductId:", err);
+          result(err, null);
+          return;
+        }
+      }
+
       result(null, row);
       return;
     }
