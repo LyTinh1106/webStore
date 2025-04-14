@@ -63,6 +63,26 @@
 		});
 	});
 
+	//Banners Slick
+	$('.banners-slick').each(function () {
+		var $this = $(this),
+			$nav = $this.attr('data-nav');
+	
+		$this.slick({
+			slidesToShow: 1,
+			slidesToScroll: 1,
+			autoplay: true,
+			infinite: true,
+			speed: 500,
+			dots: true,
+			arrows: true,
+			appendArrows: $nav ? $nav : false,
+			// fade: true,
+			rslidesToShow: 1,
+			slidesToScroll: 1,
+		});
+	});
+
 	// Products Widget Slick
 	$('.products-widget-slick').each(function () {
 		var $this = $(this),
@@ -183,36 +203,3 @@
 	}
 })(jQuery);
 
-document.addEventListener('DOMContentLoaded', () => {
-	let currentIndex = 0;
-	const images = document.querySelectorAll('#hot-deal .hot-deal-img');
-	const totalImages = images.length;
-	const leftArrow = document.querySelector('#hot-deal .arrow.left');
-	const rightArrow = document.querySelector('#hot-deal .arrow.right');
-  
-	// Hàm hiển thị ảnh tại chỉ số currentIndex
-	function showImage(index) {
-	  images.forEach((img, i) => {
-		img.style.display = (i === index) ? 'block' : 'none';
-	  });
-	}
-  
-	// Hàm chuyển ảnh tiếp theo
-	function nextImage() {
-	  currentIndex = (currentIndex + 1) % totalImages;
-	  showImage(currentIndex);
-	}
-  
-	// Hàm quay lại ảnh trước
-	function prevImage() {
-	  currentIndex = (currentIndex - 1 + totalImages) % totalImages;
-	  showImage(currentIndex);
-	}
-  
-	// Gán sự kiện cho mũi tên
-	if (leftArrow) leftArrow.addEventListener('click', prevImage);
-	if (rightArrow) rightArrow.addEventListener('click', nextImage);
-  
-	// Tự động chuyển ảnh sau mỗi 15 giây
-	setInterval(nextImage, 15000);
-  });
