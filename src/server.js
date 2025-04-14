@@ -41,23 +41,12 @@ app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "em
 app.get("/auth/google/callback", passport.authenticate('google', { failureRedirect: "/login" }), (req, res) => {
   res.redirect('/HomePage')
 });
-// app.get('/HomePage', (req, res) => {
-//   if (!req.user) {
-//     return res.redirect('/login');
-//   }
-
-//   res.render('HomePage', {
-//     user: req.user
-//   });
-// });
-// app.get('/HomePage', (req, res) => {
-//   res.render('HomePage', {
-//     user: req.user || null 
-//   });
-// });
-
-
-
+app.get("/logout", (req, res, next) => {
+  req.logOut(function(err) {
+    if (err) { return next(err); }
+    res.redirect("/HomePage");
+  });
+});
 
 app.use('/', webRouters);
 
