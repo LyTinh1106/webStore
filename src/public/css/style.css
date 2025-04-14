@@ -61,6 +61,7 @@ body {
   color: #333;
   padding: 0;
   margin: 0; 
+  box-sizing: border-box;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -791,8 +792,59 @@ textarea.input {
 }
 
 /*=========================================================
+	05 -> banner
+===========================================================*/
+#hot-deal {
+  position: relative;
+  width: 100%;           /* Full chiều ngang theo cha, không tràn viền */
+  max-width: 1200px;     /* Hoặc 1440px tùy layout của bạn */
+  margin: 0 auto;        /* Căn giữa */
+  overflow: hidden;
+}
+
+/* Ảnh banner */
+.hot-deal-img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+/* Mũi tên chuyển ảnh */
+.arrow {
+  position: absolute;
+  top: 50%;
+  font-size: 30px;
+  color: white;
+  padding: 16px;
+  background-color: rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  z-index: 10;
+  user-select: none;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  transform: translateY(-50%);
+}
+
+.left {
+  left: 10px;
+}
+
+.right {
+  right: 10px;
+}
+
+/* Hiện mũi tên khi hover */
+#hot-deal:hover .arrow {
+  opacity: 1;
+}
+
+/* Reset body */
+
+/*=========================================================
 	05 -> HOT DEAL
 ===========================================================*/
+
 
 #hot-deal.section {
   padding: 60px 0px ;
@@ -2200,6 +2252,8 @@ textarea.input {
     margin-top: 10px;
   }
 }
+
+
 /* Form login */
 .body-login-register{
     margin: 0;

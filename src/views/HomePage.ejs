@@ -24,7 +24,7 @@
 
 	<!-- Font Awesome Icon -->
 	<link rel="stylesheet" href="/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"> -->
 
 	<!-- Custom stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="/css/style.css" />
@@ -115,7 +115,9 @@
 							<!-- /Cart -->
 							<!--Account-->
 							<div class="dropdown Account">
-								<a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+								<a href="#"
+									class="d-inline-flex align-items-center text-decoration-none dropdown-toggle"
+									id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
 									<i class="fa fa-user-o me-1"></i>
 									<% if (user) { %>
 										<span>
@@ -141,7 +143,7 @@
 														class="fas fa-sign-in-alt me-2"></i> Đăng nhập</a></li>
 											<li><a class="dropdown-item" href="/register"><i
 														class="fas fa-user-plus me-2"></i> Đăng ký</a></li>
-										<% } %>
+											<% } %>
 								</ul>
 							</div>
 							<!--/Account-->
@@ -193,52 +195,93 @@
 	<!-- /NAVIGATION -->
 
 	<!-- SECTION -->
-
 	<!-- /SECTION -->
+
 	<!-- HOT DEAL SECTION -->
-	<div id="hot-deal" class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-12">
-					<div class="hot-deal">
-						<ul class="hot-deal-countdown">
-							<li>
-								<div>
-									<h3>02</h3>
-									<span>Days</span>
-								</div>
-							</li>
-							<li>
-								<div>
-									<h3>10</h3>
-									<span>Hours</span>
-								</div>
-							</li>
-							<li>
-								<div>
-									<h3>34</h3>
-									<span>Mins</span>
-								</div>
-							</li>
-							<li>
-								<div>
-									<h3>60</h3>
-									<span>Secs</span>
-								</div>
-							</li>
-						</ul>
-						<h2 class="text-uppercase">hot deal this week</h2>
-						<p>New Collection Up to 50% OFF</p>
-						<a class="primary-btn cta-btn" href="#">Shop now</a>
-					</div>
-				</div>
-			</div>
-			<!-- /row -->
+	<!-- <div class="section">
+		<div id="hot-deal">
+			<img src="../images/z6504173361555_906aa053426c57d8e294a4787be4451d.jpg" alt="Banner" class="hot-deal-img"
+				style="display: block;">
+			<img src="../images/z6504173481319_6152e41b06818ca355f3a7c75271446c.jpg" alt="Banner" class="hot-deal-img"
+				style="display: none;">
+			<img src="../images/thang_04_laptop_gaming_banner_web_slider_800x400.png" alt="Banner" class="hot-deal-img"
+				style="display: none;">
+			<img src="../images/thang_04_acer_laptop_800x400.png tuần lễ sale.png" alt="Banner" class="hot-deal-img"
+				style="display: none;">
+	
+			<span class="arrow left" onclick="prevImage()" >&#10094;</span>
+			<span class="arrow right"onclick="nextImage()" >&#10095;</span>
+	
 		</div>
-		<!-- /container -->
+		<script>
+			let currentIndex = 0;
+			const images = document.querySelectorAll('#hot-deal .hot-deal-img');
+			const totalImages = images.length;
+	
+			
+			setInterval(() => {
+				images[currentIndex].style.display = 'none';  
+				currentIndex = (currentIndex + 1) % totalImages;  
+				images[currentIndex].style.display = 'block';  
+			}, 15000);
+	
+		
+			function prevImage() {
+				images[currentIndex].style.display = 'none';  
+				currentIndex = (currentIndex - 1 + totalImages) % totalImages;  
+				images[currentIndex].style.display = 'block';  
+			}
+	
+
+			function nextImage() {
+				images[currentIndex].style.display = 'none';  
+				currentIndex = (currentIndex + 1) % totalImages;  
+				images[currentIndex].style.display = 'block';  
+			}
+		</script>
+	</div> -->
+	<!-- GAMING FESTIVAL BANNER FULLSCREEN -->
+	<div id="hot-deal">
+		<img src="../images/z6504173361555_906aa053426c57d8e294a4787be4451d.jpg" alt="Banner" class="hot-deal-img"
+			style="display: block;">
+		<img src="../images/z6504173361555_906aa053426c57d8e294a4787be4451d.jpg" alt="Banner" class="hot-deal-img"
+			style="display: none;">
+		<img src="../public/images/z6504173481319_6152e41b06818ca355f3a7c75271446c.jpg" alt="Banner"
+			class="hot-deal-img" style="display: none;">
+
+
+		<!-- Mũi tên -->
+		<span class="arrow left" onclick="prevImage()">&#10094;</span>
+		<span class="arrow right" onclick="nextImage()">&#10095;</span>
 	</div>
+	<script>
+		let currentIndex = 0;
+		const images = document.querySelectorAll('#hot-deal .hot-deal-img');
+		const totalImages = images.length;
+
+		// Chuyển ảnh tự động sau mỗi 10 giây
+		setInterval(() => {
+			images[currentIndex].style.display = 'none';  // Ẩn ảnh hiện tại
+			currentIndex = (currentIndex + 1) % totalImages;  // Chuyển sang ảnh tiếp theo
+			images[currentIndex].style.display = 'block';  // Hiện ảnh mới
+		}, 15000);
+
+		// Chức năng chuyển ảnh qua mũi tên trái
+		function prevImage() {
+			images[currentIndex].style.display = 'none';  // Ẩn ảnh hiện tại
+			currentIndex = (currentIndex - 1 + totalImages) % totalImages;  // Chuyển về ảnh trước
+			images[currentIndex].style.display = 'block';  // Hiện ảnh mới
+		}
+
+		// Chức năng chuyển ảnh qua mũi tên phải
+		function nextImage() {
+			images[currentIndex].style.display = 'none';  // Ẩn ảnh hiện tại
+			currentIndex = (currentIndex + 1) % totalImages;  // Chuyển sang ảnh tiếp theo
+			images[currentIndex].style.display = 'block';  // Hiện ảnh mới
+		}
+	</script>
+
+
 	<!-- /HOT DEAL SECTION -->
 
 	<!-- SECTION -->
@@ -449,8 +492,6 @@
 		<!-- /container -->
 	</div>
 	<!-- /SECTION -->
-
-
 
 	<!-- SECTION -->
 	<div class="section">
