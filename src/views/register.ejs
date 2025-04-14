@@ -9,8 +9,8 @@
 </head>
 
 <body>
-    <div class="body-register">
-    <div class="register-container">
+    <div class="body-login-register">
+    <div class="login-register-container">
         <h1>Sign Up</h1>
         <form action="/register" method="post">
             <div class="input-group">
@@ -33,19 +33,20 @@
                 <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
             </div>
 
-            <button type="submit" class="register-btn">SIGN UP</button>
+            <button type="submit" class="login-register-btn">SIGN UP</button>
         </form>
 
         <div class="or-divider">Or Sign Up Using</div>
 
         <div class="social-register">
-            <div class="social-btn facebook">f</div>
-            <div class="social-btn twitter">t</div>
-            <div class="social-btn google">G</div>
+            <a href="/auth/google" class="social-btn google">
+                <img src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg' alt="google-icon" class="google-logo">
+            <span class="btn-text">Sign in with Google</span>
+        </a>
         </div>
 
         <div class="login-text">Already have an account?</div>
-        <a href="#" class="login-link">LOGIN</a>
+        <a href="/login" class="login-link">LOGIN</a>
     </div>
 </div>
 </body>
