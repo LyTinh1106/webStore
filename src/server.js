@@ -41,7 +41,12 @@ app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "em
 app.get("/auth/google/callback", passport.authenticate('google', { failureRedirect: "/login" }), (req, res) => {
   res.redirect('/HomePage')
 });
-
+app.get("/logout", (req, res, next) => {
+  req.logOut(function(err) {
+    if (err) { return next(err); }
+    res.redirect("/HomePage");
+  });
+});
 
 app.use('/', webRouters);
 app.use('/api',apiRoutes)
