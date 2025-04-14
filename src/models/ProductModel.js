@@ -1,6 +1,5 @@
 const sql = require("../config/database");
 
-
 const Product = function (product) {
   this.fancy_id = product.fancy_id;
   this.name = product.name;
@@ -26,33 +25,39 @@ Product.create = (newProduct, result) => {
 };
 
 Product.findById = (id, result) => {
-  sql.query("SELECT * FROM product WHERE fancy_id = ?", id, (err, res) => {
+  sql.query("SELECT * FROM product WHERE id = ?", [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
+
     if (res.length) {
       console.log("found product: ", res[0]);
       result(null, res[0]);
       return;
     }
+
     result({ kind: "not_found" }, null);
   });
 };
 
 Product.getAll = (name, result) => {
   let query = "SELECT * FROM product";
+  let params = [];
+
   if (name) {
-    query += ` WHERE name LIKE '%${name}%'`;
+    query += " WHERE name LIKE ?";
+    params.push(`%${name}%`);
   }
 
-  sql.query(query, (err, res) => {
+  sql.query(query, params, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
       return;
     }
+
     console.log("products: ", res);
     result(null, res);
   });
@@ -60,9 +65,10 @@ Product.getAll = (name, result) => {
 
 Product.updateById = (id, product, result) => {
   sql.query(
-    `UPDATE product SET name = ?, description = ?, import_price = ?, retail_price = ?, brand_id = ?, category_id = ?, origin = ?, warranty = ?
-     WHERE fancy_id = ?`,
+    `UPDATE product SET fancy_id = ?, name = ?, description = ?, import_price = ?, retail_price = ?, brand_id = ?, category_id = ?, origin = ?, warranty = ?
+     WHERE id = ?`,
     [
+      product.fancy_id,
       product.name,
       product.description,
       product.import_price,
@@ -91,9 +97,8 @@ Product.updateById = (id, product, result) => {
   );
 };
 
-
 Product.remove = (id, result) => {
-  sql.query("DELETE FROM product WHERE fancy_id = ?", id, (err, res) => {
+  sql.query("DELETE FROM product WHERE id = ?", [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);

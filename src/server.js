@@ -5,7 +5,7 @@ const googleStrategy = require('passport-google-oauth20')
 require('dotenv').config();
 const configViewEngine = require('./config/ViewEngine');
 const webRouters = require('./routes/web');
-const connection = require('./config/database');
+const apiRoutes = require('./routes/api')
 
 const app = express();
 const port = process.env.PORT || 9000;
@@ -41,25 +41,11 @@ app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "em
 app.get("/auth/google/callback", passport.authenticate('google', { failureRedirect: "/login" }), (req, res) => {
   res.redirect('/HomePage')
 });
-// app.get('/HomePage', (req, res) => {
-//   if (!req.user) {
-//     return res.redirect('/login');
-//   }
-
-//   res.render('HomePage', {
-//     user: req.user
-//   });
-// });
-// app.get('/HomePage', (req, res) => {
-//   res.render('HomePage', {
-//     user: req.user || null 
-//   });
-// });
-
-
 
 
 app.use('/', webRouters);
+app.use('/api',apiRoutes)
+
 
 app.listen(port, hostname, () => {
   console.log(`Server is running on port ${port}`)
