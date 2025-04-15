@@ -5,20 +5,20 @@ const accountServices = require('../services/accountServices')
 
 const getHomePage = (req, res) => {
     res.render('HomePage', {
-      user: req.user || null 
+        user: req.user || null
     });
-  }
-const getRegister = (req,res) => {
+}
+const getRegister = (req, res) => {
     res.render('register')
 }
-const getLogin = (req,res) => {
+const getLogin = (req, res) => {
     res.render('login')
- }
- const getDashboard = (req,res) => {
+}
+const getDashboard = (req, res) => {
     res.render('dashboard')
- } 
+}
 
- const postRegister = async (req, res) => {
+const postRegister = async (req, res) => {
     try {
         const result = await accountServices.createNewUser(req.body);
 
@@ -34,19 +34,19 @@ const getLogin = (req,res) => {
     }
 };
 
- const postLogin = async (req, res) => {
+const postLogin = async (req, res) => {
     try {
-        
+
         console.log("Dữ liệu form gửi lên:", req.body);
         console.log('Session:', req.session);
         const { email, password } = req.body;
         const result = await accountServices.handleUserLogin(email, password);
-        
+
 
         if (result.success) {
             req.session.user = {
                 email: result.user.email,
-                role: result.user.role 
+                role: result.user.role
             };
             // console.log('Session after login:', req.session); // Debug
             if (result.user.role === 'admin') {
@@ -59,7 +59,7 @@ const getLogin = (req,res) => {
         }
     } catch (error) {
         console.error("Lỗi server khi đăng nhập:", error);
-         return res.status(500).send("Lỗi server khi đăng nhập.");
+        return res.status(500).send("Lỗi server khi đăng nhập.");
     }
 };
 
@@ -67,10 +67,17 @@ const getLogin = (req,res) => {
 
 
 module.exports = {
+    create,
+    findAll,
+    findOne,
+    findByEmail,
+    update,
+    remove,
+    isAdmin,
+    getDashboard,
     getHomePage,
     getRegister,
     getLogin,
-    postRegister,
-    postLogin,
-    getDashboard
+    register,
+    login
 }
