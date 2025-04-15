@@ -86,13 +86,11 @@
                             <a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle"
                                 id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                                 <i class="fa fa-user-o me-1"></i>
-                                <% if (user) { %>
-                                    <span>
-                                        <%= user.displayName %>
-                                    </span>
-                                    <% } else { %>
-                                        <span>Guest</span>
-                                        <% } %>
+                                <% if (user && user.emails && user.emails[0]) { %>
+                                    <%= user.emails[0].value.split('@')[0] %>
+                                <% } else { %>
+                                    Guest
+                                <% } %>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <% if (user) { %>
