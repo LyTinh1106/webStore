@@ -1,68 +1,86 @@
 const Brand = require("../models/BrandModel");
 
-
-const createBrand = (req, res) => {
-  if (!req.body.brand_name) {
-    return res.status(400).send({ message: "brand_name is required!" });
-  }
-
-  const brand = new Brand({ brand_name: req.body.brand_name });
-
-  Brand.create(brand, (err, data) => {
-    if (err) res.status(500).send({ message: err.message || "Some error occurred." });
-    else res.status(200).send({ message: "ok", data });
-  });
-};
-
-
-const getAllBrands = (req, res) => {
+// [GET] /brands - Hiển thị danh sách brand
+exports.getAllBrands = (req, res) => {
   const name = req.query.name;
 
   Brand.getAll(name, (err, data) => {
-    if (err) res.status(500).send({ message: err.message || "Some error occurred." });
-    else res.status(200).send({ message: "ok", data });
-  });
-};
-
-
-const getBrandById = (req, res) => {
-  Brand.findById(req.params.id, (err, data) => {
     if (err) {
-      if (err.kind === "not_found") res.status(404).send({ message: "Brand not found." });
-      else res.status(500).send({ message: "Error retrieving brand." });
-    } else res.status(200).send({ message: "ok", data });
+      res.status(500).render("error", { message: err.message || "Đã xảy ra lỗi khi lấy danh sách brand." });
+    } else {
+      res.render("brandDashboard", { brands: data });
+    }
   });
 };
 
+// [GET] /brands/:id - Chi tiết brand
+exports.getBrandById = (req, res) => {
+  const id = req.params.id;
+  Brand.findById(id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy brand với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: `Lỗi truy xuất brand với ID ${id}.` });
+      }
+    } else {
+      res.render("brandDashboard", { brand: data, mode: "edit" }); // Nếu dùng chung dashboard, thêm mode
+    }
+  });
+};
 
-const updateBrand = (req, res) => {
-  if (!req.body.brand_name) {
-    return res.status(400).send({ message: "brand_name is required!" });
+// [POST] /brands - Tạo mới brand
+exports.createBrand = (req, res) => {
+  const name = req.body.brand_name?.trim();
+  if (!name) {
+    return res.status(400).render("error", { message: "Tên brand không được để trống." });
   }
 
-  Brand.updateById(req.params.id, new Brand(req.body), (err, data) => {
+  const newBrand = new Brand({ brand_name: name });
+  Brand.create(newBrand, (err, data) => {
     if (err) {
-      if (err.kind === "not_found") res.status(404).send({ message: "Brand not found." });
-      else res.status(500).send({ message: "Error updating brand." });
-    } else res.status(200).send({ message: "ok", data });
+      res.status(500).render("error", { message: err.message || "Lỗi khi tạo brand." });
+    } else {
+      res.redirect("/brands");
+    }
   });
 };
 
-// Delete brand
-const deleteBrand = (req, res) => {
-  Brand.remove(req.params.id, (err, data) => {
+// [POST] /brands/:id/update - Cập nhật brand
+exports.updateBrand = (req, res) => {
+  const id = req.params.id;
+  const name = req.body.brand_name?.trim();
+
+  if (!name) {
+    return res.status(400).render("error", { message: "Tên brand không được để trống." });
+  }
+
+  Brand.updateById(id, new Brand({ brand_name: name }), (err, data) => {
     if (err) {
-      if (err.kind === "not_found") res.status(404).send({ message: "Brand not found." });
-      else res.status(500).send({ message: "Could not delete brand." });
-    } else res.status(200).send({ message: "ok" });
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy brand với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: "Lỗi khi cập nhật brand." });
+      }
+    } else {
+      res.redirect("/brands");
+    }
   });
 };
 
+// [POST] /brands/:id/delete - Xóa brand
+exports.deleteBrand = (req, res) => {
+  const id = req.params.id;
 
-module.exports = {
-  createBrand,
-  getAllBrands,
-  getBrandById,
-  updateBrand,
-  deleteBrand,
+  Brand.remove(id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy brand với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: "Lỗi khi xóa brand." });
+      }
+    } else {
+      res.redirect("/brands");
+    }
+  });
 };

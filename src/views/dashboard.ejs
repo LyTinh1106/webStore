@@ -272,20 +272,41 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>#ORD001</td>
-                            <td>Nguyễn Văn A</td>
-                            <td>25/03/2025</td>
-                            <td>Momo</td>
-                            <td>12,500,000 VNĐ</td>
-                            <td><span class="badge bg-success">Đã giao</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
+                        <% if (orders.length > 0) { %>
+                          <% orders.forEach(order => { %>
+                            <tr>
+                              <td>#<%= order.id %></td>
+                              <td><%= order.email || 'Không rõ' %></td>
+                              <td><%= new Date(order.created_at).toLocaleDateString('vi-VN') %></td>
+                              <td><%= order.payment_method %></td>
+                              <td><%= order.total_payment %> VNĐ</td>
+                              <td>
+                                <% if (order.order_status === 'Đã giao') { %>
+                                  <span class="badge bg-success"><%= order.order_status %></span>
+                                <% } else if (order.order_status === 'Đang chờ') { %>
+                                  <span class="badge bg-warning"><%= order.order_status %></span>
+                                <% } else if (order.order_status === 'Đã hủy') { %>
+                                  <span class="badge bg-danger"><%= order.order_status %></span>
+                                <% } else { %>
+                                  <span class="badge bg-secondary"><%= order.order_status %></span>
+                                <% } %>
+                              </td>
+                              <td>
+                                <a href="/orders/<%= order.id %>" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>
+                                <a href="/orders/<%= order.id %>/edit" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                <form action="/orders/<%= order.id %>/delete" method="POST" class="d-inline">
+                                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i class="fas fa-trash"></i></button>
+                                </form>
+                              </td>
+                            </tr>
+                          <% }) %>
+                        <% } else { %>
+                          <tr>
+                            <td colspan="7" class="text-center">Không có đơn hàng nào.</td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                      
                 </table>
             </div>
             <!-- <nav aria-label="Page navigation">
@@ -320,21 +341,35 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>SP001</td>
-                            <td>iPhone 15 Pro Max</td>
-                            <td>Điện thoại</td>
-                            <td>3,990,000 VNĐ</td>
-                            <td>30,990,000 VNĐ</td>
-                            <td>Mĩ Tho</td>
-                            <td>10 năm</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
+                        <% if (products.length > 0) { %>
+                          <% products.forEach((product) => { %>
+                            <tr>
+                              <td><%= product.fancy_id %></td>
+                              <td><%= product.name %></td>
+                              <td><%= product.category_name|| 'Không rõ' %></td>
+                              <td><%= Number(product.import_price).toLocaleString('vi-VN') %> VNĐ</td>
+                              <td><%= Number(product.retail_price).toLocaleString('vi-VN') %> VNĐ</td>
+                              <td><%= product.origin %></td>
+                              <td><%= product.warranty %></td>
+                              <td>
+                                <a href="/products/<%= product.id %>" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>
+                                <a href="/products/<%= product.id %>/edit" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                <form action="/products/<%= product.id %>/delete" method="POST" class="d-inline">
+                                  <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
+                                    <i class="fas fa-trash"></i>
+                                  </button>
+                                </form>
+                              </td>
+                            </tr>
+                          <% }) %>
+                        <% } else { %>
+                          <tr>
+                            <td colspan="8" class="text-center">Không có sản phẩm nào.</td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                      
+                      
                 </table>
             </div>
             <!-- <nav aria-label="Page navigation">
@@ -403,15 +438,28 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>L001</td>
-                            <td>Điện thoại</td>
-                            <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-
+                        <% if (brands && brands.length > 0) { %>
+                            <% brands.forEach((brand) => { %>
+                                <tr>
+                                    <td><%= brand.brand_id %></td>
+                                    <td><%= brand.brand_name %></td>
+                                    <td>
+                                        <a href="/brands/<%= brand.id %>" class="btn btn-sm btn-info">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="/brands/<%= brand.id %>/delete" method="POST" style="display:inline-block;" onsubmit="return confirm('Bạn có chắc muốn xóa?');">
+                                            <button type="submit" class="btn btn-sm btn-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="3" class="text-center">Không có nhãn hàng nào.</td>
+                            </tr>
+                        <% } %>
                     </tbody>
                 </table>
             </div>
@@ -438,20 +486,33 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>L001</td>
-                            <td>30/4/2025</td>
-                            <td>hoả tốc</td>
-                            <td>bị bom hàng</td>
-                            <td>zunex phạm</td>
-                            <td>1</td>
-                            <td>475a điện biên phủ</td>
-                            <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
+                        <% if (shippings && shippings.length > 0) { %>
+                            <% shippings.forEach(function(shipping) { %>
+                                <tr>
+                                    <td><%= shipping.id %></td>
+                                    <td><%= shipping.shipping_date %></td>
+                                    <td><%= shipping.delivery_method %></td>
+                                    <td><%= shipping.shipping_status %></td>
+                                    <td><%= shipping.customer_name || 'N/A' %></td> <!-- nếu cần hiển thị tên thay vì id -->
+                                    <td><%= shipping.id_order %></td>
+                                    <td><%= shipping.shipping_address %></td>
+                                    <td>
+                                        <a href="/shippings/<%= shipping.id_shipping %>" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                        <form action="/shippings/<%= shipping.id_shipping %>/delete" method="POST" style="display:inline;">
+                                            <button class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xoá?')">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } else { %>
+                            <tr>
+                                <td colspan="8" class="text-center">Không có dữ liệu vận chuyển.</td>
+                            </tr>
+                        <% } %>
                     </tbody>
+                    
                 </table>
             </div>
         </div>
@@ -475,18 +536,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>L001</td>
-                            <td>Zunex phạm</td>
-                            <td>00000001</td>
-                            <td>zunex@gmail.com</td>
-                            <td>475a điện biên phủ</td>
+                        <% suppliers.forEach((supplier) => { %>
+                          <tr>
+                            <td><%= supplier.id %></td>
+                            <td><%= supplier.name %></td>
+                            <td><%= supplier.phonenumber %></td>
+                            <td><%= supplier.email %></td>
+                            <td><%= supplier.address %></td>
                             <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                              <a href="/suppliers/<%= supplier.id %>/edit" class="btn btn-sm btn-info">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                              <form action="/suppliers/<%= supplier.id %>/delete" method="POST" style="display:inline;">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xóa nhà cung cấp này?')">
+                                  <i class="fas fa-trash"></i>
+                                </button>
+                              </form>
                             </td>
-                        </tr>
-                    </tbody>
+                          </tr>
+                        <% }); %>
+                      </tbody>
+                      
                 </table>
             </div>
         </div>
@@ -510,18 +580,31 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>L001</td>
-                            <td>sale999</td>
-                            <td>100%</td>
-                            <td>30/4</td>
-                            <td>1/5</td>
-                            <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
+                        <% if (vouchers && vouchers.length > 0) { %>
+                          <% vouchers.forEach((voucher, index) => { %>
+                            <tr>
+                              <td><%= voucher.id %></td>
+                              <td><%= voucher.voucher_code %></td>
+                              <td><%= voucher.voucher_value %></td>
+                              <td><%= voucher.date_start %></td>
+                              <td><%= voucher.date_end %></td>
+                              <td>
+                                <form action="/vouchers/<%= voucher.id %>/update" method="get" style="display:inline;">
+                                  <button class="btn btn-sm btn-info" title="Chỉnh sửa"><i class="fas fa-edit"></i></button>
+                                </form>
+                                <form action="/vouchers/<%= voucher.id %>/delete" method="post" style="display:inline;" onsubmit="return confirm('Bạn có chắc muốn xóa voucher này?');">
+                                  <button class="btn btn-sm btn-danger" title="Xóa"><i class="fas fa-trash"></i></button>
+                                </form>
+                              </td>
+                            </tr>
+                          <% }) %>
+                        <% } else { %>
+                          <tr>
+                            <td colspan="6" class="text-center">Không có voucher nào.</td>
+                          </tr>
+                        <% } %>
+                      </tbody>
+                      
                 </table>
             </div>
         </div>
@@ -544,27 +627,38 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>admin@techstore.vn</td>
+                        <% accounts.forEach((account, index) => { %>
+                          <tr>
+                            <td><%= account.id %></td>
+                            <td><%= account.email %></td>
                             <td>
-                                <div class="input-group">
-                                    <input type="password" class="form-control form-control-sm" value="admin123"
-                                        id="password1" readonly>
-                                    <button class="btn btn-sm btn-outline-secondary toggle-password" type="button"
-                                        data-target="password1">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
+                              <div class="input-group">
+                                <input type="password" class="form-control form-control-sm" value="<%= account.password %>"
+                                  id="password<%= index %>" readonly>
+                                <button class="btn btn-sm btn-outline-secondary toggle-password" type="button"
+                                  data-target="password<%= index %>">
+                                  <i class="fas fa-eye"></i>
+                                </button>
+                              </div>
                             </td>
-                            <td>Admin</td>
+                            <td><%= account.role %></td>
                             <td>
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                              <a href="/accounts/<%= account.id %>" class="btn btn-sm btn-primary" title="Xem chi tiết">
+                                <i class="fas fa-eye"></i>
+                              </a>
+                              <a href="/accounts/<%= account.id %>/edit" class="btn btn-sm btn-info" title="Chỉnh sửa">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                              <form action="/accounts/<%= account.id %>/delete" method="POST" class="d-inline">
+                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc muốn xoá tài khoản này?')" title="Xoá">
+                                  <i class="fas fa-trash"></i>
+                                </button>
+                              </form>
                             </td>
-                        </tr>
-                    </tbody>
+                          </tr>
+                        <% }); %>
+                      </tbody>
+                      
                 </table>
             </div>
         </div>

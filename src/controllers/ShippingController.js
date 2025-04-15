@@ -1,69 +1,88 @@
-const Shipping = require('../models/ShippingModel');
+const Shipping = require("../models/ShippingModel");
 
-// Thêm shipping mới
+const getAllShipping = (req, res) => {
+  Shipping.getAll((err, data) => {
+    if (err) {
+      res.status(500).render("error", { message: err.message || "Đã xảy ra lỗi khi lấy danh sách vận chuyển." });
+    } else {
+      res.render("shippingDashboard", { shippings: data });
+    }
+  });
+};
+
+const getShippingById = (req, res) => {
+  const id = req.params.id;
+  Shipping.findById(id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy thông tin vận chuyển với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: `Lỗi truy xuất thông tin vận chuyển với ID ${id}.` });
+      }
+    } else {
+      res.render("shippingDashboard", { shipping: data, mode: "edit" });
+    }
+  });
+};
+
 const createShipping = (req, res) => {
   const { shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address } = req.body;
 
   if (!shipping_date || !delivery_method || !shipping_status || !id_customer || !id_order || !shipping_address) {
-    return res.status(400).json({ message: "Thiếu thông tin vận chuyển." });
+    return res.status(400).render("error", { message: "Thiếu thông tin vận chuyển." });
   }
 
   const newShipping = new Shipping({ shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address });
 
   Shipping.create(newShipping, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi tạo vận chuyển." });
-    res.status(201).json({ message: "Tạo vận chuyển thành công", data });
+    if (err) {
+      res.status(500).render("error", { message: err.message || "Lỗi khi tạo vận chuyển." });
+    } else {
+      res.redirect("/shippings");
+    }
   });
 };
 
-// Lấy thông tin shipping theo id
-const getShippingById = (req, res) => {
-  const shippingId = req.params.id;
-
-  Shipping.findById(shippingId, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi lấy thông tin vận chuyển." });
-    if (!data) return res.status(404).json({ message: "Không tìm thấy thông tin vận chuyển." });
-    res.status(200).json(data);
-  });
-};
-
-// Lấy tất cả shipping
-const getAllShipping = (req, res) => {
-  Shipping.getAll((err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi lấy danh sách vận chuyển." });
-    res.status(200).json(data);
-  });
-};
-
-// Cập nhật thông tin shipping theo id
 const updateShippingById = (req, res) => {
-  const shippingId = req.params.id;
+  const id = req.params.id;
   const { shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address } = req.body;
 
   if (!shipping_date || !delivery_method || !shipping_status || !id_customer || !id_order || !shipping_address) {
-    return res.status(400).json({ message: "Thiếu thông tin cập nhật." });
+    return res.status(400).render("error", { message: "Thiếu thông tin để cập nhật vận chuyển." });
   }
 
-  const updatedShipping = { shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address };
+  const updatedShipping = new Shipping({ shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address });
 
-  Shipping.updateById(shippingId, updatedShipping, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi cập nhật vận chuyển." });
-    if (!data) return res.status(404).json({ message: "Vận chuyển không tồn tại." });
-    res.status(200).json({ message: "Cập nhật vận chuyển thành công", data });
+  Shipping.updateById(id, updatedShipping, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy vận chuyển với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: "Lỗi khi cập nhật vận chuyển." });
+      }
+    } else {
+      res.redirect("/shippings");
+    }
   });
 };
 
-// Xoá shipping theo id
 const deleteShippingById = (req, res) => {
-  const shippingId = req.params.id;
+  const id = req.params.id;
 
-  Shipping.remove(shippingId, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi xoá vận chuyển." });
-    if (!data) return res.status(404).json({ message: "Vận chuyển không tồn tại." });
-    res.status(200).json({ message: "Xoá vận chuyển thành công" });
+  Shipping.remove(id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy vận chuyển với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: "Lỗi khi xoá vận chuyển." });
+      }
+    } else {
+      res.redirect("/shippings");
+    }
   });
 };
 
+// 👉 Export toàn bộ
 module.exports = {
   createShipping,
   getShippingById,

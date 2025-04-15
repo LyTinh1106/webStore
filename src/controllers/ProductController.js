@@ -1,19 +1,50 @@
 const Product = require("../models/ProductModel");
+const Category = require("../models/CategoryModel");
+const Brand = require("../models/BrandModel");
 
+// [GET] /products - Hiển thị trang quản lý sản phẩm
+const getProduct = (req, res) => {
+  Product.getAll(null, (err, products) => {
+    if (err) {
+      return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm." });
+    }
 
-const getProduct = (req,res) => {
-    res.render('Product', {
-      user: req.user || null 
+    Category.getAll((err, categories) => {
+      if (err) {
+        return res.status(500).render("error", { message: "Lỗi khi lấy danh sách danh mục." });
+      }
+
+      Brand.getAll(null, (err, brands) => {
+        if (err) {
+          return res.status(500).render("error", { message: "Lỗi khi lấy danh sách nhãn hàng." });
+        }
+
+        res.render("Product", {
+          user: req.user || null,
+          products,
+          categories,
+          brands
+        });
+      });
     });
-}
-const getStore = (req,res) => {
-    res.render('Store', {
-      user: req.user || null 
-    })
-}
+  });
+};
 
+// [GET] /store - Hiển thị trang cửa hàng
+const getStore = (req, res) => {
+  Product.getAll(null, (err, products) => {
+    if (err) {
+      return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm trong cửa hàng." });
+    }
 
-// Create new product
+    res.render("Store", {
+      user: req.user || null,
+      products
+    });
+  });
+};
+
+// [POST] /products - Tạo sản phẩm mới
 const createProduct = (req, res) => {
   const {
     fancy_id,
@@ -28,7 +59,7 @@ const createProduct = (req, res) => {
   } = req.body;
 
   if (!fancy_id || !name) {
-    return res.status(400).json({ message: "fancy_id and name are required!" });
+    return res.status(400).render("error", { message: "Mã sản phẩm và tên sản phẩm là bắt buộc." });
   }
 
   const newProduct = new Product({
@@ -44,39 +75,34 @@ const createProduct = (req, res) => {
   });
 
   Product.create(newProduct, (err, data) => {
-    if (err)
-      return res.status(500).json({ message: err.message || "Error creating product." });
-    res.status(200).json({ message: "Product created successfully", data });
-  });
-};
-
-// Get all products (optional: filter by name)
-const getAllProducts = (req, res) => {
-  const name = req.query.name;
-
-  Product.getAll(name, (err, data) => {
-    if (err)
-      return res.status(500).json({ message: err.message || "Error retrieving products." });
-    res.status(200).json({ message: "ok", data });
-  });
-};
-
-// Get product by ID
-const getProductById = (req, res) => {
-  Product.findById(req.params.id, (err, data) => {
     if (err) {
-      if (err.kind === "not_found")
-        return res.status(404).json({ message: "Product not found." });
-      return res.status(500).json({ message: "Error retrieving product." });
+      return res.status(500).render("error", { message: err.message || "Lỗi khi tạo sản phẩm." });
     }
-    res.status(200).json({ message: "ok", data });
+    res.redirect("/products");
   });
 };
 
-// Update product
+// [GET] /products/:id - Chi tiết sản phẩm
+const getProductById = (req, res) => {
+  Product.findById(req.params.id, (err, product) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
+      }
+      return res.status(500).render("error", { message: "Lỗi khi truy xuất sản phẩm." });
+    }
+
+    res.render("ProductDetail", {
+      user: req.user || null,
+      product
+    });
+  });
+};
+
+// [POST] /products/:id/update - Cập nhật sản phẩm
 const updateProduct = (req, res) => {
   const {
-    fancy_id, 
+    fancy_id,
     name,
     description,
     import_price,
@@ -88,7 +114,7 @@ const updateProduct = (req, res) => {
   } = req.body;
 
   if (!name) {
-    return res.status(400).json({ message: "Product name is required!" });
+    return res.status(400).render("error", { message: "Tên sản phẩm là bắt buộc." });
   }
 
   const updatedProduct = new Product({
@@ -105,31 +131,35 @@ const updateProduct = (req, res) => {
 
   Product.updateById(req.params.id, updatedProduct, (err, data) => {
     if (err) {
-      if (err.kind === "not_found")
-        return res.status(404).json({ message: "Product not found." });
-      return res.status(500).json({ message: "Error updating product." });
+      if (err.kind === "not_found") {
+        return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
+      }
+      return res.status(500).render("error", { message: "Lỗi khi cập nhật sản phẩm." });
     }
-    res.status(200).json({ message: "Product updated successfully", data });
+
+    res.redirect("/products");
   });
 };
 
+// [POST] /products/:id/delete - Xóa sản phẩm
 const deleteProduct = (req, res) => {
   Product.remove(req.params.id, (err, data) => {
     if (err) {
-      if (err.kind === "not_found")
-        return res.status(404).json({ message: "Product not found." });
-      return res.status(500).json({ message: "Could not delete product." });
+      if (err.kind === "not_found") {
+        return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
+      }
+      return res.status(500).render("error", { message: "Lỗi khi xóa sản phẩm." });
     }
-    res.status(200).json({ message: "Product deleted successfully" });
+
+    res.redirect("/products");
   });
 };
+
 module.exports = {
+  getProduct,
+  getStore,
   createProduct,
-  getAllProducts,
   getProductById,
   updateProduct,
-  deleteProduct,
-  getProduct, 
-  getStore
+  deleteProduct
 };
-
