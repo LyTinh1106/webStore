@@ -360,48 +360,29 @@
                         <tr>
                             <th>Mã loại</th>
                             <th>Tên loại</th>
-                            <th>Số sản phẩm</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>L001</td>
-                            <td>Điện thoại</td>
-                            <td>28</td>
+                        <% categories.forEach((category, index) => { %>
+                          <tr>
+                            <td><%= 'L' + String(category.id).padStart(3, '0') %></td>
+                            <td><%= category.name %></td>
+                           
                             <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                              <a href="/categories/<%= category.id %>/edit" class="btn btn-sm btn-info">
+                                <i class="fas fa-edit"></i>
+                              </a>
+                              <form action="/categories/<%= category.id %>/delete" method="POST" style="display:inline;">
+                                <button class="btn btn-sm btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">
+                                  <i class="fas fa-trash"></i>
+                                </button>
+                              </form>
                             </td>
-                        </tr>
-                        <tr>
-                            <td>L002</td>
-                            <td>Laptop</td>
-                            <td>15</td>
-                            <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>L003</td>
-                            <td>Tablet</td>
-                            <td>12</td>
-                            <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>L004</td>
-                            <td>Phụ kiện</td>
-                            <td>27</td>
-                            <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                    </tbody>
+                          </tr>
+                        <% }) %>
+                      </tbody>
+                      
                 </table>
             </div>
         </div>

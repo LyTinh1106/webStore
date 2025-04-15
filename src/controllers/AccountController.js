@@ -244,5 +244,4 @@ module.exports = {
   getLogin,
   register,
   login
-
 };

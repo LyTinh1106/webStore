@@ -116,5 +116,14 @@ Account.remove = (id, result) => {
     result(null, res);
   });
 };
+Account.isAdmin = (email, result) => {
+  sql.query("SELECT role FROM account WHERE email = ?", [email], (err, res) => {
+    if (err) return result(err, null);
+    if (res.length > 0 && res[0].role === "admin") {
+      return result(null, true);
+    }
+    return result(null, false);
+  });
+};
 
 module.exports = Account;

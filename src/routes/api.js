@@ -14,6 +14,8 @@ const Importing = require('./importing');
 const ImportingDetail = require('./importingdetail');
 const Shipping = require('./shipping');
 const Customer = require('./customer');
+const Account = require('./account')
+
 
 // ✅ Dùng đúng biến apiRouters
 apiRouters.use('/brand', Brand);
@@ -21,7 +23,7 @@ apiRouters.use('/product', Product);
 apiRouters.use('/voucher', Voucher);
 apiRouters.use('/supplier', Supplier);
 apiRouters.use('/cart', Cart);
-//apiRouters.use('/account', Account);  
+apiRouters.use('/account', Account);  
 apiRouters.use('/category', Category);
 apiRouters.use('/order', Order);
 apiRouters.use('/product-detail', ProductDetail);

@@ -43,7 +43,7 @@ app.get("/auth/google/callback", passport.authenticate('google', { failureRedire
 app.get("/logout", (req, res, next) => {
   req.logOut(function(err) {
     if (err) { return next(err); }
-    res.redirect("/HomePage");
+    res.redirect("/homepage");
   });
 });
 
