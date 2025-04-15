@@ -108,8 +108,8 @@ CREATE TABLE order_table (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     payment_method VARCHAR(50),
     order_status ENUM('approving', 'on delivering', 'delivered', 'completed'),
-    product_id INT,
     account_id INT,
+    total_payment FLOAT,
     FOREIGN KEY (product_id) REFERENCES product(id),
     FOREIGN KEY (account_id) REFERENCES account(id)
 );
@@ -222,10 +222,10 @@ INSERT INTO customer (first_name, last_name, gender, email, phone, address) VALU
 ('David', 'Brown', 'male', 'david.brown@email.com', '0934567890', '789 Oak Street');
 
 -- Insert order_table
-INSERT INTO order_table (created_at, payment_method, order_status, product_id, account_id) VALUES 
-('2024-03-15 14:00:00', 'Credit Card', 'approving', 1, 2),
-('2024-03-16 10:30:00', 'PayPal', 'on delivering', 2, 3),
-('2024-03-17 16:45:00', 'Bank Transfer', 'completed', 3, 2);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment) VALUES 
+('2024-03-15 14:00:00', 'Credit Card', 'approving', 2, 4500.00),
+('2024-03-16 10:30:00', 'PayPal', 'on delivering', 3, 4500.00),
+('2024-03-17 16:45:00', 'Bank Transfer', 'completed', 2, 4500.00);
 
 -- Insert order_detail
 INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES 

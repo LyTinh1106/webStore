@@ -9,128 +9,132 @@
 </head>
 
 <body>
-    <!-- MAIN HEADER -->
-    <div id="header">
-        <!-- container -->
-        <div class="container">
-            <!-- row -->
-            <div class="row">
-                <!-- LOGO -->
-                <div class="col-md-3">
-                    <div class="header-logo">
-                        <a href="#" class="logo">
-                            <img src="/images/Screenshot_2025-03-24_213649-removebg-preview(1)(1).png" alt="">
-                        </a>
-                    </div>
-                </div>
-                <!-- /LOGO -->
-
-                <!-- SEARCH BAR -->
-                <div class="col-md-6">
-                    <div class="header-search">
-                        <form>
-                            <input class="input" placeholder="Search here">
-                            <button class="search-btn">Search</button>
-                        </form>
-                    </div>
-                </div>
-                <!-- /SEARCH BAR -->
-
-                <!-- ACCOUNT -->
-                <div class="col-md-3 clearfix">
-                    <div class="header-ctn">
-                        <!-- Cart -->
-                        <div class="dropdown">
-                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>Your Cart</span>
-                                <div class="qty">3</div>
+    <header>
+        <div id="header">
+            <!-- container -->
+            <div class="container">
+                <!-- row -->
+                <div class="row">
+                    <!-- LOGO -->
+                    <div class="col-md-3">
+                        <div class="header-logo">
+                            <a href="#" class="logo">
+                                <img src="/images/Screenshot_2025-03-24_213649-removebg-preview(1)(1).png" alt="">
                             </a>
-                            <div class="cart-dropdown" style="display: none;">
-                                <div class="cart-list">
-                                    <div class="product-widget">
-                                        <div class="product-img">
-                                            <img src="/images/product01.png" alt="">
-                                        </div>
-                                        <div class="product-body">
-                                            <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                        </div>
-                                        <button class="delete"><i class="fa fa-close"></i></button>
-                                    </div>
+                        </div>
+                    </div>
+                    <!-- /LOGO -->
 
-                                    <div class="product-widget">
-                                        <div class="product-img">
-                                            <img src="/images/product02.png" alt="">
+                    <!-- SEARCH BAR -->
+                    <div class="col-md-6">
+                        <div class="header-search">
+                            <form>
+                                <input class="input" placeholder="Search here">
+                                <button class="search-btn">Search</button>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- /SEARCH BAR -->
+
+                    <!-- ACCOUNT -->
+                    <div class="col-md-3 clearfix">
+                        <div class="header-ctn">
+                            <!-- Cart -->
+                            <div class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span>Your Cart</span>
+                                    <div class="qty">3</div>
+                                </a>
+                                <div class="cart-dropdown" style="display: none;">
+                                    <div class="cart-list">
+                                        <div class="product-widget">
+                                            <div class="product-img">
+                                                <img src="/images/product01.png" alt="">
+                                            </div>
+                                            <div class="product-body">
+                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                                                <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+                                            </div>
+                                            <button class="delete"><i class="fa fa-close"></i></button>
                                         </div>
-                                        <div class="product-body">
-                                            <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+
+                                        <div class="product-widget">
+                                            <div class="product-img">
+                                                <img src="/images/product02.png" alt="">
+                                            </div>
+                                            <div class="product-body">
+                                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                                                <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+                                            </div>
+                                            <button class="delete"><i class="fa fa-close"></i></button>
                                         </div>
-                                        <button class="delete"><i class="fa fa-close"></i></button>
                                     </div>
-                                </div>
-                                <div class="cart-summary">
-                                    <small>3 Item(s) selected</small>
-                                    <h5>SUBTOTAL: $2940.00</h5>
-                                </div>
-                                <div class="cart-btns">
-                                    <a href="#">View Cart</a>
-                                    <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+                                    <div class="cart-summary">
+                                        <small>3 Item(s) selected</small>
+                                        <h5>SUBTOTAL: $2940.00</h5>
+                                    </div>
+                                    <div class="cart-btns">
+                                        <a href="#">View Cart</a>
+                                        <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <!-- /Cart -->
-                        <!--Account-->
-                        <div class="dropdown Account">
-                            <a href="#" class="d-inline-flex align-items-center text-decoration-none dropdown-toggle"
-                                id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-                                <i class="fa fa-user-o me-1"></i>
-                                <% if (user) { %>
-                                    <span>
-                                        <%= user.displayName %>
-                                    </span>
-                                    <% } else { %>
-                                        <span>Guest</span>
-                                        <% } %>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <% if (user) { %>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài
-                                            đặt</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>
-                                            Đăng xuất</a></li>
-                                    <% } else { %>
-                                        <li><a class="dropdown-item" href="/login"><i
-                                                    class="fas fa-sign-in-alt me-2"></i> Đăng nhập</a></li>
-                                        <li><a class="dropdown-item" href="/register"><i
-                                                    class="fas fa-user-plus me-2"></i> Đăng ký</a></li>
-                                        <% } %>
-                            </ul>
-                        </div>
-                        <!--/Account-->
-                        <!-- Menu Toogle -->
-                        <div class="menu-toggle">
-                            <a href="#">
-                                <i class="fa fa-bars"></i>
-                                <span>Menu</span>
-                            </a>
-                        </div>
-                        <!-- /Menu Toogle -->
+                            <!-- /Cart -->
+                            <!--Account-->
+                            <div class="dropdown Account">
+                                <a href="#"
+                                    class="d-inline-flex align-items-center text-decoration-none dropdown-toggle"
+                                    id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa fa-user-o me-1"></i>
+                                    <% if (user) { %>
+                                        <span>
+                                            <%= user.displayName %>
+                                        </span>
+                                        <% } else { %>
+                                            <span>Guest</span>
+                                            <% } %>
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                    <% if (user) { %>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ</a>
+                                        </li>
+                                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài
+                                                đặt</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="/logout"><i
+                                                    class="fas fa-sign-out-alt me-2"></i>
+                                                Đăng xuất</a></li>
+                                        <% } else { %>
+                                            <li><a class="dropdown-item" href="/login"><i
+                                                        class="fas fa-sign-in-alt me-2"></i> Đăng nhập</a></li>
+                                            <li><a class="dropdown-item" href="/register"><i
+                                                        class="fas fa-user-plus me-2"></i> Đăng ký</a></li>
+                                            <% } %>
+                                </ul>
+                            </div>
+                            <!--/Account-->
+                            <!-- Menu Toogle -->
+                            <div class="menu-toggle">
+                                <a href="#">
+                                    <i class="fa fa-bars"></i>
+                                    <span>Menu</span>
+                                </a>
+                            </div>
+                            <!-- /Menu Toogle -->
 
+                        </div>
                     </div>
+                    <!-- /ACCOUNT -->
                 </div>
-                <!-- /ACCOUNT -->
+                <!-- row -->
             </div>
-            <!-- row -->
+            <!-- container -->
         </div>
-        <!-- container -->
-    </div>
+    </header>
+
     <!-- /MAIN HEADER -->
     <!-- NAVIGATION -->
     <nav id="navigation">

@@ -18,7 +18,6 @@ app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use(session({
-  // secret: 'topSecretKey',
   secret: process.env.SERVER_SECRET_KEY,
   resave: false,
   saveUninitialized: true,
