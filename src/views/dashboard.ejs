@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Trang Web Bán Thiết Bị Công Nghệ</title>
+    <title>Admin Dashboard</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -16,12 +17,12 @@
             --warning-color: #f39c12;
             --danger-color: #e74c3c;
         }
-        
+
         body {
             background-color: #f8f9fa;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         .sidebar {
             background-color: var(--secondary-color);
             min-height: 100vh;
@@ -29,39 +30,39 @@
             position: fixed;
             width: 250px;
         }
-        
+
         .sidebar .logo {
             padding: 20px;
             font-size: 24px;
             font-weight: bold;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .sidebar ul {
             list-style: none;
             padding: 0;
         }
-        
+
         .sidebar ul li {
             padding: 10px 20px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
-        
+
         .sidebar ul li a {
             color: white;
             text-decoration: none;
             display: block;
         }
-        
+
         .sidebar ul li:hover {
             background-color: rgba(255, 255, 255, 0.1);
         }
-        
+
         .main-content {
             margin-left: 250px;
             padding: 20px;
         }
-        
+
         .dashboard-card {
             border-radius: 10px;
             padding: 20px;
@@ -69,29 +70,29 @@
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             color: white;
         }
-        
+
         .dashboard-card .value {
             font-size: 24px;
             font-weight: bold;
             margin-top: 10px;
         }
-        
+
         .dashboard-card.revenue {
             background-color: var(--primary-color);
         }
-        
+
         .dashboard-card.orders {
             background-color: var(--success-color);
         }
-        
+
         .dashboard-card.customers {
             background-color: var(--warning-color);
         }
-        
+
         .dashboard-card.products {
             background-color: var(--danger-color);
         }
-        
+
         .content-section {
             background-color: white;
             border-radius: 10px;
@@ -99,7 +100,7 @@
             margin-bottom: 20px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
         }
-        
+
         .section-title {
             border-bottom: 2px solid #f1f1f1;
             padding-bottom: 10px;
@@ -107,18 +108,18 @@
             font-weight: bold;
             color: var(--secondary-color);
         }
-        
+
         .table-responsive {
             overflow-x: auto;
         }
-        
+
         .header-container {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
         }
-        
+
         .user-info {
             display: flex;
             align-items: center;
@@ -127,7 +128,7 @@
             border-radius: 30px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        
+
         .user-avatar {
             width: 35px;
             height: 35px;
@@ -140,44 +141,45 @@
             margin-right: 10px;
             font-weight: bold;
         }
-        
+
         .user-details {
             display: flex;
             flex-direction: column;
         }
-        
+
         .user-name {
             font-weight: bold;
             font-size: 14px;
         }
-        
+
         .user-role {
             font-size: 12px;
             color: #777;
         }
-        
+
         @media (max-width: 992px) {
             .sidebar {
                 width: 100%;
                 position: relative;
                 min-height: auto;
             }
-            
+
             .main-content {
                 margin-left: 0;
             }
-            
+
             .header-container {
                 flex-direction: column;
                 align-items: flex-start;
             }
-            
+
             .user-info {
                 margin-top: 10px;
             }
         }
     </style>
 </head>
+
 <body>
     <!-- Sidebar -->
     <div class="sidebar">
@@ -187,6 +189,10 @@
             <li><a href="#orders"><i class="fas fa-shopping-cart me-2"></i> Đơn hàng</a></li>
             <li><a href="#products"><i class="fas fa-mobile-alt me-2"></i> Sản phẩm</a></li>
             <li><a href="#categories"><i class="fas fa-list me-2"></i> Loại sản phẩm</a></li>
+            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Nhãn hàng</a></li>
+            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Giao hàng</a></li>
+            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Nhà cung cấp</a></li>
+            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Voucher</a></li>
             <li><a href="#accounts"><i class="fas fa-users me-2"></i> Tài khoản</a></li>
             <li><a href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
         </ul>
@@ -204,19 +210,23 @@
                     <span class="user-role">Quản trị viên</span>
                 </div>
                 <div class="dropdown ms-2">
-                    <button class="btn btn-sm dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-sm dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown"
+                        aria-expanded="false">
                         <i class="fas fa-angle-down"></i>
                     </button>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                         <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
                         <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+                        <li>
+                            <hr class="dropdown-divider">
+                        </li>
+                        <li><a class="dropdown-item" href="logout.php"><i class="fas fa-sign-out-alt me-2"></i> Đăng
+                                xuất</a></li>
                     </ul>
                 </div>
             </div>
         </div>
-        
+
         <!-- Stats Panels -->
         <div class="row" id="dashboard">
             <div class="col-md-3">
@@ -244,7 +254,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Orders Section -->
         <div class="content-section" id="orders">
             <h3 class="section-title">Quản lý đơn hàng</h3>
@@ -255,6 +265,7 @@
                             <th>Mã ĐH</th>
                             <th>Khách hàng</th>
                             <th>Ngày đặt</th>
+                            <th>Phương thức thanh toán</th>
                             <th>Tổng tiền</th>
                             <th>Trạng thái</th>
                             <th>Thao tác</th>
@@ -265,32 +276,9 @@
                             <td>#ORD001</td>
                             <td>Nguyễn Văn A</td>
                             <td>25/03/2025</td>
+                            <td>Momo</td>
                             <td>12,500,000 VNĐ</td>
                             <td><span class="badge bg-success">Đã giao</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#ORD002</td>
-                            <td>Trần Thị B</td>
-                            <td>26/03/2025</td>
-                            <td>8,900,000 VNĐ</td>
-                            <td><span class="badge bg-warning text-dark">Đang giao</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>#ORD003</td>
-                            <td>Lê Văn C</td>
-                            <td>30/03/2025</td>
-                            <td>21,500,000 VNĐ</td>
-                            <td><span class="badge bg-info">Chờ xác nhận</span></td>
                             <td>
                                 <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
                                 <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
@@ -300,7 +288,7 @@
                     </tbody>
                 </table>
             </div>
-            <nav aria-label="Page navigation">
+            <!-- <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-end">
                     <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
                     <li class="page-item active"><a class="page-link" href="#">1</a></li>
@@ -308,9 +296,9 @@
                     <li class="page-item"><a class="page-link" href="#">3</a></li>
                     <li class="page-item"><a class="page-link" href="#">Sau</a></li>
                 </ul>
-            </nav>
+            </nav> -->
         </div>
-        
+
         <!-- Products Section -->
         <div class="content-section" id="products">
             <h3 class="section-title">Quản lý sản phẩm</h3>
@@ -324,9 +312,10 @@
                             <th>Mã SP</th>
                             <th>Tên sản phẩm</th>
                             <th>Loại</th>
+                            <th>Giá nhập</th>
                             <th>Giá bán</th>
-                            <th>Tồn kho</th>
-                            <th>Trạng thái</th>
+                            <th>Xuất xứ</th>
+                            <th>Bảo hành</th>
                             <th>Thao tác</th>
                         </tr>
                     </thead>
@@ -335,48 +324,10 @@
                             <td>SP001</td>
                             <td>iPhone 15 Pro Max</td>
                             <td>Điện thoại</td>
+                            <td>3,990,000 VNĐ</td>
                             <td>30,990,000 VNĐ</td>
-                            <td>15</td>
-                            <td><span class="badge bg-success">Còn hàng</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SP002</td>
-                            <td>MacBook Pro M3</td>
-                            <td>Laptop</td>
-                            <td>45,990,000 VNĐ</td>
-                            <td>8</td>
-                            <td><span class="badge bg-success">Còn hàng</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SP003</td>
-                            <td>iPad Pro 12.9</td>
-                            <td>Tablet</td>
-                            <td>25,490,000 VNĐ</td>
-                            <td>0</td>
-                            <td><span class="badge bg-danger">Hết hàng</span></td>
-                            <td>
-                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>SP004</td>
-                            <td>Samsung Galaxy S24 Ultra</td>
-                            <td>Điện thoại</td>
-                            <td>27,990,000 VNĐ</td>
-                            <td>12</td>
-                            <td><span class="badge bg-success">Còn hàng</span></td>
+                            <td>Mĩ Tho</td>
+                            <td>10 năm</td>
                             <td>
                                 <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
                                 <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
@@ -386,7 +337,7 @@
                     </tbody>
                 </table>
             </div>
-            <nav aria-label="Page navigation">
+            <!-- <nav aria-label="Page navigation">
                 <ul class="pagination justify-content-end">
                     <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
                     <li class="page-item active"><a class="page-link" href="#">1</a></li>
@@ -394,9 +345,9 @@
                     <li class="page-item"><a class="page-link" href="#">3</a></li>
                     <li class="page-item"><a class="page-link" href="#">Sau</a></li>
                 </ul>
-            </nav>
+            </nav> -->
         </div>
-        
+
         <!-- Categories Section -->
         <div class="content-section" id="categories">
             <h3 class="section-title">Quản lý loại sản phẩm</h3>
@@ -435,7 +386,146 @@
                 </table>
             </div>
         </div>
-        
+
+        <!-- Brands Section -->
+        <div class="content-section" id="brands">
+            <h3 class="section-title">Quản lý nhãn hàng</h3>
+            <div class="mb-3">
+                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm nhãn hàng mới</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã nhãn hàng</th>
+                            <th>Tên nhãn hàng</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>L001</td>
+                            <td>Điện thoại</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Shipping Section -->
+        <div class="content-section" id="shipping">
+            <h3 class="section-title">Quản lý giao hàng</h3>
+            <div class="mb-3">
+                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm đơn giao hàng mới</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã giao hàng</th>
+                            <th>Ngày giao</th>
+                            <th>Phương thức giao</th>
+                            <th>Trạng thái</th>
+                            <th>Người nhận</th>
+                            <th>Mã đơn hàng</th>
+                            <th>Địa chỉ</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>L001</td>
+                            <td>30/4/2025</td>
+                            <td>hoả tốc</td>
+                            <td>bị bom hàng</td>
+                            <td>zunex phạm</td>
+                            <td>1</td>
+                            <td>475a điện biên phủ</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Supplier Section -->
+        <div class="content-section" id="suppliers">
+            <h3 class="section-title">Quản lý nhà cung cấp</h3>
+            <div class="mb-3">
+                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm nhà cung cấp mới</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Mã nhà cung cấp</th>
+                            <th>Tên nhà cung cấp</th>
+                            <th>Điện thoại</th>
+                            <th>Email</th>
+                            <th>Địa chỉ</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>L001</td>
+                            <td>Zunex phạm</td>
+                            <td>00000001</td>
+                            <td>zunex@gmail.com</td>
+                            <td>475a điện biên phủ</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Voucher Section -->
+        <div class="content-section" id="vouchers">
+            <h3 class="section-title">Quản lý voucher</h3>
+            <div class="mb-3">
+                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm voucher</button>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Mã voucher</th>
+                            <th>Trị giá</th>
+                            <th>Ngày bắt đầu</th>
+                            <th>ngày kết thúc</th>
+                            <th>Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>L001</td>
+                            <td>sale999</td>
+                            <td>100%</td>
+                            <td>30/4</td>
+                            <td>1/5</td>
+                            <td>
+                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
+                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
         <!-- Accounts Section -->
         <div class="content-section" id="accounts">
             <h3 class="section-title">Quản lý tài khoản</h3>
@@ -447,7 +537,6 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Tên tài khoản</th>
                             <th>Email</th>
                             <th>Mật khẩu</th>
                             <th>Quyền</th>
@@ -457,54 +546,20 @@
                     <tbody>
                         <tr>
                             <td>1</td>
-                            <td>admin</td>
                             <td>admin@techstore.vn</td>
                             <td>
                                 <div class="input-group">
-                                    <input type="password" class="form-control form-control-sm" value="admin123" id="password1" readonly>
-                                    <button class="btn btn-sm btn-outline-secondary toggle-password" type="button" data-target="password1">
+                                    <input type="password" class="form-control form-control-sm" value="admin123"
+                                        id="password1" readonly>
+                                    <button class="btn btn-sm btn-outline-secondary toggle-password" type="button"
+                                        data-target="password1">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </div>
                             </td>
                             <td>Admin</td>
                             <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>nhanvien1</td>
-                            <td>nhanvien1@techstore.vn</td>
-                            <td>
-                                <div class="input-group">
-                                    <input type="password" class="form-control form-control-sm" value="nhanvien123" id="password2" readonly>
-                                    <button class="btn btn-sm btn-outline-secondary toggle-password" type="button" data-target="password2">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td>Nhân viên</td>
-                            <td>
-                                <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
-                                <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>quanly</td>
-                            <td>quanly@techstore.vn</td>
-                            <td>
-                                <div class="input-group">
-                                    <input type="password" class="form-control form-control-sm" value="quanly123" id="password3" readonly>
-                                    <button class="btn btn-sm btn-outline-secondary toggle-password" type="button" data-target="password3">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </div>
-                            </td>
-                            <td>Quản lý</td>
-                            <td>
+                                <button class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></button>
                                 <button class="btn btn-sm btn-info"><i class="fas fa-edit"></i></button>
                                 <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
                             </td>
@@ -518,15 +573,15 @@
     <!-- Bootstrap JS và jQuery -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    
+
     <!-- JavaScript -->
     <script>
         // Hiện/ẩn mật khẩu
-        $(document).ready(function() {
-            $('.toggle-password').click(function() {
+        $(document).ready(function () {
+            $('.toggle-password').click(function () {
                 const targetId = $(this).data('target');
                 const passwordInput = $('#' + targetId);
-                
+
                 if (passwordInput.attr('type') === 'password') {
                     passwordInput.attr('type', 'text');
                     $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
@@ -535,21 +590,22 @@
                     $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
                 }
             });
-            
+
             // Smooth scroll khi click vào các mục trong sidebar
-            $('a[href^="#"]').on('click', function(e) {
+            $('a[href^="#"]').on('click', function (e) {
                 e.preventDefault();
-                
+
                 const target = this.hash;
                 const $target = $(target);
-                
+
                 $('html, body').animate({
                     'scrollTop': $target.offset().top - 20
                 }, 800, 'swing');
             });
         });
     </script>
-    
-    
+
+
 </body>
+
 </html>

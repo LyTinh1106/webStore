@@ -2,10 +2,14 @@ const Product = require("../models/ProductModel");
 
 
 const getProduct = (req,res) => {
-    res.render('Product')
+    res.render('Product', {
+      user: req.user || null 
+    });
 }
 const getStore = (req,res) => {
-    res.render('Store')
+    res.render('Store', {
+      user: req.user || null 
+    })
 }
 
 
