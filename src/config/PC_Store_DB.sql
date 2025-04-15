@@ -110,7 +110,6 @@ CREATE TABLE order_table (
     order_status ENUM('approving', 'on delivering', 'delivered', 'completed'),
     account_id INT,
     total_payment FLOAT,
-    FOREIGN KEY (product_id) REFERENCES product(id),
     FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
