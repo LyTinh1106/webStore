@@ -4,8 +4,8 @@ const Order = function(order) {
   this.created_at = order.created_at;
   this.payment_method = order.payment_method;
   this.order_status = order.order_status;
-  this.product_id = order.product_id;
   this.account_id = order.account_id;
+  this.total_payment = order.total_payment
 };
 
 
@@ -37,7 +37,7 @@ Order.findById = (id, result) => {
 
 
 Order.getAll = (result) => {
-  sql.query("SELECT * FROM order_table", (err, res) => {
+  sql.query("SELECT *, a.email FROM order_table o join account a on o.account_id = a.id", (err, res) => {
     if (err) {
       result(null, err);
       return;
@@ -49,8 +49,15 @@ Order.getAll = (result) => {
 
 Order.updateById = (id, order, result) => {
   sql.query(
-    "UPDATE order_table SET created_at = ?, payment_method = ?, order_status = ?, product_id = ?, account_id = ? WHERE id = ?",
-    [order.created_at, order.payment_method, order.order_status, order.product_id, order.account_id, id],
+    "UPDATE order_table SET created_at = ?, payment_method = ?, order_status = ?, account_id = ?, total_payment = ? WHERE id = ?",
+    [
+      order.created_at,
+      order.payment_method,
+      order.order_status,
+      order.account_id,
+      order.total_payment,
+      id
+    ],
     (err, res) => {
       if (err) {
         result(null, err);
@@ -64,7 +71,6 @@ Order.updateById = (id, order, result) => {
     }
   );
 };
-
 
 Order.remove = (id, result) => {
   sql.query("DELETE FROM order_table WHERE id = ?", [id], (err, res) => {

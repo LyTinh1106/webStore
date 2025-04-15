@@ -43,11 +43,15 @@ Product.findById = (id, result) => {
 };
 
 Product.getAll = (name, result) => {
-  let query = "SELECT * FROM product";
+  let query = `
+    SELECT p.*, c.name as "category_name"
+    FROM product p
+    LEFT JOIN category c ON p.category_id = c.id
+  `;
   let params = [];
 
   if (name) {
-    query += " WHERE name LIKE ?";
+    query += " WHERE p.name LIKE ?";
     params.push(`%${name}%`);
   }
 
@@ -62,6 +66,7 @@ Product.getAll = (name, result) => {
     result(null, res);
   });
 };
+
 
 Product.updateById = (id, product, result) => {
   sql.query(

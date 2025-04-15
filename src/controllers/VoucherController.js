@@ -1,75 +1,91 @@
-const Voucher = require('../models/VoucherModel');
+const Voucher = require("../models/VoucherModel");
 
-// Thêm voucher mới
-const createVoucher = (req, res) => {
-  const { voucher_code, voucher_value, date_start, date_end } = req.body;
+// [GET] /vouchers - Hiển thị danh sách voucher (có lọc theo code)
+exports.getAllVouchers = (req, res) => {
+  const code = req.query.code?.trim();
+
+  Voucher.getAll(code, (err, data) => {
+    if (err) {
+      res.status(500).render("error", { message: "Lỗi khi lấy danh sách voucher." });
+    } else {
+      res.render("voucherDashboard", { vouchers: data });
+    }
+  });
+};
+
+// [GET] /vouchers/:id - Chi tiết voucher
+exports.getVoucherById = (req, res) => {
+  const id = req.params.id;
+
+  Voucher.findById(id, (err, data) => {
+    if (err) {
+      res.status(500).render("error", { message: `Lỗi khi truy xuất voucher với ID ${id}.` });
+    } else if (!data) {
+      res.status(404).render("error", { message: `Không tìm thấy voucher với ID ${id}.` });
+    } else {
+      res.render("voucherDashboard", { voucher: data, mode: "edit" });
+    }
+  });
+};
+
+// [POST] /vouchers - Tạo mới voucher
+exports.createVoucher = (req, res) => {
+  const voucher_code = req.body.voucher_code?.trim();
+  const voucher_value = req.body.voucher_value?.trim();
+  const date_start = req.body.date_start?.trim();
+  const date_end = req.body.date_end?.trim();
 
   if (!voucher_code || !voucher_value || !date_start || !date_end) {
-    return res.status(400).json({ message: "Thiếu thông tin voucher." });
+    return res.status(400).render("error", { message: "Thiếu thông tin voucher." });
   }
 
   const newVoucher = new Voucher({ voucher_code, voucher_value, date_start, date_end });
 
   Voucher.create(newVoucher, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi tạo voucher." });
-    res.status(201).json({ message: "Tạo voucher thành công", data });
+    if (err) {
+      res.status(500).render("error", { message: "Lỗi khi tạo voucher." });
+    } else {
+      res.redirect("/vouchers");
+    }
   });
 };
 
-// Lấy voucher theo ID
-const getVoucherById = (req, res) => {
-  const voucherId = req.params.id;
-
-  Voucher.findById(voucherId, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi lấy voucher." });
-    if (!data) return res.status(404).json({ message: "Voucher không tồn tại." });
-    res.status(200).json(data);
-  });
-};
-
-// Lấy tất cả voucher (tuỳ chọn lọc theo voucher_code)
-const getAllVouchers = (req, res) => {
-  const { code } = req.query;
-
-  Voucher.getAll(code, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi lấy danh sách voucher." });
-    res.status(200).json(data);
-  });
-};
-
-// Cập nhật voucher
-const updateVoucher = (req, res) => {
-  const voucherId = req.params.id;
-  const { voucher_code, voucher_value, date_start, date_end } = req.body;
+// [POST] /vouchers/:id/update - Cập nhật voucher
+exports.updateVoucher = (req, res) => {
+  const id = req.params.id;
+  const voucher_code = req.body.voucher_code?.trim();
+  const voucher_value = req.body.voucher_value?.trim();
+  const date_start = req.body.date_start?.trim();
+  const date_end = req.body.date_end?.trim();
 
   if (!voucher_code || !voucher_value || !date_start || !date_end) {
-    return res.status(400).json({ message: "Thiếu thông tin cập nhật." });
+    return res.status(400).render("error", { message: "Thiếu thông tin cập nhật voucher." });
   }
 
-  const updatedVoucher = { voucher_code, voucher_value, date_start, date_end };
+  const updatedVoucher = new Voucher({ voucher_code, voucher_value, date_start, date_end });
 
-  Voucher.updateById(voucherId, updatedVoucher, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi cập nhật voucher." });
-    if (!data) return res.status(404).json({ message: "Voucher không tồn tại." });
-    res.status(200).json({ message: "Cập nhật voucher thành công", data });
+  Voucher.updateById(id, updatedVoucher, (err, data) => {
+    if (err) {
+      res.status(500).render("error", { message: `Lỗi khi cập nhật voucher với ID ${id}.` });
+    } else if (!data) {
+      res.status(404).render("error", { message: `Không tìm thấy voucher với ID ${id}.` });
+    } else {
+      res.redirect("/vouchers");
+    }
   });
 };
 
-// Xoá voucher
-const deleteVoucher = (req, res) => {
-  const voucherId = req.params.id;
+// [POST] /vouchers/:id/delete - Xoá voucher
+exports.deleteVoucher = (req, res) => {
+  const id = req.params.id;
 
-  Voucher.remove(voucherId, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi xoá voucher." });
-    if (!data) return res.status(404).json({ message: "Voucher không tồn tại." });
-    res.status(200).json({ message: "Xoá voucher thành công" });
+  Voucher.remove(id, (err, data) => {
+    if (err) {
+      res.status(500).render("error", { message: `Lỗi khi xoá voucher với ID ${id}.` });
+    } else if (!data) {
+      res.status(404).render("error", { message: `Không tìm thấy voucher với ID ${id}.` });
+    } else {
+      res.redirect("/vouchers");
+    }
   });
-};
-
-module.exports = {
-  createVoucher,
-  getVoucherById,
-  getAllVouchers,
-  updateVoucher,
-  deleteVoucher
 };

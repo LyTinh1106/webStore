@@ -43,7 +43,15 @@ Shipping.findById = (id, result) => {
 
 // Lấy tất cả shipping
 Shipping.getAll = (result) => {
-  sql.query("SELECT * FROM shipping", (err, res) => {
+  const query = ` SELECT 
+      s.*, 
+      CONCAT(c.first_name, ' ', c.last_name) AS customer_name
+    FROM 
+      shipping s
+    JOIN 
+      customer c ON s.id_customer = c.id`;
+
+  sql.query(query, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
@@ -53,6 +61,7 @@ Shipping.getAll = (result) => {
     result(null, res);
   });
 };
+
 
 // Cập nhật thông tin shipping theo ID
 Shipping.updateById = (id, shipping, result) => {

@@ -1,7 +1,7 @@
 const express = require('express');
 const {
   createProduct,
-  getAllProducts,
+  getProduct,
   getProductById,
   updateProduct,
   deleteProduct
@@ -10,7 +10,7 @@ const {
 const router = express.Router();
 
 // Get all products or filter by name (optional query param ?name=)
-router.get('/', getAllProducts);
+router.get('/', getProduct);
 
 // Get a single product by fancy_id
 router.get('/:id', getProductById);

@@ -1,68 +1,90 @@
-const Order = require('../models/OrderModel');
+const Order = require("../models/OrderModel");
 
-// Tạo đơn hàng mới
-const createOrder = (req, res) => {
+// [GET] /orders - Hiển thị danh sách đơn hàng
+exports.getAllOrders = (req, res) => {
+  const { status } = req.query;
+
+  Order.getAll(status, (err, data) => {
+    if (err) {
+      res.status(500).render("error", { message: err.message || "Đã xảy ra lỗi khi lấy danh sách đơn hàng." });
+    } else {
+      res.render("orderDashboard", { orders: data });
+    }
+  });
+};
+
+// [GET] /orders/:id - Chi tiết đơn hàng
+exports.getOrderById = (req, res) => {
+  const id = req.params.id;
+  Order.findById(id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy đơn hàng với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: `Lỗi truy xuất đơn hàng với ID ${id}.` });
+      }
+    } else {
+      res.render("orderDashboard", { order: data, mode: "edit" }); // Nếu dùng chung dashboard, thêm mode
+    }
+  });
+};
+
+// [POST] /orders - Tạo mới đơn hàng
+exports.createOrder = (req, res) => {
   const { created_at, payment_method, order_status, product_id, account_id } = req.body;
 
   if (!created_at || !payment_method || !order_status || !product_id || !account_id) {
-    return res.status(400).json({ message: "Thiếu thông tin đơn hàng." });
+    return res.status(400).render("error", { message: "Thiếu thông tin đơn hàng." });
   }
 
   const newOrder = new Order({ created_at, payment_method, order_status, product_id, account_id });
 
   Order.create(newOrder, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi tạo đơn hàng." });
-    res.status(201).json({ message: "Tạo đơn hàng thành công", data });
+    if (err) {
+      res.status(500).render("error", { message: err.message || "Lỗi khi tạo đơn hàng." });
+    } else {
+      res.redirect("/orders");
+    }
   });
 };
 
-// Lấy đơn hàng theo ID
-const getOrderById = (req, res) => {
-  Order.findById(req.params.id, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi tìm đơn hàng." });
-    if (!data) return res.status(404).json({ message: "Không tìm thấy đơn hàng." });
-    res.status(200).json(data);
-  });
-};
-
-// Lấy tất cả đơn hàng
-const getAllOrders = (req, res) => {
-  Order.getAll((err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi lấy danh sách đơn hàng." });
-    res.status(200).json(data);
-  });
-};
-
-// Cập nhật đơn hàng
-const updateOrder = (req, res) => {
+// [POST] /orders/:id/update - Cập nhật đơn hàng
+exports.updateOrder = (req, res) => {
+  const id = req.params.id;
   const { created_at, payment_method, order_status, product_id, account_id } = req.body;
 
   if (!created_at || !payment_method || !order_status || !product_id || !account_id) {
-    return res.status(400).json({ message: "Thiếu thông tin để cập nhật đơn hàng." });
+    return res.status(400).render("error", { message: "Thiếu thông tin để cập nhật đơn hàng." });
   }
 
   const updatedOrder = new Order({ created_at, payment_method, order_status, product_id, account_id });
 
-  Order.updateById(req.params.id, updatedOrder, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi cập nhật đơn hàng." });
-    if (!data) return res.status(404).json({ message: "Không tìm thấy đơn hàng để cập nhật." });
-    res.status(200).json({ message: "Cập nhật đơn hàng thành công", data });
+  Order.updateById(id, updatedOrder, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy đơn hàng với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: "Lỗi khi cập nhật đơn hàng." });
+      }
+    } else {
+      res.redirect("/orders");
+    }
   });
 };
 
-// Xoá đơn hàng
-const deleteOrder = (req, res) => {
-  Order.remove(req.params.id, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi xoá đơn hàng." });
-    if (!data) return res.status(404).json({ message: "Không tìm thấy đơn hàng để xoá." });
-    res.status(200).json({ message: "Xoá đơn hàng thành công" });
-  });
-};
+// [POST] /orders/:id/delete - Xóa đơn hàng
+exports.deleteOrder = (req, res) => {
+  const id = req.params.id;
 
-module.exports = {
-  createOrder,
-  getOrderById,
-  getAllOrders,
-  updateOrder,
-  deleteOrder,
+  Order.remove(id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("error", { message: `Không tìm thấy đơn hàng với ID ${id}.` });
+      } else {
+        res.status(500).render("error", { message: "Lỗi khi xóa đơn hàng." });
+      }
+    } else {
+      res.redirect("/orders");
+    }
+  });
 };

@@ -1,6 +1,12 @@
 const Account = require("../models/AccountModel");
 const bcrypt = require("bcrypt");
 const Category = require('../models/CategoryModel')
+const Brand = require('../models/BrandModel')
+const Product = require('../models/ProductModel')
+const Order = require('../models/OrderModel')
+const Shipping = require('../models/ShippingModel')
+const Supplier = require('../models/SupplierModel')
+const Voucher = require('../models/VoucherModel')
 const saltRounds = 10;
 
 const getHomePage = (req, res) => {
@@ -14,9 +20,8 @@ const getLogin = (req, res) => {
     res.render('login');
   };
   const getDashboard = (req, res) => {
-    
-    if (req.session.user.role !== 'admin') {
-      return res.redirect('/homepage?error=Truy cập bị từ chối');
+    if (!req.session.user || req.session.user.role !== 'admin') {
+      return res.redirect('/homepage?error=Truy+cập+bị+từ+chối');
     }
   
     Account.getAll(null, (err, accounts) => {
@@ -29,10 +34,60 @@ const getLogin = (req, res) => {
           return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách danh mục' });
         }
   
-        res.render('dashboard', { accounts, categories, user: req.session.user });
+        Brand.getAll(null, (err, brands) => {
+          if (err) {
+            return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhãn hàng' });
+          }
+  
+          Product.getAll(null, (err, products) => {
+            if (err) {
+              return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách sản phẩm' });
+            }
+  
+            Order.getAll((err, orders) => {
+              if (err) {
+                return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách đơn hàng' });
+              }
+  
+              Shipping.getAll((err, shippings) => {
+                if (err) {
+                  return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
+                }
+  
+                Supplier.getAll((err, suppliers) => {
+                  if (err) {
+                    return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
+                  }
+  
+                  Voucher.getAll(null, (err, vouchers) => {
+                    if (err) {
+                      return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
+                    }
+  
+                    res.render('dashboard', {
+                      user: req.session.user,
+                      accounts,
+                      categories,
+                      brands,
+                      products,
+                      orders,
+                      shippings,
+                      suppliers,
+                      vouchers
+                    });
+                  });
+                });
+              });
+            });
+          });
+        });
       });
     });
   };
+  
+  
+  
+  
   
  
   
@@ -168,7 +223,7 @@ const register = async (req, res) => {
         const newAccount = {
           email,
           password: hashedPassword,
-          role: "customer", h
+          role: "customer" 
         };
   
         Account.create(newAccount, (err, data) => {
