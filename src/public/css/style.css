@@ -97,7 +97,7 @@ ul, ol {
 .primary-btn {
   display: inline-block;
   padding: 12px 30px;
-  background-color: #1B56FD;
+  background-color: #E52020;
   border: none;
   border-radius: 40px;
   color: #FFF;
@@ -910,8 +910,8 @@ textarea.input {
 }
 
 .product:hover {
-  -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
-  box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #D10024;
+  -webkit-box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #222222;
+  box-shadow: 0px 0px 6px 0px #E4E7ED, 0px 0px 0px 2px #222222;
 }
 
 .product .product-img {
@@ -1000,7 +1000,7 @@ textarea.input {
 }
 
 .product .product-body .product-rating>i.fa-star {
-  color: #E52020;
+  color: #FEBA17;
 }
 
 .product .product-body .product-rating:after {
@@ -1089,7 +1089,7 @@ textarea.input {
   border: 2px solid transparent;
   height: 40px;
   padding: 0 30px;
-  background-color: #1B56FD;
+  background-color: #E52020;
   color: #FFF;
   text-transform: uppercase;
   font-weight: 700;
@@ -1105,15 +1105,15 @@ textarea.input {
   width: 40px;
   height: 40px;
   line-height: 38px;
-  color: #1B56FD;
+  color: #E52020;
   opacity: 0;
   visibility: hidden;
 }
 
 .product .add-to-cart .add-to-cart-btn:hover {
   background-color: #FFF;
-  color: #1B56FD;
-  border-color: #1B56FD;
+  color: #E52020;
+  border-color: #E52020;
   padding: 0px 30px 0px 50px;
 }
 
@@ -1528,7 +1528,7 @@ textarea.input {
 }
 
 .product-details .product-rating>i.fa-star {
-  color: #E52020;
+  color: #FEBA17;
 }
 
 .product-details .review-link {
@@ -1554,7 +1554,7 @@ textarea.input {
   text-transform: uppercase;
   font-weight: 700;
   margin-left: 30px;
-  color: #1B56FD;
+  color: #E52020;
 }
 
 .product-details .product-options {
@@ -1583,7 +1583,7 @@ textarea.input {
   border: 2px solid transparent;
   height: 40px;
   padding: 0 30px;
-  background-color: #3556a3;
+  background-color: #E52020;
   color: #FFF;
   text-transform: uppercase;
   font-weight: 700;
@@ -1599,15 +1599,15 @@ textarea.input {
   width: 40px;
   height: 40px;
   line-height: 38px;
-  color: #1B56FD;
+  color: #E52020;
   opacity: 0;
   visibility: hidden;
 }
 
 .product-details .add-to-cart .add-to-cart-btn:hover {
   background-color: #FFF;
-  color: #1B56FD;
-  border-color: #1B56FD;
+  color: #E52020;
+  border-color: #E52020;
   padding: 0px 30px 0px 50px;
 }
 
@@ -1735,7 +1735,7 @@ textarea.input {
 }
 
 .rating-avg .rating-stars>i.fa-star, .rating .rating-stars>i.fa-star {
-  color: #1B56FD;
+  color: #FEBA17;
 }
 
 .rating li {
@@ -1753,7 +1753,7 @@ textarea.input {
 }
 
 .rating .rating-progress>div {
-  background-color: #1B56FD;
+  background-color: #0118D8;
   position: absolute;
   left: 0;
   top: 0;
@@ -1807,7 +1807,7 @@ textarea.input {
 }
 
 .reviews .review-heading .review-rating>i.fa-star {
-  color: #1B56FD;
+  color: #FEBA17;
 }
 
 .reviews-pagination {
@@ -1877,12 +1877,12 @@ textarea.input {
 }
 
 .review-form .input-rating .stars>label:hover:before, .review-form .input-rating .stars>label:hover~label:before {
-  color: #1B56FD;
+  color: #FEBA17;
 }
 
 .review-form .input-rating .stars>input:checked label:before, .review-form .input-rating .stars>input:checked~label:before {
   content: "\f005";
-  color: #1B56FD;
+  color: #FEBA17;
 }
 
 /*=========================================================
@@ -2085,7 +2085,7 @@ textarea.input {
 }
 
 .footer-links li a:hover {
-  color: #1B56FD;
+  color: #F5F5F5;
 }
 
 .copyright {
