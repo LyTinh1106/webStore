@@ -31,6 +31,7 @@
 	);
 	/////////////////////////////////////////
 
+
 	// Products Slick
 	$('.products-slick').each(function () {
 		var $this = $(this),
@@ -67,7 +68,7 @@
 	$('.banners-slick').each(function () {
 		var $this = $(this),
 			$nav = $this.attr('data-nav');
-	
+
 		$this.slick({
 			slidesToShow: 1,
 			slidesToScroll: 1,
@@ -77,7 +78,6 @@
 			dots: true,
 			arrows: true,
 			appendArrows: $nav ? $nav : false,
-			// fade: true,
 			rslidesToShow: 1,
 			slidesToScroll: 1,
 		});
@@ -201,5 +201,30 @@
 			handle ? priceInputMax.value = value : priceInputMin.value = value
 		});
 	}
+	/////////////////////////////////////////
+	// Dropdown toggle on click + hover
+	$('.account-dropdown').on('click', function (e) {
+		e.stopPropagation();
+	});
+
+	$('.dropdown').hover(
+		function (e) {
+			$(this).find('.account-dropdown').stop(true, true).slideDown(100);
+		},
+		function (e) {
+			$(this).find('.account-dropdown').stop(true, true).slideUp(100);
+		}
+	);
+
+	$('.dropdown').hover(
+		function () {
+			$(this).addClass('open');
+		},
+		function () {
+			$(this).removeClass('open');
+		}
+	);
+
+
 })(jQuery);
 

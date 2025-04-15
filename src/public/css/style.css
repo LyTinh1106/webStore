@@ -1235,18 +1235,33 @@ textarea.input {
   z-index: 10;
 }
 
-.products-slick-nav .slick-prev, .products-slick-nav .slick-next {
+.products-slick-nav .slick-next{
   position: static;
   -webkit-transform: none;
   -ms-transform: none;
   transform: none;
-  width: 20px;
-  height: 20px;
+  width: 40px;
+  height: 40px;
   display: inline-block !important;
   margin: 0px 2px;
 }
 
-.products-slick-nav .slick-prev:before, .products-slick-nav .slick-next:before {
+.products-slick-nav .slick-prev {
+  position: static;
+  -webkit-transform: none;
+  -ms-transform: none;
+  transform: none;
+  width: 40px;
+  height: 40px;
+  display: inline-block !important;
+  margin: 0px 2px;
+}
+
+.products-slick-nav .slick-prev:before {
+  font-size: 14px;
+}
+
+.products-slick-nav .slick-next:before {
   font-size: 14px;
 }
 
@@ -1961,91 +1976,6 @@ textarea.input {
 }
 
 /*=========================================================
-	10 -> NEWSLETTER
-===========================================================*/
-
-#newsletter.section {
-  border-top: 2px solid #E4E7ED;
-  border-bottom: 3px solid #1B56FD;
-  margin-top: 30px;
-}
-
-.newsletter {
-  text-align: center;
-}
-
-.newsletter p {
-  font-size: 24px;
-}
-
-.newsletter form {
-  position: relative;
-  max-width: 520px;
-  margin: 30px auto;
-}
-
-.newsletter form:after {
-  content: "\f003";
-  font-family: FontAwesome;
-  position: absolute;
-  font-size: 160px;
-  color: #E4E7ED;
-  top: 15px;
-  -webkit-transform: translateY(-50%) rotate(15deg);
-  -ms-transform: translateY(-50%) rotate(15deg);
-  transform: translateY(-50%) rotate(15deg);
-  z-index: -1;
-  left: -90px;
-}
-
-.newsletter form .input {
-  width: calc(100% - 160px);
-  margin-right: -4px;
-  border-radius: 40px 0px 0px 40px;
-}
-
-.newsletter form .newsletter-btn {
-  width: 160px;
-  height: 40px;
-  font-weight: 700;
-  background: #1B56FD;
-  color: #FFF;
-  border: none;
-  border-radius: 0px 40px 40px 0px;
-}
-
-.newsletter .newsletter-follow {
-  text-align: center;
-}
-
-.newsletter .newsletter-follow li {
-  display: inline-block;
-  margin-right: 5px;
-}
-
-.newsletter .newsletter-follow li:last-child {
-  margin-right: 0px;
-}
-
-.newsletter .newsletter-follow li a {
-  position: relative;
-  display: block;
-  width: 40px;
-  height: 40px;
-  text-align: center;
-  line-height: 40px;
-  border: 1px solid #E4E7ED;
-  background-color: #FFF;
-  -webkit-transition: 0.2s all;
-  transition: 0.2s all;
-}
-
-.newsletter .newsletter-follow li a:hover, .newsletter .newsletter-follow li a:focus {
-  background-color: #E4E7ED;
-  color: #1B56FD;
-}
-
-/*=========================================================
 	11 -> FOOTER
 ===========================================================*/
 
@@ -2114,10 +2044,10 @@ textarea.input {
 \*----------------------------*/
 
 .slick-prev, .slick-next {
-  width: 40px;
-  height: 40px;
+  width: 50px;
+  height: 50px;
   border: 1px solid #E4E7ED;
-  background-color: #FFF;
+  background-color: #f5f5f5c7;
   border-radius: 50%;
   z-index: 22;
   -webkit-transition: 0.2s all;
@@ -2454,11 +2384,6 @@ textarea.input {
   margin-bottom: 30px;
 }
 
-
-/* .google {
-  background-color: #dd4b39;
-} */
-
 .login-text {
   text-align: center;
   color: #666;
@@ -2473,9 +2398,12 @@ textarea.input {
   font-weight: bold;
   text-decoration: none;
 }
-
 /* devider */
 .dropdown-menu .dropdown-divider {
   border-top: 2px solid #ddd; /* dày hơn và màu đậm hơn */
   margin: 0.5rem 0;
+}
+.Account .dropdown-menu {
+  margin-top: 0 !important;
+  top: 100% !important;
 }
