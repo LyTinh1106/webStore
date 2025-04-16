@@ -29,8 +29,10 @@ exports.getCategoryById = (req, res) => {
 
 // [POST] /categories - Tạo mới category
 exports.createCategory = (req, res) => {
-  if (!req.body.name) {
-    return res.status(400).render("error", { message: "Tên category không được để trống." });
+  const cat_name = req.body.name?.trim();
+  if (!cat_name) {
+    // return res.status(400).render("error", { message: "Tên category không được để trống." });
+    return res.status(400).send("Tên category không được để trống.");
   }
 
   const newCategory = new Category({ name: req.body.name });
@@ -38,7 +40,7 @@ exports.createCategory = (req, res) => {
     if (err) {
       res.status(500).render("error", { message: err.message || "Lỗi khi tạo category." });
     } else {
-      res.redirect("/dashboard");
+      return res.status(201).json({ success: true, message: "Tạo category thành công!", brand: data });
     }
   });
 };

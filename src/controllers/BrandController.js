@@ -43,6 +43,7 @@ exports.createBrand = (req, res) => {
     } else {
       return res.status(201).json({ success: true, message: "Tạo brand thành công!", brand: data });
 
+
     }
   });
 };
