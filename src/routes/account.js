@@ -1,4 +1,6 @@
 const express = require('express');
+require('dotenv').config(); 
+const bodyParser = require('body-parser');
 const {
   create,
   findAll,
@@ -12,7 +14,15 @@ const {
   getDashboard,
   getHomePage,
   getRegister,
-  getLogin
+  getLogin,
+  getForgotPassword,
+  getResetPassword,
+  sendResetPasswordEmail,
+  resetPassword,
+  verifyResetToken
+ 
+  
+ 
 } = require('../controllers/AccountController');
 
 const router = express.Router();
@@ -23,9 +33,22 @@ router.get('/register', getRegister);
 router.get('/login', getLogin);
 router.get('/dashboard', getDashboard);
 
+//Quên Mật Khẩu
+router.get("/forgot-password", getForgotPassword);
+router.get("/reset-password" , getResetPassword);
+router.get('/reset-password', verifyResetToken);
+
+// Xử lý quên mk
+router.post('/forgot-password', sendResetPasswordEmail);
+router.post('/reset-password/:token', resetPassword);
+router.post('/send-reset-code',sendResetPasswordEmail);
+router.post('/send-reset-code/:token', resetPassword)
+
+
 // Xử lý auth
 router.post('/register', register);
 router.post('/login', login);
+
 
 // API
 router.get('/', findAll);                    // GET /accounts
