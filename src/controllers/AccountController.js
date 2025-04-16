@@ -2,11 +2,16 @@ const Account = require("../models/AccountModel");
 const bcrypt = require("bcrypt");
 const Category = require('../models/CategoryModel')
 const Brand = require('../models/BrandModel')
-const Product = require('../models/ProductModel')
+const Product = require('../models/ProductModel'); 
 const Order = require('../models/OrderModel')
 const Shipping = require('../models/ShippingModel')
 const Supplier = require('../models/SupplierModel')
 const Voucher = require('../models/VoucherModel')
+
+const nodemailer = require('nodemailer');
+const jwt = require('jsonwebtoken');
+
+
 const saltRounds = 10;
 
 const getHomePage = (req, res) => {
@@ -19,6 +24,16 @@ const getRegister = (req, res) => {
 const getLogin = (req, res) => {
     res.render('login');
   };
+  const getForgotPassword = (req, res) => {
+    res.render('forgotPassword', { message: null }); // truyền message mặc định
+  };
+  const getResetPassword = (req, res) => {
+    const token = req.query.token;
+    res.render('resetPassword', { token, message: null });
+  };
+
+  
+
   const getDashboard = (req, res) => {
     if (!req.session.user || req.session.user.role !== 'admin') {
       return res.redirect('/homepage?error=Truy+cập+bị+từ+chối');
@@ -84,13 +99,114 @@ const getLogin = (req, res) => {
       });
     });
   };
+
+  //Forgot password
+  const sendResetPasswordEmail = async (req, res) => {
+    const { email } = req.body;
   
+    try {
+      // Sử dụng model thay vì db.query trực tiếp
+      Account.findByEmail(email, (err, account) => {
+        if (err || !account) {
+          return res.status(404).json({ message: "Email không tồn tại" });
+        }
   
+        // Tạo JWT token
+        const token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+        const resetLink = `http://localhost:9000/reset-password?token=${token}`;
+
   
+        // Cấu hình Gmail
+        const transporter = nodemailer.createTransport({
+          service: 'Gmail',
+          auth: {
+            user: 'nguyencongvinh2909@gmail.com',
+            pass: 'rrmt hpek pgea zexx',  // Nên sử dụng biến môi trường để bảo mật
+          },
+        });
+  
+        const mailOptions = {
+          from: 'nguyencongvinh2909@gmail.com',
+          to: email,
+          subject: 'Đặt lại mật khẩu',
+          html: `
+            <p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>
+            <p>Click vào liên kết sau trong vòng 1 giờ:</p>
+            <a href="${resetLink}">${resetLink}</a>
+          `,
+        };
+  
+        // Gửi email và kiểm tra lỗi
+        transporter.sendMail(mailOptions, (error, info) => {
+          if (error) {
+            return res.status(500).json({ message: "Lỗi khi gửi email" });
+          }
+          res.json({ message: "Đã gửi email đặt lại mật khẩu!" });
+        });
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: "Lỗi server!" });
+    }
+  };
+  
+//reset pass
+const resetPassword = async (req, res) => {
+  const { email, newPassword, token } = req.body;
+
+  if (!email || !newPassword || !token) {
+    return res.render("resetPassword", {
+      token: null,
+      message: "Thiếu thông tin đầu vào.",
+    });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY);
+
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    Account.updatePasswordByEmail(email, hashedPassword, (err, result) => {
+      if (err) {
+        return res.render("resetPassword", {
+          token: null,
+          message: "Lỗi khi cập nhật mật khẩu.",
+        });
+      }
+
+      req.session.successMessage = "Đặt lại mật khẩu thành công.";
+      return res.redirect("/login");
+    });
+  } catch (err) {
+    return res.render("resetPassword", {
+      token: null,
+      message: "Token không hợp lệ hoặc đã hết hạn.",
+    });
+  }
+};
+
+
+
+
+  
+
+//verify
+const verifyResetToken = (req, res) => {
+  const { token } = req.query;
+  try {
+    const decoded = jwt.verify(token, process.env.SECRET_KEY)
+    // Nếu hợp lệ, render form đặt lại mật khẩu
+    res.render('reset-password', { token, error: null });
+  } catch (err) {
+    // Token không hợp lệ hoặc hết hạn
+    res.render('reset-password', { token: null, error: 'Token không hợp lệ.' });
+  }
+};
+  
+
+
   
   
  
-  
 
 
 const create = async (req, res) => {
@@ -283,7 +399,6 @@ const register = async (req, res) => {
     });
   };
   
-  
 
 module.exports = {
   create,
@@ -298,5 +413,10 @@ module.exports = {
   getRegister,
   getLogin,
   register,
-  login
-};
+  login,
+  getForgotPassword,
+  getResetPassword,
+  sendResetPasswordEmail,
+  resetPassword,
+  verifyResetToken
+}
