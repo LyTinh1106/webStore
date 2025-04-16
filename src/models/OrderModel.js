@@ -37,7 +37,7 @@ Order.findById = (id, result) => {
 
 
 Order.getAll = (result) => {
-  sql.query("SELECT *, a.email FROM order_table o join account a on o.account_id = a.id", (err, res) => {
+  sql.query("SELECT *, a.email FROM order_table o JOIN account a on o.account_id = a.id", (err, res) => {
     if (err) {
       result(null, err);
       return;
