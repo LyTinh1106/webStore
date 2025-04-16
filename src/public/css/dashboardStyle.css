@@ -166,3 +166,16 @@ body {
         margin-top: 10px;
     }
 }
+
+/* calendar */
+.input-group-text {
+    background-color: #f8f9fa;
+    border: 1px solid #ced4da;
+    transition: background-color 0.2s;
+}
+.input-group-text:hover {
+    background-color: #e9ecef;
+}
+.input-group-text:active {
+    background-color: #dee2e6;
+}

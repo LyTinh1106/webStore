@@ -38,7 +38,7 @@ router.get("/forgot-password", getForgotPassword);
 router.get("/reset-password" , getResetPassword);
 router.get('/reset-password', verifyResetToken);
 
-// Xử lý quên mk
+// Xử lý quên mật khẩu
 router.post('/forgot-password', sendResetPasswordEmail);
 router.post('/reset-password/:token', resetPassword);
 router.post('/send-reset-code',sendResetPasswordEmail);

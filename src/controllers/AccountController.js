@@ -121,7 +121,7 @@ const getLogin = (req, res) => {
           service: 'Gmail',
           auth: {
             user: 'nguyencongvinh2909@gmail.com',
-            pass: 'rrmt hpek pgea zexx',  // Nên sử dụng biến môi trường để bảo mật
+            pass: process.env.EMAIL_PASS,  
           },
         });
   
@@ -135,13 +135,12 @@ const getLogin = (req, res) => {
             <a href="${resetLink}">${resetLink}</a>
           `,
         };
-  
+        
         // Gửi email và kiểm tra lỗi
         transporter.sendMail(mailOptions, (error, info) => {
           if (error) {
             return res.status(500).json({ message: "Lỗi khi gửi email" });
           }
-          // res.json({ message: "Đã gửi email đặt lại mật khẩu!" });
           res.send('123')
         });
       });
@@ -205,9 +204,6 @@ const verifyResetToken = (req, res) => {
   
 
 
-  
-  
- 
 
 
 const create = async (req, res) => {
