@@ -294,6 +294,7 @@
                     </div>
                 </div>
             </div>
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -334,6 +335,8 @@
                 </table>
             </div>
         </div>
+
+
 
         <!-- Brands Section -->
         <div class="content-section" id="brands">
@@ -628,7 +631,7 @@
                         }
 
                         // Gửi AJAX (dùng fetch API hoặc jQuery tùy bạn)
-                        fetch('/api/voucher/add', {
+                        fetch('/api/voucher/create', {
                             method: 'POST',
                             body: formData
                         })

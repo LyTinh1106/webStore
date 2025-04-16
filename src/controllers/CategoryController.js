@@ -35,7 +35,7 @@ exports.createCategory = (req, res) => {
     return res.status(400).send("Tên category không được để trống.");
   }
 
-  const newCategory = new Category({ name: req.body.name });
+  const newCategory = new Category({ name: cat_name });
   Category.create(newCategory, (err, data) => {
     if (err) {
       res.status(500).render("error", { message: err.message || "Lỗi khi tạo category." });

@@ -1,4 +1,4 @@
-// Hiện/ẩn mật khẩu
+
 $(document).ready(function () {
     $('.toggle-password').click(function () {
         const targetId = $(this).data('target');
@@ -83,7 +83,7 @@ document.getElementById("addCategoryForm").addEventListener("submit", async func
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ name: cat_Name })
+            body: JSON.stringify({ name: categoryName })
         });
 
         if (response.ok) {

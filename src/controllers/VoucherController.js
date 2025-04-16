@@ -45,7 +45,7 @@ exports.createVoucher = (req, res) => {
     if (err) {
       res.status(500).render("error", { message: "Lỗi khi tạo voucher." });
     } else {
-      res.redirect("/vouchers");
+      return res.status(201).json({ success: true, message: "Tạo voucher thành công!", voucher: data });
     }
   });
 };
