@@ -31,7 +31,7 @@ exports.getVoucherById = (req, res) => {
 // [POST] /vouchers - Tạo mới voucher
 exports.createVoucher = (req, res) => {
   const voucher_code = req.body.voucher_code?.trim();
-  const voucher_value = req.body.voucher_value?.trim();
+  const voucher_value = req.body.voucher_value;
   const date_start = req.body.date_start?.trim();
   const date_end = req.body.date_end?.trim();
 

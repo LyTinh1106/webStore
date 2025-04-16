@@ -11,7 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- style -->
     <link rel="stylesheet" href="css/dashboardStyle.css">
-
+    <!-- Flatpickr CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
 
 </head>
 
@@ -55,7 +56,8 @@
                         <li>
                             <hr class="dropdown-divider">
                         </li>
-                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
+                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Đăng
+                                xuất</a></li>
                     </ul>
                 </div>
             </div>
@@ -266,20 +268,23 @@
                 </a>
 
                 <!-- Modal Form -->
-                <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
 
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addCategoryModalLabel">Thêm loại sản phẩm</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
                             </div>
 
                             <div class="modal-body">
                                 <form id="addCategoryForm">
                                     <div class="mb-3">
                                         <label for="categoryName" class="form-label">Tên loại sản phẩm</label>
-                                        <input type="text" class="form-control" id="categoryName" name="cat_Name" placeholder="Nhập tên loại sản phẩm" required>
+                                        <input type="text" class="form-control" id="categoryName" name="cat_Name"
+                                            placeholder="Nhập tên loại sản phẩm" required>
                                     </div>
                                 </form>
                             </div>
@@ -308,8 +313,7 @@
                             <tr>
                                 <td>
                                     <%= 'L' + String(category.id).padStart(3, '0' ) %>
-                                    <!-- <%= category.id%> -->
-
+                                        <!-- <%= category.id%> -->
                                 </td>
                                 <td>
                                     <%= category.name %>
@@ -335,8 +339,6 @@
             </div>
         </div>
 
-
-
         <!-- Brands Section -->
         <div class="content-section" id="brands">
             <h3 class="section-title">Quản lý nhãn hàng</h3>
@@ -346,8 +348,9 @@
                     <i class="fas fa-plus"></i> Thêm nhãn hàng mới
                 </a>
                 <!-- Modal Form -->
-                <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered"> 
+                <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
 
                             <div class="modal-header">
@@ -578,13 +581,24 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="startDate" class="form-label">Ngày bắt đầu</label>
-                                        <input type="text" class="form-control datetime-picker" id="startDate"
-                                            name="stardate" required>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="startDate" name="stardate"
+                                                placeholder="YYYY-MM-DD HH:mm:ss" required>
+                                            <span class="input-group-text" id="startDateIcon" style="cursor:pointer;">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
                                     </div>
+
                                     <div class="mb-3">
                                         <label for="endDate" class="form-label">Ngày kết thúc</label>
-                                        <input type="text" class="form-control datetime-picker" id="endDate"
-                                            name="enddate" required>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="endDate" name="enddate"
+                                                placeholder="YYYY-MM-DD HH:mm:ss" required>
+                                            <span class="input-group-text" id="endDateIcon" style="cursor:pointer;">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
                                     </div>
                                 </form>
                                 <div id="voucherMessage" class="mt-2 text-danger" style="display:none;"></div>
@@ -598,68 +612,7 @@
                         </div>
                     </div>
                 </div>
-                <!-- Flatpickr CSS -->
-                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-                <!-- Flatpickr JS -->
-                <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-                <script>
-                    flatpickr(".datetime-picker", {
-                        enableTime: true,
-                        dateFormat: "d-m-Y H:i",
-                        time_24hr: true,
-                        position: "above",
-                        defaultHour: 0,
-                        defaultMinute: 0
-                    });
-
-                    document.getElementById("addVoucherForm").addEventListener("submit", function (e) {
-                        e.preventDefault();
-
-                        const form = e.target;
-                        const formData = new FormData(form);
-                        const messageBox = document.getElementById("voucherMessage");
-                        messageBox.style.display = "none";
-
-                        const startDate = flatpickr.parseDate(formData.get("stardate"), "d-m-Y H:i");
-                        const endDate = flatpickr.parseDate(formData.get("enddate"), "d-m-Y H:i");
-
-                        if (endDate <= startDate) {
-                            messageBox.textContent = "Ngày kết thúc phải sau ngày bắt đầu!";
-                            messageBox.style.display = "block";
-                            return;
-                        }
-
-                        // Gửi AJAX (dùng fetch API hoặc jQuery tùy bạn)
-                        fetch('/api/voucher/create', {
-                            method: 'POST',
-                            body: formData
-                        })
-                            .then(response => {
-                                if (!response.ok) throw new Error("Có lỗi xảy ra!");
-                                return response.json();
-                            })
-                            .then(data => {
-                                if (data.success) {
-                                    alert("Thêm voucher thành công!");
-                                    form.reset();
-                                    flatpickr("#startDate").clear();
-                                    flatpickr("#endDate").clear();
-                                    const modal = bootstrap.Modal.getInstance(document.getElementById('addVoucherModal'));
-                                    modal.hide();
-                                    // Gọi lại bảng / danh sách nếu cần
-                                } else {
-                                    messageBox.textContent = data.message || "Thêm không thành công!";
-                                    messageBox.style.display = "block";
-                                }
-                            })
-                            .catch(error => {
-                                messageBox.textContent = error.message || "Lỗi mạng!";
-                                messageBox.style.display = "block";
-                            });
-                    });
-                </script>
-
-
+                
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -786,12 +739,10 @@
         <!-- Bootstrap JS và jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
+         <!-- Flatpickr JS -->
+         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <!-- JavaScript -->
         <script src="js/dashboardScript.js"></script>
-
-
-
 </body>
 
 </html>

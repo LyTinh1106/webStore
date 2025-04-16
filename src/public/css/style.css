@@ -2172,7 +2172,7 @@ textarea.input {
 
 
 /* Form login */
-.body-login-register{
+.body-register, .body-login, .body-forgotPassword, .body-resetPassword{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -2186,7 +2186,7 @@ textarea.input {
     background-size: 100%;
 }
 
-.login-register-container {
+.register-container, .login-container, .forgotPassword-container, .resetPassword-container {
   width: 100%;
   max-width: 400px;
   padding: 40px 30px;
@@ -2195,7 +2195,7 @@ textarea.input {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.login-register-container h1 {
+.register-container h1, .login-container h1, .forgotPassword-container h1, .resetPassword-container h1 {
   text-align: center;
   margin-bottom: 30px;
   color: #333;
@@ -2251,7 +2251,7 @@ textarea.input {
   text-decoration: none;
 }
 
-.login-register-btn {
+.register-btn, .login-btn, .forgotPassword-btn, .resetPassword-btn {
   width: 100%;
   padding: 12px;
   background: rgba(0, 0, 0, 0.7);
@@ -2264,7 +2264,7 @@ textarea.input {
   transition: transform 0.3s ease;
 }
 
-.login-btn:hover {
+.login-btn:hover, .register-btn:hover, .forgotPassword-btn:hover, .resetPassword-btn:hover {
   transform: translateY(-2px);
 }
 
@@ -2372,12 +2372,6 @@ textarea.input {
   text-decoration: none;
 }
 
-
-.register-btn:hover {
-  transform: translateY(-2px);
-}
-
-
 .social-register {
   display: flex;
   justify-content: center;
@@ -2399,7 +2393,14 @@ textarea.input {
   font-weight: bold;
   text-decoration: none;
 }
-/* devider */
+
+
+/* return btn */
+.return-btn{
+  text-align: right;
+  padding: top 5px;
+}
+/* devider dropdown menu */
 .dropdown-menu .dropdown-divider {
   border-top: 2px solid #ddd; /* dày hơn và màu đậm hơn */
   margin: 0.5rem 0;
@@ -2407,4 +2408,20 @@ textarea.input {
 .Account .dropdown-menu {
   margin-top: 0 !important;
   top: 100% !important;
+}
+
+
+/* reset pasword */
+
+.resetPassword-container .return-btn {
+  text-align: center;
+}
+
+/* reset password devider */
+
+hr {
+  border: none;
+  height: 1px;
+  background: linear-gradient(to right, #E4E7ED, #626262, #E4E7ED);
+  margin: 20px 0;
 }
