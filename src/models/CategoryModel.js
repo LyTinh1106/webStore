@@ -14,7 +14,7 @@ Category.create = (newCategory, result) => {
       return;
     }
 
-    console.log("created category: ", { id: res.insertId, ...newCategory });
+    // console.log("created category: ", { id: res.insertId, ...newCategory });
     result(null, { id: res.insertId, ...newCategory });
   });
 };

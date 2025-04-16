@@ -141,7 +141,8 @@ const getLogin = (req, res) => {
           if (error) {
             return res.status(500).json({ message: "Lỗi khi gửi email" });
           }
-          res.json({ message: "Đã gửi email đặt lại mật khẩu!" });
+          // res.json({ message: "Đã gửi email đặt lại mật khẩu!" });
+          res.send('123')
         });
       });
     } catch (err) {
