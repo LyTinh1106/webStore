@@ -126,4 +126,25 @@ Account.isAdmin = (email, result) => {
   });
 };
 
+Account.updatePasswordByEmail = (email, hashedPassword, result) => {
+  sql.query(
+    "UPDATE account SET password = ? WHERE email = ?",
+    [hashedPassword, email],
+    (err, res) => {
+      if (err) {
+        result(err, null);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      result(null, res);
+    }
+  );
+};
+
+
 module.exports = Account;

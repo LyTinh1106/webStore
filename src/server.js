@@ -6,6 +6,7 @@ require('dotenv').config();
 const configViewEngine = require('./config/ViewEngine');
 const webRouters = require('./routes/web');
 const apiRoutes = require('./routes/api')
+const bodyParser = require('body-parser');
 
 const app = express();
 const port = process.env.PORT || 9000;
@@ -46,6 +47,10 @@ app.get("/logout", (req, res, next) => {
     res.redirect("/homepage");
   });
 });
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
 
 app.use('/', webRouters);
 app.use('/api',apiRoutes)
