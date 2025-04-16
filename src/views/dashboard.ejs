@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- style -->
     <link rel="stylesheet" href="css/dashboardStyle.css">
+
+
 </head>
 
 <body>
@@ -259,7 +261,38 @@
         <div class="content-section" id="categories">
             <h3 class="section-title">Quản lý loại sản phẩm</h3>
             <div class="mb-3">
-                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm loại sản phẩm mới</button>
+                <!-- Nút mở popup -->
+                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                    <i class="fas fa-plus"></i> Thêm danh mục mới
+                </a>
+
+                <!-- Modal Form -->
+                <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered"> 
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addCategoryModalLabel">Thêm loại sản phẩm</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form id="addCategoryForm">
+                                    <div class="mb-3">
+                                        <label for="categoryName" class="form-label">Tên loại sản phẩm</label>
+                                        <input type="text" class="form-control" id="categoryName" name="cat_Name" placeholder="Nhập tên loại sản phẩm" required>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="addCategoryForm" class="btn btn-primary">Thêm</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -275,6 +308,8 @@
                             <tr>
                                 <td>
                                     <%= 'L' + String(category.id).padStart(3, '0' ) %>
+                                    <!-- <%= category.id%> -->
+
                                 </td>
                                 <td>
                                     <%= category.name %>
@@ -304,18 +339,13 @@
         <div class="content-section" id="brands">
             <h3 class="section-title">Quản lý nhãn hàng</h3>
             <div class="mb-3">
-                <!-- <a class="btn btn-success"><i class="fas fa-plus"></i> Thêm nhãn hàng mới</a> -->
-
-
                 <!-- Nút mở popup -->
                 <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addBrandModal">
                     <i class="fas fa-plus"></i> Thêm nhãn hàng mới
                 </a>
-
                 <!-- Modal Form -->
-                <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered"> <!-- Thêm modal-dialog-centered ở đây -->
+                <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered"> 
                         <div class="modal-content">
 
                             <div class="modal-header">
@@ -342,43 +372,6 @@
                         </div>
                     </div>
                 </div>
-
-
-                <script>
-                    document.getElementById("addBrandForm").addEventListener("submit", async function (e) {
-                        e.preventDefault(); // Không reload trang
-
-                        const brandName = document.getElementById("brandName").value.trim();
-
-                        if (!brandName) {
-                            alert("Vui lòng nhập tên nhãn hàng.");
-                            return;
-                        }
-
-                        try {
-                            const response = await fetch("/api/brands/create", {
-                                method: "POST",
-                                headers: {
-                                    "Content-Type": "application/json"
-                                },
-                                body: JSON.stringify({ brand_name: brandName })
-                            });
-
-                            if (response.redirected) {
-                                window.location.href = response.url; // Redirect nếu backend trả về redirect
-                            } else if (!response.ok) {
-                                const text = await response.text();
-                                document.body.innerHTML = text; // Hiển thị trang lỗi trả về
-                            }
-
-                        } catch (error) {
-                            alert("Đã xảy ra lỗi khi gửi yêu cầu.");
-                            console.error(error);
-                        }
-                    });
-                </script>
-
-
             </div>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -552,135 +545,251 @@
         <div class="content-section" id="vouchers">
             <h3 class="section-title">Quản lý voucher</h3>
             <div class="mb-3">
-                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm voucher</button>
+                <!-- Nút mở popup -->
+                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addVoucherModal">
+                    <i class="fas fa-plus"></i> Thêm voucher mới
+                </a>
+
+                <!-- Modal Form -->
+                <div class="modal fade" id="addVoucherModal" tabindex="-1" aria-labelledby="addVoucherModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addVoucherModalLabel">Thêm Voucher</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form id="addVoucherForm">
+                                    <div class="mb-3">
+                                        <label for="vouCode" class="form-label">Mã voucher</label>
+                                        <input type="text" class="form-control" id="vouCode" name="vou_code"
+                                            placeholder="Nhập mã voucher" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="vouValue" class="form-label">Giá trị (%)</label>
+                                        <input type="number" class="form-control" id="vouValue" name="value"
+                                            placeholder="Nhập giá trị voucher" min="1" max="100" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="startDate" class="form-label">Ngày bắt đầu</label>
+                                        <input type="text" class="form-control datetime-picker" id="startDate"
+                                            name="stardate" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="endDate" class="form-label">Ngày kết thúc</label>
+                                        <input type="text" class="form-control datetime-picker" id="endDate"
+                                            name="enddate" required>
+                                    </div>
+                                </form>
+                                <div id="voucherMessage" class="mt-2 text-danger" style="display:none;"></div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="addVoucherForm" class="btn btn-primary">Thêm</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <!-- Flatpickr CSS -->
+                <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+                <!-- Flatpickr JS -->
+                <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+                <script>
+                    flatpickr(".datetime-picker", {
+                        enableTime: true,
+                        dateFormat: "d-m-Y H:i",
+                        time_24hr: true,
+                        position: "above",
+                        defaultHour: 0,
+                        defaultMinute: 0
+                    });
+
+                    document.getElementById("addVoucherForm").addEventListener("submit", function (e) {
+                        e.preventDefault();
+
+                        const form = e.target;
+                        const formData = new FormData(form);
+                        const messageBox = document.getElementById("voucherMessage");
+                        messageBox.style.display = "none";
+
+                        const startDate = flatpickr.parseDate(formData.get("stardate"), "d-m-Y H:i");
+                        const endDate = flatpickr.parseDate(formData.get("enddate"), "d-m-Y H:i");
+
+                        if (endDate <= startDate) {
+                            messageBox.textContent = "Ngày kết thúc phải sau ngày bắt đầu!";
+                            messageBox.style.display = "block";
+                            return;
+                        }
+
+                        // Gửi AJAX (dùng fetch API hoặc jQuery tùy bạn)
+                        fetch('/api/voucher/add', {
+                            method: 'POST',
+                            body: formData
+                        })
+                            .then(response => {
+                                if (!response.ok) throw new Error("Có lỗi xảy ra!");
+                                return response.json();
+                            })
+                            .then(data => {
+                                if (data.success) {
+                                    alert("Thêm voucher thành công!");
+                                    form.reset();
+                                    flatpickr("#startDate").clear();
+                                    flatpickr("#endDate").clear();
+                                    const modal = bootstrap.Modal.getInstance(document.getElementById('addVoucherModal'));
+                                    modal.hide();
+                                    // Gọi lại bảng / danh sách nếu cần
+                                } else {
+                                    messageBox.textContent = data.message || "Thêm không thành công!";
+                                    messageBox.style.display = "block";
+                                }
+                            })
+                            .catch(error => {
+                                messageBox.textContent = error.message || "Lỗi mạng!";
+                                messageBox.style.display = "block";
+                            });
+                    });
+                </script>
+
+
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Mã voucher</th>
+                                <th>Trị giá</th>
+                                <th>Ngày bắt đầu</th>
+                                <th>ngày kết thúc</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (vouchers && vouchers.length> 0) { %>
+                                <% vouchers.forEach((voucher, index)=> { %>
+                                    <tr>
+                                        <td>
+                                            <%= voucher.id %>
+                                        </td>
+                                        <td>
+                                            <%= voucher.voucher_code %>
+                                        </td>
+                                        <td>
+                                            <%= voucher.voucher_value %>
+                                        </td>
+                                        <td>
+                                            <%= voucher.date_start %>
+                                        </td>
+                                        <td>
+                                            <%= voucher.date_end %>
+                                        </td>
+                                        <td>
+                                            <form action="/vouchers/<%= voucher.id %>/update" method="get"
+                                                style="display:inline;">
+                                                <button class="btn btn-sm btn-info" title="Chỉnh sửa"><i
+                                                        class="fas fa-edit"></i></button>
+                                            </form>
+                                            <form action="/vouchers/<%= voucher.id %>/delete" method="post"
+                                                style="display:inline;"
+                                                onsubmit="return confirm('Bạn có chắc muốn xóa voucher này?');">
+                                                <button class="btn btn-sm btn-danger" title="Xóa"><i
+                                                        class="fas fa-trash"></i></button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="6" class="text-center">Không có voucher nào.</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+
+                    </table>
+                </div>
             </div>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Mã voucher</th>
-                            <th>Trị giá</th>
-                            <th>Ngày bắt đầu</th>
-                            <th>ngày kết thúc</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% if (vouchers && vouchers.length> 0) { %>
-                            <% vouchers.forEach((voucher, index)=> { %>
+
+            <!-- Accounts Section -->
+            <div class="content-section" id="accounts">
+                <h3 class="section-title">Quản lý tài khoản</h3>
+                <div class="mb-3">
+                    <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm tài khoản mới</button>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Mật khẩu</th>
+                                <th>Quyền</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% accounts.forEach((account, index)=> { %>
                                 <tr>
                                     <td>
-                                        <%= voucher.id %>
+                                        <%= account.id %>
                                     </td>
                                     <td>
-                                        <%= voucher.voucher_code %>
+                                        <%= account.email %>
                                     </td>
                                     <td>
-                                        <%= voucher.voucher_value %>
+                                        <div class="input-group">
+                                            <input type="password" class="form-control form-control-sm"
+                                                value="<%= account.password %>" id="password<%= index %>" readonly>
+                                            <button class="btn btn-sm btn-outline-secondary toggle-password"
+                                                type="button" data-target="password<%= index %>">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </div>
                                     </td>
                                     <td>
-                                        <%= voucher.date_start %>
+                                        <%= account.role %>
                                     </td>
                                     <td>
-                                        <%= voucher.date_end %>
-                                    </td>
-                                    <td>
-                                        <form action="/vouchers/<%= voucher.id %>/update" method="get"
-                                            style="display:inline;">
-                                            <button class="btn btn-sm btn-info" title="Chỉnh sửa"><i
-                                                    class="fas fa-edit"></i></button>
-                                        </form>
-                                        <form action="/vouchers/<%= voucher.id %>/delete" method="post"
-                                            style="display:inline;"
-                                            onsubmit="return confirm('Bạn có chắc muốn xóa voucher này?');">
-                                            <button class="btn btn-sm btn-danger" title="Xóa"><i
-                                                    class="fas fa-trash"></i></button>
+                                        <a href="/accounts/<%= account.id %>" class="btn btn-sm btn-primary"
+                                            title="Xem chi tiết">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="/accounts/<%= account.id %>/edit" class="btn btn-sm btn-info"
+                                            title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form action="/accounts/<%= account.id %>/delete" method="POST"
+                                            class="d-inline">
+                                            <button type="submit" class="btn btn-sm btn-danger"
+                                                onclick="return confirm('Bạn có chắc muốn xoá tài khoản này?')"
+                                                title="Xoá">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </form>
                                     </td>
                                 </tr>
-                                <% }) %>
-                                    <% } else { %>
-                                        <tr>
-                                            <td colspan="6" class="text-center">Không có voucher nào.</td>
-                                        </tr>
-                                        <% } %>
-                    </tbody>
+                                <% }); %>
+                        </tbody>
 
-                </table>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- Accounts Section -->
-        <div class="content-section" id="accounts">
-            <h3 class="section-title">Quản lý tài khoản</h3>
-            <div class="mb-3">
-                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm tài khoản mới</button>
-            </div>
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Email</th>
-                            <th>Mật khẩu</th>
-                            <th>Quyền</th>
-                            <th>Thao tác</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% accounts.forEach((account, index)=> { %>
-                            <tr>
-                                <td>
-                                    <%= account.id %>
-                                </td>
-                                <td>
-                                    <%= account.email %>
-                                </td>
-                                <td>
-                                    <div class="input-group">
-                                        <input type="password" class="form-control form-control-sm"
-                                            value="<%= account.password %>" id="password<%= index %>" readonly>
-                                        <button class="btn btn-sm btn-outline-secondary toggle-password" type="button"
-                                            data-target="password<%= index %>">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                                <td>
-                                    <%= account.role %>
-                                </td>
-                                <td>
-                                    <a href="/accounts/<%= account.id %>" class="btn btn-sm btn-primary"
-                                        title="Xem chi tiết">
-                                        <i class="fas fa-eye"></i>
-                                    </a>
-                                    <a href="/accounts/<%= account.id %>/edit" class="btn btn-sm btn-info"
-                                        title="Chỉnh sửa">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form action="/accounts/<%= account.id %>/delete" method="POST" class="d-inline">
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Bạn có chắc muốn xoá tài khoản này?')" title="Xoá">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <% }); %>
-                    </tbody>
+        <!-- Bootstrap JS và jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-                </table>
-            </div>
-        </div>
-    </div>
+        <!-- JavaScript -->
+        <script src="js/dashboardScript.js"></script>
 
-    <!-- Bootstrap JS và jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
-    <!-- JavaScript -->
-    <script src="js/dashboardScript.js"></script>
+
 </body>
 
 </html>

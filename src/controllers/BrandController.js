@@ -41,7 +41,7 @@ exports.createBrand = (req, res) => {
     if (err) {
       res.status(500).render("error", { message: err.message || "Lỗi khi tạo brand." });
     } else {
-      res.redirect("/brands");
+      return res.status(201).json({ success: true, message: "Tạo brand thành công!", brand: data });
     }
   });
 };
