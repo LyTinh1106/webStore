@@ -12,8 +12,8 @@ const router = express.Router();
 
 router.get('/', getAllBrands);           
 router.get('/:id', getBrandById);       
-router.post('/', createBrand);           
-router.put('/:id', updateBrand);         
-router.delete('/:id', deleteBrand);      
+router.post('/create', createBrand);           
+router.put('/update/:id', updateBrand);         
+router.delete('/delete/:id', deleteBrand);      
 
 module.exports = router;

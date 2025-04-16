@@ -24,9 +24,14 @@ router.get('/reset-password',verifyResetToken);
 
 router.post('/register', register)
 router.post('/login',login)
+
 router.post('/forgot-password',sendResetPasswordEmail);
 router.post('/reset-password',resetPassword);
 router.post('/send-reset-code', sendResetPasswordEmail)
 router.post('/send-reset-code/:token', resetPassword);
 router.post('/reset-password/:token', resetPassword);
+
+
+
+
   module.exports = router
