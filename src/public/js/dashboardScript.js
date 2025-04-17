@@ -332,3 +332,51 @@ document.querySelectorAll(".delete-voucher-btn").forEach(button => {
         }
     });
 });
+
+//supplier
+//add supplier modal form
+//modal add brand form
+document.getElementById("addSupplierForm").addEventListener("submit", async function (e) {
+    e.preventDefault(); // Ngăn reload mặc định của form
+
+    const suppName = document.getElementById("supplierName").value.trim();
+    const suppPhoneNum = document.getElementById("supplierPhonenumber").value.trim();
+    const suppEmail = document.getElementById("supplierEmail").value.trim();
+    const suppAddress = document.getElementById("supplierAddress").value.trim();
+
+    if (!brandName) {
+        alert("Vui lòng nhập tên nhãn hàng.");
+        return;
+    }
+
+    try {
+        const response = await fetch("/api/supplier/create", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: suppName,
+                phonenumber: suppPhoneNum,
+                email: suppEmail,
+                address: suppAddress
+            })
+        });
+
+        if (response.ok) {
+            // Lưu vị trí cuộn
+            const scrollY = window.scrollY;
+            localStorage.setItem("scrollPosition", scrollY);
+
+            // Reload lại trang
+            location.reload();
+        } else {
+            const text = await response.text();
+            document.body.innerHTML = text;
+        }
+
+    } catch (error) {
+        alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+        console.error(error);
+    }
+});
