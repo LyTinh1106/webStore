@@ -85,7 +85,7 @@ exports.deleteVoucher = (req, res) => {
     } else if (!data) {
       res.status(404).render("error", { message: `Không tìm thấy voucher với ID ${id}.` });
     } else {
-      res.redirect("/vouchers");
+      return res.status(201).json({ success: true, message: "Xóa voucher thành công!", voucher: data });
     }
   });
 };

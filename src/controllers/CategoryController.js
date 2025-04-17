@@ -78,7 +78,7 @@ exports.deleteCategory = (req, res) => {
         res.status(500).render("error", { message: "Lỗi khi xóa category." });
       }
     } else {
-      res.redirect("/dashboard");
+      return res.status(201).json({ success: true, message: "Xóa category thành công!", brand: data });
     }
   });
 };
