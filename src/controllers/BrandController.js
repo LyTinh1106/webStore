@@ -65,7 +65,7 @@ exports.updateBrand = (req, res) => {
         res.status(500).render("error", { message: "Lỗi khi cập nhật brand." });
       }
     } else {
-      res.redirect("/brands");
+      return res.status(201).json({ success: true, message: "Cập nhật brand thành công!", brand: data });
     }
   });
 };

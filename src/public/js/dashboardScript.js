@@ -107,6 +107,58 @@ document.addEventListener("DOMContentLoaded", function () {
         localStorage.removeItem("scrollPosition");
     }
 });
+//update brand
+document.getElementById("updateBrandForm").addEventListener("submit", async function (e) {
+    e.preventDefault(); // Ngăn reload mặc định của form
+
+    // Lấy giá trị từ các input trong form
+    const brandId = document.getElementById("brandId").value.trim();
+    const brandName = document.getElementById("updateBrandName").value.trim();
+
+    if (!brandId || !brandName) {
+        alert("Vui lòng nhập đầy đủ thông tin.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/brand/update/${brandId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ brand_name: brandName })
+        });
+
+        if (response.ok) {
+            // Lưu vị trí cuộn
+            const scrollY = window.scrollY;
+            localStorage.setItem("scrollPosition", scrollY);
+
+            // Reload lại trang
+            location.reload();
+        } else {
+            const text = await response.text();
+            document.body.innerHTML = text;
+        }
+
+    } catch (error) {
+        alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+        console.error(error);
+    }
+});
+document.querySelectorAll(".editBrandBtn").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const brandId = this.getAttribute("data-id");
+        const brandName = this.getAttribute("data-name");
+
+        // Điền thông tin vào các input trong modal
+        document.getElementById("brandId").value = brandId;
+        document.getElementById("updateBrandName").value = brandName;
+    });
+});
+
+
+
 
 //Category
 
@@ -195,6 +247,68 @@ window.addEventListener("load", () => {
         localStorage.removeItem("scrollPosition");
     }
 });
+
+// Update Category
+// Lắng nghe sự kiện submit của form cập nhật category
+document.querySelectorAll('.editCategoryBtn').forEach(button => {
+    button.addEventListener('click', function () {
+        const categoryId = this.getAttribute('data-id');
+        const categoryName = this.getAttribute('data-name');
+        
+        // Điền giá trị vào form
+        document.getElementById('categoryId').value = categoryId;
+        document.getElementById('updateCategoryName').value = categoryName;
+    });
+});
+
+// Xử lý form cập nhật danh mục
+// Xử lý form cập nhật danh mục
+document.getElementById("updateCategoryForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const categoryId = document.getElementById("categoryId").value.trim();
+    const categoryName = document.getElementById("updateCategoryName").value.trim();
+
+    if (!categoryId || !categoryName) {
+        alert("Vui lòng nhập đầy đủ thông tin.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/category/update/${categoryId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ name: categoryName }) // ✅ gửi đúng thuộc tính 'name'
+        });
+
+        if (response.ok) {
+            location.reload();
+        } else {
+            const text = await response.text();
+            alert("Có lỗi xảy ra: " + text);
+        }
+    } catch (error) {
+        alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+        console.error(error);
+    }
+});
+
+
+// Lắng nghe sự kiện click vào nút chỉnh sửa category
+document.querySelectorAll(".editCategoryBtn").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const categoryId = this.getAttribute("data-id");
+        const categoryName = this.getAttribute("data-name");
+
+        // Điền thông tin vào các input trong modal
+        document.getElementById("categoryId").value = categoryId;
+        document.getElementById("updateCategoryName").value = categoryName;
+    });
+});
+
+
 //Voucher
 
 // Khởi tạo flatpickr cho các trường nhập liệu ngày
@@ -332,6 +446,87 @@ document.querySelectorAll(".delete-voucher-btn").forEach(button => {
         }
     });
 });
+// Update Voucher
+document.getElementById("editVoucherForm").addEventListener("submit", async function (e) {
+    e.preventDefault(); // Ngăn reload
+
+    const id = document.getElementById("editVoucherId").value;
+    const vouCode = document.getElementById("editVouCode").value.trim().toUpperCase();
+    const vouValue = parseInt(document.getElementById("editVouValue").value);
+    const startDateStr = document.getElementById("editStartDate").value.trim();
+    const endDateStr = document.getElementById("editEndDate").value.trim();
+
+    const messageBox = document.getElementById("editVoucherMessage");
+    messageBox.style.display = "none";
+
+    if (!vouCode || isNaN(vouValue) || !startDateStr || !endDateStr) {
+        alert("Vui lòng nhập đầy đủ thông tin voucher.");
+        return;
+    }
+
+    const formatDateTime = (date) => {
+        const pad = (n) => n < 10 ? '0' + n : n;
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    };
+
+    const startDate = flatpickr.parseDate(startDateStr, "Y-m-d H:i:s");
+    const endDate = flatpickr.parseDate(endDateStr, "Y-m-d H:i:s");
+
+    if (!startDate || !endDate || endDate <= startDate) {
+        messageBox.textContent = "Ngày kết thúc phải sau ngày bắt đầu!";
+        messageBox.style.display = "block";
+        return;
+    }
+
+    const formattedStart = formatDateTime(startDate);
+    const formattedEnd = formatDateTime(endDate);
+
+    try {
+        const response = await fetch(`/api/voucher/update/${id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                voucher_code: vouCode,
+                voucher_value: vouValue,
+                date_start: formattedStart,
+                date_end: formattedEnd
+            })
+        });
+
+        if (response.ok) {
+            // Lưu vị trí scroll
+            const scrollY = window.scrollY;
+            localStorage.setItem("voucherScrollPosition", scrollY);
+
+            // Reload
+            location.reload();
+        } else {
+            const result = await response.json();
+            messageBox.textContent = result.message || "Cập nhật thất bại!";
+            messageBox.style.display = "block";
+        }
+
+    } catch (error) {
+        alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+        console.error(error);
+    }
+});
+document.querySelectorAll(".edit-voucher-btn").forEach(btn => {
+    btn.addEventListener("click", function () {
+        const row = btn.closest("tr");
+        document.getElementById("editVoucherId").value = row.children[0].innerText.trim();
+        document.getElementById("editVouCode").value = row.children[1].innerText.trim();
+        document.getElementById("editVouValue").value = row.children[2].innerText.trim();
+        document.getElementById("editStartDate").value = row.children[3].innerText.trim();
+        document.getElementById("editEndDate").value = row.children[4].innerText.trim();
+        const modal = new bootstrap.Modal(document.getElementById("editVoucherModal"));
+        modal.show();
+    });
+});
+
+
 
 //supplier
 //add supplier modal form
