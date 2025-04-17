@@ -83,7 +83,7 @@ const deleteSupplier = (req, res) => {
         res.status(500).render("error", { message: "Lỗi khi xoá nhà cung cấp." });
       }
     } else {
-      res.redirect("/suppliers");
+      return res.status(201).json({ success: true, message: "Xóa nhà cung cấp thành công!",Supplier: data });
     }
   });
 };

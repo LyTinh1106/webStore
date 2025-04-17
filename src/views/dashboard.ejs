@@ -838,16 +838,15 @@
                                     <%= supplier.address %>
                                 </td>
                                 <td>
-                                    <a href="/suppliers/<%= supplier.id %>/edit" class="btn btn-sm btn-info">
-                                        <i class="fas fa-edit"></i>
-                                    </a>
-                                    <form action="/suppliers/<%= supplier.id %>/delete" method="POST"
-                                        style="display:inline;">
-                                        <button type="submit" class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Bạn có chắc muốn xóa nhà cung cấp này?')">
-                                            <i class="fas fa-trash"></i>
+                                    <form action="/suppliers/<%= supplier.id %>/edit" method="get" style="display:inline;">
+                                        <button class="btn btn-sm btn-info" title="Chỉnh sửa">
+                                            <i class="fas fa-edit"></i>
                                         </button>
                                     </form>
+                                    <button class="btn btn-sm btn-danger delete-supplier-btn" title="Xóa"
+                                        data-id="<%= supplier.id %>">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
                             <% }); %>
@@ -961,7 +960,6 @@
                                                 <button class="btn btn-sm btn-info" title="Chỉnh sửa"><i
                                                         class="fas fa-edit"></i></button>
                                             </form>
-                                        <td>
                                             <button class="btn btn-sm btn-danger delete-voucher-btn" title="Xóa"
                                                 data-id="<%= voucher.id %>">
                                                 <i class="fas fa-trash"></i>

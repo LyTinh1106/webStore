@@ -13,6 +13,6 @@ router.post('/create', createSupplier); // Tạo mới nhà cung cấp
 router.get('/', getAllSuppliers); // Lấy tất cả nhà cung cấp
 router.get('/:id', getSupplierById); // Lấy nhà cung cấp theo ID
 router.put('/:id', updateSupplier); // Cập nhật nhà cung cấp
-router.delete('/:id', deleteSupplier); // Xoá nhà cung cấp
+router.delete('/delete/:id', deleteSupplier); // Xoá nhà cung cấp
 
 module.exports = router;

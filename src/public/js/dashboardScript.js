@@ -380,3 +380,37 @@ document.getElementById("addSupplierForm").addEventListener("submit", async func
         console.error(error);
     }
 });
+//delete supplier
+document.querySelectorAll(".delete-supplier-btn").forEach(button => {
+    button.addEventListener("click", async function () {
+        const supplierId = this.dataset.id;
+
+        if (!supplierId) {
+            alert("Không tìm thấy ID của nhà cung cấp.");
+            return;
+        }
+
+        const confirmed = confirm("Bạn có chắc muốn xóa nhà cung cấp này?");
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(`/api/supplier/delete/${supplierId}`, {
+                method: "DELETE"
+            });
+
+            if (response.ok) {
+                const scrollY = window.scrollY;
+                localStorage.setItem("supplierScrollPosition", scrollY);
+                location.reload();
+            } else {
+                const text = await response.text();
+                alert("Không thể xóa nhà cung cấp: " + text);
+            }
+
+        } catch (error) {
+            alert("Đã xảy ra lỗi khi gửi yêu cầu xóa nhà cung cấp.");
+            console.error(error);
+        }
+    });
+});
+
