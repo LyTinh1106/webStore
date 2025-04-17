@@ -65,6 +65,48 @@ document.getElementById("addBrandForm").addEventListener("submit", async functio
         console.error(error);
     }
 });
+// delete brand
+document.addEventListener("DOMContentLoaded", function () {
+    const deleteButtons = document.querySelectorAll(".delete-brand-btn");
+
+    deleteButtons.forEach(button => {
+        button.addEventListener("click", async function () {
+            const brandId = this.dataset.id;
+
+            const confirmed = confirm("Bạn có chắc muốn xóa?");
+            if (!confirmed) return;
+
+            try {
+                const response = await fetch(`/api/brand/delete/${brandId}`, {
+                    method: "DELETE"
+                });
+
+                if (response.ok) {
+                    // Lưu vị trí cuộn
+                    const scrollY = window.scrollY;
+                    localStorage.setItem("scrollPosition", scrollY);
+
+                    // Reload lại trang
+                    location.reload();
+                } else {
+                    const text = await response.text();
+                    alert("Xóa thất bại: " + text);
+                }
+
+            } catch (error) {
+                alert("Đã xảy ra lỗi khi gửi yêu cầu xóa.");
+                console.error(error);
+            }
+        });
+    });
+
+    // Khôi phục vị trí cuộn nếu có
+    const scrollPosition = localStorage.getItem("scrollPosition");
+    if (scrollPosition !== null) {
+        window.scrollTo(0, parseInt(scrollPosition));
+        localStorage.removeItem("scrollPosition");
+    }
+});
 
 //Category
 
@@ -111,7 +153,48 @@ window.addEventListener("load", () => {
         localStorage.removeItem("scrollPosition");
     }
 });
+// delete categoty
+document.querySelectorAll(".delete-category-btn").forEach(button => {
+    button.addEventListener("click", async function () {
+        const categoryId = this.dataset.id;
 
+        if (!categoryId) {
+            alert("Không tìm thấy ID của danh mục.");
+            return;
+        }
+
+        const confirmed = confirm("Bạn có chắc muốn xóa danh mục này?");
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(`/api/category/delete/${categoryId}`, {
+                method: "DELETE", 
+            });
+
+            if (response.ok) {
+                const scrollY = window.scrollY;
+                localStorage.setItem("scrollPosition", scrollY);
+                location.reload();
+            } else {
+                const text = await response.text();
+                alert("Không xóa được danh mục: " + text);
+            }
+
+        } catch (error) {
+            alert("Đã xảy ra lỗi khi gửi yêu cầu xóa.");
+            console.error(error);
+        }
+    });
+});
+
+// Sau khi reload, cuộn về vị trí cũ
+window.addEventListener("load", () => {
+    const scrollY = localStorage.getItem("scrollPosition");
+    if (scrollY !== null) {
+        window.scrollTo(0, parseInt(scrollY));
+        localStorage.removeItem("scrollPosition");
+    }
+});
 //Voucher
 
 // Khởi tạo flatpickr cho các trường nhập liệu ngày
@@ -150,7 +233,7 @@ document.getElementById("endDateIcon").addEventListener("click", function () {
 });
 
 
-//modal add category form
+//modal add voucher form
 document.getElementById("addVoucherForm").addEventListener("submit", async function (e) {
     e.preventDefault(); // Ngăn form reload mặc định
 
@@ -167,17 +250,23 @@ document.getElementById("addVoucherForm").addEventListener("submit", async funct
         return;
     }
 
-    // Parse start and end dates using flatpickr
+    const formatDateTime = (date) => {
+        const pad = (n) => n < 10 ? '0' + n : n;
+        return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    };
+    
     const startDate = flatpickr.parseDate(startDateStr, "Y-m-d H:i:s");
     const endDate = flatpickr.parseDate(endDateStr, "Y-m-d H:i:s");
-
-    // Kiểm tra nếu ngày kết thúc nhỏ hơn hoặc bằng ngày bắt đầu
-    if (endDate <= startDate) {
+    
+    if (!startDate || !endDate || endDate <= startDate) {
         messageBox.textContent = "Ngày kết thúc phải sau ngày bắt đầu!";
         messageBox.style.display = "block";
         return;
     }
-
+    
+    const formattedStart = formatDateTime(startDate);
+    const formattedEnd = formatDateTime(endDate);
+    
     try {
         const response = await fetch("/api/voucher/create", {
             method: "POST",
@@ -187,8 +276,8 @@ document.getElementById("addVoucherForm").addEventListener("submit", async funct
             body: JSON.stringify({
                 voucher_code: vouCode,
                 voucher_value: vouValue,
-                date_start: startDate,
-                date_end: endDate
+                date_start: formattedStart,
+                date_end: formattedEnd
             })
         });
 
@@ -208,4 +297,38 @@ document.getElementById("addVoucherForm").addEventListener("submit", async funct
         alert("Đã xảy ra lỗi khi gửi yêu cầu.");
         console.error(error);
     }
+});
+
+// delete voucher
+document.querySelectorAll(".delete-voucher-btn").forEach(button => {
+    button.addEventListener("click", async function () {
+        const voucherId = this.dataset.id;
+
+        if (!voucherId) {
+            alert("Không tìm thấy ID của voucher.");
+            return;
+        }
+
+        const confirmed = confirm("Bạn có chắc muốn xóa voucher này?");
+        if (!confirmed) return;
+
+        try {
+            const response = await fetch(`/api/voucher/delete/${voucherId}`, {
+                method: "DELETE"
+            });
+
+            if (response.ok) {
+                const scrollY = window.scrollY;
+                localStorage.setItem("voucherScrollPosition", scrollY);
+                location.reload();
+            } else {
+                const text = await response.text();
+                alert("Không thể xóa voucher: " + text);
+            }
+
+        } catch (error) {
+            alert("Đã xảy ra lỗi khi gửi yêu cầu xóa voucher.");
+            console.error(error);
+        }
+    });
 });

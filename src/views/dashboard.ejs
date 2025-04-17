@@ -309,31 +309,22 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% categories.forEach((category, index)=> { %>
+                        <% categories.forEach((category, index) => { %>
                             <tr>
-                                <td>
-                                    <%= 'L' + String(category.id).padStart(3, '0' ) %>
-                                        <!-- <%= category.id%> -->
-                                </td>
-                                <td>
-                                    <%= category.name %>
-                                </td>
-
+                                <td><%= category.id %></td> <!-- Đã bỏ L001 -->
+                                <td><%= category.name %></td>
                                 <td>
                                     <a href="/categories/<%= category.id %>/edit" class="btn btn-sm btn-info">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <form action="/categories/<%= category.id %>/delete" method="POST"
-                                        style="display:inline;">
-                                        <button class="btn btn-sm btn-danger"
-                                            onclick="return confirm('Bạn có chắc chắn muốn xóa?')">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </form>
+                                    <button class="btn btn-sm btn-danger delete-category-btn" data-id="<%= category.id %>">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
                                 </td>
                             </tr>
-                            <% }) %>
+                        <% }) %>
                     </tbody>
+                    
 
                 </table>
             </div>
@@ -398,17 +389,14 @@
                                         <%= brand.brand_name %>
                                     </td>
                                     <td>
-                                        <a href="/brands/<%= brand.id %>" class="btn btn-sm btn-info">
+                                        <a href="/brands/<%= brand.brand_id %>" class="btn btn-sm btn-info">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="/brands/<%= brand.id %>/delete" method="POST"
-                                            style="display:inline-block;"
-                                            onsubmit="return confirm('Bạn có chắc muốn xóa?');">
-                                            <button type="submit" class="btn btn-sm btn-danger">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <button class="btn btn-sm btn-danger delete-brand-btn" data-id="<%= brand.brand_id %>">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
+                                    
                                 </tr>
                                 <% }) %>
                                     <% } else { %>
@@ -650,13 +638,17 @@
                                                 <button class="btn btn-sm btn-info" title="Chỉnh sửa"><i
                                                         class="fas fa-edit"></i></button>
                                             </form>
-                                            <form action="/vouchers/<%= voucher.id %>/delete" method="post"
-                                                style="display:inline;"
-                                                onsubmit="return confirm('Bạn có chắc muốn xóa voucher này?');">
-                                                <button class="btn btn-sm btn-danger" title="Xóa"><i
-                                                        class="fas fa-trash"></i></button>
-                                            </form>
+                                            <td>
+                                                <button 
+                                                    class="btn btn-sm btn-danger delete-voucher-btn" 
+                                                    title="Xóa"
+                                                    data-id="<%= voucher.id %>">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                            
                                         </td>
+                                        
                                     </tr>
                                     <% }) %>
                                         <% } else { %>

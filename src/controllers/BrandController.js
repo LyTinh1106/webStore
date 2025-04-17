@@ -82,7 +82,8 @@ exports.deleteBrand = (req, res) => {
         res.status(500).render("error", { message: "Lỗi khi xóa brand." });
       }
     } else {
-      res.redirect("/brands");
+      return res.status(201).json({ success: true, message: "Xóa brand thành công!", brand: data });
+
     }
   });
 };
