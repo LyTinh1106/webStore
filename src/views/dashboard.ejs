@@ -181,7 +181,237 @@
         <div class="content-section" id="products">
             <h3 class="section-title">Quản lý sản phẩm</h3>
             <div class="mb-3">
-                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm sản phẩm mới</button>
+                <!-- Nút mở popup -->
+                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addProductModal">
+                    <i class="fas fa-plus"></i> Thêm sản phẩm mới
+                </a>
+
+                <!-- Modal Thêm Sản Phẩm -->
+                <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Thêm Sản Phẩm Mới</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addProductForm" enctype="multipart/form-data">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="productCode" class="form-label">Mã sản phẩm</label>
+                                            <input type="text" class="form-control" id="productCode" name="productCode"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="productName" class="form-label">Tên sản phẩm</label>
+                                            <input type="text" class="form-control" id="productName" name="productName"
+                                                required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="description" class="form-label">Mô tả</label>
+                                            <textarea class="form-control" id="description" name="description"
+                                                rows="3"></textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="importPrice" class="form-label">Giá nhập</label>
+                                            <input type="number" class="form-control" id="importPrice"
+                                                name="importPrice" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="salePrice" class="form-label">Giá bán</label>
+                                            <input type="number" class="form-control" id="salePrice" name="salePrice"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="category" class="form-label">Loại sản phẩm</label>
+                                            <select class="form-select" id="category" name="category">
+                                                <option value="">-- Chọn loại --</option>
+                                                <option value="Điện thoại">Điện thoại</option>
+                                                <option value="Laptop">Laptop</option>
+                                                <option value="Phụ kiện">Phụ kiện</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="brand" class="form-label">Hãng</label>
+                                            <select class="form-select" id="brand" name="brand">
+                                                <option value="">-- Chọn hãng --</option>
+                                                <option value="Apple">Apple</option>
+                                                <option value="Samsung">Samsung</option>
+                                                <option value="Dell">Dell</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="origin" class="form-label">Xuất xứ</label>
+                                            <input type="text" class="form-control" id="origin" name="origin">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="warranty" class="form-label">Bảo hành (tháng)</label>
+                                            <input type="number" class="form-control" id="warranty" name="warranty">
+                                        </div>
+
+                                        <!-- Hình ảnh -->
+                                        <div class="col-md-6">
+                                            <label for="mainImage" class="form-label">Hình chính</label>
+                                            <input class="form-control" type="file" id="mainImage" name="mainImage"
+                                                accept="image/*">
+                                            <div id="mainImagePreview" class="mt-2 position-relative"
+                                                style="max-width: 150px;"></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="extraImages" class="form-label">Hình phụ</label>
+                                            <input class="form-control" type="file" id="extraImages"
+                                                name="extraImages[]" multiple accept="image/*">
+                                            <div id="previewArea" class="mt-2 d-flex flex-wrap gap-2"></div>
+                                        </div>
+
+                                        <!-- Thông số kỹ thuật -->
+                                        <div class="col-md-12">
+                                            <label for="specFile" class="form-label">Thông số kỹ thuật (File)</label>
+                                            <input class="form-control" type="file" id="specFile" name="specFile"
+                                                accept=".pdf,.doc,.docx,.xls,.xlsx,.txt">
+                                            <small class="text-muted">Hỗ trợ các định dạng: PDF, Word, Excel,
+                                                TXT</small>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản
+                                    phẩm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- JavaScript xử lý ảnh -->
+                <script>
+                    const mainImageInput = document.getElementById("mainImage");
+                    const mainImagePreview = document.getElementById("mainImagePreview");
+
+                    const extraImagesInput = document.getElementById("extraImages");
+                    const previewArea = document.getElementById("previewArea");
+
+                    let mainImageFile = null;
+                    let extraImagesFiles = [];
+
+                    // Hiển thị và xóa hình chính
+                    mainImageInput.addEventListener("change", () => {
+                        const file = mainImageInput.files[0];
+                        if (!file) return;
+
+                        // Kiểm tra trùng với hình phụ
+                        if (extraImagesFiles.some(f => f.name === file.name)) {
+                            alert("Hình này đã được chọn ở hình phụ. Vui lòng chọn hình khác.");
+                            mainImageInput.value = "";
+                            return;
+                        }
+
+                        mainImageFile = file;
+                        renderMainImagePreview();
+                    });
+
+                    function renderMainImagePreview() {
+                        if (!mainImageFile) {
+                            mainImagePreview.innerHTML = "";
+                            return;
+                        }
+
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            mainImagePreview.innerHTML = `
+        <img src="${e.target.result}" class="img-thumbnail" style="width: 100%;">
+        <button class="btn btn-sm btn-danger position-absolute" style="top:0; right:0;" onclick="removeMainImage()">×</button>
+      `;
+                        };
+                        reader.readAsDataURL(mainImageFile);
+                    }
+
+                    function removeMainImage() {
+                        mainImageFile = null;
+                        mainImageInput.value = "";
+                        mainImagePreview.innerHTML = "";
+                    }
+
+                    // Xử lý hình phụ
+                    extraImagesInput.addEventListener("change", (event) => {
+                        const files = Array.from(event.target.files);
+                        let added = false;
+
+                        files.forEach(file => {
+                            if (file.name === mainImageFile?.name) {
+                                alert(`Hình "${file.name}" đã chọn ở hình chính.`);
+                                return;
+                            }
+
+                            if (extraImagesFiles.some(f => f.name === file.name)) {
+                                alert(`Hình "${file.name}" đã được chọn rồi.`);
+                                return;
+                            }
+
+                            extraImagesFiles.push(file);
+                            added = true;
+                        });
+
+                        if (added) renderExtraPreviews();
+                        extraImagesInput.value = ""; // reset input để có thể chọn lại hình đã bỏ qua
+                    });
+
+                    function renderExtraPreviews() {
+                        previewArea.innerHTML = "";
+                        extraImagesFiles.forEach((file, index) => {
+                            const reader = new FileReader();
+                            reader.onload = function (e) {
+                                const wrapper = document.createElement("div");
+                                wrapper.className = "position-relative";
+
+                                const img = document.createElement("img");
+                                img.src = e.target.result;
+                                img.classList.add("img-thumbnail");
+                                img.style.width = "100px";
+                                img.style.height = "100px";
+
+                                const removeBtn = document.createElement("button");
+                                removeBtn.innerText = "×";
+                                removeBtn.className = "btn btn-sm btn-danger position-absolute";
+                                removeBtn.style.top = "0";
+                                removeBtn.style.right = "0";
+                                removeBtn.onclick = () => {
+                                    extraImagesFiles.splice(index, 1);
+                                    renderExtraPreviews();
+                                };
+
+                                wrapper.appendChild(img);
+                                wrapper.appendChild(removeBtn);
+                                previewArea.appendChild(wrapper);
+                            };
+                            reader.readAsDataURL(file);
+                        });
+                    }
+
+                    // Submit form
+                    document.getElementById("addProductForm").addEventListener("submit", function (e) {
+                        e.preventDefault();
+                        const formData = new FormData(this);
+
+                        if (mainImageFile) {
+                            formData.set("mainImage", mainImageFile);
+                        }
+
+                        extraImagesFiles.forEach(file => {
+                            formData.append("extraImages[]", file);
+                        });
+
+                        console.log("Đã sẵn sàng gửi form:");
+                        console.log("Hình chính:", mainImageFile?.name);
+                        console.log("Số hình phụ:", extraImagesFiles.length);
+
+                        // Gửi formData bằng fetch hoặc axios nếu muốn
+                    });
+                </script>
+
             </div>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -309,22 +539,27 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% categories.forEach((category, index) => { %>
+                        <% categories.forEach((category, index)=> { %>
                             <tr>
-                                <td><%= category.id %></td> <!-- Đã bỏ L001 -->
-                                <td><%= category.name %></td>
+                                <td>
+                                    <%= category.id %>
+                                </td> <!-- Đã bỏ L001 -->
+                                <td>
+                                    <%= category.name %>
+                                </td>
                                 <td>
                                     <a href="/categories/<%= category.id %>/edit" class="btn btn-sm btn-info">
                                         <i class="fas fa-edit"></i>
                                     </a>
-                                    <button class="btn btn-sm btn-danger delete-category-btn" data-id="<%= category.id %>">
+                                    <button class="btn btn-sm btn-danger delete-category-btn"
+                                        data-id="<%= category.id %>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
-                        <% }) %>
+                            <% }) %>
                     </tbody>
-                    
+
 
                 </table>
             </div>
@@ -389,14 +624,54 @@
                                         <%= brand.brand_name %>
                                     </td>
                                     <td>
-                                        <a href="/brands/<%= brand.brand_id %>" class="btn btn-sm btn-info">
+                                        <!-- popup updatebutton -->
+                                        <a href="#" class="btn btn-sm btn-info" data-bs-toggle="modal"
+                                            data-bs-target="#updateBrandModal">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <button class="btn btn-sm btn-danger delete-brand-btn" data-id="<%= brand.brand_id %>">
+                                        <!-- popup updateform -->
+                                        <div class="modal fade" id="updateBrandModal" tabindex="-1"
+                                            aria-labelledby="updateBrandModalLabel" aria-hidden="true">
+                                            <div class="modal-dialog modal-dialog-centered">
+                                                <div class="modal-content">
+
+                                                    <div class="modal-header">
+                                                        <h5 class="modal-title" id="updateBrandModalLabel">Cập nhật nhãn
+                                                            hàng mới</h5>
+                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                            aria-label="Đóng"></button>
+                                                    </div>
+
+                                                    <div class="modal-body">
+                                                        <form id="updateBrandForm">
+                                                            <div class="mb-3">
+                                                                <label for="brandName" class="form-label">Tên nhãn
+                                                                    hàng</label>
+                                                                <input type="text" class="form-control" id="brandName"
+                                                                    name="brand_Name" placeholder="Nhập tên nhãn hàng"
+                                                                    required>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+
+                                                    <div class="modal-footer">
+                                                        <button type="button" class="btn btn-secondary"
+                                                            data-bs-dismiss="modal">Hủy</button>
+                                                        <button type="submit" form="updateBrandForm"
+                                                            class="btn btn-primary">Cập nhật</button>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <button class="btn btn-sm btn-danger delete-brand-btn"
+                                            data-id="<%= brand.brand_id %>">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
-                                    
+
                                 </tr>
                                 <% }) %>
                                     <% } else { %>
@@ -482,7 +757,55 @@
         <div class="content-section" id="suppliers">
             <h3 class="section-title">Quản lý nhà cung cấp</h3>
             <div class="mb-3">
-                <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm nhà cung cấp mới</button>
+                <!-- Nút mở popup -->
+                <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
+                    <i class="fas fa-plus"></i> Thêm nhà cung cấp mới
+                </a>
+                <!-- Modal Form -->
+                <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addSupplierModalLabel">Thêm nhà cung cấp mới</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form id="addSupplierForm">
+                                    <div class="mb-3">
+                                        <label for="supplierName" class="form-label">Tên nhà cung cấp</label>
+                                        <input type="text" class="form-control" id="supplierName" name="name"
+                                            placeholder="Nhập tên nhà cung cấp" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="supplierPhonenumber" class="form-label">Số điện thoại</label>
+                                        <input type="text" class="form-control" id="supplierPhonenumber" name="phonenumber"
+                                            placeholder="Nhập số điện thoại" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="supplierEmail" class="form-label">Email</label>
+                                        <input type="text" class="form-control" id="supplierEmail" name="email"
+                                            placeholder="Nhập email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="supplierAddress" class="form-label">Địa chỉ</label>
+                                        <input type="text" class="form-control" id="supplierAddress" name="address"
+                                            placeholder="Nhập địa chỉ" required>
+                                    </div>
+                                </form>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="addSupplierForm" class="btn btn-primary">Thêm</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -600,7 +923,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -638,17 +961,15 @@
                                                 <button class="btn btn-sm btn-info" title="Chỉnh sửa"><i
                                                         class="fas fa-edit"></i></button>
                                             </form>
-                                            <td>
-                                                <button 
-                                                    class="btn btn-sm btn-danger delete-voucher-btn" 
-                                                    title="Xóa"
-                                                    data-id="<%= voucher.id %>">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </td>
-                                            
+                                        <td>
+                                            <button class="btn btn-sm btn-danger delete-voucher-btn" title="Xóa"
+                                                data-id="<%= voucher.id %>">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
                                         </td>
-                                        
+
+                                        </td>
+
                                     </tr>
                                     <% }) %>
                                         <% } else { %>
@@ -731,8 +1052,8 @@
         <!-- Bootstrap JS và jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-         <!-- Flatpickr JS -->
-         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <!-- Flatpickr JS -->
+        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <!-- JavaScript -->
         <script src="js/dashboardScript.js"></script>
 </body>

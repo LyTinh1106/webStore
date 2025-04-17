@@ -41,7 +41,8 @@ const createSupplier = (req, res) => {
     if (err) {
       res.status(500).render("error", { message: "Lỗi khi tạo nhà cung cấp." });
     } else {
-      res.redirect("/suppliers");
+      return res.status(201).json({ success: true, message: "Tạo supplier thành công!", Supplier: data });
+
     }
   });
 };
