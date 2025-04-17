@@ -40,7 +40,7 @@ exports.createCategory = (req, res) => {
     if (err) {
       res.status(500).render("error", { message: err.message || "Lỗi khi tạo category." });
     } else {
-      return res.status(201).json({ success: true, message: "Tạo category thành công!", brand: data });
+      return res.status(201).json({ success: true, message: "Tạo category thành công!", category: data });
     }
   });
 };
@@ -61,7 +61,7 @@ exports.updateCategory = (req, res) => {
         res.status(500).render("error", { message: "Lỗi khi cập nhật category." });
       }
     } else {
-      res.redirect("/dashboard");
+      return res.status(201).json({ success: true, message: "Xóa category thành công!", category: data });
     }
   });
 };
