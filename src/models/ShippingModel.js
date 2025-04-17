@@ -1,7 +1,19 @@
 const sql = require('../config/database');
 
+// Hàm hỗ trợ định dạng ngày giờ thành YYYY-MM-DD HH:mm:ss
+const formatDate = (date) => {
+  if (!date) return null;
+  const d = new Date(date);
+  return d.getFullYear() + '-' +
+         String(d.getMonth() + 1).padStart(2, '0') + '-' +
+         String(d.getDate()).padStart(2, '0') + ' ' +
+         String(d.getHours()).padStart(2, '0') + ':' +
+         String(d.getMinutes()).padStart(2, '0') + ':' +
+         String(d.getSeconds()).padStart(2, '0');
+};
+
 const Shipping = function (shipping) {
-  this.shipping_date = shipping.shipping_date;
+  this.shipping_date = shipping.shipping_date ? formatDate(shipping.shipping_date) : null;
   this.delivery_method = shipping.delivery_method;
   this.shipping_status = shipping.shipping_status;
   this.id_customer = shipping.id_customer;
@@ -9,17 +21,21 @@ const Shipping = function (shipping) {
   this.shipping_address = shipping.shipping_address;
 };
 
-
 Shipping.create = (newShipping, result) => {
-  sql.query("INSERT INTO shipping SET ?", newShipping, (err, res) => {
+  const formattedShipping = {
+    ...newShipping,
+    shipping_date: newShipping.shipping_date ? formatDate(newShipping.shipping_date) : null
+  };
+
+  sql.query("INSERT INTO shipping SET ?", formattedShipping, (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
       return;
     }
 
-    console.log("created shipping: ", { id: res.insertId, ...newShipping });
-    result(null, { id: res.insertId, ...newShipping });
+    console.log("created shipping: ", { id: res.insertId, ...formattedShipping });
+    result(null, { id: res.insertId, ...formattedShipping });
   });
 };
 
@@ -33,7 +49,12 @@ Shipping.findById = (id, result) => {
     }
 
     if (res.length) {
-      result(null, res[0]);
+      const shipping = {
+        ...res[0],
+        shipping_date: res[0].shipping_date ? formatDate(res[0].shipping_date) : null
+      };
+      console.log("found shipping: ", shipping);
+      result(null, shipping);
       return;
     }
 
@@ -43,7 +64,7 @@ Shipping.findById = (id, result) => {
 
 // Lấy tất cả shipping
 Shipping.getAll = (result) => {
-  const query = ` SELECT 
+  const query = `SELECT 
       s.*, 
       CONCAT(c.first_name, ' ', c.last_name) AS customer_name
     FROM 
@@ -58,25 +79,35 @@ Shipping.getAll = (result) => {
       return;
     }
 
-    result(null, res);
+    const formattedShippings = res.map(shipping => ({
+      ...shipping,
+      shipping_date: shipping.shipping_date ? formatDate(shipping.shipping_date) : null
+    }));
+
+    console.log("shippings: ", formattedShippings);
+    result(null, formattedShippings);
   });
 };
 
-
 // Cập nhật thông tin shipping theo ID
 Shipping.updateById = (id, shipping, result) => {
+  const formattedShipping = {
+    ...shipping,
+    shipping_date: shipping.shipping_date ? formatDate(shipping.shipping_date) : null
+  };
+
   sql.query(
     `UPDATE shipping 
      SET shipping_date = ?, delivery_method = ?, shipping_status = ?, 
          id_customer = ?, id_order = ?, shipping_address = ?
      WHERE id = ?`,
     [
-      shipping.shipping_date,
-      shipping.delivery_method,
-      shipping.shipping_status,
-      shipping.id_customer,
-      shipping.id_order,
-      shipping.shipping_address,
+      formattedShipping.shipping_date,
+      formattedShipping.delivery_method,
+      formattedShipping.shipping_status,
+      formattedShipping.id_customer,
+      formattedShipping.id_order,
+      formattedShipping.shipping_address,
       id
     ],
     (err, res) => {
@@ -91,7 +122,8 @@ Shipping.updateById = (id, shipping, result) => {
         return;
       }
 
-      result(null, { id: id, ...shipping });
+      console.log("updated shipping: ", { id: id, ...formattedShipping });
+      result(null, { id: id, ...formattedShipping });
     }
   );
 };
@@ -110,6 +142,7 @@ Shipping.remove = (id, result) => {
       return;
     }
 
+    console.log("deleted shipping with id: ", id);
     result(null, res);
   });
 };

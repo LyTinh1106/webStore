@@ -25,11 +25,10 @@
             <li><a href="#orders"><i class="fas fa-shopping-cart me-2"></i> Đơn hàng</a></li>
             <li><a href="#products"><i class="fas fa-mobile-alt me-2"></i> Sản phẩm</a></li>
             <li><a href="#categories"><i class="fas fa-list me-2"></i> Loại sản phẩm</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Nhãn hàng</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Giao hàng</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Nhà cung cấp</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Voucher</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Tài khoản</a></li>
+            <li><a href="#brands"><i class="fas fa-tags me-2"></i> Nhãn hàng</a></li>
+            <li><a href="#shipping"><i class="fas fa-truck me-2"></i> Giao hàng</a></li>
+            <li><a href="#suppliers"><i class="fas fa-warehouse me-2"></i> Nhà cung cấp</a></li>
+            <li><a href="#vouchers"><i class="fas fa-ticket-alt me-2"></i> Voucher</a></li>
             <li><a href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
         </ul>
     </div>
@@ -551,8 +550,8 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <!-- Modal chỉnh sửa danh mục -->
 
+                                    <!-- Modal chỉnh sửa danh mục -->
                                     <div class="modal fade" id="updateCategoryModal" tabindex="-1"
                                         aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered">
@@ -846,6 +845,9 @@
                         </tr>
                     </thead>
                     <tbody>
+
+ 
+
                         <% if (suppliers && suppliers.length> 0) { %>
                             <% suppliers.forEach((supplier)=> { %>
                                 <tr>
@@ -870,6 +872,7 @@
                                             data-name="<%= supplier.name %>"
                                             data-phonenumber="<%= supplier.phonenumber %>"
                                             data-email="<%= supplier.email %>" data-address="<%= supplier.address %>">
+
                                             <i class="fas fa-edit"></i>
                                         </a>
                                         <button class="btn btn-sm btn-danger delete-supplier-btn"
@@ -888,6 +891,7 @@
                 </table>
             </div>
         </div>
+
 
         <!-- Modal Cập Nhật Nhà Cung Cấp -->
         <div class="modal fade" id="updateSupplierModal" tabindex="-1" aria-labelledby="updateSupplierModalLabel"
@@ -932,10 +936,6 @@
                 </div>
             </div>
         </div>
-
-
-
-
 
         <!-- Voucher Section -->
         <div class="content-section" id="vouchers">

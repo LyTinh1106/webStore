@@ -1,22 +1,40 @@
 const sql = require('../config/database');
 
+// Hàm hỗ trợ định dạng ngày giờ thành YYYY-MM-DD HH:mm:ss
+const formatDate = (date) => {
+  if (!date) return null;
+  const d = new Date(date);
+  return d.getFullYear() + '-' +
+    String(d.getMonth() + 1).padStart(2, '0') + '-' +
+    String(d.getDate()).padStart(2, '0') + ' ' +
+    String(d.getHours()).padStart(2, '0') + ':' +
+    String(d.getMinutes()).padStart(2, '0') + ':' +
+    String(d.getSeconds()).padStart(2, '0');
+};
+
 const Voucher = function (voucher) {
   this.voucher_code = voucher.voucher_code;
   this.voucher_value = voucher.voucher_value;
-  this.date_start = voucher.date_start;
-  this.date_end = voucher.date_end;
+  this.date_start = voucher.date_start ? formatDate(voucher.date_start) : null;
+  this.date_end = voucher.date_end ? formatDate(voucher.date_end) : null;
 };
 
 Voucher.create = (newVoucher, result) => {
-  sql.query('INSERT INTO voucher SET ?', newVoucher, (err, res) => {
+  const formattedVoucher = {
+    ...newVoucher,
+    date_start: newVoucher.date_start ? formatDate(newVoucher.date_start) : null,
+    date_end: newVoucher.date_end ? formatDate(newVoucher.date_end) : null
+  };
+
+  sql.query('INSERT INTO voucher SET ?', formattedVoucher, (err, res) => {
     if (err) {
       console.log('error: ', err);
       result(err, null);
       return;
     }
 
-    console.log('created voucher: ', { id: res.insertId, ...newVoucher });
-    result(null, { id: res.insertId, ...newVoucher });
+    console.log('created voucher: ', { id: res.insertId, ...formattedVoucher });
+    result(null, { id: res.insertId, ...formattedVoucher });
   });
 };
 
@@ -29,8 +47,13 @@ Voucher.findById = (id, result) => {
     }
 
     if (res.length) {
-      console.log('found voucher: ', res[0]);
-      result(null, res[0]);
+      const voucher = {
+        ...res[0],
+        date_start: res[0].date_start ? formatDate(res[0].date_start) : null,
+        date_end: res[0].date_end ? formatDate(res[0].date_end) : null
+      };
+      console.log('found voucher: ', voucher);
+      result(null, voucher);
       return;
     }
 
@@ -54,15 +77,27 @@ Voucher.getAll = (code, result) => {
       return;
     }
 
-    console.log('vouchers: ', res);
-    result(null, res);
+    const formattedVouchers = res.map(voucher => ({
+      ...voucher,
+      date_start: voucher.date_start ? formatDate(voucher.date_start) : null,
+      date_end: voucher.date_end ? formatDate(voucher.date_end) : null
+    }));
+
+    console.log('vouchers: ', formattedVouchers);
+    result(null, formattedVouchers);
   });
 };
 
 Voucher.updateById = (id, voucher, result) => {
+  const formattedVoucher = {
+    ...voucher,
+    date_start: voucher.date_start ? formatDate(voucher.date_start) : null,
+    date_end: voucher.date_end ? formatDate(voucher.date_end) : null
+  };
+
   sql.query(
     'UPDATE voucher SET voucher_code = ?, voucher_value = ?, date_start = ?, date_end = ? WHERE id = ?',
-    [voucher.voucher_code, voucher.voucher_value, voucher.date_start, voucher.date_end, id],
+    [formattedVoucher.voucher_code, formattedVoucher.voucher_value, formattedVoucher.date_start, formattedVoucher.date_end, id],
     (err, res) => {
       if (err) {
         console.log('error: ', err);
@@ -75,8 +110,8 @@ Voucher.updateById = (id, voucher, result) => {
         return;
       }
 
-      console.log('updated voucher: ', { id: id, ...voucher });
-      result(null, { id: id, ...voucher });
+      console.log('updated voucher: ', { id: id, ...formattedVoucher });
+      result(null, { id: id, ...formattedVoucher });
     }
   );
 };
