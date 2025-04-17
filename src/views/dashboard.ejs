@@ -25,11 +25,10 @@
             <li><a href="#orders"><i class="fas fa-shopping-cart me-2"></i> Đơn hàng</a></li>
             <li><a href="#products"><i class="fas fa-mobile-alt me-2"></i> Sản phẩm</a></li>
             <li><a href="#categories"><i class="fas fa-list me-2"></i> Loại sản phẩm</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Nhãn hàng</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Giao hàng</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Nhà cung cấp</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Voucher</a></li>
-            <li><a href="#accounts"><i class="fas fa-users me-2"></i> Tài khoản</a></li>
+            <li><a href="#brands"><i class="fas fa-tags me-2"></i> Nhãn hàng</a></li>
+            <li><a href="#shipping"><i class="fas fa-truck me-2"></i> Giao hàng</a></li>
+            <li><a href="#suppliers"><i class="fas fa-warehouse me-2"></i> Nhà cung cấp</a></li>
+            <li><a href="#vouchers"><i class="fas fa-ticket-alt me-2"></i> Voucher</a></li>
             <li><a href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
         </ul>
     </div>
@@ -496,20 +495,23 @@
                 <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
                     <i class="fas fa-plus"></i> Thêm danh mục mới
                 </a>
-        
+
                 <!-- Modal Thêm mới danh mục -->
-                <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel" aria-hidden="true">
+                <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+                    aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title" id="addCategoryModalLabel">Thêm loại sản phẩm</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
                             </div>
                             <div class="modal-body">
                                 <form id="addCategoryForm">
                                     <div class="mb-3">
                                         <label for="categoryName" class="form-label">Tên loại sản phẩm</label>
-                                        <input type="text" class="form-control" id="categoryName" name="cat_Name" placeholder="Nhập tên loại sản phẩm" required>
+                                        <input type="text" class="form-control" id="categoryName" name="cat_Name"
+                                            placeholder="Nhập tên loại sản phẩm" required>
                                     </div>
                                 </form>
                             </div>
@@ -521,7 +523,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -532,58 +534,71 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% categories.forEach((category) => { %>
+                        <% categories.forEach((category)=> { %>
                             <tr>
-                                <td><%= category.id %></td>
-                                <td><%= category.name %></td>
+                                <td>
+                                    <%= category.id %>
+                                </td>
+                                <td>
+                                    <%= category.name %>
+                                </td>
                                 <td>
                                     <!-- Nút chỉnh sửa -->
                                     <a href="#" class="btn btn-sm btn-info editCategoryBtn" data-bs-toggle="modal"
-                                       data-bs-target="#updateCategoryModal" data-id="<%= category.id %>" data-name="<%= category.name %>">
+                                        data-bs-target="#updateCategoryModal" data-id="<%= category.id %>"
+                                        data-name="<%= category.name %>">
                                         <i class="fas fa-edit"></i>
                                     </a>
-        
-                                    <!-- Modal chỉnh sửa danh mục -->
-                                    <!-- Modal chỉnh sửa danh mục -->
-<div class="modal fade" id="updateCategoryModal" tabindex="-1" aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="updateCategoryModalLabel">Cập nhật danh mục</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-            </div>
-            <div class="modal-body">
-                <form id="updateCategoryForm">
-                    <input type="hidden" id="categoryId">
-                    <div class="mb-3">
-                        <label for="updateCategoryName" class="form-label">Tên danh mục</label>
-                        <input type="text" class="form-control" id="updateCategoryName" name="name" required>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                <button type="submit" form="updateCategoryForm" class="btn btn-primary">Cập nhật</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-        
+                                    <!-- Modal chỉnh sửa danh mục -->
+                                    <!-- Modal chỉnh sửa danh mục -->
+                                    <div class="modal fade" id="updateCategoryModal" tabindex="-1"
+                                        aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
+                                        <div class="modal-dialog modal-dialog-centered">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h5 class="modal-title" id="updateCategoryModalLabel">Cập nhật danh
+                                                        mục</h5>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                        aria-label="Đóng"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <form id="updateCategoryForm">
+                                                        <input type="hidden" id="categoryId">
+                                                        <div class="mb-3">
+                                                            <label for="updateCategoryName" class="form-label">Tên danh
+                                                                mục</label>
+                                                            <input type="text" class="form-control"
+                                                                id="updateCategoryName" name="name" required>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary"
+                                                        data-bs-dismiss="modal">Hủy</button>
+                                                    <button type="submit" form="updateCategoryForm"
+                                                        class="btn btn-primary">Cập nhật</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
                                     <!-- Nút xóa danh mục -->
-                                    <button class="btn btn-sm btn-danger delete-category-btn" data-id="<%= category.id %>">
+                                    <button class="btn btn-sm btn-danger delete-category-btn"
+                                        data-id="<%= category.id %>">
                                         <i class="fas fa-trash"></i>
                                     </button>
                                 </td>
                             </tr>
-                        <% }) %>
+                            <% }) %>
                     </tbody>
                 </table>
             </div>
         </div>
-         <!-- Modal Update Form -->
-        
-        
+        <!-- Modal Update Form -->
+
+
 
         <!-- Brands Section -->
         <div class="content-section" id="brands">
@@ -594,9 +609,10 @@
                     <i class="fas fa-plus"></i> Thêm nhãn hàng mới
                 </a>
             </div>
-        
+
             <!-- Modal Thêm Nhãn Hàng -->
-            <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel" aria-hidden="true">
+            <div class="modal fade" id="addBrandModal" tabindex="-1" aria-labelledby="addBrandModalLabel"
+                aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -607,7 +623,8 @@
                             <form id="addBrandForm">
                                 <div class="mb-3">
                                     <label for="brandName" class="form-label">Tên nhãn hàng</label>
-                                    <input type="text" class="form-control" id="brandName" name="brand_Name" placeholder="Nhập tên nhãn hàng" required>
+                                    <input type="text" class="form-control" id="brandName" name="brand_Name"
+                                        placeholder="Nhập tên nhãn hàng" required>
                                 </div>
                             </form>
                         </div>
@@ -618,7 +635,7 @@
                     </div>
                 </div>
             </div>
-        
+
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -629,37 +646,43 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% if (brands && brands.length > 0) { %>
-                            <% brands.forEach((brand) => { %>
+                        <% if (brands && brands.length> 0) { %>
+                            <% brands.forEach((brand)=> { %>
                                 <tr>
-                                    <td><%= brand.brand_id %></td>
-                                    <td><%= brand.brand_name %></td>
+                                    <td>
+                                        <%= brand.brand_id %>
+                                    </td>
+                                    <td>
+                                        <%= brand.brand_name %>
+                                    </td>
                                     <td>
                                         <!-- Nút sửa -->
-                                        <a href="#" class="btn btn-sm btn-info editBrandBtn"
-                                           data-bs-toggle="modal" data-bs-target="#updateBrandModal"
-                                           data-id="<%= brand.brand_id %>" data-name="<%= brand.brand_name %>">
-                                           <i class="fas fa-edit"></i>
+                                        <a href="#" class="btn btn-sm btn-info editBrandBtn" data-bs-toggle="modal"
+                                            data-bs-target="#updateBrandModal" data-id="<%= brand.brand_id %>"
+                                            data-name="<%= brand.brand_name %>">
+                                            <i class="fas fa-edit"></i>
                                         </a>
                                         <!-- Nút xóa -->
-                                        <button class="btn btn-sm btn-danger delete-brand-btn" data-id="<%= brand.brand_id %>">
+                                        <button class="btn btn-sm btn-danger delete-brand-btn"
+                                            data-id="<%= brand.brand_id %>">
                                             <i class="fas fa-trash"></i>
                                         </button>
                                     </td>
                                 </tr>
-                            <% }) %>
-                        <% } else { %>
-                            <tr>
-                                <td colspan="3" class="text-center">Không có nhãn hàng nào.</td>
-                            </tr>
-                        <% } %>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="3" class="text-center">Không có nhãn hàng nào.</td>
+                                        </tr>
+                                        <% } %>
                     </tbody>
                 </table>
             </div>
         </div>
-        
+
         <!-- Modal Cập Nhật Nhãn Hàng -->
-        <div class="modal fade" id="updateBrandModal" tabindex="-1" aria-labelledby="updateBrandModalLabel" aria-hidden="true">
+        <div class="modal fade" id="updateBrandModal" tabindex="-1" aria-labelledby="updateBrandModalLabel"
+            aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -682,7 +705,7 @@
                 </div>
             </div>
         </div>
-        
+
 
         <!-- Shipping Section -->
         <div class="content-section" id="shipping">
@@ -782,8 +805,8 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="supplierPhonenumber" class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" id="supplierPhonenumber" name="phonenumber"
-                                            placeholder="Nhập số điện thoại" required>
+                                        <input type="text" class="form-control" id="supplierPhonenumber"
+                                            name="phonenumber" placeholder="Nhập số điện thoại" required>
                                     </div>
                                     <div class="mb-3">
                                         <label for="supplierEmail" class="form-label">Email</label>
@@ -838,7 +861,8 @@
                                     <%= supplier.address %>
                                 </td>
                                 <td>
-                                    <form action="/suppliers/<%= supplier.id %>/edit" method="get" style="display:inline;">
+                                    <form action="/suppliers/<%= supplier.id %>/edit" method="get"
+                                        style="display:inline;">
                                         <button class="btn btn-sm btn-info" title="Chỉnh sửa">
                                             <i class="fas fa-edit"></i>
                                         </button>
@@ -856,8 +880,8 @@
             </div>
         </div>
 
-         <!-- Voucher Section -->
-         <div class="content-section" id="vouchers">
+        <!-- Voucher Section -->
+        <div class="content-section" id="vouchers">
             <h3 class="section-title">Quản lý voucher</h3>
             <div class="mb-3">
                 <!-- Nút mở popup -->
@@ -925,66 +949,68 @@
 
                 <!--Update form-->
                 <!-- Modal Edit Form -->
-<div class="modal fade" id="editVoucherModal" tabindex="-1" aria-labelledby="editVoucherModalLabel"
-aria-hidden="true">
-<div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
+                <div class="modal fade" id="editVoucherModal" tabindex="-1" aria-labelledby="editVoucherModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
 
-        <div class="modal-header">
-            <h5 class="modal-title" id="editVoucherModalLabel">Chỉnh sửa Voucher</h5>
-            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-        </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editVoucherModalLabel">Chỉnh sửa Voucher</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
 
-        <div class="modal-body">
-            <form id="editVoucherForm">
-                <!-- Trường ẩn để chứa ID voucher -->
-                <input type="hidden" id="editVoucherId" name="id">
+                            <div class="modal-body">
+                                <form id="editVoucherForm">
+                                    <!-- Trường ẩn để chứa ID voucher -->
+                                    <input type="hidden" id="editVoucherId" name="id">
 
-                <div class="mb-3">
-                    <label for="editVouCode" class="form-label">Mã voucher</label>
-                    <input type="text" class="form-control" id="editVouCode" name="vou_code"
-                        placeholder="Nhập mã voucher" required>
-                </div>
+                                    <div class="mb-3">
+                                        <label for="editVouCode" class="form-label">Mã voucher</label>
+                                        <input type="text" class="form-control" id="editVouCode" name="vou_code"
+                                            placeholder="Nhập mã voucher" required>
+                                    </div>
 
-                <div class="mb-3">
-                    <label for="editVouValue" class="form-label">Giá trị (%)</label>
-                    <input type="number" class="form-control" id="editVouValue" name="value"
-                        placeholder="Nhập giá trị voucher" min="1" max="100" required>
-                </div>
+                                    <div class="mb-3">
+                                        <label for="editVouValue" class="form-label">Giá trị (%)</label>
+                                        <input type="number" class="form-control" id="editVouValue" name="value"
+                                            placeholder="Nhập giá trị voucher" min="1" max="100" required>
+                                    </div>
 
-                <div class="mb-3">
-                    <label for="editStartDate" class="form-label">Ngày bắt đầu</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="editStartDate" name="stardate"
-                            placeholder="YYYY-MM-DD HH:mm:ss" required>
-                        <span class="input-group-text" id="editStartDateIcon" style="cursor:pointer;">
-                            <i class="fas fa-calendar-alt"></i>
-                        </span>
+                                    <div class="mb-3">
+                                        <label for="editStartDate" class="form-label">Ngày bắt đầu</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="editStartDate" name="stardate"
+                                                placeholder="YYYY-MM-DD HH:mm:ss" required>
+                                            <span class="input-group-text" id="editStartDateIcon"
+                                                style="cursor:pointer;">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="editEndDate" class="form-label">Ngày kết thúc</label>
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" id="editEndDate" name="enddate"
+                                                placeholder="YYYY-MM-DD HH:mm:ss" required>
+                                            <span class="input-group-text" id="editEndDateIcon" style="cursor:pointer;">
+                                                <i class="fas fa-calendar-alt"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </form>
+                                <div id="editVoucherMessage" class="mt-2 text-danger" style="display:none;"></div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="editVoucherForm" class="btn btn-primary">Cập nhật</button>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
-
-                <div class="mb-3">
-                    <label for="editEndDate" class="form-label">Ngày kết thúc</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="editEndDate" name="enddate"
-                            placeholder="YYYY-MM-DD HH:mm:ss" required>
-                        <span class="input-group-text" id="editEndDateIcon" style="cursor:pointer;">
-                            <i class="fas fa-calendar-alt"></i>
-                        </span>
-                    </div>
-                </div>
-            </form>
-            <div id="editVoucherMessage" class="mt-2 text-danger" style="display:none;"></div>
-        </div>
-
-        <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-            <button type="submit" form="editVoucherForm" class="btn btn-primary">Cập nhật</button>
-        </div>
-
-    </div>
-</div>
-</div>
 
 
 
@@ -1026,7 +1052,7 @@ aria-hidden="true">
                                                 data-id="<%= voucher.id %>">
                                                 <i class="fas fa-edit"></i>
                                             </button>
-                                            
+
                                             <button class="btn btn-sm btn-danger delete-voucher-btn" title="Xóa"
                                                 data-id="<%= voucher.id %>">
                                                 <i class="fas fa-trash"></i>

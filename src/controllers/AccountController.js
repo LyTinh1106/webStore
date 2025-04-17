@@ -186,9 +186,6 @@ const resetPassword = async (req, res) => {
 
 
 
-
-  
-
 //verify
 const verifyResetToken = (req, res) => {
   const { token } = req.query;

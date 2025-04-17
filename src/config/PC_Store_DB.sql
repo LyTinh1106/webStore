@@ -147,6 +147,24 @@ CREATE TABLE cart (
     FOREIGN KEY (id_product) REFERENCES product(id)
 );
 
+CREATE VIEW view_fullproduct AS
+SELECT 
+    p.id,
+    p.fancy_id,
+    p.name,
+    c.name AS cat_name,
+    b.brand_name,
+    p.import_price AS imp_price,
+    p.retail_price AS re_price,
+    p.origin,
+    p.warranty
+FROM 
+    product p
+JOIN 
+    category c ON p.category_id = c.id
+JOIN 
+    brand b ON p.brand_id = b.brand_id;
+
 
 
 

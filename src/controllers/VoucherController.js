@@ -54,7 +54,7 @@ exports.createVoucher = (req, res) => {
 exports.updateVoucher = (req, res) => {
   const id = req.params.id;
   const voucher_code = req.body.voucher_code?.trim();
-  const voucher_value = req.body.voucher_value?.trim();
+  const voucher_value = req.body.voucher_value;
   const date_start = req.body.date_start?.trim();
   const date_end = req.body.date_end?.trim();
 
