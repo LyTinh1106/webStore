@@ -550,7 +550,7 @@
                                         <i class="fas fa-edit"></i>
                                     </a>
 
-                                    <!-- Modal chỉnh sửa danh mục -->
+
                                     <!-- Modal chỉnh sửa danh mục -->
                                     <div class="modal fade" id="updateCategoryModal" tabindex="-1"
                                         aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
@@ -784,52 +784,54 @@
                 <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addSupplierModal">
                     <i class="fas fa-plus"></i> Thêm nhà cung cấp mới
                 </a>
-                <!-- Modal Form -->
-                <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
+            </div>
 
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addSupplierModalLabel">Thêm nhà cung cấp mới</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Đóng"></button>
-                            </div>
+            <!-- Modal Thêm Nhà Cung Cấp -->
+            <div class="modal fade" id="addSupplierModal" tabindex="-1" aria-labelledby="addSupplierModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
 
-                            <div class="modal-body">
-                                <form id="addSupplierForm">
-                                    <div class="mb-3">
-                                        <label for="supplierName" class="form-label">Tên nhà cung cấp</label>
-                                        <input type="text" class="form-control" id="supplierName" name="name"
-                                            placeholder="Nhập tên nhà cung cấp" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="supplierPhonenumber" class="form-label">Số điện thoại</label>
-                                        <input type="text" class="form-control" id="supplierPhonenumber"
-                                            name="phonenumber" placeholder="Nhập số điện thoại" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="supplierEmail" class="form-label">Email</label>
-                                        <input type="text" class="form-control" id="supplierEmail" name="email"
-                                            placeholder="Nhập email" required>
-                                    </div>
-                                    <div class="mb-3">
-                                        <label for="supplierAddress" class="form-label">Địa chỉ</label>
-                                        <input type="text" class="form-control" id="supplierAddress" name="address"
-                                            placeholder="Nhập địa chỉ" required>
-                                    </div>
-                                </form>
-                            </div>
-
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                <button type="submit" form="addSupplierForm" class="btn btn-primary">Thêm</button>
-                            </div>
-
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="addSupplierModalLabel">Thêm nhà cung cấp mới</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
                         </div>
+
+                        <div class="modal-body">
+                            <form id="addSupplierForm">
+                                <div class="mb-3">
+                                    <label for="supplierName" class="form-label">Tên nhà cung cấp</label>
+                                    <input type="text" class="form-control" id="supplierName" name="name"
+                                        placeholder="Nhập tên nhà cung cấp" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="supplierPhonenumber" class="form-label">Số điện thoại</label>
+                                    <input type="text" class="form-control" id="supplierPhonenumber" name="phonenumber"
+                                        placeholder="Nhập số điện thoại" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="supplierEmail" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="supplierEmail" name="email"
+                                        placeholder="Nhập email" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="supplierAddress" class="form-label">Địa chỉ</label>
+                                    <input type="text" class="form-control" id="supplierAddress" name="address"
+                                        placeholder="Nhập địa chỉ" required>
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="submit" form="addSupplierForm" class="btn btn-primary">Thêm</button>
+                        </div>
+
                     </div>
                 </div>
             </div>
+
+            <!-- Bảng nhà cung cấp -->
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -843,40 +845,95 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% suppliers.forEach((supplier)=> { %>
-                            <tr>
-                                <td>
-                                    <%= supplier.id %>
-                                </td>
-                                <td>
-                                    <%= supplier.name %>
-                                </td>
-                                <td>
-                                    <%= supplier.phonenumber %>
-                                </td>
-                                <td>
-                                    <%= supplier.email %>
-                                </td>
-                                <td>
-                                    <%= supplier.address %>
-                                </td>
-                                <td>
-                                    <form action="/suppliers/<%= supplier.id %>/edit" method="get"
-                                        style="display:inline;">
-                                        <button class="btn btn-sm btn-info" title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </button>
-                                    </form>
-                                    <button class="btn btn-sm btn-danger delete-supplier-btn" title="Xóa"
-                                        data-id="<%= supplier.id %>">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </td>
-                            </tr>
-                            <% }); %>
-                    </tbody>
 
+ 
+
+                        <% if (suppliers && suppliers.length> 0) { %>
+                            <% suppliers.forEach((supplier)=> { %>
+                                <tr>
+                                    <td>
+                                        <%= supplier.id %>
+                                    </td>
+                                    <td>
+                                        <%= supplier.name %>
+                                    </td>
+                                    <td>
+                                        <%= supplier.phonenumber %>
+                                    </td>
+                                    <td>
+                                        <%= supplier.email %>
+                                    </td>
+                                    <td>
+                                        <%= supplier.address %>
+                                    </td>
+                                    <td>
+                                        <a href="#" class="btn btn-sm btn-info editSupplierBtn" data-bs-toggle="modal"
+                                            data-bs-target="#updateSupplierModal" data-id="<%= supplier.id %>"
+                                            data-name="<%= supplier.name %>"
+                                            data-phonenumber="<%= supplier.phonenumber %>"
+                                            data-email="<%= supplier.email %>" data-address="<%= supplier.address %>">
+
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button class="btn btn-sm btn-danger delete-supplier-btn"
+                                            data-id="<%= supplier.id %>">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <% }) %>
+                                    <% } else { %>
+                                        <tr>
+                                            <td colspan="6" class="text-center">Không có nhà cung cấp nào.</td>
+                                        </tr>
+                                        <% } %>
+                    </tbody>
                 </table>
+            </div>
+        </div>
+
+
+        <!-- Modal Cập Nhật Nhà Cung Cấp -->
+        <div class="modal fade" id="updateSupplierModal" tabindex="-1" aria-labelledby="updateSupplierModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="updateSupplierModalLabel">Cập nhật nhà cung cấp</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                    </div>
+
+                    <div class="modal-body">
+                        <form id="updateSupplierForm">
+                            <input type="hidden" id="updateSupplierId" name="id">
+                            <div class="mb-3">
+                                <label for="updateSupplierName" class="form-label">Tên nhà cung cấp</label>
+                                <input type="text" class="form-control" id="updateSupplierName" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateSupplierPhonenumber" class="form-label">Số điện thoại</label>
+                                <input type="text" class="form-control" id="updateSupplierPhonenumber"
+                                    name="phonenumber" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateSupplierEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="updateSupplierEmail" name="email" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="updateSupplierAddress" class="form-label">Địa chỉ</label>
+                                <input type="text" class="form-control" id="updateSupplierAddress" name="address"
+                                    required>
+                            </div>
+                        </form>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" form="updateSupplierForm" class="btn btn-primary">Cập nhật</button>
+                    </div>
+
+                </div>
             </div>
         </div>
 

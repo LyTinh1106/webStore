@@ -66,7 +66,7 @@ const updateSupplier = (req, res) => {
         res.status(500).render("error", { message: "Lỗi khi cập nhật nhà cung cấp." });
       }
     } else {
-      res.redirect("/suppliers");
+      return res.status(201).json({ success: true, message: "Tạo category thành công!", Supplier: data });
     }
   });
 };

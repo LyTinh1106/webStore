@@ -262,7 +262,7 @@ document.querySelectorAll('.editCategoryBtn').forEach(button => {
 });
 
 // Xử lý form cập nhật danh mục
-// Xử lý form cập nhật danh mục
+
 document.getElementById("updateCategoryForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
@@ -608,4 +608,59 @@ document.querySelectorAll(".delete-supplier-btn").forEach(button => {
         }
     });
 });
+// Cập nhật supplier
+document.getElementById("updateSupplierForm").addEventListener("submit", async function (e) {
+    e.preventDefault(); // Ngăn reload mặc định của form
+
+    // Lấy giá trị từ các input trong form
+    const supplierId = document.getElementById("updateSupplierId").value.trim();
+    const supplierName = document.getElementById("updateSupplierName").value.trim();
+    const supplierPhonenumber = document.getElementById("updateSupplierPhonenumber").value.trim();
+    const supplierEmail = document.getElementById("updateSupplierEmail").value.trim();
+    const supplierAddress = document.getElementById("updateSupplierAddress").value.trim();
+
+    if (!supplierId || !supplierName || !supplierPhonenumber || !supplierEmail || !supplierAddress) {
+        alert("Vui lòng nhập đầy đủ thông tin.");
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/supplier/update/${supplierId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                name: supplierName,
+                phonenumber: supplierPhonenumber,
+                email: supplierEmail,
+                address: supplierAddress
+            })
+        });
+
+        if (response.ok) {
+            const scrollY = window.scrollY;
+            localStorage.setItem("scrollPosition", scrollY);
+            location.reload();
+        } else {
+            const text = await response.text();
+            document.body.innerHTML = text;
+        }
+    } catch (error) {
+        alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+        console.error(error);
+    }
+});
+
+// Đổ dữ liệu vào form khi bấm nút sửa
+document.querySelectorAll(".editSupplierBtn").forEach(btn => {
+    btn.addEventListener("click", function () {
+        document.getElementById("updateSupplierId").value = this.getAttribute("data-id");
+        document.getElementById("updateSupplierName").value = this.getAttribute("data-name");
+        document.getElementById("updateSupplierPhonenumber").value = this.getAttribute("data-phonenumber");
+        document.getElementById("updateSupplierEmail").value = this.getAttribute("data-email");
+        document.getElementById("updateSupplierAddress").value = this.getAttribute("data-address");
+    });
+});
+
 
