@@ -1,10 +1,9 @@
 const multer = require("multer");
 const path = require("path");
 
-// Cấu hình lưu trữ
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "src/public/images/"); // Lưu file vào thư mục 'images'
+    cb(null, "src/public/images/");
   },
   filename: function (req, file, cb) {
     const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1E9);
@@ -13,6 +12,12 @@ const storage = multer.diskStorage({
   }
 });
 
+const upload = multer({
+  storage,
+  limits: {
+    fileSize: 5 * 1024 * 1024, // 5MB mỗi file
+    files: 7 // 6 images + 1 specFile
+  }
+});
 
-const upload = multer({ storage });
 module.exports = upload;

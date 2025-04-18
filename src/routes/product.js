@@ -19,13 +19,11 @@ router.get('/:id', getProductById);
 router.post(
   "/create",
   upload.fields([
-    { name: "mainImage", maxCount: 1 },
-    { name: "extraImages", maxCount: 5 },
-    { name: "specFile", maxCount: 1 }
+    { name: "images", maxCount: 6 }, // Tối đa 6 ảnh
+    { name: "specFile", maxCount: 1 } // 1 file thông số kỹ thuật
   ]),
   createProduct
 );
-
 
 router.put('/:id', updateProduct);
 
