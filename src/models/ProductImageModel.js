@@ -84,4 +84,22 @@ ProductImage.remove = (id, result) => {
   });
 };
 
+// Thêm nhiều ảnh một lúc
+ProductImage.bulkInsert = (images, result) => {
+    if (!images.length) return result(null); // Không có ảnh thì thoát
+  
+    const values = images.map(img => [img.product_id, img.URL]);
+  
+    const sqlQuery = "INSERT INTO product_image (product_id, URL) VALUES ?";
+    sql.query(sqlQuery, [values], (err, res) => {
+      if (err) {
+        console.error("Lỗi khi insert nhiều ảnh:", err);
+        return result(err, null);
+      }
+  
+      result(null, res);
+    });
+  };
+  
+
 module.exports = ProductImage;

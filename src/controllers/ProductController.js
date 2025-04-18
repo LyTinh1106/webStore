@@ -1,6 +1,7 @@
 const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
 const Brand = require("../models/BrandModel");
+const ProductImage = require("../models/ProductImageModel");
 
 // [GET] /products - Hiển thị trang quản lý sản phẩm
 const getProduct = (req, res) => {
@@ -45,41 +46,80 @@ const getStore = (req, res) => {
 };
 
 // [POST] /products - Tạo sản phẩm mới
-const createProduct = (req, res) => {
-  const {
-    fancy_id,
-    name,
-    description,
-    import_price,
-    retail_price,
-    brand_id,
-    category_id,
-    origin,
-    warranty,
-  } = req.body;
+const createProduct = async (req, res) => {
+  try {
+    const {
+      productCode,
+      productName,
+      description,
+      importPrice,
+      salePrice,
+      brand,
+      category,
+      origin,
+      warranty
+    } = req.body;
 
-  if (!fancy_id || !name) {
-    return res.status(400).render("error", { message: "Mã sản phẩm và tên sản phẩm là bắt buộc." });
+    const mainImage = req.files["mainImage"]?.[0]?.filename || null;
+    const extraImages = req.files["extraImages"]?.map(file => file.filename) || [];
+    const specFile = req.files["specFile"]?.[0]?.filename || null;
+
+    // 1️⃣ Insert sản phẩm trước
+    const newProduct = {
+      fancy_id: productCode,
+      name: productName,
+      description,
+      import_price: importPrice,
+      retail_price: salePrice,
+      brand_id: brand,
+      category_id: category,
+      origin,
+      warranty,
+      // spec_file: specFile
+    };
+
+    Product.create(newProduct, async (err, createdProduct) => {
+      if (err) {
+        return res.status(500).json({ message: err.message || "Lỗi khi tạo sản phẩm." });
+      }
+
+      const productId = createdProduct.id || createdProduct.insertId;
+      const imageInserts = [];
+
+      // 2️⃣ Push ảnh chính vào đầu danh sách nếu có
+      if (mainImage) {
+        imageInserts.push({
+          product_id: productId,
+          URL: mainImage
+        });
+      }
+
+      // 3️⃣ Push ảnh phụ vào sau
+      extraImages.forEach(filename => {
+        imageInserts.push({
+          product_id: productId,
+          URL: filename
+        });
+      });
+
+      // 4️⃣ Insert ảnh vào product_image
+      if (imageInserts.length > 0) {
+        ProductImage.bulkInsert(imageInserts, (err2) => {
+          if (err2) {
+            console.error("Lỗi lưu ảnh:", err2);
+            return res.status(500).json({ message: "Lỗi khi lưu ảnh sản phẩm." });
+          }
+
+          res.status(201).json({ message: "Tạo sản phẩm thành công!" });
+        });
+      } else {
+        res.status(201).json({ message: "Tạo sản phẩm thành công (không có ảnh)." });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Lỗi khi xử lý sản phẩm." });
   }
-
-  const newProduct = new Product({
-    fancy_id,
-    name,
-    description,
-    import_price,
-    retail_price,
-    brand_id,
-    category_id,
-    origin,
-    warranty,
-  });
-
-  Product.create(newProduct, (err, data) => {
-    if (err) {
-      return res.status(500).render("error", { message: err.message || "Lỗi khi tạo sản phẩm." });
-    }
-    res.redirect("/products");
-  });
 };
 
 // [GET] /products/:id - Chi tiết sản phẩm
