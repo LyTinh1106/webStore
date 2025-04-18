@@ -2,6 +2,7 @@ const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
 const Brand = require("../models/BrandModel");
 const ProductImage = require("../models/ProductImageModel");
+const TechnicalSpecification = require('../models/ProductDetailModel');
 
 // [GET] /products - Hiển thị trang quản lý sản phẩm
 const getProduct = (req, res) => {
@@ -46,6 +47,9 @@ const getStore = (req, res) => {
 };
 
 // [POST] /products - Tạo sản phẩm mới
+const fs = require('fs').promises; // Thêm module fs để đọc file
+const path = require('path');
+
 const createProduct = async (req, res) => {
   try {
     const {
@@ -62,12 +66,26 @@ const createProduct = async (req, res) => {
 
     // Lấy danh sách ảnh và specFile từ req.files
     const images = req.files["images"] ? req.files["images"].map(file => file.filename) : [];
-    const specFile = req.files["specFile"] ? req.files["specFile"][0].filename : null;
+    const specFile = req.files["specFile"] ? req.files["specFile"][0] : null;
 
     // Debug: Kiểm tra file nhận được
     console.log("Files received:", req.files);
     console.log("Images:", images);
     console.log("SpecFile:", specFile);
+
+    // Đọc nội dung specFile và chuyển thành JSON
+    let specJson = null;
+    if (specFile) {
+      try {
+        const filePath = path.join(__dirname, '../public/images/', specFile.filename); // Điều chỉnh đường dẫn theo cấu trúc thư mục của bạn
+        const fileContent = await fs.readFile(filePath, 'utf-8');
+        specJson = JSON.parse(fileContent); // Chuyển nội dung file thành JSON
+        console.log("Spec JSON:", specJson);
+      } catch (err) {
+        console.error("Lỗi khi đọc hoặc parse specFile:", err);
+        return res.status(400).json({ success: false, message: "Lỗi khi đọc file thông số kỹ thuật." });
+      }
+    }
 
     // Tạo đối tượng sản phẩm mới
     const newProduct = {
@@ -80,7 +98,7 @@ const createProduct = async (req, res) => {
       category_id: category,
       origin,
       warranty,
-      //spec_file: specFile // Thêm specFile nếu cần
+      // spec_file: specFile ? specFile.filename : null // Thêm specFile nếu cần
     };
 
     // Insert sản phẩm
@@ -101,6 +119,32 @@ const createProduct = async (req, res) => {
         });
       });
 
+      // Gọi hàm tạo thông số kỹ thuật nếu specJson tồn tại
+      if (specJson) {
+        try {
+          // Chuyển đổi specJson thành định dạng phù hợp với bảng technical_specification
+          const newDetail = {
+            product_id: productId,
+            specs: JSON.stringify(specJson) // Lưu specJson dưới dạng chuỗi JSON
+          };
+
+          // Gọi TechnicalSpecification.create
+          await new Promise((resolve, reject) => {
+            TechnicalSpecification.create(newDetail, (err, result) => {
+              if (err) {
+                console.error("Lỗi khi tạo thông số kỹ thuật:", err);
+                return reject(err);
+              }
+              console.log("Technical specification created:", result);
+              resolve(result);
+            });
+          });
+        } catch (err) {
+          console.error("Lỗi khi tạo thông số kỹ thuật:", err);
+          return res.status(500).json({ success: false, message: "Lỗi khi tạo thông số kỹ thuật." });
+        }
+      }
+
       // Insert ảnh vào product_image
       if (imageInserts.length > 0) {
         ProductImage.bulkInsert(imageInserts, (err2) => {
@@ -119,6 +163,7 @@ const createProduct = async (req, res) => {
     res.status(500).json({ success: false, message: "Lỗi khi xử lý sản phẩm." });
   }
 };
+
 
 // [GET] /products/:id - Chi tiết sản phẩm
 const getProductById = (req, res) => {
