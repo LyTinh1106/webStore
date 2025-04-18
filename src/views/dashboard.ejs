@@ -187,147 +187,191 @@
 
                 <!-- Modal Thêm Sản Phẩm -->
                 <!-- Modal Thêm Sản Phẩm -->
-<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Thêm Sản Phẩm Mới</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-        </div>
-        <div class="modal-body">
-          <form id="addProductForm" enctype="multipart/form-data">
-            <div class="row g-3">
-              <div class="col-md-6">
-                <label for="productCode" class="form-label">Mã sản phẩm</label>
-                <input type="text" class="form-control" id="productCode" name="productCode" required>
-              </div>
-              <div class="col-md-6">
-                <label for="productName" class="form-label">Tên sản phẩm</label>
-                <input type="text" class="form-control" id="productName" name="productName" required>
-              </div>
-              <div class="col-12">
-                <label for="description" class="form-label">Mô tả</label>
-                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
-              </div>
-              <div class="col-md-6">
-                <label for="importPrice" class="form-label">Giá nhập</label>
-                <input type="number" class="form-control" id="importPrice" name="importPrice" required>
-              </div>
-              <div class="col-md-6">
-                <label for="salePrice" class="form-label">Giá bán</label>
-                <input type="number" class="form-control" id="salePrice" name="salePrice" required>
-              </div>
-              <div class="col-md-6">
-                <label for="category" class="form-label">Loại sản phẩm</label>
-                <select class="form-select" id="category" name="category">
-                  <option value="">-- Chọn loại--</option>
-                  <% categories.forEach(function(category) { %>
-                    <option value="<%= category.id %>"><%= category.name %></option>
-                  <% }) %>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="brand" class="form-label">Hãng</label>
-                <select class="form-select" id="brand" name="brand">
-                  <option value="">-- Chọn hãng --</option>
-                  <% brands.forEach(function(brand) { %>
-                    <option value="<%= brand.brand_id %>"><%= brand.brand_name %></option>
-                  <% }) %>
-                </select>
-              </div>
-              <div class="col-md-6">
-                <label for="origin" class="form-label">Xuất xứ</label>
-                <input type="text" class="form-control" id="origin" name="origin">
-              </div>
-              <div class="col-md-6">
-                <label for="warranty" class="form-label">Bảo hành (tháng)</label>
-                <input type="number" class="form-control" id="warranty" name="warranty">
-              </div>
-  
-              <!-- Hình ảnh -->
-              <div class="col-md-12">
-                <label for="images" class="form-label">Hình ảnh sản phẩm</label>
-                <input class="form-control" type="file" id="images" name="images" multiple accept="image/*">
-                <div id="imagePreview" class="mt-2 d-flex flex-wrap gap-2"></div>
-              </div>
-  
-              <!-- Thông số kỹ thuật -->
-              <div class="col-md-12">
-                <label for="specFile" class="form-label">Thông số kỹ thuật (File)</label>
-                <input class="form-control" type="file" id="specFile" name="specFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt">
-                <small class="text-muted">Hỗ trợ các định dạng: PDF, Word, Excel, TXT</small>
-              </div>
-            </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-          <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản phẩm</button>
-        </div>
-      </div>
-    </div>
-  </div>
+                <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Thêm Sản Phẩm Mới</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addProductForm" enctype="multipart/form-data">
+                                    <div class="row g-3">
+                                        <div class="col-md-6">
+                                            <label for="productCode" class="form-label">Mã sản phẩm</label>
+                                            <input type="text" class="form-control" id="productCode" name="productCode"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="productName" class="form-label">Tên sản phẩm</label>
+                                            <input type="text" class="form-control" id="productName" name="productName"
+                                                required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label for="description" class="form-label">Mô tả</label>
+                                            <textarea class="form-control" id="description" name="description"
+                                                rows="3"></textarea>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="importPrice" class="form-label">Giá nhập</label>
+                                            <input type="number" class="form-control" id="importPrice"
+                                                name="importPrice" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="salePrice" class="form-label">Giá bán</label>
+                                            <input type="number" class="form-control" id="salePrice" name="salePrice"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="category" class="form-label">Loại sản phẩm</label>
+                                            <select class="form-select" id="category" name="category">
+                                                <option value="">-- Chọn loại--</option>
+                                                <% categories.forEach(function(category) { %>
+                                                    <option value="<%= category.id %>">
+                                                        <%= category.name %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="brand" class="form-label">Hãng</label>
+                                            <select class="form-select" id="brand" name="brand">
+                                                <option value="">-- Chọn hãng --</option>
+                                                <% brands.forEach(function(brand) { %>
+                                                    <option value="<%= brand.brand_id %>">
+                                                        <%= brand.brand_name %>
+                                                    </option>
+                                                    <% }) %>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="origin" class="form-label">Xuất xứ</label>
+                                            <input type="text" class="form-control" id="origin" name="origin">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="warranty" class="form-label">Bảo hành (tháng)</label>
+                                            <input type="number" class="form-control" id="warranty" name="warranty">
+                                        </div>
 
+                                        <!-- Hình ảnh -->
+                                        <div class="col-md-12">
+                                            <label for="images" class="form-label">Hình ảnh sản phẩm</label>
+                                            <input class="form-control" type="file" id="images" name="images" multiple
+                                                accept="image/*">
+                                            <div id="imagePreview" class="mt-2 d-flex flex-wrap gap-2"></div>
+                                        </div>
+
+                                        <!-- Thông số kỹ thuật -->
+                                        <div class="col-md-12">
+                                            <label for="specFile" class="form-label">Thông số kỹ thuật (File)</label>
+                                            <input class="form-control" type="file" id="specFile" name="specFile"
+                                                accept=".csv,.txt,.xlsx">
+                                            <small class="text-muted">Hỗ trợ định dạng: CSV, TXT, Excel</small>
+
+                                            <div id="specActions" class="mt-2" style="display: none;">
+                                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    onclick="clearSpecData()">🧹 Xóa dữ liệu</button>
+                                            </div>
+
+                                            <div id="specTableContainer" class="mt-3" style="display: none;">
+                                                <h6>Thông số kỹ thuật:</h6>
+                                                <table class="table table-bordered table-sm">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Thuộc tính</th>
+                                                            <th>Giá trị</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="specTableBody"></tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản
+                                    phẩm</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Thư viện SheetJS hỗ trợ đọc Excel -->
+                <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
                 <!-- JavaScript xử lý ảnh -->
-               <!-- JavaScript xử lý ảnh và submit form -->
-<script>
-    const imagesInput = document.getElementById("images");
-    const imagePreview = document.getElementById("imagePreview");
-    let imageFiles = [];
-  
-    // Xử lý chọn ảnh
-    imagesInput.addEventListener("change", (event) => {
-  const files = Array.from(event.target.files);
-  let added = false;
+                <!-- JavaScript xử lý ảnh và submit form -->
+                <script>
+                    
+                    const specFileInput = document.getElementById("specFile");
+                    const specTableBody = document.getElementById("specTableBody");
+                    const specTableContainer = document.getElementById("specTableContainer");
+                    const specActions = document.getElementById("specActions");
 
-  files.forEach(file => {
-    if (imageFiles.some(f => f.name === file.name)) {
-      alert(`Hình "${file.name}" đã được chọn.`);
-      return;
-    }
+                    specFileInput.addEventListener("change", function () {
+                        const file = this.files[0];
+                        if (!file) return;
 
-    imageFiles.push(file);
-    added = true;
-  });
+                        const fileName = file.name.toLowerCase();
+                        const reader = new FileReader();
 
-  if (added) renderImagePreviews();
-});
-  
-    // Hiển thị preview ảnh
-    function renderImagePreviews() {
-      imagePreview.innerHTML = "";
-      imageFiles.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-          const wrapper = document.createElement("div");
-          wrapper.className = "position-relative me-2 mb-2";
-  
-          const img = document.createElement("img");
-          img.src = e.target.result;
-          img.classList.add("img-thumbnail");
-          img.style.width = "100px";
-          img.style.height = "100px";
-  
-          const removeBtn = document.createElement("button");
-          removeBtn.innerText = "×";
-          removeBtn.type = "button";
-          removeBtn.className = "btn btn-sm btn-danger position-absolute";
-          removeBtn.style.top = "0";
-          removeBtn.style.right = "0";
-          removeBtn.onclick = () => {
-            imageFiles.splice(index, 1);
-            renderImagePreviews();
-          };
-  
-          wrapper.appendChild(img);
-          wrapper.appendChild(removeBtn);
-          imagePreview.appendChild(wrapper);
-        };
-        reader.readAsDataURL(file);
-      });
-    }
-   
-  </script>
+                        if (fileName.endsWith(".csv") || fileName.endsWith(".txt")) {
+                            reader.onload = function (e) {
+                                const lines = e.target.result.split(/\r?\n/);
+                                const data = lines.map(line => {
+                                    const parts = line.includes(":") ? line.split(":") : line.split(",");
+                                    return parts.length >= 2 ? [parts[0].trim(), parts.slice(1).join(",").trim()] : null;
+                                }).filter(pair => pair && pair[0] !== "");
+
+                                renderSpecTable(data);
+                            };
+                            reader.readAsText(file);
+                        } else if (fileName.endsWith(".xlsx")) {
+                            reader.onload = function (e) {
+                                const data = new Uint8Array(e.target.result);
+                                const workbook = XLSX.read(data, { type: "array" });
+                                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                                const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                                const dataArr = json
+                                    .filter(row => row.length >= 2 && row[0])
+                                    .map(row => [row[0], row[1]]);
+
+                                renderSpecTable(dataArr);
+                            };
+                            reader.readAsArrayBuffer(file);
+                        } else {
+                            alert("Định dạng không được hỗ trợ. Chỉ chấp nhận CSV, TXT hoặc Excel (.xlsx).");
+                            this.value = "";
+                        }
+                    });
+
+                    function renderSpecTable(data) {
+                        specTableBody.innerHTML = "";
+                        data.forEach(([key, value]) => {
+                            const cleanedValues = value
+                                .split(",")
+                                .map(part => part.trim())
+                                .filter(part => part !== "")
+                                .join("<br>");
+
+                            const row = document.createElement("tr");
+                            row.innerHTML = `<td>${key}</td><td>${cleanedValues}</td>`;
+                            specTableBody.appendChild(row);
+                        });
+                        specTableContainer.style.display = "block";
+                        specActions.style.display = "block";
+                    }
+
+                    function clearSpecData() {
+                        specFileInput.value = "";
+                        specTableBody.innerHTML = "";
+                        specTableContainer.style.display = "none";
+                        specActions.style.display = "none";
+                    }
+                </script>
 
             </div>
             <div class="table-responsive">
@@ -764,7 +808,7 @@
                     </thead>
                     <tbody>
 
- 
+
 
                         <% if (suppliers && suppliers.length> 0) { %>
                             <% suppliers.forEach((supplier)=> { %>

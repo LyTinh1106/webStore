@@ -1,0 +1,12 @@
+{
+  "brand": "Dell",
+  "model": "XPS 13 9315",
+  "processor": "Intel Core i7-1250U",
+  "ram": "16GB LPDDR5",
+  "storage": "512GB SSD NVMe",
+  "graphics": "Intel Iris Xe Graphics",
+  "display": "13.4 inch FHD+ (1920 x 1200), Anti-Glare",
+  "battery": "3-cell, 51 Whr",
+  "operating_system": "Windows 11 Home",
+  "weight": "1.17 kg"
+}

@@ -185,7 +185,7 @@ document.getElementById("addCategoryForm").addEventListener("submit", async func
         if (response.ok) {
             const scrollY = window.scrollY;
             localStorage.setItem("scrollPosition", scrollY);
-            
+
             location.reload();
         } else {
             const text = await response.text();
@@ -220,7 +220,7 @@ document.querySelectorAll(".delete-category-btn").forEach(button => {
 
         try {
             const response = await fetch(`/api/category/delete/${categoryId}`, {
-                method: "DELETE", 
+                method: "DELETE",
             });
 
             if (response.ok) {
@@ -254,7 +254,7 @@ document.querySelectorAll('.editCategoryBtn').forEach(button => {
     button.addEventListener('click', function () {
         const categoryId = this.getAttribute('data-id');
         const categoryName = this.getAttribute('data-name');
-        
+
         // Điền giá trị vào form
         document.getElementById('categoryId').value = categoryId;
         document.getElementById('updateCategoryName').value = categoryName;
@@ -312,7 +312,7 @@ document.querySelectorAll(".editCategoryBtn").forEach(btn => {
 //Voucher
 
 // Khởi tạo flatpickr cho các trường nhập liệu ngày
- const config = {
+const config = {
     enableTime: true,
     time_24hr: true,
     allowInput: true,
@@ -366,21 +366,21 @@ document.getElementById("addVoucherForm").addEventListener("submit", async funct
 
     const formatDateTime = (date) => {
         const pad = (n) => n < 10 ? '0' + n : n;
-        return `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
     };
-    
+
     const startDate = flatpickr.parseDate(startDateStr, "Y-m-d H:i:s");
     const endDate = flatpickr.parseDate(endDateStr, "Y-m-d H:i:s");
-    
+
     if (!startDate || !endDate || endDate <= startDate) {
         messageBox.textContent = "Ngày kết thúc phải sau ngày bắt đầu!";
         messageBox.style.display = "block";
         return;
     }
-    
+
     const formattedStart = formatDateTime(startDate);
     const formattedEnd = formatDateTime(endDate);
-    
+
     try {
         const response = await fetch("/api/voucher/create", {
             method: "POST",
@@ -662,34 +662,91 @@ document.querySelectorAll(".editSupplierBtn").forEach(btn => {
         document.getElementById("updateSupplierAddress").value = this.getAttribute("data-address");
     });
 });
+//product
+const imagesInput = document.getElementById("images");
+const imagePreview = document.getElementById("imagePreview");
+let imageFiles = [];
+
+// Xử lý chọn ảnh
+imagesInput.addEventListener("change", (event) => {
+    const files = Array.from(event.target.files);
+    let added = false;
+
+    files.forEach(file => {
+        if (imageFiles.some(f => f.name === file.name)) {
+            alert(`Hình "${file.name}" đã được chọn.`);
+            return;
+        }
+
+        imageFiles.push(file);
+        added = true;
+    });
+
+    if (added) renderImagePreviews();
+});
+
+// Hiển thị preview ảnh
+function renderImagePreviews() {
+    imagePreview.innerHTML = "";
+    imageFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            const wrapper = document.createElement("div");
+            wrapper.className = "position-relative me-2 mb-2";
+
+            const img = document.createElement("img");
+            img.src = e.target.result;
+            img.classList.add("img-thumbnail");
+            img.style.width = "100px";
+            img.style.height = "100px";
+
+            const removeBtn = document.createElement("button");
+            removeBtn.innerText = "×";
+            removeBtn.type = "button";
+            removeBtn.className = "btn btn-sm btn-danger position-absolute";
+            removeBtn.style.top = "0";
+            removeBtn.style.right = "0";
+            removeBtn.onclick = () => {
+                imageFiles.splice(index, 1);
+                renderImagePreviews();
+            };
+
+            wrapper.appendChild(img);
+            wrapper.appendChild(removeBtn);
+            imagePreview.appendChild(wrapper);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
 
 // Add product
 document.getElementById("addProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
-  
+
     const form = document.getElementById("addProductForm");
     const formData = new FormData(form);
-  
+
     try {
-      const response = await fetch("/api/product/create", {
-        method: "POST",
-        body: formData
-      });
-  
-      const result = await response.json();
-  
-      if (result.success) {
-        alert(result.message || "Thêm sản phẩm thành công!");
-        form.reset();
-  
-        // 👇 Reload lại trang hoặc cập nhật danh sách sản phẩm nếu cần
-        // location.reload();
-      } else {
-        alert("❌ " + (result.message || "Thêm sản phẩm thất bại."));
-      }
-  
+        const response = await fetch("/api/product/create", {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+            alert(result.message || "Thêm sản phẩm thành công!");
+            form.reset();
+
+            // 👇 Reload lại trang hoặc cập nhật danh sách sản phẩm nếu cần
+            // location.reload();
+        } else {
+            alert("❌ " + (result.message || "Thêm sản phẩm thất bại."));
+        }
+
     } catch (err) {
-      alert("Đã xảy ra lỗi khi gửi dữ liệu.");
-      console.error(err);
+        alert("Đã xảy ra lỗi khi gửi dữ liệu.");
+        console.error(err);
     }
-  });
+});
