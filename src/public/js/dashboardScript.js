@@ -663,4 +663,33 @@ document.querySelectorAll(".editSupplierBtn").forEach(btn => {
     });
 });
 
-
+// Add product
+document.getElementById("addProductForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+  
+    const form = document.getElementById("addProductForm");
+    const formData = new FormData(form);
+  
+    try {
+      const response = await fetch("/api/product/create", {
+        method: "POST",
+        body: formData
+      });
+  
+      const result = await response.json();
+  
+      if (result.success) {
+        alert(result.message || "Thêm sản phẩm thành công!");
+        form.reset();
+  
+        // 👇 Reload lại trang hoặc cập nhật danh sách sản phẩm nếu cần
+        // location.reload();
+      } else {
+        alert("❌ " + (result.message || "Thêm sản phẩm thất bại."));
+      }
+  
+    } catch (err) {
+      alert("Đã xảy ra lỗi khi gửi dữ liệu.");
+      console.error(err);
+    }
+  });

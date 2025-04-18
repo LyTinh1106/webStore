@@ -226,19 +226,19 @@
                                         <div class="col-md-6">
                                             <label for="category" class="form-label">Loại sản phẩm</label>
                                             <select class="form-select" id="category" name="category">
-                                                <option value="">-- Chọn loại --</option>
-                                                <option value="Điện thoại">Điện thoại</option>
-                                                <option value="Laptop">Laptop</option>
-                                                <option value="Phụ kiện">Phụ kiện</option>
+                                                <option value="">-- Chọn loại--</option>
+                                                <% categories.forEach(function(category) { %>
+                                                    <option value="<%= category.id %>"><%= category.name %></option>
+                                                <% }) %>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
                                             <label for="brand" class="form-label">Hãng</label>
                                             <select class="form-select" id="brand" name="brand">
                                                 <option value="">-- Chọn hãng --</option>
-                                                <option value="Apple">Apple</option>
-                                                <option value="Samsung">Samsung</option>
-                                                <option value="Dell">Dell</option>
+                                                <% brands.forEach(function(brand) { %>
+                                                    <option value="<%= brand.brand_id %>"><%= brand.brand_name %></option>
+                                                <% }) %>
                                             </select>
                                         </div>
                                         <div class="col-md-6">
@@ -278,8 +278,7 @@
                             </div>
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản
-                                    phẩm</button>
+                                <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản phẩm</button>
                             </div>
                         </div>
                     </div>

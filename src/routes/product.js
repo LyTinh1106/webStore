@@ -6,22 +6,30 @@ const {
   updateProduct,
   deleteProduct
 } = require('../controllers/ProductController');
+const upload = require('../middleware/upload')
 
 const router = express.Router();
 
-// Get all products or filter by name (optional query param ?name=)
 router.get('/', getProduct);
 
-// Get a single product by fancy_id
+
 router.get('/:id', getProductById);
 
-// Create a new product
-router.post('/', createProduct);
 
-// Update product by fancy_id
+router.post(
+  "/create",
+  upload.fields([
+    { name: "mainImage", maxCount: 1 },
+    { name: "extraImages", maxCount: 5 },
+    { name: "specFile", maxCount: 1 }
+  ]),
+  createProduct
+);
+
+
 router.put('/:id', updateProduct);
 
-// Delete product by fancy_id
+
 router.delete('/:id', deleteProduct);
 
 module.exports = router;
