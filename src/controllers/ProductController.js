@@ -60,11 +60,16 @@ const createProduct = async (req, res) => {
       warranty
     } = req.body;
 
-    const mainImage = req.files["mainImage"]?.[0]?.filename || null;
-    const extraImages = req.files["extraImages"]?.map(file => file.filename) || [];
-    const specFile = req.files["specFile"]?.[0]?.filename || null;
+    // Lấy danh sách ảnh và specFile từ req.files
+    const images = req.files["images"] ? req.files["images"].map(file => file.filename) : [];
+    const specFile = req.files["specFile"] ? req.files["specFile"][0].filename : null;
 
-    // 1️⃣ Insert sản phẩm trước
+    // Debug: Kiểm tra file nhận được
+    console.log("Files received:", req.files);
+    console.log("Images:", images);
+    console.log("SpecFile:", specFile);
+
+    // Tạo đối tượng sản phẩm mới
     const newProduct = {
       fancy_id: productCode,
       name: productName,
@@ -75,50 +80,43 @@ const createProduct = async (req, res) => {
       category_id: category,
       origin,
       warranty,
-      // spec_file: specFile
+      //spec_file: specFile // Thêm specFile nếu cần
     };
 
+    // Insert sản phẩm
     Product.create(newProduct, async (err, createdProduct) => {
       if (err) {
-        return res.status(500).json({ message: err.message || "Lỗi khi tạo sản phẩm." });
+        console.error("Lỗi khi tạo sản phẩm:", err);
+        return res.status(500).json({ success: false, message: err.message || "Lỗi khi tạo sản phẩm." });
       }
 
       const productId = createdProduct.id || createdProduct.insertId;
       const imageInserts = [];
 
-      // 2️⃣ Push ảnh chính vào đầu danh sách nếu có
-      if (mainImage) {
-        imageInserts.push({
-          product_id: productId,
-          URL: mainImage
-        });
-      }
-
-      // 3️⃣ Push ảnh phụ vào sau
-      extraImages.forEach(filename => {
+      // Thêm tất cả ảnh vào imageInserts
+      images.forEach(filename => {
         imageInserts.push({
           product_id: productId,
           URL: filename
         });
       });
 
-      // 4️⃣ Insert ảnh vào product_image
+      // Insert ảnh vào product_image
       if (imageInserts.length > 0) {
         ProductImage.bulkInsert(imageInserts, (err2) => {
           if (err2) {
             console.error("Lỗi lưu ảnh:", err2);
-            return res.status(500).json({ message: "Lỗi khi lưu ảnh sản phẩm." });
+            return res.status(500).json({ success: false, message: "Lỗi khi lưu ảnh sản phẩm." });
           }
-
-          res.status(201).json({ message: "Tạo sản phẩm thành công!" });
+          res.status(201).json({ success: true, message: "Tạo sản phẩm thành công!" });
         });
       } else {
-        res.status(201).json({ message: "Tạo sản phẩm thành công (không có ảnh)." });
+        res.status(201).json({ success: true, message: "Tạo sản phẩm thành công (không có ảnh)." });
       }
     });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Lỗi khi xử lý sản phẩm." });
+    console.error("Lỗi khi xử lý sản phẩm:", error);
+    res.status(500).json({ success: false, message: "Lỗi khi xử lý sản phẩm." });
   }
 };
 

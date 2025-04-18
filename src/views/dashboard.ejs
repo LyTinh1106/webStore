@@ -186,229 +186,148 @@
                 </a>
 
                 <!-- Modal Thêm Sản Phẩm -->
-                <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
-                    aria-hidden="true">
-                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title">Thêm Sản Phẩm Mới</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                    aria-label="Đóng"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form id="addProductForm" enctype="multipart/form-data">
-                                    <div class="row g-3">
-                                        <div class="col-md-6">
-                                            <label for="productCode" class="form-label">Mã sản phẩm</label>
-                                            <input type="text" class="form-control" id="productCode" name="productCode"
-                                                required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="productName" class="form-label">Tên sản phẩm</label>
-                                            <input type="text" class="form-control" id="productName" name="productName"
-                                                required>
-                                        </div>
-                                        <div class="col-12">
-                                            <label for="description" class="form-label">Mô tả</label>
-                                            <textarea class="form-control" id="description" name="description"
-                                                rows="3"></textarea>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="importPrice" class="form-label">Giá nhập</label>
-                                            <input type="number" class="form-control" id="importPrice"
-                                                name="importPrice" required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="salePrice" class="form-label">Giá bán</label>
-                                            <input type="number" class="form-control" id="salePrice" name="salePrice"
-                                                required>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="category" class="form-label">Loại sản phẩm</label>
-                                            <select class="form-select" id="category" name="category">
-                                                <option value="">-- Chọn loại--</option>
-                                                <% categories.forEach(function(category) { %>
-                                                    <option value="<%= category.id %>"><%= category.name %></option>
-                                                <% }) %>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="brand" class="form-label">Hãng</label>
-                                            <select class="form-select" id="brand" name="brand">
-                                                <option value="">-- Chọn hãng --</option>
-                                                <% brands.forEach(function(brand) { %>
-                                                    <option value="<%= brand.brand_id %>"><%= brand.brand_name %></option>
-                                                <% }) %>
-                                            </select>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="origin" class="form-label">Xuất xứ</label>
-                                            <input type="text" class="form-control" id="origin" name="origin">
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="warranty" class="form-label">Bảo hành (tháng)</label>
-                                            <input type="number" class="form-control" id="warranty" name="warranty">
-                                        </div>
-
-                                        <!-- Hình ảnh -->
-                                        <div class="col-md-6">
-                                            <label for="mainImage" class="form-label">Hình chính</label>
-                                            <input class="form-control" type="file" id="mainImage" name="mainImage"
-                                                accept="image/*">
-                                            <div id="mainImagePreview" class="mt-2 position-relative"
-                                                style="max-width: 150px;"></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <label for="extraImages" class="form-label">Hình phụ</label>
-                                            <input class="form-control" type="file" id="extraImages"
-                                                name="extraImages[]" multiple accept="image/*">
-                                            <div id="previewArea" class="mt-2 d-flex flex-wrap gap-2"></div>
-                                        </div>
-
-                                        <!-- Thông số kỹ thuật -->
-                                        <div class="col-md-12">
-                                            <label for="specFile" class="form-label">Thông số kỹ thuật (File)</label>
-                                            <input class="form-control" type="file" id="specFile" name="specFile"
-                                                accept=".pdf,.doc,.docx,.xls,.xlsx,.txt">
-                                            <small class="text-muted">Hỗ trợ các định dạng: PDF, Word, Excel,
-                                                TXT</small>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản phẩm</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                <!-- Modal Thêm Sản Phẩm -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Thêm Sản Phẩm Mới</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addProductForm" enctype="multipart/form-data">
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="productCode" class="form-label">Mã sản phẩm</label>
+                <input type="text" class="form-control" id="productCode" name="productCode" required>
+              </div>
+              <div class="col-md-6">
+                <label for="productName" class="form-label">Tên sản phẩm</label>
+                <input type="text" class="form-control" id="productName" name="productName" required>
+              </div>
+              <div class="col-12">
+                <label for="description" class="form-label">Mô tả</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+              </div>
+              <div class="col-md-6">
+                <label for="importPrice" class="form-label">Giá nhập</label>
+                <input type="number" class="form-control" id="importPrice" name="importPrice" required>
+              </div>
+              <div class="col-md-6">
+                <label for="salePrice" class="form-label">Giá bán</label>
+                <input type="number" class="form-control" id="salePrice" name="salePrice" required>
+              </div>
+              <div class="col-md-6">
+                <label for="category" class="form-label">Loại sản phẩm</label>
+                <select class="form-select" id="category" name="category">
+                  <option value="">-- Chọn loại--</option>
+                  <% categories.forEach(function(category) { %>
+                    <option value="<%= category.id %>"><%= category.name %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="brand" class="form-label">Hãng</label>
+                <select class="form-select" id="brand" name="brand">
+                  <option value="">-- Chọn hãng --</option>
+                  <% brands.forEach(function(brand) { %>
+                    <option value="<%= brand.brand_id %>"><%= brand.brand_name %></option>
+                  <% }) %>
+                </select>
+              </div>
+              <div class="col-md-6">
+                <label for="origin" class="form-label">Xuất xứ</label>
+                <input type="text" class="form-control" id="origin" name="origin">
+              </div>
+              <div class="col-md-6">
+                <label for="warranty" class="form-label">Bảo hành (tháng)</label>
+                <input type="number" class="form-control" id="warranty" name="warranty">
+              </div>
+  
+              <!-- Hình ảnh -->
+              <div class="col-md-12">
+                <label for="images" class="form-label">Hình ảnh sản phẩm</label>
+                <input class="form-control" type="file" id="images" name="images" multiple accept="image/*">
+                <div id="imagePreview" class="mt-2 d-flex flex-wrap gap-2"></div>
+              </div>
+  
+              <!-- Thông số kỹ thuật -->
+              <div class="col-md-12">
+                <label for="specFile" class="form-label">Thông số kỹ thuật (File)</label>
+                <input class="form-control" type="file" id="specFile" name="specFile" accept=".pdf,.doc,.docx,.xls,.xlsx,.txt">
+                <small class="text-muted">Hỗ trợ các định dạng: PDF, Word, Excel, TXT</small>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+          <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản phẩm</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
                 <!-- JavaScript xử lý ảnh -->
-                <script>
-                    const mainImageInput = document.getElementById("mainImage");
-                    const mainImagePreview = document.getElementById("mainImagePreview");
+               <!-- JavaScript xử lý ảnh và submit form -->
+<script>
+    const imagesInput = document.getElementById("images");
+    const imagePreview = document.getElementById("imagePreview");
+    let imageFiles = [];
+  
+    // Xử lý chọn ảnh
+    imagesInput.addEventListener("change", (event) => {
+  const files = Array.from(event.target.files);
+  let added = false;
 
-                    const extraImagesInput = document.getElementById("extraImages");
-                    const previewArea = document.getElementById("previewArea");
+  files.forEach(file => {
+    if (imageFiles.some(f => f.name === file.name)) {
+      alert(`Hình "${file.name}" đã được chọn.`);
+      return;
+    }
 
-                    let mainImageFile = null;
-                    let extraImagesFiles = [];
+    imageFiles.push(file);
+    added = true;
+  });
 
-                    // Hiển thị và xóa hình chính
-                    mainImageInput.addEventListener("change", () => {
-                        const file = mainImageInput.files[0];
-                        if (!file) return;
-
-                        // Kiểm tra trùng với hình phụ
-                        if (extraImagesFiles.some(f => f.name === file.name)) {
-                            alert("Hình này đã được chọn ở hình phụ. Vui lòng chọn hình khác.");
-                            mainImageInput.value = "";
-                            return;
-                        }
-
-                        mainImageFile = file;
-                        renderMainImagePreview();
-                    });
-
-                    function renderMainImagePreview() {
-                        if (!mainImageFile) {
-                            mainImagePreview.innerHTML = "";
-                            return;
-                        }
-
-                        const reader = new FileReader();
-                        reader.onload = function (e) {
-                            mainImagePreview.innerHTML = `
-        <img src="${e.target.result}" class="img-thumbnail" style="width: 100%;">
-        <button class="btn btn-sm btn-danger position-absolute" style="top:0; right:0;" onclick="removeMainImage()">×</button>
-      `;
-                        };
-                        reader.readAsDataURL(mainImageFile);
-                    }
-
-                    function removeMainImage() {
-                        mainImageFile = null;
-                        mainImageInput.value = "";
-                        mainImagePreview.innerHTML = "";
-                    }
-
-                    // Xử lý hình phụ
-                    extraImagesInput.addEventListener("change", (event) => {
-                        const files = Array.from(event.target.files);
-                        let added = false;
-
-                        files.forEach(file => {
-                            if (file.name === mainImageFile?.name) {
-                                alert(`Hình "${file.name}" đã chọn ở hình chính.`);
-                                return;
-                            }
-
-                            if (extraImagesFiles.some(f => f.name === file.name)) {
-                                alert(`Hình "${file.name}" đã được chọn rồi.`);
-                                return;
-                            }
-
-                            extraImagesFiles.push(file);
-                            added = true;
-                        });
-
-                        if (added) renderExtraPreviews();
-                        extraImagesInput.value = ""; // reset input để có thể chọn lại hình đã bỏ qua
-                    });
-
-                    function renderExtraPreviews() {
-                        previewArea.innerHTML = "";
-                        extraImagesFiles.forEach((file, index) => {
-                            const reader = new FileReader();
-                            reader.onload = function (e) {
-                                const wrapper = document.createElement("div");
-                                wrapper.className = "position-relative";
-
-                                const img = document.createElement("img");
-                                img.src = e.target.result;
-                                img.classList.add("img-thumbnail");
-                                img.style.width = "100px";
-                                img.style.height = "100px";
-
-                                const removeBtn = document.createElement("button");
-                                removeBtn.innerText = "×";
-                                removeBtn.className = "btn btn-sm btn-danger position-absolute";
-                                removeBtn.style.top = "0";
-                                removeBtn.style.right = "0";
-                                removeBtn.onclick = () => {
-                                    extraImagesFiles.splice(index, 1);
-                                    renderExtraPreviews();
-                                };
-
-                                wrapper.appendChild(img);
-                                wrapper.appendChild(removeBtn);
-                                previewArea.appendChild(wrapper);
-                            };
-                            reader.readAsDataURL(file);
-                        });
-                    }
-
-                    // Submit form
-                    document.getElementById("addProductForm").addEventListener("submit", function (e) {
-                        e.preventDefault();
-                        const formData = new FormData(this);
-
-                        if (mainImageFile) {
-                            formData.set("mainImage", mainImageFile);
-                        }
-
-                        extraImagesFiles.forEach(file => {
-                            formData.append("extraImages[]", file);
-                        });
-
-                        console.log("Đã sẵn sàng gửi form:");
-                        console.log("Hình chính:", mainImageFile?.name);
-                        console.log("Số hình phụ:", extraImagesFiles.length);
-
-                        // Gửi formData bằng fetch hoặc axios nếu muốn
-                    });
-                </script>
+  if (added) renderImagePreviews();
+});
+  
+    // Hiển thị preview ảnh
+    function renderImagePreviews() {
+      imagePreview.innerHTML = "";
+      imageFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function (e) {
+          const wrapper = document.createElement("div");
+          wrapper.className = "position-relative me-2 mb-2";
+  
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.classList.add("img-thumbnail");
+          img.style.width = "100px";
+          img.style.height = "100px";
+  
+          const removeBtn = document.createElement("button");
+          removeBtn.innerText = "×";
+          removeBtn.type = "button";
+          removeBtn.className = "btn btn-sm btn-danger position-absolute";
+          removeBtn.style.top = "0";
+          removeBtn.style.right = "0";
+          removeBtn.onclick = () => {
+            imageFiles.splice(index, 1);
+            renderImagePreviews();
+          };
+  
+          wrapper.appendChild(img);
+          wrapper.appendChild(removeBtn);
+          imagePreview.appendChild(wrapper);
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+   
+  </script>
 
             </div>
             <div class="table-responsive">
