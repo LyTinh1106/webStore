@@ -222,7 +222,7 @@ const updateProduct = (req, res) => {
       return res.status(500).render("error", { message: "Lỗi khi cập nhật sản phẩm." });
     }
 
-    res.redirect("/products");
+    
   });
 };
 

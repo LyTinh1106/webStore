@@ -25,7 +25,16 @@ router.post(
   createProduct
 );
 
-router.put('/:id', updateProduct);
+// router.put('/update/:id', updateProduct);
+router.put(
+  '/update/:id',
+  upload.fields([
+    { name: 'images', maxCount: 6 },
+    { name: 'specFile', maxCount: 1 }
+  ]),
+  updateProduct
+);
+
 
 
 router.delete('/delete/:id', deleteProduct);
