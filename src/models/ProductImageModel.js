@@ -100,6 +100,19 @@ ProductImage.bulkInsert = (images, result) => {
       result(null, res);
     });
   };
+
+  // Xoá tất cả ảnh liên quan đến sản phẩm
+ProductImage.deleteByProductId = (productId, result) => {
+  sql.query("DELETE FROM product_image WHERE product_id = ?", [productId], (err, res) => {
+    if (err) {
+      result(err, null);
+      return;
+    }
+
+    result(null, res);
+  });
+};
+
   
 
 module.exports = ProductImage;
