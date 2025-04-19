@@ -750,3 +750,46 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
         console.error(err);
     }
 });
+// xóa product
+document.addEventListener("DOMContentLoaded", function () {
+    const deleteButtons = document.querySelectorAll(".delete-btn");
+  
+    deleteButtons.forEach(button => {
+      button.addEventListener("click", async function () {
+        const productId = this.dataset.id;
+        const confirmDelete = confirm("Bạn có chắc muốn xóa sản phẩm này?");
+        if (!confirmDelete) return;
+  
+        try {
+            const response = await fetch(`/api/product/delete/${productId}`, {
+              method: "DELETE", 
+              headers: {
+                "Content-Type": "application/json"
+              }
+            });
+          
+            if (!response.ok) throw new Error("Xóa thất bại");
+          
+            const result = await response.json();
+          
+            
+          
+            if (result.success) {
+              alert(result.message || "Đã xóa sản phẩm.");
+          
+              
+              const row = document.getElementById(`product-${productId}`);
+              if (row) row.remove();
+            } else {
+              alert(result.message || "❌ Xảy ra lỗi khi xóa sản phẩm.");
+            }
+          
+          } catch (error) {
+            console.error("Lỗi khi xóa sản phẩm:", error);
+            alert("❌ Xảy ra lỗi khi xóa sản phẩm.");
+          }
+          
+      });
+    });
+  });
+  

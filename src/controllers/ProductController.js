@@ -1,3 +1,5 @@
+
+
 const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
 const Brand = require("../models/BrandModel");
@@ -226,15 +228,48 @@ const updateProduct = (req, res) => {
 
 // [POST] /products/:id/delete - Xóa sản phẩm
 const deleteProduct = (req, res) => {
-  Product.remove(req.params.id, (err, data) => {
+  const productId = req.params.id;
+
+  
+  ProductImage.findByProductId(productId, (err, images) => {
     if (err) {
-      if (err.kind === "not_found") {
-        return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
-      }
-      return res.status(500).render("error", { message: "Lỗi khi xóa sản phẩm." });
+      console.error("Lỗi khi tìm ảnh sản phẩm:", err);
+      return res.status(500).render("error", { message: "Lỗi khi tìm ảnh sản phẩm." });
     }
 
-    res.redirect("/products");
+    if (images && images.length > 0) {
+      images.forEach((image) => {
+        const filePath = path.join(__dirname, "../public/images", image.URL);
+
+       
+        fs.access(filePath, fs.constants.F_OK, (err) => {
+          if (err) {
+            console.warn(`❌ File không tồn tại: ${filePath}`);
+            return;
+          }
+
+          fs.unlink(filePath, (err) => {
+            if (err) {
+              console.warn(`Không thể xóa file ảnh ${filePath}:`, err.message);
+            } else {
+              console.log(`✅ Đã xóa file: ${filePath}`);
+            }
+          });
+        });
+      });
+    }
+
+   
+    Product.remove(productId, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
+        }
+        return res.status(500).render("error", { message: "Lỗi khi xóa sản phẩm." });
+      }
+
+      res.status(200).json({ success: true, message: "Xóa sản phẩm thành công!" });
+    });
   });
 };
 

@@ -103,21 +103,42 @@ Product.updateById = (id, product, result) => {
 };
 
 Product.remove = (id, result) => {
-  sql.query("DELETE FROM product WHERE id = ?", [id], (err, res) => {
+  // Bước 1: Xóa thông số kỹ thuật liên quan đến sản phẩm
+  sql.query("DELETE FROM technical_specification WHERE product_id = ?", [id], (err, res) => {
     if (err) {
-      console.log("error: ", err);
+      console.log("Lỗi khi xóa thông số kỹ thuật của sản phẩm:", err);
       result(null, err);
       return;
     }
 
-    if (res.affectedRows == 0) {
-      result({ kind: "not_found" }, null);
-      return;
-    }
+    // Bước 2: Xóa tất cả các ảnh liên quan tới sản phẩm trong bảng product_image
+    sql.query("DELETE FROM product_image WHERE product_id = ?", [id], (err2, res2) => {
+      if (err2) {
+        console.log("Lỗi khi xóa ảnh của sản phẩm:", err2);
+        result(null, err2);
+        return;
+      }
 
-    console.log("deleted product with id: ", id);
-    result(null, res);
+      // Bước 3: Xóa sản phẩm khỏi bảng product
+      sql.query("DELETE FROM product WHERE id = ?", [id], (err3, res3) => {
+        if (err3) {
+          console.log("Lỗi khi xóa sản phẩm:", err3);
+          result(null, err3);
+          return;
+        }
+
+        // Nếu không có sản phẩm nào bị xóa, trả về lỗi "not_found"
+        if (res3.affectedRows == 0) {
+          result({ kind: "not_found" }, null);
+          return;
+        }
+
+        console.log("Đã xóa sản phẩm với id:", id);
+        result(null, res3); // Trả về kết quả sau khi xóa
+      });
+    });
   });
 };
+
 
 module.exports = Product;

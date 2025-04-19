@@ -391,42 +391,23 @@
                     <tbody>
                         <% if (products.length> 0) { %>
                             <% products.forEach((product)=> { %>
-                                <tr>
+                                <tr id="product-<%= product.id %>">
+                                    <td><%= product.fancy_id %></td>
+                                    <td><%= product.name %></td>
+                                    <td><%= product.category_name || 'Không rõ' %></td>
+                                    <td><%= Number(product.import_price).toLocaleString('vi-VN') %> VNĐ</td>
+                                    <td><%= Number(product.retail_price).toLocaleString('vi-VN') %> VNĐ</td>
+                                    <td><%= product.origin %></td>
+                                    <td><%= product.warranty %></td>
                                     <td>
-                                        <%= product.fancy_id %>
-                                    </td>
-                                    <td>
-                                        <%= product.name %>
-                                    </td>
-                                    <td>
-                                        <%= product.category_name|| 'Không rõ' %>
-                                    </td>
-                                    <td>
-                                        <%= Number(product.import_price).toLocaleString('vi-VN') %> VNĐ
-                                    </td>
-                                    <td>
-                                        <%= Number(product.retail_price).toLocaleString('vi-VN') %> VNĐ
-                                    </td>
-                                    <td>
-                                        <%= product.origin %>
-                                    </td>
-                                    <td>
-                                        <%= product.warranty %>
-                                    </td>
-                                    <td>
-                                        <a href="/products/<%= product.id %>" class="btn btn-sm btn-primary"><i
-                                                class="fas fa-eye"></i></a>
-                                        <a href="/products/<%= product.id %>/edit" class="btn btn-sm btn-info"><i
-                                                class="fas fa-edit"></i></a>
-                                        <form action="/products/<%= product.id %>/delete" method="POST"
-                                            class="d-inline">
-                                            <button type="submit" class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Bạn có chắc muốn xóa sản phẩm này?')">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
+                                        <a href="/products/<%= product.id %>" class="btn btn-sm btn-primary"><i class="fas fa-eye"></i></a>
+                                        <a href="/products/<%= product.id %>/edit" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a>
+                                        <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="<%= product.id %>">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
                                     </td>
                                 </tr>
+                                
                                 <% }) %>
                                     <% } else { %>
                                         <tr>
