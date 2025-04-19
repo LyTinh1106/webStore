@@ -751,45 +751,148 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
     }
 });
 // xóa product
-document.addEventListener("DOMContentLoaded", function () {
-    const deleteButtons = document.querySelectorAll(".delete-btn");
-  
-    deleteButtons.forEach(button => {
-      button.addEventListener("click", async function () {
-        const productId = this.dataset.id;
-        const confirmDelete = confirm("Bạn có chắc muốn xóa sản phẩm này?");
-        if (!confirmDelete) return;
-  
+// Xử lý nút xóa sản phẩm
+document.querySelectorAll(".delete-product-btn").forEach(button => {
+    button.addEventListener("click", async function () {
+        const productId = this.dataset.id; // Lấy productId từ data-id của nút xóa
+
+        // Cảnh báo xác nhận xóa sản phẩm
+        const isConfirmed = confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?");
+        if (!isConfirmed) return; // Nếu người dùng không xác nhận, dừng lại
+
         try {
+            // Gửi yêu cầu DELETE đến API
             const response = await fetch(`/api/product/delete/${productId}`, {
-              method: "DELETE", 
-              headers: {
-                "Content-Type": "application/json"
-              }
+                method: "DELETE"
             });
-          
-            if (!response.ok) throw new Error("Xóa thất bại");
-          
-            const result = await response.json();
-          
-            
-          
-            if (result.success) {
-              alert(result.message || "Đã xóa sản phẩm.");
-          
-              
-              const row = document.getElementById(`product-${productId}`);
-              if (row) row.remove();
+
+            if (response.ok) {
+                // Nếu xóa thành công, tìm dòng sản phẩm và xóa nó khỏi giao diện
+                const row = document.getElementById(`product-${productId}`);
+                if (row) {
+                    row.remove();  // Xóa dòng sản phẩm khỏi bảng
+                    alert("Sản phẩm đã được xóa thành công!"); // Thông báo thành công
+                } else {
+                    console.error('Không tìm thấy dòng sản phẩm trong bảng.');
+                    alert("Không thể tìm thấy sản phẩm để xóa.");
+                }
             } else {
-              alert(result.message || "❌ Xảy ra lỗi khi xóa sản phẩm.");
+                // Nếu API trả về lỗi
+                const errorText = await response.text();
+                console.error("Lỗi khi xóa sản phẩm:", errorText);
+                alert("Không thể xóa sản phẩm. Lỗi: " + errorText);
             }
-          
-          } catch (error) {
-            console.error("Lỗi khi xóa sản phẩm:", error);
-            alert("❌ Xảy ra lỗi khi xóa sản phẩm.");
-          }
-          
-      });
+        } catch (err) {
+            // Xử lý lỗi khi gửi yêu cầu
+            console.error("Lỗi khi xóa sản phẩm:", err);
+            alert("Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.");
+        }
     });
-  });
-  
+});
+
+  //edit product
+  // Cập nhật sản phẩm
+document.getElementById("updateProductForm").addEventListener("submit", async function (e) {
+    e.preventDefault(); // Ngăn reload mặc định của form
+
+    // Lấy dữ liệu từ form
+    const productId = document.getElementById("editProductId").value.trim();
+    const productCode = document.getElementById("editProductCode").value.trim();
+    const productName = document.getElementById("editProductName").value.trim();
+    const description = document.getElementById("editDescription").value.trim();
+    const importPrice = document.getElementById("editImportPrice").value.trim();
+    const salePrice = document.getElementById("editSalePrice").value.trim();
+    const category = document.getElementById("editCategory").value.trim();
+    const brand = document.getElementById("editBrand").value.trim();
+    const origin = document.getElementById("editOrigin").value.trim();
+    const warranty = document.getElementById("editWarranty").value.trim();
+    const imageFile = document.getElementById("editImages").files[0];
+    const specFile = document.getElementById("editSpecFile").files[0]; // Thông số kỹ thuật (.xlsx, .csv)
+
+    // Kiểm tra thông tin bắt buộc
+    if (!productId || !productCode || !productName || !importPrice || !salePrice) {
+        alert("Vui lòng nhập đầy đủ thông tin bắt buộc.");
+        return;
+    }
+
+    // Tạo FormData
+    const formData = new FormData();
+    formData.append("id", productId);
+    formData.append("fancy_id", productCode);
+    formData.append("description", description);
+    formData.append("name", productName);
+    formData.append("import_price", importPrice);
+    formData.append("retail_price", salePrice);
+    formData.append("category_id", category);
+    formData.append("brand_id", brand);
+    formData.append("origin", origin);
+    formData.append("warranty", warranty);
+
+    if (imageFile) {
+        formData.append("image", imageFile);
+    }
+
+    if (specFile) {
+        formData.append("specFile", specFile); // File Excel hoặc CSV
+    }
+
+    try {
+        const response = await fetch(`/api/product/update/${productId}`, {
+            method: "PUT",
+            body: formData
+        });
+
+        if (response.ok) {
+            const scrollY = window.scrollY;
+            localStorage.setItem("scrollPosition", scrollY);
+            location.reload();
+        } else {
+            const errorText = await response.text();
+            document.body.innerHTML = errorText; // Debug nếu lỗi
+        }
+    } catch (error) {
+        alert("Đã xảy ra lỗi khi gửi yêu cầu cập nhật sản phẩm.");
+        console.error(error);
+    }
+});
+
+// Đổ dữ liệu vào form khi bấm nút sửa
+document.querySelectorAll('.editProductBtn').forEach(button => {
+    button.addEventListener('click', function () {
+        // Lấy dữ liệu từ data-attributes
+        const productId = this.dataset.id;
+        const productCode = this.dataset.code;
+        const productName = this.dataset.name;
+        const description = this.dataset.description;
+        const importPrice = this.dataset.importprice;
+        const salePrice = this.dataset.saleprice;
+        const category = this.dataset.category;
+        const brand = this.dataset.brand;
+        const origin = this.dataset.origin;
+        const warranty = this.dataset.warranty;
+        const imageUrl = this.dataset.imageUrl;
+
+        // Gán vào form
+        document.getElementById("editProductId").value = productId;
+        document.getElementById("editProductCode").value = productCode;
+        document.getElementById("editProductName").value = productName;
+        document.getElementById("editDescription").value = description;
+        document.getElementById("editImportPrice").value = importPrice;
+        document.getElementById("editSalePrice").value = salePrice;
+        document.getElementById("editCategory").value = category;
+        document.getElementById("editBrand").value = brand;
+        document.getElementById("editOrigin").value = origin;
+        document.getElementById("editWarranty").value = warranty;
+
+        // Hiển thị ảnh
+        const imgEl = document.getElementById("productImage");
+        imgEl.src = imageUrl || "";
+
+        // Xóa dữ liệu file input và bảng thông số kỹ thuật cũ nếu có
+        document.getElementById("editSpecFile").value = "";
+        clearSpecData(); // Hàm do bạn tự định nghĩa để reset bảng thông số kỹ thuật
+
+        // Nếu cần lấy lại spec từ server:
+        // fetch(`/api/products/${productId}/spec`).then(res => res.json()).then(renderSpecTable);
+    });
+});
