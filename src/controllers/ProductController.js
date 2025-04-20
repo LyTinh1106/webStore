@@ -176,7 +176,7 @@ const getProductById = (req, res) => {
       }
       return res.status(500).render("error", { message: "Lỗi khi truy xuất sản phẩm." });
     }
-
+    
     res.render("ProductDetail", {
       user: req.user || null,
       product
@@ -220,6 +220,8 @@ const updateProduct = (req, res) => {
         return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
       }
       return res.status(500).render("error", { message: "Lỗi khi cập nhật sản phẩm." });
+    }else{
+      return res.status(201).json({ success: true, message: "Cập nhật product thành công!", product: data });
     }
 
     
