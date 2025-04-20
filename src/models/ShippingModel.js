@@ -34,7 +34,7 @@ Shipping.create = (newShipping, result) => {
       return;
     }
 
-    console.log("created shipping: ", { id: res.insertId, ...formattedShipping });
+    // console.log("created shipping: ", { id: res.insertId, ...formattedShipping });
     result(null, { id: res.insertId, ...formattedShipping });
   });
 };
@@ -84,7 +84,7 @@ Shipping.getAll = (result) => {
       shipping_date: shipping.shipping_date ? formatDate(shipping.shipping_date) : null
     }));
 
-    console.log("shippings: ", formattedShippings);
+    // console.log("shippings: ", formattedShippings);
     result(null, formattedShippings);
   });
 };
@@ -122,7 +122,7 @@ Shipping.updateById = (id, shipping, result) => {
         return;
       }
 
-      console.log("updated shipping: ", { id: id, ...formattedShipping });
+      // console.log("updated shipping: ", { id: id, ...formattedShipping });
       result(null, { id: id, ...formattedShipping });
     }
   );

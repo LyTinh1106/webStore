@@ -96,7 +96,7 @@ Product.updateById = (id, product, result) => {
         return;
       }
 
-      console.log("updated product: ", { id: id, ...product });
+      // console.log("updated product: ", { id: id, ...product });
       result(null, { id: id, ...product });
     }
   );

@@ -83,7 +83,7 @@ Voucher.getAll = (code, result) => {
       date_end: voucher.date_end ? formatDate(voucher.date_end) : null
     }));
 
-    console.log('vouchers: ', formattedVouchers);
+    // console.log('vouchers: ', formattedVouchers);
     result(null, formattedVouchers);
   });
 };

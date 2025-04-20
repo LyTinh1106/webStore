@@ -664,11 +664,23 @@ document.querySelectorAll(".editSupplierBtn").forEach(btn => {
 });
 //product
 const imagesInput = document.getElementById("images");
+const editImagesInput = document.getElementById("editImages");
 const imagePreview = document.getElementById("imagePreview");
+const editImagePreview = document.getElementById("editImagePreview");
+
 let imageFiles = [];
 
 // Xử lý chọn ảnh
 imagesInput.addEventListener("change", (event) => {
+    handleImageSelection(event, imagePreview);
+});
+
+editImagesInput.addEventListener("change", (event) => {
+    handleImageSelection(event, editImagePreview);
+});
+
+// Hàm xử lý chọn ảnh và render preview
+function handleImageSelection(event, previewContainer) {
     const files = Array.from(event.target.files);
     let added = false;
 
@@ -682,12 +694,13 @@ imagesInput.addEventListener("change", (event) => {
         added = true;
     });
 
-    if (added) renderImagePreviews();
-});
+    if (added) renderImagePreviews(previewContainer);
+}
 
-// Hiển thị preview ảnh
-function renderImagePreviews() {
-    imagePreview.innerHTML = "";
+// Hàm hiển thị ảnh preview
+function renderImagePreviews(previewContainer) {
+    previewContainer.innerHTML = "";
+
     imageFiles.forEach((file, index) => {
         const reader = new FileReader();
         reader.onload = function (e) {
@@ -706,19 +719,108 @@ function renderImagePreviews() {
             removeBtn.className = "btn btn-sm btn-danger position-absolute";
             removeBtn.style.top = "0";
             removeBtn.style.right = "0";
+
             removeBtn.onclick = () => {
                 imageFiles.splice(index, 1);
-                renderImagePreviews();
+                renderImagePreviews(previewContainer);
             };
 
             wrapper.appendChild(img);
             wrapper.appendChild(removeBtn);
-            imagePreview.appendChild(wrapper);
+            previewContainer.appendChild(wrapper);
         };
         reader.readAsDataURL(file);
     });
 }
 
+//thông số kĩ thuật
+
+const fileMappings = [
+    {
+        inputId: "specFile",
+        tableBodyId: "specTableBody",
+        containerId: "specTableContainer",
+        actionsId: "specActions"
+    },
+    {
+        inputId: "editSpecFile",
+        tableBodyId: "editSpecTableBody",
+        containerId: "editSpecTableContainer",
+        actionsId: "editSpecActions"
+    }
+];
+
+fileMappings.forEach(({ inputId, tableBodyId, containerId, actionsId }) => {
+    const input = document.getElementById(inputId);
+    const tableBody = document.getElementById(tableBodyId);
+    const container = document.getElementById(containerId);
+    const actions = document.getElementById(actionsId);
+
+    input.addEventListener("change", function () {
+        const file = this.files[0];
+        if (!file) return;
+
+        const fileName = file.name.toLowerCase();
+        const reader = new FileReader();
+
+        const render = (data) => renderSpecTable(data, tableBody, container, actions);
+
+        if (fileName.endsWith(".csv") || fileName.endsWith(".txt")) {
+            reader.onload = function (e) {
+                const lines = e.target.result.split(/\r?\n/);
+                const data = lines.map(line => {
+                    const parts = line.includes(":") ? line.split(":") : line.split(",");
+                    return parts.length >= 2 ? [parts[0].trim(), parts.slice(1).join(",").trim()] : null;
+                }).filter(pair => pair && pair[0] !== "");
+                render(data);
+            };
+            reader.readAsText(file);
+        } else if (fileName.endsWith(".xlsx")) {
+            reader.onload = function (e) {
+                const data = new Uint8Array(e.target.result);
+                const workbook = XLSX.read(data, { type: "array" });
+                const sheet = workbook.Sheets[workbook.SheetNames[0]];
+                const json = XLSX.utils.sheet_to_json(sheet, { header: 1 });
+
+                const dataArr = json
+                    .filter(row => row.length >= 2 && row[0])
+                    .map(row => [row[0], row[1]]);
+                render(dataArr);
+            };
+            reader.readAsArrayBuffer(file);
+        } else {
+            alert("Định dạng không được hỗ trợ. Chỉ chấp nhận CSV, TXT hoặc Excel (.xlsx).");
+            this.value = "";
+        }
+
+        // Xóa dữ liệu riêng theo input
+        window[`clearSpecData_${inputId}`] = function () {
+            input.value = "";
+            tableBody.innerHTML = "";
+            container.style.display = "none";
+            actions.style.display = "none";
+        };
+    });
+});
+
+// Hàm render bảng
+function renderSpecTable(data, tableBody, container, actions) {
+    tableBody.innerHTML = "";
+    data.forEach(([key, value]) => {
+        const cleanedValues = value
+            .split(",")
+            .map(part => part.trim())
+            .filter(part => part !== "")
+            .join("<br>");
+
+        const row = document.createElement("tr");
+        row.innerHTML = `<td>${key}</td><td>${cleanedValues}</td>`;
+        tableBody.appendChild(row);
+    });
+
+    container.style.display = "block";
+    actions.style.display = "block";
+}
 
 // Add product
 document.getElementById("addProductForm").addEventListener("submit", async function (e) {
@@ -742,7 +844,7 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
             // 👇 Reload lại trang hoặc cập nhật danh sách sản phẩm nếu cần
             // location.reload();
         } else {
-            alert("❌ " + (result.message || "Thêm sản phẩm thất bại."));
+            alert((result.message || "Thêm sản phẩm thất bại."));
         }
 
     } catch (err) {
@@ -790,8 +892,8 @@ document.querySelectorAll(".delete-product-btn").forEach(button => {
     });
 });
 
-  //edit product
-  // Cập nhật sản phẩm
+//edit product
+// Cập nhật sản phẩm
 document.getElementById("updateProductForm").addEventListener("submit", async function (e) {
     e.preventDefault(); // Ngăn reload mặc định của form
 
@@ -829,7 +931,7 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
     formData.append("warranty", warranty);
 
     if (imageFile) {
-        formData.append("image", imageFile);
+        formData.append("images", imageFile);
     }
 
     if (specFile) {
@@ -851,7 +953,7 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
             document.body.innerHTML = errorText; // Debug nếu lỗi
         }
     } catch (error) {
-        alert("Đã xảy ra lỗi khi gửi yêu cầu cập nhật sản phẩm.");
+        alert("Đã xảy ra lỗi khi gửi yêu cầu cập nhật sản phẩm." + error.message);
         console.error(error);
     }
 });
