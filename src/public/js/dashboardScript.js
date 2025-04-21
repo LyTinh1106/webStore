@@ -841,8 +841,11 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
             alert(result.message || "Thêm sản phẩm thành công!");
             form.reset();
 
-            // 👇 Reload lại trang hoặc cập nhật danh sách sản phẩm nếu cần
-            // location.reload();
+            // 👇 Lưu vị trí cuộn trước khi reload
+            sessionStorage.setItem("scrollPosition", window.scrollY);
+
+            // 👇 Reload lại trang
+            location.reload();
         } else {
             alert((result.message || "Thêm sản phẩm thất bại."));
         }
