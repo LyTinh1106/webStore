@@ -5,7 +5,7 @@ USE pc_store
 CREATE TABLE brand (
     brand_id INT PRIMARY KEY AUTO_INCREMENT,
     brand_name VARCHAR(255) NOT NULL
-);
+); không MSI
 
 -- Bảng category
 CREATE TABLE category (
@@ -24,7 +24,7 @@ CREATE TABLE product (
     brand_id INT,
     category_id INT,
     origin VARCHAR(255),
-    warranty VARCHAR(255),
+    warranty VARCHAR(255), (theo tháng)
     FOREIGN KEY (brand_id) REFERENCES brand(brand_id),
     FOREIGN KEY (category_id) REFERENCES category(id)
 );
@@ -176,88 +176,229 @@ JOIN
 
 
 -- Dữ liệu mẫu
--- Insert brand
-INSERT INTO brand (brand_name) VALUES 
-('ASUS'), ('Acer'), ('Dell');
+INSERT INTO brand (brand_name) VALUES
+('ASUS'), ('Acer'), ('Gigabyte'), ('Intel'), ('AMD'),
+('Corsair'), ('Logitech'), ('Razer'), ('HP'), ('Dell');
 
--- Insert category
-INSERT INTO category (name) VALUES 
-('Laptop'), ('Desktop'), ('Monitor');
+INSERT INTO category (name) VALUES
+('Laptop'), ('CPU'), ('GPU'), ('Mainboard'), ('RAM'),
+('SSD'), ('Power Supply'), ('Mouse'), ('Keyboard'), ('Monitor');
 
--- Insert product
-INSERT INTO product (fancy_id, name, description, import_price, retail_price, brand_id, category_id, origin, warranty) VALUES 
-('LAP001', 'ASUS ROG Strix', 'Gaming laptop with high performance', 1200.00, 1500.00, 1, 1, 'Taiwan', '2 years'),
-('DES001', 'Acer Aspire TC', 'Powerful desktop for work and play', 700.00, 900.00, 2, 2, 'China', '1 year'),
-('MON001', 'Dell UltraSharp U2723QE', '4K UHD Monitor', 400.00, 550.00, 3, 3, 'USA', '3 years');
+INSERT INTO product (fancy_id, name, description, import_price, retail_price, brand_id, category_id, origin, warranty)
+VALUES
+('P001', 'ASUS ROG Zephyrus G14', 'Gaming laptop 14 inch Ryzen 9', 1500, 1700, 1, 1, 'Taiwan', '24'),
+('P002', 'Intel Core i9-13900K', 'High-end CPU for gaming/production', 550, 620, 4, 2, 'USA', '36'),
+('P003', 'AMD Ryzen 7 5800X', 'Powerful multi-core CPU', 320, 370, 5, 2, 'USA', '36'),
+('P004', 'Gigabyte RTX 4070 Ti', 'High-performance graphics card', 800, 950, 3, 3, 'Taiwan', '24'),
+('P005', 'ASUS TUF B660M', 'Mainboard for Intel Gen 12', 130, 150, 1, 4, 'Taiwan', '24'),
+('P006', 'Corsair Vengeance 16GB', 'DDR4 3200MHz RAM kit', 60, 75, 6, 5, 'USA', '36'),
+('P007', 'Samsung 970 EVO 1TB', 'NVMe M.2 SSD', 100, 120, 6, 6, 'Korea', '60'),
+('P008', 'Cooler Master 750W PSU', '80+ Gold Power Supply', 90, 110, 6, 7, 'China', '60'),
+('P009', 'Logitech G Pro Wireless', 'Gaming mouse lightweight', 80, 100, 7, 8, 'China', '24'),
+('P010', 'Razer Huntsman Mini', 'Compact gaming keyboard RGB', 85, 105, 8, 9, 'Singapore', '24');
 
--- Insert product_image
-INSERT INTO product_image (product_id, URL) VALUES 
-(1, 'rog_strix_side.jpg'),
-(2, 'aspire_tc_back.jpg'),
-(3, 'ultrasharp_front.jpg');
+INSERT INTO product_image (product_id, URL) VALUES
+(1, 'https://example.com/laptop1.jpg'),
+(2, 'https://example.com/cpu1.jpg'),
+(3, 'https://example.com/cpu2.jpg'),
+(4, 'https://example.com/gpu1.jpg'),
+(5, 'https://example.com/mainboard1.jpg'),
+(6, 'https://example.com/ram1.jpg'),
+(7, 'https://example.com/ssd1.jpg'),
+(8, 'https://example.com/psu1.jpg'),
+(9, 'https://example.com/mouse1.jpg'),
+(10, 'https://example.com/keyboard1.jpg');
 
--- Insert technical_specification
-INSERT INTO technical_specification (specs, product_id) VALUES 
-('{"CPU": "Intel i9", "RAM": "32GB", "GPU": "RTX 3070"}', 1),
-('{"CPU": "Intel i5", "RAM": "16GB", "Storage": "512GB SSD"}', 2),
-('{"Resolution": "3840x2160", "Panel": "IPS"}', 3);
+INSERT INTO technical_specification (specs, product_id) VALUES
+-- Product 1: Laptop
+('{
+  "screen": "14 inch", "cpu": "Ryzen 9", "gpu": "RTX 3060", "ram": "16GB DDR5",
+  "ssd": "1TB NVMe", "battery": "76Wh", "weight": "1.7kg", "os": "Windows 11",
+  "refresh_rate": "120Hz", "keyboard": "RGB", "ports": "USB-C, HDMI",
+  "wifi": "Wi-Fi 6E", "bluetooth": "5.2", "camera": "720p HD"
+}', 1),
 
--- Insert supplier
-INSERT INTO supplier (name, phonenumber, email, address) VALUES 
-('Tech World', '0123456789', 'contact@techworld.com', '123 Tech Street'),
-('Giga Supplier', '0987654321', 'info@gigasupplier.com', '456 Supplier Ave'),
-('Future Electronics', '0112233445', 'sales@futureelec.com', '789 Future Rd');
+-- Product 2: CPU Intel
+('{
+  "brand": "Intel", "model": "Core i9-13900K", "cores": 24, "threads": 32,
+  "base_clock": "3.0GHz", "boost_clock": "5.8GHz", "socket": "LGA1700",
+  "cache": "36MB", "tdp": "125W", "unlocked": true, "architecture": "Raptor Lake",
+  "integrated_graphics": "UHD 770", "max_temp": "100°C"
+}', 2),
 
--- Insert importing
-INSERT INTO importing (date, total_price, id_supplier) VALUES 
-('2024-03-01', 4500.00, 1),
-('2024-03-05', 3000.00, 2),
-('2024-03-10', 2000.00, 3);
+-- Product 3: CPU AMD
+('{
+  "brand": "AMD", "model": "Ryzen 7 5800X", "cores": 8, "threads": 16,
+  "base_clock": "3.8GHz", "boost_clock": "4.7GHz", "socket": "AM4",
+  "tdp": "105W", "unlocked": true, "l3_cache": "32MB", "architecture": "Zen 3",
+  "cooler_included": false, "max_temp": "90°C", "release_year": 2020
+}', 3),
 
--- Insert importing_detail
-INSERT INTO importing_detail (id_importing, id_product, quantity, subtotalprice) VALUES 
-(1, 1, 10, 12000.00),
-(2, 2, 5, 3500.00),
-(3, 3, 8, 3200.00);
+-- Product 4: VGA
+('{
+  "brand": "Gigabyte", "gpu": "RTX 4070 Ti", "vram": "12GB GDDR6X",
+  "cuda_cores": 7680, "base_clock": "2310MHz", "boost_clock": "2610MHz",
+  "memory_bus": "192-bit", "power_draw": "285W", "fans": 3,
+  "output_ports": "3xDP, 1xHDMI", "length": "336mm", "cooling": "Windforce",
+  "ray_tracing": true, "dlss": "3.0", "pcie": "4.0"
+}', 4),
 
--- Insert voucher
-INSERT INTO voucher (voucher_code, voucher_value, date_start, date_end) VALUES 
-('SALE10', 10, '2024-03-01 00:00:00', '2024-03-31 23:59:59'),
-('DISCOUNT15', 15, '2024-04-01 00:00:00', '2024-04-30 23:59:59'),
-('NEWYEAR20', 20, '2024-05-01 00:00:00', '2024-05-31 23:59:59');
+-- Product 5: Mainboard
+('{
+  "brand": "ASUS", "model": "TUF B660M", "socket": "LGA1700", "chipset": "B660",
+  "form_factor": "Micro-ATX", "memory_support": "DDR4 5333MHz", "max_memory": "128GB",
+  "pcie_slots": 3, "m2_slots": 2, "sata_ports": 4, "wifi": false,
+  "bluetooth": false, "rgb_header": true, "bios_flashback": true
+}', 5),
 
--- Insert account
-INSERT INTO account (email, password, role) VALUES 
-('admin01@email.com', 'securepass123', 'admin'),
-('john.doe@email.com', 'hashedpassword1', 'customer'),
-('anna.smith@email.com', 'hashedpassword2', 'customer');
+-- Product 6: RAM
+('{
+  "brand": "Corsair", "type": "DDR4", "capacity": "16GB", "speed": "3200MHz",
+  "voltage": "1.35V", "timing": "16-18-18-36", "heat_spreader": true,
+  "modules": "2x8GB", "ecc": false, "rgb": false, "warranty": "Lifetime",
+  "profile": "XMP 2.0", "color": "Black"
+}', 6),
 
--- Insert customer
-INSERT INTO customer (first_name, last_name, gender, email, phone, address) VALUES 
-('John', 'Doe', 'male', 'john.doe@email.com', '0912345678', '123 Elm Street'),
-('Anna', 'Smith', 'female', 'anna.smith@email.com', '0923456789', '456 Maple Street'),
-('David', 'Brown', 'male', 'david.brown@email.com', '0934567890', '789 Oak Street');
+-- Product 7: SSD
+('{
+  "brand": "Samsung", "model": "970 EVO", "type": "NVMe", "interface": "PCIe 3.0 x4",
+  "capacity": "1TB", "form_factor": "M.2 2280", "sequential_read": "3500MB/s",
+  "sequential_write": "3300MB/s", "endurance": "600TBW", "controller": "Samsung Phoenix",
+  "nand": "V-NAND 3-bit MLC", "dram_cache": true, "mtbf": "1.5 million hours",
+  "encryption": "AES 256-bit"
+}', 7),
 
--- Insert order_table
-INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment) VALUES 
-('2024-03-15 14:00:00', 'Credit Card', 'approving', 2, 4500.00),
-('2024-03-16 10:30:00', 'PayPal', 'on delivering', 3, 4500.00),
-('2024-03-17 16:45:00', 'Bank Transfer', 'completed', 2, 4500.00);
+-- Product 8: PSU
+('{
+  "brand": "Cooler Master", "wattage": 750, "efficiency": "80+ Gold",
+  "modular": "Semi-Modular", "fan_size": "135mm", "protection": "OVP/UVP/SCP/OCP",
+  "input_voltage": "100-240V", "pcb": "Double-layer", "eps_connectors": 2,
+  "sata_connectors": 6, "gpu_support": "Up to RTX 4080", "form_factor": "ATX",
+  "noise_level": "20dB", "length": "160mm"
+}', 8),
 
--- Insert order_detail
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES 
-(1, 1, 1, 1500.00),
-(2, 2, 1, 900.00),
-(3, 3, 2, 1100.00);
+-- Product 9: Mouse
+('{
+  "brand": "Logitech", "model": "G Pro Wireless", "dpi": 25600, "buttons": 6,
+  "sensor": "HERO", "connection": "Wireless", "battery_life": "60 hours",
+  "weight": "80g", "rgb": true, "switch_lifetime": "50M clicks",
+  "shape": "Ambidextrous", "polling_rate": "1000Hz", "software": "G HUB"
+}', 9),
 
--- Insert shipping
-INSERT INTO shipping (shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address) VALUES 
-('2024-03-18', 'Standard', 'completed', 1, 1, '123 Elm Street'),
-('2024-03-19', 'Express', 'failed', 2, 2, '456 Maple Street'),
-('2024-03-20', 'Standard', 'completed', 3, 3, '789 Oak Street');
+-- Product 10: Keyboard
+('{
+  "brand": "Razer", "model": "Huntsman Mini", "switch_type": "Optical",
+  "layout": "60%", "backlight": "RGB", "connection": "Wired", "key_rollover": "NKRO",
+  "polling_rate": "1000Hz", "frame": "Aluminum", "cable": "Detachable USB-C",
+  "macro_support": true, "onboard_memory": true, "software": "Razer Synapse",
+  "actuation_point": "1.0mm", "lifespan": "100M keystrokes"
+}', 10);
 
--- Insert cart
-INSERT INTO cart (id_customer, id_product, quantity) VALUES 
+
+INSERT INTO supplier (name, phonenumber, email, address) VALUES
+('FPT Trading', '0901234567', 'contact@fpt.vn', 'Hà Nội'),
+('Synnex FPT', '0912345678', 'sales@synnexfpt.vn', 'TP.HCM'),
+('An Phat', '0934567890', 'support@anphat.vn', 'Hà Nội'),
+('Phong Vu', '0945678901', 'info@phongvu.vn', 'TP.HCM'),
+('GearVN', '0987654321', 'hello@gearvn.com', 'TP.HCM'),
+('NguyenCongPC', '0978123456', 'sales@nguyencongpc.vn', 'Hà Nội'),
+('Hanoicomputer', '0966789123', 'cs@hanoicomputer.vn', 'Hà Nội'),
+('CellphoneS', '0909123456', 'info@cellphones.com.vn', 'TP.HCM'),
+('Tiki Trading', '0911987654', 'trade@tiki.vn', 'TP.HCM'),
+('LazadaTech', '0933123123', 'tech@lazada.vn', 'TP.HCM');
+
+INSERT INTO importing (date, total_price, id_supplier) VALUES
+('2025-04-01', 10000, 1),
+('2025-04-02', 8000, 2),
+('2025-04-03', 12000, 3),
+('2025-04-04', 7000, 4),
+('2025-04-05', 9000, 5),
+('2025-04-06', 6500, 6),
+('2025-04-07', 11000, 7),
+('2025-04-08', 7300, 8),
+('2025-04-09', 8600, 9),
+('2025-04-10', 9900, 10);
+
+INSERT INTO importing_detail (id_importing, id_product, quantity, subtotalprice) VALUES
+(1, 1, 5, 7500),
+(2, 2, 3, 1650),
+(3, 3, 4, 1280),
+(4, 4, 2, 1600),
+(5, 5, 5, 650),
+(6, 6, 10, 600),
+(7, 7, 6, 600),
+(8, 8, 4, 360),
+(9, 9, 8, 640),
+(10, 10, 7, 595);
+
+INSERT INTO voucher (voucher_code, voucher_value, date_start, date_end) VALUES
+('SALE10', 10, '2025-04-01', '2025-04-30'),
+('FREESHIP', 5, '2025-04-01', '2025-05-01'),
+('TECH15', 15, '2025-04-10', '2025-05-10'),
+('GEAR20', 20, '2025-04-15', '2025-05-15'),
+('HOTDEAL5', 5, '2025-04-20', '2025-05-20'),
+('SUMMER30', 30, '2025-05-01', '2025-06-01'),
+('FLASH50', 50, '2025-04-18', '2025-04-20'),
+('WELCOME', 10, '2025-04-01', '2025-12-31'),
+('VIP25', 25, '2025-05-01', '2025-05-31'),
+('BLACKFRIDAY', 40, '2025-11-25', '2025-11-30');
+
+INSERT INTO customer (first_name, last_name, gender, email, phone, address) VALUES
+('Nguyen', 'An', 'male', 'user1@gmail.com', '0911111111', 'Hà Nội'),
+('Tran', 'Binh', 'male', 'user2@gmail.com', '0922222222', 'TP.HCM'),
+('Le', 'Chi', 'female', 'user3@gmail.com', '0933333333', 'Đà Nẵng'),
+('Pham', 'Dung', 'female', 'user4@gmail.com', '0944444444', 'Cần Thơ'),
+('Hoang', 'E', 'male', 'user5@gmail.com', '0955555555', 'Hải Phòng'),
+('Dang', 'G', 'female', 'user6@gmail.com', '0966666666', 'Huế'),
+('Do', 'H', 'male', 'user7@gmail.com', '0977777777', 'Bình Dương'),
+('Vo', 'I', 'female', 'user8@gmail.com', '0988888888', 'Nha Trang'),
+('Nguyen', 'K', 'male', 'user9@gmail.com', '0999999999', 'Hà Nội'),
+('Tran', 'L', 'female', 'user10@gmail.com', '0900000000', 'TP.HCM');
+
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment) VALUES
+('2025-04-01 10:00:00', 'COD', 'completed', 2, 1700),
+('2025-04-02 12:30:00', 'Bank Transfer', 'delivered', 3, 370),
+('2025-04-03 14:00:00', 'COD', 'on delivering', 4, 950),
+('2025-04-04 09:00:00', 'COD', 'approving', 5, 150),
+('2025-04-05 11:15:00', 'Credit Card', 'completed', 6, 600),
+('2025-04-06 16:45:00', 'COD', 'delivered', 7, 120),
+('2025-04-07 13:00:00', 'Bank Transfer', 'completed', 8, 110),
+('2025-04-08 15:30:00', 'COD', 'on delivering', 9, 640),
+('2025-04-09 17:00:00', 'COD', 'approving', 10, 105),
+('2025-04-10 10:00:00', 'Credit Card', 'completed', 2, 100);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES
+(1, 1, 1, 1700),
+(2, 3, 1, 370),
+(3, 4, 1, 950),
+(4, 5, 1, 150),
+(5, 6, 8, 600),
+(6, 7, 1, 120),
+(7, 8, 1, 110),
+(8, 9, 8, 640),
+(9, 10, 1, 105),
+(10, 9, 1, 100);
+
+INSERT INTO shipping (shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address) VALUES
+('2025-04-02', 'GHN', 'completed', 1, 1, 'Hà Nội'),
+('2025-04-03', 'GHTK', 'completed', 2, 2, 'TP.HCM'),
+('2025-04-04', 'J&T', 'failed', 3, 3, 'Đà Nẵng'),
+('2025-04-05', 'GHN', 'completed', 4, 4, 'Cần Thơ'),
+('2025-04-06', 'VNPost', 'completed', 5, 5, 'Hải Phòng'),
+('2025-04-07', 'GHTK', 'completed', 6, 6, 'Huế'),
+('2025-04-08', 'GHN', 'completed', 7, 7, 'Bình Dương'),
+('2025-04-09', 'J&T', 'completed', 8, 8, 'Nha Trang'),
+('2025-04-10', 'VNPost', 'completed', 9, 9, 'Hà Nội'),
+('2025-04-11', 'GHN', 'completed', 10, 10, 'TP.HCM');
+
+INSERT INTO cart (id_customer, id_product, quantity) VALUES
 (1, 2, 1),
 (2, 3, 2),
-(3, 1, 1);
+(3, 5, 1),
+(4, 6, 2),
+(5, 8, 1),
+(6, 9, 1),
+(7, 10, 1),
+(8, 7, 1),
+(9, 4, 1),
+(10, 1, 1);
