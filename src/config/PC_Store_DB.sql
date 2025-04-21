@@ -5,7 +5,7 @@ USE pc_store
 CREATE TABLE brand (
     brand_id INT PRIMARY KEY AUTO_INCREMENT,
     brand_name VARCHAR(255) NOT NULL
-); không MSI
+);
 
 -- Bảng category
 CREATE TABLE category (
@@ -24,7 +24,7 @@ CREATE TABLE product (
     brand_id INT,
     category_id INT,
     origin VARCHAR(255),
-    warranty VARCHAR(255), (theo tháng)
+    warranty VARCHAR(255), 
     FOREIGN KEY (brand_id) REFERENCES brand(brand_id),
     FOREIGN KEY (category_id) REFERENCES category(id)
 );
