@@ -36,25 +36,20 @@ Brand.findById = (id, result) => {
 };
 
 
-Brand.getAll = (name, result) => {
-  let query = "SELECT * FROM brand";
-  let params = [];
+Brand.getAll = (result) => {
+  const query = "SELECT * FROM brand";
 
-  if (name) {
-    query += " WHERE brand_name LIKE ?";
-    params.push(`%${name}%`);
-  }
-
-  sql.query(query, params, (err, res) => {
+  sql.query(query, (err, res) => {
     if (err) {
       console.log("error: ", err);
-      result(null, err);
+      result(err, null);
       return;
     }
 
     result(null, res);
   });
 };
+
 
 
 Brand.updateById = (id, brand, result) => {

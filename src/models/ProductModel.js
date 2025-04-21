@@ -44,9 +44,19 @@ Product.findById = (id, result) => {
 
 Product.getAll = (name, result) => {
   let query = `
-    SELECT p.*, c.name as "category_name"
-    FROM product p
-    LEFT JOIN category c ON p.category_id = c.id
+    SELECT 
+    p.*, 
+    c.name AS category_name, 
+    pi.URL AS image
+FROM product p
+LEFT JOIN category c ON p.category_id = c.id
+LEFT JOIN product_image pi ON pi.id = (
+    SELECT id FROM product_image 
+    WHERE product_id = p.id 
+    ORDER BY id ASC 
+    LIMIT 1
+)
+
   `;
   let params = [];
 
