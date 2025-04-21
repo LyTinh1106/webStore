@@ -175,7 +175,7 @@ JOIN
 
 
 
--- Dữ liệu mẫu
+
 INSERT INTO brand (brand_name) VALUES
 ('ASUS'), ('Acer'), ('Gigabyte'), ('Intel'), ('AMD'),
 ('Corsair'), ('Logitech'), ('Razer'), ('HP'), ('Dell');
