@@ -144,11 +144,14 @@ Product.remove = (id, result) => {
         }
 
         console.log("Đã xóa sản phẩm với id:", id);
-        result(null, res3); // Trả về kết quả sau khi xóa
+        result(null, res3); 
       });
     });
   });
 };
+//Tim kiem san pham
+
+
 
 
 module.exports = Product;
