@@ -1,4 +1,4 @@
-
+const sql = require('../config/database');
 
 const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
@@ -59,7 +59,6 @@ const getStore = (req, res) => {
               products,
               categories,
               brands
-              
             });
           });
         });
@@ -96,13 +95,13 @@ const getStore = (req, res) => {
       console.log("Images:", images);
       console.log("SpecFile:", specFile);
 
-      // Đọc nội dung specFile và chuyển thành JSON
+      
       let specJson = null;
       if (specFile) {
         try {
           const filePath = path.join(__dirname, '../public/images/', specFile.filename); // Điều chỉnh đường dẫn theo cấu trúc thư mục của bạn
           const fileContent = await fs.readFile(filePath, 'utf-8');
-          specJson = JSON.parse(fileContent); // Chuyển nội dung file thành JSON
+          specJson = JSON.parse(fileContent); 
           console.log("Spec JSON:", specJson);
         } catch (err) {
           console.error("Lỗi khi đọc hoặc parse specFile:", err);
@@ -110,7 +109,7 @@ const getStore = (req, res) => {
         }
       }
 
-      // Tạo đối tượng sản phẩm mới
+      
       const newProduct = {
         fancy_id: productCode,
         name: productName,
@@ -121,10 +120,10 @@ const getStore = (req, res) => {
         category_id: category,
         origin,
         warranty,
-        // spec_file: specFile ? specFile.filename : null // Thêm specFile nếu cần
+        
       };
 
-      // Insert sản phẩm
+     
       Product.create(newProduct, async (err, createdProduct) => {
         if (err) {
           console.error("Lỗi khi tạo sản phẩm:", err);
@@ -134,7 +133,7 @@ const getStore = (req, res) => {
         const productId = createdProduct.id || createdProduct.insertId;
         const imageInserts = [];
 
-        // Thêm tất cả ảnh vào imageInserts
+        
         images.forEach(filename => {
           imageInserts.push({
             product_id: productId,
@@ -142,13 +141,13 @@ const getStore = (req, res) => {
           });
         });
 
-        // Gọi hàm tạo thông số kỹ thuật nếu specJson tồn tại
+        
         if (specJson) {
           try {
-            // Chuyển đổi specJson thành định dạng phù hợp với bảng technical_specification
+            
             const newDetail = {
               product_id: productId,
-              specs: JSON.stringify(specJson) // Lưu specJson dưới dạng chuỗi JSON
+              specs: JSON.stringify(specJson) 
             };
 
             // Gọi TechnicalSpecification.create
@@ -296,11 +295,84 @@ const getStore = (req, res) => {
     });
   };
 
+  const filterByCategory = (req, res) => {
+    
+    const categoryIds = (req.body.category_ids || []).map(Number);
+  
+    if (categoryIds.length === 0) {
+      return res.json([]); // Không có danh mục → không lọc
+    }
+  
+    const placeholders = categoryIds.map(() => '?').join(',');
+    const query = `
+      SELECT p.*, c.name AS category_name, pi.URL AS image
+      FROM product p
+      LEFT JOIN category c ON p.category_id = c.id
+      LEFT JOIN product_image pi ON pi.id = (
+        SELECT id FROM product_image
+        WHERE product_id = p.id
+        ORDER BY id ASC LIMIT 1
+      )
+      WHERE p.category_id IN (${placeholders})
+    `;
+  
+    const sql = require('../config/database');
+    sql.query(query, categoryIds, (err, result) => {
+      if (err) {
+        console.error("Lỗi lọc danh mục:", err);
+        return res.status(500).json({ error: 'Lỗi server khi lọc danh mục' });
+      }
+  
+      res.json(result);
+    });
+  };
+  
+  const filterByBrand = (req, res) => {
+    
+    const brandIds = (req.body.brand_ids || []).map(Number);
+  
+    if (brandIds.length === 0) {
+      return res.json([]); // Không có brand → không lọc
+    }
+  
+    const placeholders = brandIds.map(() => '?').join(',');
+    const query = `
+      SELECT p.*, c.name AS category_name, pi.URL AS image
+      FROM product p
+      LEFT JOIN category c ON p.category_id = c.id
+      LEFT JOIN product_image pi ON pi.id = (
+        SELECT id FROM product_image
+        WHERE product_id = p.id
+        ORDER BY id ASC LIMIT 1
+      )
+      WHERE p.brand_id IN (${placeholders})
+    `;
+  
+    const sql = require('../config/database');
+    sql.query(query, brandIds, (err, result) => {
+      if (err) {
+        console.error("Lỗi lọc thương hiệu:", err);
+        return res.status(500).json({ error: 'Lỗi server khi lọc thương hiệu' });
+      }
+  
+      res.json(result);
+    });
+  };
+  
+  
+  
+
+
+
+
   module.exports = {
     getProduct,
     getStore,
     createProduct,
     getProductById,
     updateProduct,
-    deleteProduct
+    deleteProduct,
+    filterByCategory,
+    filterByBrand
+    
   };

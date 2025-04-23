@@ -4,7 +4,9 @@ const {
   getProduct,
   getProductById,
   updateProduct,
-  deleteProduct
+  deleteProduct,
+  filterByCategory,
+  filterByBrand
 } = require('../controllers/ProductController');
 const upload = require('../middleware/upload')
 
@@ -38,5 +40,9 @@ router.put(
 
 
 router.delete('/delete/:id', deleteProduct);
+router.post('/filter/categories', filterByCategory);
+router.post('/filter/brands', filterByBrand);
+
+
 
 module.exports = router;

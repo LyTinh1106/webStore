@@ -2437,3 +2437,7 @@ hr {
   background: linear-gradient(to right, #E4E7ED, #626262, #E4E7ED);
   margin: 20px 0;
 }
+
+.d-none {
+  display: none !important;
+}
