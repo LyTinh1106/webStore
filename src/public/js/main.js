@@ -234,52 +234,43 @@
 
 })(jQuery);
 
-
-
-// --- LỌC THEO CATEGORY ---
+// Tách lọc theo Category
 const categoryCheckboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
-categoryCheckboxes.forEach(cb => cb.addEventListener('change', filterProducts));
+categoryCheckboxes.forEach(cb => cb.addEventListener('change', filterByCategory));
 
-// --- LỌC THEO BRAND ---
-const brandCheckboxes = document.querySelectorAll('.brand-filter input[type="checkbox"]');
-brandCheckboxes.forEach(cb => cb.addEventListener('change', filterProducts));
+async function filterByCategory() {
+  const category_ids = Array.from(categoryCheckboxes)
+    .filter(cb => cb.checked)
+    .map(cb => cb.value);
 
-async function filterProducts() {
-  const category_ids = Array.from(categoryCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-  const brand_ids = Array.from(brandCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
-
-  let url = '';
-  let payload = {};
-
-  if (category_ids.length > 0) {
-	url = '/api/product/filter/categories';
-	payload = { category_ids };
-  } else if (brand_ids.length > 0) {
-	url = '/api/product/filter/brands';
-	payload = { brand_ids };
-  } else {
-	// Nếu không chọn gì → hiện toàn bộ
-	document.getElementById('filtered-products').classList.add('d-none');
-	document.getElementById('all-products').classList.remove('d-none');
-	return;
-  }
-
-  const res = await fetch(url, {
-	method: 'POST',
-	headers: { 'Content-Type': 'application/json' },
-	body: JSON.stringify(payload)
+  const res = await fetch('/api/product/filter/categories', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ category_ids })
   });
 
   const products = await res.json();
-  renderFilteredProducts(products);
+  renderFilteredProducts(products, category_ids.length > 0);
 }
 
-function renderFilteredProducts(products) {
-  const filteredBox = document.getElementById('filtered-products');
-  const allBox = document.getElementById('all-products');
-  filteredBox.innerHTML = '';
+// Tách lọc theo Brand
+const brandCheckboxes = document.querySelectorAll('.brand-filter input[type="checkbox"]');
+brandCheckboxes.forEach(cb => cb.addEventListener('change', filterByBrand));
 
+async function filterByBrand() {
+  const brand_ids = Array.from(brandCheckboxes)
+    .filter(cb => cb.checked)
+    .map(cb => cb.value);
 
+  const res = await fetch('/api/product/filter/brands', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ brand_ids })
+  });
+
+  const products = await res.json();
+  renderFilteredProducts(products, brand_ids.length > 0);
+}
 // tách lọc theo thanh kéo trượt giá
 const priceMin = document.getElementById('price-min');
 const priceMax = document.getElementById('price-max');
@@ -295,6 +286,17 @@ priceMax.addEventListener('change', () => {
   const max = parseInt(priceMax.value) || 999999;
   filterByPrice(min, max);
 });
+
+async function filterByPrice(min, max) {
+	const res = await fetch('/api/product/filter-price', {
+	  method: 'POST',
+	  headers: { 'Content-Type': 'application/json' },
+	  body: JSON.stringify({ min, max })
+	});
+  
+	const products = await res.json();
+	renderFilteredProducts(products, true);
+  }
 
 // Hàm render sản phẩm lọc
 function renderFilteredProducts(products, shouldShowFiltered) {
@@ -328,8 +330,12 @@ function renderFilteredProducts(products, shouldShowFiltered) {
             <h3 class="product-name"><a href="#">${p.name}</a></h3>
             <h4 class="product-price">$${p.retail_price}</h4>
             <div class="product-rating">
-              ${[...Array(5)].map(() => '<i class="fa fa-star"></i>').join('')}
-            </div>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+			</div>
             <div class="product-btns">
               <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
               <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
@@ -344,14 +350,5 @@ function renderFilteredProducts(products, shouldShowFiltered) {
     `;
   });
 }
-async function filterByPrice(min, max) {
-  const res = await fetch('/api/product/filter-price', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ min, max })
-  });
 
-  const products = await res.json();
-  renderFilteredProducts(products, true);
-}
 
