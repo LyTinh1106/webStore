@@ -15,8 +15,17 @@ const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 
 const getHomePage = (req, res) => {
-    res.render('HomePage', { user: req.user || null });
-  };
+  Product.getAll(null, (err, products) => {
+    if (err) {
+      return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm." });
+    }
+
+    res.render('HomePage', {
+      user: req.user || null,
+      products
+    });
+  });
+};
 
 const getRegister = (req, res) => {
   res.render('register');

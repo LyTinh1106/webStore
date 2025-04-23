@@ -33,7 +33,4 @@ router.post('/send-reset-code', sendResetPasswordEmail)
 router.post('/send-reset-code/:token', resetPassword);
 router.post('/reset-password/:token', resetPassword);
 
-
-
-
-  module.exports = router
+module.exports = router
