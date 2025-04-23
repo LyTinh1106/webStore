@@ -159,7 +159,8 @@
 						<!-- /aside Widget -->
 					</div>
 					<!-- /ASIDE -->
-
+                    
+					  
 					<!-- STORE -->
 					<div id="store" class="col-md-9">
 						<!-- store top filter -->
@@ -185,12 +186,25 @@
 								<li><a href="#"><i class="fa fa-th-list"></i></a></li>
 							</ul>
 						</div>
-
+						
+						  
+						  
 						<!-- FILTERED PRODUCTS -->
 						<div id="filtered-products" class="row d-none"></div>
-
-						<!-- DEFAULT PRODUCTS -->
+						
 						<div id="all-products" class="row">
+							<div id="filtered-products" class="row d-none"></div>
+						<% if (typeof keyword !== 'undefined' && keyword) { %>
+							<h3>Kết quả cho: "<%= keyword %>"</h3>
+						  <% } %>
+						  
+						  <% if (products.length === 0) { %>
+							<p>Không tìm thấy sản phẩm phù hợp.</p>
+						  <% } else { %>
+							<% products.forEach(product => { %>
+							  <!-- Hiển thị sản phẩm -->
+							<% }) %>
+						  <% } %>
 							<% products.forEach((product)=> { %>
 								<div class="col-md-4 col-xs-6">
 									<div class="product">
@@ -262,6 +276,8 @@
 			<script src="/js/nouislider.min.js"></script>
 			<script src="/js/jquery.zoom.min.js"></script>
 			<script src="/js/main.js"></script>
+
+
 
 </body>
 
