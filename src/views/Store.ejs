@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -39,30 +40,55 @@
 
 <body>
 	<%- include('./header.ejs') %>
-  
-	<!-- SECTION -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<!-- ASIDE -->
-				<div id="aside" class="col-md-3">
-					<!-- aside Widget -->
-					<div class="aside">
-						<h3 class="aside-title">DANH MỤC</h3>
-						<div class="checkbox-filter">
-							<% categories.forEach((category, index) => { %>
-								<div class="input-checkbox">
-								  <input type="checkbox" id="category-<%= index %>" name="category" value="<%= category.id %>">
-								  <label for="category-<%= index %>">
-									<span></span>
-									<%= category.name %>
-								  </label>
-								</div>
-							  <% }) %>
-							 		
 
+
+
+
+
+		<!-- ĐƯỜNG DẪN -->
+		<div id="breadcrumb" class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<div class="col-md-12">
+						<ul class="breadcrumb-tree">
+							<li><a href="#">Trang Chủ</a></li>
+							<li><a href="#">Tất Cả Danh Mục</a></li>
+							<li><a href="#">Phụ Kiện</a></li>
+							<li class="active">Tai Nghe (227,490 Kết Quả)</li>
+						</ul>
+					</div>
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /ĐƯỜNG DẪN -->
+
+
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- ASIDE -->
+					<div id="aside" class="col-md-3">
+						<!-- aside Widget -->
+						<div class="aside">
+							<h3 class="aside-title">DANH MỤC</h3>
+							<div class="checkbox-filter category-filter">
+								<% categories.forEach((category, index)=> { %>
+									<div class="input-checkbox">
+										<input type="checkbox" id="category-<%= index %>" name="category"
+											value="<%= category.id %>">
+										<label for="category-<%= index %>">
+											<span></span>
+											<%= category.name %>
+										</label>
+									</div>
+									<% }) %>
 							</div>
 						</div>
 
@@ -127,26 +153,9 @@
 								</div>
 							</div>
 
-					
-						</div> -->
-						<% products.forEach((product) => { %>
-							<div class="col-md-4 col-xs-6">
-							  <div class="product">
-								<div class="product-img">
-									<img src="/images/<%= product.image || 'noImage.jpg' %>" alt="">
-								  <div class="product-label">
-									<!-- <% if (product.sale_percent) { %>
-									  <span class="sale">-<%= product.sale_percent %>%</span>
-									<% } %> -->
-									<!-- <% if (product.is_new) { %>
-									  <span class="new">NEW</span>
-									<% } %> -->
-								  </div>
-
 							<div class="product-widget">
 								<div class="product-img">
 									<img src="/images/product02.png" alt="">
-
 								</div>
 								<div class="product-body">
 									<p class="product-category">Category</p>
