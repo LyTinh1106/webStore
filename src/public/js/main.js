@@ -228,3 +228,82 @@
 
 })(jQuery);
 
+// --- LỌC THEO CATEGORY ---
+const categoryCheckboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
+categoryCheckboxes.forEach(cb => cb.addEventListener('change', filterProducts));
+
+// --- LỌC THEO BRAND ---
+const brandCheckboxes = document.querySelectorAll('.brand-filter input[type="checkbox"]');
+brandCheckboxes.forEach(cb => cb.addEventListener('change', filterProducts));
+
+async function filterProducts() {
+  const category_ids = Array.from(categoryCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+  const brand_ids = Array.from(brandCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+
+  let url = '';
+  let payload = {};
+
+  if (category_ids.length > 0) {
+	url = '/api/product/filter/categories';
+	payload = { category_ids };
+  } else if (brand_ids.length > 0) {
+	url = '/api/product/filter/brands';
+	payload = { brand_ids };
+  } else {
+	// Nếu không chọn gì → hiện toàn bộ
+	document.getElementById('filtered-products').classList.add('d-none');
+	document.getElementById('all-products').classList.remove('d-none');
+	return;
+  }
+
+  const res = await fetch(url, {
+	method: 'POST',
+	headers: { 'Content-Type': 'application/json' },
+	body: JSON.stringify(payload)
+  });
+
+  const products = await res.json();
+  renderFilteredProducts(products);
+}
+
+function renderFilteredProducts(products) {
+  const filteredBox = document.getElementById('filtered-products');
+  const allBox = document.getElementById('all-products');
+
+  filteredBox.innerHTML = '';
+  allBox.classList.add('d-none');
+  filteredBox.classList.remove('d-none');
+
+  if (!products || products.length === 0) {
+	filteredBox.innerHTML = '<p>Không có sản phẩm phù hợp.</p>';
+	return;
+  }
+
+  products.forEach(p => {
+	filteredBox.innerHTML += `
+	  <div class="col-md-4 col-xs-6">
+		<div class="product">
+		  <div class="product-img">
+			<img src="/images/${p.image}" alt="${p.name}">
+		  </div>
+		  <div class="product-body">
+			<p class="product-category">${p.category_name || ''}</p>
+			<h3 class="product-name"><a href="#">${p.name}</a></h3>
+			<h4 class="product-price">$${p.retail_price}</h4>
+			<div class="product-rating">
+			  ${[...Array(5)].map(() => '<i class="fa fa-star"></i>').join('')}
+			</div>
+			<div class="product-btns">
+			  <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+			  <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+			  <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+			</div>
+		  </div>
+		  <div class="add-to-cart">
+			<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+		  </div>
+		</div>
+	  </div>
+	`;
+  });
+}
