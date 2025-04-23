@@ -198,16 +198,48 @@ VALUES
 ('P010', 'Razer Huntsman Mini', 'Compact gaming keyboard RGB', 85, 105, 8, 9, 'Singapore', '24');
 
 INSERT INTO product_image (product_id, URL) VALUES
-(1, 'https://example.com/laptop1.jpg'),
-(2, 'https://example.com/cpu1.jpg'),
-(3, 'https://example.com/cpu2.jpg'),
-(4, 'https://example.com/gpu1.jpg'),
-(5, 'https://example.com/mainboard1.jpg'),
-(6, 'https://example.com/ram1.jpg'),
-(7, 'https://example.com/ssd1.jpg'),
-(8, 'https://example.com/psu1.jpg'),
-(9, 'https://example.com/mouse1.jpg'),
-(10, 'https://example.com/keyboard1.jpg');
+(1, 'ASUS_ROG_Zephyrus_G14_1.jpg'),
+(1, 'ASUS_ROG_Zephyrus_G14_2.jpg'),
+(1, 'ASUS_ROG_Zephyrus_G14_3.jpg'),
+(1, 'ASUS_ROG_Zephyrus_G14_4.jpg'),
+
+(2, 'Intel_Core_i9_13900K_1.jpg'),
+(2, 'Intel_Core_i9_13900K_2.jpg'),
+(2, 'Intel_Core_i9_13900K_3.jpg'),
+
+(3, 'AMD_Ryzen_7_5800X_1.jpg'),
+(3, 'AMD_Ryzen_7_5800X_2.jpg'),
+(3, 'AMD_Ryzen_7_5800X_3.jpg'),
+
+(4, 'Gigabyte_RTX_4070_Ti_1.png'),
+(4, 'Gigabyte_RTX_4070_Ti_2.jpg'),
+(4, 'Gigabyte_RTX_4070_Ti_3.png'),
+
+(5, 'ASUS_TUF_B660M_1.jpg'),
+(5, 'ASUS_TUF_B660M_2.png'),
+(5, 'ASUS_TUF_B660M_3.jpg'),
+
+(6, 'Corsair_Vengeance_2x8GB_1.jpg'),
+(6, 'Corsair_Vengeance_2x8GB_2.jpg'),
+(6, 'Corsair_Vengeance_2x8GB_3.jpg'),
+
+(7, 'Samsung_970_EVO_1TB_1.jpg'),
+(7, 'Samsung_970_EVO_1TB_2.jpg'),
+(7, 'Samsung_970_EVO_1TB_3.jpg'),
+
+(8, 'Cooler_Master_750W_PSU_1.jpg'),
+(8, 'Cooler_Master_750W_PSU_2.jpg'),
+(8, 'Cooler_Master_750W_PSU_3.jpg'),
+
+(9, 'Logitech_G_Pro_Wireless_1.png'),
+(9, 'Logitech_G_Pro_Wireless_2.png'),
+(9, 'Logitech_G_Pro_Wireless_3.png'),
+(9, 'Logitech_G_Pro_Wireless_4.png'),
+(9, 'Logitech_G_Pro_Wireless_5.jpg'),
+
+(10, 'Razer_Huntsman_Mini_1.jpg'),
+(10, 'Razer_Huntsman_Mini_2.jpg'),
+(10, 'Razer_Huntsman_Mini_3.jpg');
 
 INSERT INTO technical_specification (specs, product_id) VALUES
 -- Product 1: Laptop
