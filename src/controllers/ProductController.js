@@ -362,10 +362,68 @@ const getStore = (req, res) => {
       res.json(result);
     });
   };
+  //tìm kiếm
+  const searchProductRender = (req, res) => {
+    const keyword = (req.query.q || '').trim();
+  
+    const loadData = (products) => {
+      Category.getAll((_, categories) => {
+        Brand.getAll((_, brands) => {
+          res.render('Store', {
+            user: req.user || null,
+            products,
+            keyword,
+            categories: categories || [],
+            brands: brands || []
+          });
+        });
+      });
+    };
+  
+    if (!keyword) {
+      const query = `
+        SELECT p.*, c.name AS category_name, pi.URL AS image
+        FROM product p
+        LEFT JOIN category c ON p.category_id = c.id
+        LEFT JOIN product_image pi ON pi.id = (
+          SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
+        )
+      `;
+      return sql.query(query, [], (_, results) => loadData(results || []));
+    }
+  
+    const exactQuery = `
+      SELECT p.*, c.name AS category_name, pi.URL AS image
+      FROM product p
+      LEFT JOIN category c ON p.category_id = c.id
+      LEFT JOIN product_image pi ON pi.id = (
+        SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
+      )
+      WHERE p.name = ?
+      LIMIT 1
+    `;
+  
+    sql.query(exactQuery, [keyword], (err, exactResults) => {
+      if (err) return loadData([]);
+      if (exactResults.length > 0) return loadData(exactResults);
+  
+      const likeQuery = `
+        SELECT p.*, c.name AS category_name, pi.URL AS image
+        FROM product p
+        LEFT JOIN category c ON p.category_id = c.id
+        LEFT JOIN product_image pi ON pi.id = (
+          SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
+        )
+        WHERE p.name LIKE ?
+      `;
+  
+      sql.query(likeQuery, [`%${keyword}%`], (_, likeResults) => {
+        loadData(likeResults || []);
+      });
+    });
+  };
   
   
-  
-
 
 
 
@@ -377,6 +435,6 @@ const getStore = (req, res) => {
     updateProduct,
     deleteProduct,
     filterByCategory,
-    filterByBrand
-    
+    filterByBrand,
+    searchProductRender
   };

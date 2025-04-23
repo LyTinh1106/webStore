@@ -26,14 +26,19 @@
                 <!-- /LOGO -->
 
                 <!-- SEARCH BAR -->
-                <div class="col-md-6">
-                    <div class="header-search">
-                        <form>
-                            <input class="input" placeholder="Search here">
-                            <button class="search-btn">Search</button>
-                        </form>
-                    </div>
-                </div>
+                <!-- SEARCH BAR -->
+                <!-- SEARCH BAR -->
+<div class="col-md-6">
+    <div class="header-search">
+      <form id="search-form" method="GET" action="/store">
+        <input class="input" id="search-input" name="q" placeholder="Search here">
+        <button class="search-btn" type="submit">Search</button>
+      </form>
+    </div>
+  </div>
+  <!-- /SEARCH BAR -->
+
+
                 <!-- /SEARCH BAR -->
 
                 <!-- ACCOUNT -->
@@ -87,20 +92,27 @@
                                 <i class="fa fa-user-o me-1"></i>
                                 <% if (user && user.emails && user.emails[0]) { %>
                                     <%= user.emails[0].value.split('@')[0] %>
-                                <% } else { %>
-                                    Guest
-                                <% } %>
+                                        <% } else { %>
+                                            Guest
+                                            <% } %>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <% if (user) { %>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Đăng xuất</a></li>
-                                <% } else { %>
-                                    <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i> Đăng nhập</a></li>
-                                    <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i> Đăng ký</a></li>
-                                <% } %>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ</a>
+                                    </li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a>
+                                    </li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>
+                                            Đăng xuất</a></li>
+                                    <% } else { %>
+                                        <li><a class="dropdown-item" href="/login"><i
+                                                    class="fas fa-sign-in-alt me-2"></i> Đăng nhập</a></li>
+                                        <li><a class="dropdown-item" href="/register"><i
+                                                    class="fas fa-user-plus me-2"></i> Đăng ký</a></li>
+                                        <% } %>
                             </ul>
                         </div>
                         <!--/Account-->
@@ -132,7 +144,7 @@
                 <ul class="main-nav nav navbar-nav">
                     <li class="active"><a href="#">Trang Chủ</a></li>
                     <li><a href="#">Khuyến Mãi Hot</a></li>
-                    <li><a href="#">Danh Mục</a></li>
+                    <li><a href="/store/all">Danh Mục</a></li>
                     <li><a href="#">Laptop</a></li>
                     <li><a href="#">Điện Thoại</a></li>
                     <li><a href="#">Máy Ảnh</a></li>
@@ -145,6 +157,20 @@
         <!-- /container -->
     </nav>
     <!-- /NAVIGATION -->
+     <script>
+        // --- TÌM KIẾM QUA FORM HEADER ---
+  const searchForm = document.getElementById("search-form");
+if (searchForm) {
+  searchForm.addEventListener("submit", function (e) {
+    e.preventDefault();
+    const keyword = document.getElementById("search-input").value.trim();
+    if (keyword) {
+      window.location.href = `/store?q=${encodeURIComponent(keyword)}`;
+    }
+  });
+}
+     </script>
+
 </body>
 
 </html>

@@ -1,4 +1,5 @@
 const express = require('express');
+
 const {
   createProduct,
   getProduct,
@@ -6,16 +7,19 @@ const {
   updateProduct,
   deleteProduct,
   filterByCategory,
-  filterByBrand
+  filterByBrand,
+  searchProductRender
 } = require('../controllers/ProductController');
 const upload = require('../middleware/upload')
 
 const router = express.Router();
 
 router.get('/', getProduct);
+//tìm kiếm
+router.get('/store', searchProductRender);
 
 
-router.get('/:id', getProductById);
+// router.get('/:id', getProductById);
 
 
 router.post(
@@ -36,6 +40,7 @@ router.put(
   ]),
   updateProduct
 );
+
 
 
 

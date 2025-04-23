@@ -7,6 +7,7 @@ const {getCheckout} = require('../controllers/CheckoutController')
 const {getProduct, getStore} = require('../controllers/ProductController')
 const { checkAdmin } = require('../middleware/authMiddleware');
 const { sendResetPasswordEmail} = require('../controllers/AccountController');
+const { searchProductRender } = require('../controllers/ProductController');
 const router = express.Router()
 
 
@@ -16,7 +17,8 @@ router.get('/homepage', getHomePage)
 router.get('/login', getLogin)
 router.get('/checkout',getCheckout)
 router.get('/product',getProduct)
-router.get('/store',getStore)
+router.get('/store', searchProductRender);
+router.get('/store/all',getStore)
 router.get('/dashboard', getDashboard);
 router.get('/forgot-password',getForgotPassword);
 router.get('/reset-password',getResetPassword);
