@@ -200,6 +200,12 @@
 			var value = values[handle];
 			handle ? priceInputMax.value = value : priceInputMin.value = value
 		});
+		priceSlider.noUiSlider.on('change', function (values) {
+			const min = Math.round(values[0]);
+			const max = Math.round(values[1]);
+			filterByPrice(min, max);
+		  });
+		  
 	}
 	/////////////////////////////////////////
 	// Dropdown toggle on click + hover
@@ -227,6 +233,8 @@
 
 
 })(jQuery);
+
+
 
 // --- LỌC THEO CATEGORY ---
 const categoryCheckboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
@@ -269,41 +277,81 @@ async function filterProducts() {
 function renderFilteredProducts(products) {
   const filteredBox = document.getElementById('filtered-products');
   const allBox = document.getElementById('all-products');
-
   filteredBox.innerHTML = '';
+
+
+// tách lọc theo thanh kéo trượt giá
+const priceMin = document.getElementById('price-min');
+const priceMax = document.getElementById('price-max');
+
+priceMin.addEventListener('change', () => {
+  const min = parseInt(priceMin.value) || 0;
+  const max = parseInt(priceMax.value) || 999999;
+  filterByPrice(min, max);
+});
+
+priceMax.addEventListener('change', () => {
+  const min = parseInt(priceMin.value) || 0;
+  const max = parseInt(priceMax.value) || 999999;
+  filterByPrice(min, max);
+});
+
+// Hàm render sản phẩm lọc
+function renderFilteredProducts(products, shouldShowFiltered) {
+  const filteredBox = document.getElementById('filtered-products');
+  const allBox = document.getElementById('all-products');
+  filteredBox.innerHTML = '';
+
+  if (!shouldShowFiltered) {
+    filteredBox.classList.add('d-none');
+    allBox.classList.remove('d-none');
+    return;
+  }
+
   allBox.classList.add('d-none');
   filteredBox.classList.remove('d-none');
 
   if (!products || products.length === 0) {
-	filteredBox.innerHTML = '<p>Không có sản phẩm phù hợp.</p>';
-	return;
+    filteredBox.innerHTML = '<p>Không có sản phẩm phù hợp.</p>';
+    return;
   }
 
   products.forEach(p => {
-	filteredBox.innerHTML += `
-	  <div class="col-md-4 col-xs-6">
-		<div class="product">
-		  <div class="product-img">
-			<img src="/images/${p.image}" alt="${p.name}">
-		  </div>
-		  <div class="product-body">
-			<p class="product-category">${p.category_name || ''}</p>
-			<h3 class="product-name"><a href="#">${p.name}</a></h3>
-			<h4 class="product-price">$${p.retail_price}</h4>
-			<div class="product-rating">
-			  ${[...Array(5)].map(() => '<i class="fa fa-star"></i>').join('')}
-			</div>
-			<div class="product-btns">
-			  <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-			  <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-			  <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-			</div>
-		  </div>
-		  <div class="add-to-cart">
-			<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-		  </div>
-		</div>
-	  </div>
-	`;
+    filteredBox.innerHTML += `
+      <div class="col-md-4 col-xs-6">
+        <div class="product">
+          <div class="product-img">
+            <img src="/images/${p.image}" alt="${p.name}">
+          </div>
+          <div class="product-body">
+            <p class="product-category">${p.category_name || ''}</p>
+            <h3 class="product-name"><a href="#">${p.name}</a></h3>
+            <h4 class="product-price">$${p.retail_price}</h4>
+            <div class="product-rating">
+              ${[...Array(5)].map(() => '<i class="fa fa-star"></i>').join('')}
+            </div>
+            <div class="product-btns">
+              <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+              <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+              <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+            </div>
+          </div>
+          <div class="add-to-cart">
+            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+          </div>
+        </div>
+      </div>
+    `;
   });
 }
+async function filterByPrice(min, max) {
+  const res = await fetch('/api/product/filter-price', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ min, max })
+  });
+
+  const products = await res.json();
+  renderFilteredProducts(products, true);
+}
+

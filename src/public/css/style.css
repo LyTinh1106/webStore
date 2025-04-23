@@ -822,9 +822,6 @@ textarea.input {
   }
 }
 
-
-
-
 /* Reset body */
 
 /*=========================================================
@@ -1235,26 +1232,41 @@ textarea.input {
   z-index: 10;
 }
 
+.spotlight-products-slick-nav {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 10px;
+  z-index: 10;
+}
+
+
 .products-slick-nav .slick-next{
   position: static;
   -webkit-transform: none;
   -ms-transform: none;
   transform: none;
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   display: inline-block !important;
   margin: 0px 2px;
+  right: -50px;
 }
 
 .products-slick-nav .slick-prev {
   position: static;
   -webkit-transform: none;
-  -ms-transform: none;
+  -ms-transform: none;  
   transform: none;
-  width: 40px;
-  height: 40px;
+  width: 20px;
+  height: 20px;
   display: inline-block !important;
   margin: 0px 2px;
+  left: -50px;
+
 }
 
 .products-slick-nav .slick-prev:before {

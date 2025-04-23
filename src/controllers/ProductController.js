@@ -54,15 +54,11 @@ const getStore = (req, res) => {
           return res.status(500).render("error", { message: "Lỗi khi lấy thương hiệu." });
         }
         
-         
-
             res.render("Store", {
               user: req.user || null,
               products,
               categories,
               brands
-              
-              
             });
           });
         });
@@ -366,6 +362,7 @@ const getStore = (req, res) => {
   const searchProductRender = (req, res) => {
     const keyword = (req.query.q || '').trim();
   
+
     const loadData = (products) => {
       Category.getAll((_, categories) => {
         Brand.getAll((_, brands) => {
@@ -393,11 +390,11 @@ const getStore = (req, res) => {
     }
   
     const exactQuery = `
-      SELECT p.*, c.name AS category_name, pi.URL AS image
+     SELECT p.*, c.name AS category_name, pi.URL AS image
       FROM product p
       LEFT JOIN category c ON p.category_id = c.id
       LEFT JOIN product_image pi ON pi.id = (
-        SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
+      SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
       )
       WHERE p.name = ?
       LIMIT 1
@@ -422,11 +419,30 @@ const getStore = (req, res) => {
       });
     });
   };
+
+  const filterByPrice = (req, res) => {
+    const min = Number(req.body.min) || 0;
+    const max = Number(req.body.max) || 999999;
   
+    const query = `
+        SELECT id FROM product_image
+        WHERE product_id = p.id
+        ORDER BY id ASC LIMIT 1
+      )
+      WHERE p.retail_price BETWEEN ? AND ?
+    `;
   
-
-
-
+    const sql = require('../config/database');
+    sql.query(query, [min, max], (err, result) => {
+      if (err) {
+        console.error("Lỗi lọc theo giá:", err);
+        return res.status(500).json({ error: 'Lỗi server khi lọc giá' });
+      }
+  
+      res.json(result);
+    });
+  };
+  
   module.exports = {
     getProduct,
     getStore,
@@ -436,5 +452,6 @@ const getStore = (req, res) => {
     deleteProduct,
     filterByCategory,
     filterByBrand,
-    searchProductRender
+    searchProductRender,
+    filterByPrice
   };

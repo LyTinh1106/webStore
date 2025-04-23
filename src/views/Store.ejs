@@ -44,27 +44,7 @@
 
 
 
-		<!-- ĐƯỜNG DẪN -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="breadcrumb-tree">
-							<li><a href="#">Trang Chủ</a></li>
-							<li><a href="#">Tất Cả Danh Mục</a></li>
-							<li><a href="#">Phụ Kiện</a></li>
-							<li class="active">Tai Nghe (227,490 Kết Quả)</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /ĐƯỜNG DẪN -->
-
+		
 
 		<!-- SECTION -->
 		<div class="section">
@@ -73,8 +53,28 @@
 				<!-- row -->
 				<div class="row">
 					<!-- ASIDE -->
+
 					<div id="aside" class="col-md-3">
 						<!-- aside Widget -->
+						<div class="aside">
+							<h3 class="aside-title">GIÁ</h3>
+							<div class="price-filter">
+								<div id="price-slider"></div>
+								<div class="input-number price-min">
+									<input id="price-min" type="number">
+									<span class="qty-up">+</span>
+									<span class="qty-down">-</span>
+								</div>
+								<span>-</span>
+								<div class="input-number price-max">
+									<input id="price-max" type="number">
+									<span class="qty-up">+</span>
+									<span class="qty-down">-</span>
+								</div>
+							</div>
+						</div>
+						<!-- aside Widget -->
+						<!-- /aside Widget -->
 						<div class="aside">
 							<h3 class="aside-title">DANH MỤC</h3>
 							<div class="checkbox-filter category-filter">
@@ -99,25 +99,7 @@
 						<!-- /aside Widget -->
 
 
-						<!-- aside Widget -->
-						<div class="aside">
-							<h3 class="aside-title">GIÁ</h3>
-							<div class="price-filter">
-								<div id="price-slider"></div>
-								<div class="input-number price-min">
-									<input id="price-min" type="number">
-									<span class="qty-up">+</span>
-									<span class="qty-down">-</span>
-								</div>
-								<span>-</span>
-								<div class="input-number price-max">
-									<input id="price-max" type="number">
-									<span class="qty-up">+</span>
-									<span class="qty-down">-</span>
-								</div>
-							</div>
-						</div>
-						<!-- /aside Widget -->
+
 
 						<!-- aside Widget -->
 						<div class="aside">
@@ -286,80 +268,6 @@
 		<!-- FOOTER -->
 		<%- include('./footer.ejs') %>
 			<!-- /FOOTER -->
-
-
-
-
-			<!-- <script>
-
-				document.querySelectorAll('.category-filter input[type="checkbox"]').forEach(cb => {
-					cb.addEventListener('change', filterByCategory);
-				});
-
-				async function filterByCategory() {
-					const selected = Array.from(document.querySelectorAll('.category-filter input[type="checkbox"]:checked'))
-						.map(cb => cb.value);
-
-					const res = await fetch('/api/product/filter/categories', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({ category_ids: selected })
-					});
-
-					const products = await res.json();
-					const filteredBox = document.getElementById('filtered-products');
-					const allBox = document.getElementById('all-products');
-
-					filteredBox.innerHTML = '';
-
-					if (selected.length === 0) {
-						filteredBox.classList.add('d-none');
-						allBox.classList.remove('d-none');
-						return;
-					}
-
-					allBox.classList.add('d-none');
-					filteredBox.classList.remove('d-none');
-
-					if (!products || products.length === 0) {
-						filteredBox.innerHTML = '<p>Không có sản phẩm phù hợp.</p>';
-						return;
-					}
-
-					products.forEach(p => {
-						filteredBox.innerHTML += `
-    <div class="col-md-4 col-xs-6">
-      <div class="product">
-        <div class="product-img">
-          <img src="/images/${p.image}" alt="${p.name}">
-        </div>
-        <div class="product-body">
-          <p class="product-category">${p.category_name || ''}</p>
-          <h3 class="product-name"><a href="#">${p.name}</a></h3>
-          <h4 class="product-price">$${p.retail_price}</h4>
-          <div class="product-rating">
-            ${[...Array(5)].map(() => '<i class="fa fa-star"></i>').join('')}
-          </div>
-          <div class="product-btns">
-            <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-            <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-            <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-          </div>
-        </div>
-        <div class="add-to-cart">
-          <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
-        </div>
-      </div>
-    </div>
-  `;
-					});
-				}
-			</script> -->
-		
-			  
-			  
 
 			<!-- jQuery Plugins -->
 			<script src="/js/jquery.min.js"></script>
