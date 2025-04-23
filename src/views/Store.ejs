@@ -382,6 +382,23 @@ async function filterByBrand() {
   const products = await res.json();
   renderFilteredProducts(products, brand_ids.length > 0);
 }
+// tách lọc theo thanh kéo trượt giá
+const priceMin = document.getElementById('price-min');
+const priceMax = document.getElementById('price-max');
+
+priceMin.addEventListener('change', () => {
+  const min = parseInt(priceMin.value) || 0;
+  const max = parseInt(priceMax.value) || 999999;
+  filterByPrice(min, max);
+});
+
+priceMax.addEventListener('change', () => {
+  const min = parseInt(priceMin.value) || 0;
+  const max = parseInt(priceMax.value) || 999999;
+  filterByPrice(min, max);
+});
+
+
 
 // Hàm render sản phẩm lọc
 function renderFilteredProducts(products, shouldShowFiltered) {
@@ -430,6 +447,16 @@ function renderFilteredProducts(products, shouldShowFiltered) {
       </div>
     `;
   });
+}
+async function filterByPrice(min, max) {
+  const res = await fetch('/api/product/filter-price', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ min, max })
+  });
+
+  const products = await res.json();
+  renderFilteredProducts(products, true);
 }
 			  </script>
 			  

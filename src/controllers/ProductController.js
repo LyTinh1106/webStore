@@ -359,6 +359,33 @@ const getStore = (req, res) => {
     });
   };
   
+  const filterByPrice = (req, res) => {
+    const min = Number(req.body.min) || 0;
+    const max = Number(req.body.max) || 999999;
+  
+    const query = `
+      SELECT p.*, c.name AS category_name, pi.URL AS image
+      FROM product p
+      LEFT JOIN category c ON p.category_id = c.id
+      LEFT JOIN product_image pi ON pi.id = (
+        SELECT id FROM product_image
+        WHERE product_id = p.id
+        ORDER BY id ASC LIMIT 1
+      )
+      WHERE p.retail_price BETWEEN ? AND ?
+    `;
+  
+    const sql = require('../config/database');
+    sql.query(query, [min, max], (err, result) => {
+      if (err) {
+        console.error("Lỗi lọc theo giá:", err);
+        return res.status(500).json({ error: 'Lỗi server khi lọc giá' });
+      }
+  
+      res.json(result);
+    });
+  };
+  
   
   
 
@@ -373,6 +400,7 @@ const getStore = (req, res) => {
     updateProduct,
     deleteProduct,
     filterByCategory,
-    filterByBrand
+    filterByBrand,
+    filterByPrice
     
   };
