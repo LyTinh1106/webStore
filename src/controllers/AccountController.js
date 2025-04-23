@@ -49,7 +49,7 @@ const getLogin = (req, res) => {
           return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách danh mục' });
         }
   
-        Brand.getAll(null, (err, brands) => {
+        Brand.getAll((err, brands) => {
           if (err) {
             return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhãn hàng' });
           }

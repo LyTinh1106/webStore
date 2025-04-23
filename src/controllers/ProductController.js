@@ -54,14 +54,11 @@ const getStore = (req, res) => {
           return res.status(500).render("error", { message: "Lỗi khi lấy thương hiệu." });
         }
         
-         
-
             res.render("Store", {
               user: req.user || null,
               products,
               categories,
-              brands,
-              images
+              brands
               
             });
           });

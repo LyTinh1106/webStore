@@ -55,9 +55,7 @@ LEFT JOIN product_image pi ON pi.id = (
     WHERE product_id = p.id 
     ORDER BY id ASC 
     LIMIT 1
-)
-
-  `;
+)`;
   let params = [];
 
   if (name) {

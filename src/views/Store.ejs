@@ -40,28 +40,6 @@
 <body>
 	<%- include('./header.ejs') %>
 
-	<!-- ĐƯỜNG DẪN -->
-	<div id="breadcrumb" class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-12">
-					<ul class="breadcrumb-tree">
-						<li><a href="#">Trang Chủ</a></li>
-						<li><a href="#">Tất Cả Danh Mục</a></li>
-						<li><a href="#">Phụ Kiện</a></li>
-						<li class="active">Tai Nghe (227,490 Kết Quả)</li>
-					</ul>
-				</div>
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /ĐƯỜNG DẪN -->
-
-
 	<!-- SECTION -->
 	<div class="section">
 		<!-- container -->
@@ -232,17 +210,13 @@
 										cart</button>
 								</div>
 							</div>
-						
-
-
-
-
+					
 						</div> -->
 						<% products.forEach((product) => { %>
 							<div class="col-md-4 col-xs-6">
 							  <div class="product">
 								<div class="product-img">
-									<img src="/images/<%= product.image || 'default.png' %>" alt="">
+									<img src="/images/<%= product.image || 'noImage.jpg' %>" alt="">
 								  <div class="product-label">
 									<!-- <% if (product.sale_percent) { %>
 									  <span class="sale">-<%= product.sale_percent %>%</span>
