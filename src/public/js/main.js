@@ -200,6 +200,12 @@
 			var value = values[handle];
 			handle ? priceInputMax.value = value : priceInputMin.value = value
 		});
+		priceSlider.noUiSlider.on('change', function (values) {
+			const min = Math.round(values[0]);
+			const max = Math.round(values[1]);
+			filterByPrice(min, max);
+		  });
+		  
 	}
 	/////////////////////////////////////////
 	// Dropdown toggle on click + hover
