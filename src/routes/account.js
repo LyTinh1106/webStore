@@ -19,7 +19,8 @@ const {
   getResetPassword,
   sendResetPasswordEmail,
   resetPassword,
-  verifyResetToken
+  verifyResetToken,
+  verifyOtp
  
   
  
@@ -43,6 +44,10 @@ router.post('/forgot-password', sendResetPasswordEmail);
 router.post('/reset-password/:token', resetPassword);
 router.post('/send-reset-code',sendResetPasswordEmail);
 router.post('/send-reset-code/:token', resetPassword)
+//OTP
+
+router.get('/verify-otp', (req, res) => res.render('verify-otp', { message: null }));
+router.post('/verify-otp',verifyOtp);
 
 
 // Xử lý auth

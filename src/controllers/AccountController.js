@@ -319,53 +319,119 @@ const isAdmin = (req, res) => {
     res.send({ isAdmin });
   });
 };
-// dang ki
+//Đăng kí tài khoản có  OTP
 const register = async (req, res) => {
-    const { email, password, confirmpassword } = req.body;
-  
-    if (!email || !password || !confirmpassword) {
-      return res.status(400).render("register", { message: "Vui lòng điền đầy đủ thông tin." });
-    }
-  
-    if (password !== confirmpassword) {
-      return res.status(400).render("register", { message: "Mật khẩu không khớp." });
-    }
-  
-    try {
-      Account.findByEmail(email, async (err, existingAccount) => {
-        if (existingAccount) {
-          return res.status(400).render("register", { message: "Email đã được sử dụng." });
+  const { email, password, confirmpassword, agreeTerms } = req.body;
+
+  if (!email || !password || !confirmpassword || !agreeTerms) {
+    return res.status(400).render("register", { message: "Vui lòng điền đầy đủ thông tin." });
+  }
+
+  if (password !== confirmpassword) {
+    return res.status(400).render("register", { message: "Mật khẩu không khớp." });
+  }
+
+  if (!agreeTerms) {
+    return res.status(400).render("register", { message: "Bạn cần đồng ý với điều khoản dịch vụ." });
+  }
+
+  try {
+    Account.findByEmail(email, async (err, existingAccount) => {
+      if (existingAccount) {
+        return res.status(400).render("register", { message: "Email đã được sử dụng." });
+      }
+
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+      // ✅ Lưu tạm tài khoản vào session thay vì lưu vào DB ngay
+      req.session.pendingAccount = {
+        email,
+        password: hashedPassword,
+        role: "customer"
+      };
+
+      const otp = Math.floor(100000 + Math.random() * 900000);
+      const otpExpires = Date.now() + 5 * 60 * 1000; // 5 phút
+
+      req.session.otp = otp;
+      req.session.otpExpires = otpExpires;
+      req.session.otpEmail = email;
+
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS,
         }
-  
-        const hashedPassword = await bcrypt.hash(password, saltRounds);
-  
-        const newAccount = {
-          email,
-          password: hashedPassword,
-          role: "customer" 
-        };
-  
-        Account.create(newAccount, (err, data) => {
-          if (err) return res.status(500).render("register", { message: "Đăng ký thất bại." });
-  
-          req.session.user = {
-            id: data.id,
-            email: data.email,
-            role: data.role,
-          };
-  
-          
-          if (data.role === "admin") {
-            return res.redirect("/dashboard");
-          } else {
-            return res.redirect("/homepage");
-          }
-        });
       });
-    } catch (error) {
-      res.status(500).render("register", { message: "Đã xảy ra lỗi trong quá trình đăng ký." });
+
+      const mailOptions = {
+        from: process.env.EMAIL_USER,
+        to: email,
+        subject: "Mã OTP xác minh tài khoản",
+        html: `<p>Mã OTP của bạn là: <strong>${otp}</strong></p><p>OTP có hiệu lực trong 5 phút.</p>`
+      };
+
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Lỗi gửi OTP:", error);
+          return res.status(500).render("register", { message: "Lỗi khi gửi mã OTP." });
+        }
+        return res.redirect("/verify-otp");
+      });
+    });
+  } catch (error) {
+    console.error("Lỗi đăng ký:", error);
+    res.status(500).render("register", { message: "Đã xảy ra lỗi trong quá trình đăng ký." });
+  }
+};
+
+// Hàm xử lý xác minh OTP - tích hợp cả HTML (render) và JSON (fetch)
+const verifyOtp = (req, res) => {
+  const isJsonRequest = req.headers['content-type'] === 'application/json';
+  const userOtp = isJsonRequest ? req.body.otp : req.body.otp;
+
+  if (!req.session.otp || !req.session.otpExpires || !req.session.pendingAccount) {
+    const message = "OTP đã hết hạn hoặc không tồn tại.";
+    return isJsonRequest
+      ? res.json({ success: false, message })
+      : res.render("verify-otp", { message });
+  }
+
+  if (Date.now() > req.session.otpExpires) {
+    const message = "OTP đã hết hạn.";
+    return isJsonRequest
+      ? res.json({ success: false, message })
+      : res.render("verify-otp", { message });
+  }
+
+  if (parseInt(userOtp) !== req.session.otp) {
+    const message = "OTP không chính xác.";
+    return isJsonRequest
+      ? res.json({ success: false, message })
+      : res.render("verify-otp", { message });
+  }
+
+  // Nếu OTP đúng → lưu tài khoản vào DB
+  Account.create(req.session.pendingAccount, (err, data) => {
+    if (err) {
+      const message = "Lỗi khi lưu tài khoản.";
+      return isJsonRequest
+        ? res.status(500).json({ success: false, message })
+        : res.status(500).render("verify-otp", { message });
     }
-  };
+
+    delete req.session.otp;
+    delete req.session.otpExpires;
+    delete req.session.otpEmail;
+    delete req.session.pendingAccount;
+
+    return isJsonRequest
+      ? res.json({ success: true })
+      : res.redirect("/login");
+  });
+};
+
   
   
   // dang nhap
@@ -403,6 +469,7 @@ const register = async (req, res) => {
   };
   
 
+
 module.exports = {
   create,
   findAll,
@@ -421,5 +488,6 @@ module.exports = {
   getResetPassword,
   sendResetPasswordEmail,
   resetPassword,
-  verifyResetToken
+  verifyResetToken,
+  verifyOtp
 }
