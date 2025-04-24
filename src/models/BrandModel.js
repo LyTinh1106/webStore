@@ -36,17 +36,14 @@ Brand.findById = (id, result) => {
 };
 
 
-Brand.getAll = (result) => {
+Brand.getAll = (callback) => {
   const query = "SELECT * FROM brand";
-
   sql.query(query, (err, res) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
-      return;
+      return callback(err, null);
     }
-
-    result(null, res);
+    callback(null, res);
   });
 };
 

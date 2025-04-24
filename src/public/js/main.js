@@ -104,28 +104,31 @@
 	$('#product-main-img').slick({
 		infinite: true,
 		speed: 300,
-		dots: false,
+		dots: true,
 		arrows: true,
 		fade: true,
 		asNavFor: '#product-imgs',
 	});
 
+	
 	// Product imgs Slick
 	$('#product-imgs').slick({
-		slidesToShow: 3,
+		slidesToShow: 4,
 		slidesToScroll: 1,
 		arrows: true,
-		centerMode: true,
+		centerMode: false,
 		focusOnSelect: true,
 		centerPadding: 0,
 		vertical: true,
 		asNavFor: '#product-main-img',
+		infinite: true,
 		responsive: [{
 			breakpoint: 991,
 			settings: {
 				vertical: false,
 				arrows: false,
 				dots: true,
+				infinite: true,
 			}
 		},
 		]
@@ -204,8 +207,8 @@
 			const min = Math.round(values[0]);
 			const max = Math.round(values[1]);
 			filterByPrice(min, max);
-		  });
-		  
+		});
+
 	}
 	/////////////////////////////////////////
 	// Dropdown toggle on click + hover
@@ -239,18 +242,18 @@ const categoryCheckboxes = document.querySelectorAll('.category-filter input[typ
 categoryCheckboxes.forEach(cb => cb.addEventListener('change', filterByCategory));
 
 async function filterByCategory() {
-  const category_ids = Array.from(categoryCheckboxes)
-    .filter(cb => cb.checked)
-    .map(cb => cb.value);
+	const category_ids = Array.from(categoryCheckboxes)
+		.filter(cb => cb.checked)
+		.map(cb => cb.value);
 
-  const res = await fetch('/api/product/filter/categories', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ category_ids })
-  });
+	const res = await fetch('/api/product/filter/categories', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ category_ids })
+	});
 
-  const products = await res.json();
-  renderFilteredProducts(products, category_ids.length > 0);
+	const products = await res.json();
+	renderFilteredProducts(products, category_ids.length > 0);
 }
 
 // Tách lọc theo Brand
@@ -258,68 +261,68 @@ const brandCheckboxes = document.querySelectorAll('.brand-filter input[type="che
 brandCheckboxes.forEach(cb => cb.addEventListener('change', filterByBrand));
 
 async function filterByBrand() {
-  const brand_ids = Array.from(brandCheckboxes)
-    .filter(cb => cb.checked)
-    .map(cb => cb.value);
+	const brand_ids = Array.from(brandCheckboxes)
+		.filter(cb => cb.checked)
+		.map(cb => cb.value);
 
-  const res = await fetch('/api/product/filter/brands', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ brand_ids })
-  });
+	const res = await fetch('/api/product/filter/brands', {
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ brand_ids })
+	});
 
-  const products = await res.json();
-  renderFilteredProducts(products, brand_ids.length > 0);
+	const products = await res.json();
+	renderFilteredProducts(products, brand_ids.length > 0);
 }
 // tách lọc theo thanh kéo trượt giá
 const priceMin = document.getElementById('price-min');
 const priceMax = document.getElementById('price-max');
 
 priceMin.addEventListener('change', () => {
-  const min = parseInt(priceMin.value) || 0;
-  const max = parseInt(priceMax.value) || 999999;
-  filterByPrice(min, max);
+	const min = parseInt(priceMin.value) || 0;
+	const max = parseInt(priceMax.value) || 999999;
+	filterByPrice(min, max);
 });
 
 priceMax.addEventListener('change', () => {
-  const min = parseInt(priceMin.value) || 0;
-  const max = parseInt(priceMax.value) || 999999;
-  filterByPrice(min, max);
+	const min = parseInt(priceMin.value) || 0;
+	const max = parseInt(priceMax.value) || 999999;
+	filterByPrice(min, max);
 });
 
 async function filterByPrice(min, max) {
 	const res = await fetch('/api/product/filter-price', {
-	  method: 'POST',
-	  headers: { 'Content-Type': 'application/json' },
-	  body: JSON.stringify({ min, max })
+		method: 'POST',
+		headers: { 'Content-Type': 'application/json' },
+		body: JSON.stringify({ min, max })
 	});
-  
+
 	const products = await res.json();
 	renderFilteredProducts(products, true);
-  }
+}
 
 // Hàm render sản phẩm lọc
 function renderFilteredProducts(products, shouldShowFiltered) {
-  const filteredBox = document.getElementById('filtered-products');
-  const allBox = document.getElementById('all-products');
-  filteredBox.innerHTML = '';
+	const filteredBox = document.getElementById('filtered-products');
+	const allBox = document.getElementById('all-products');
+	filteredBox.innerHTML = '';
 
-  if (!shouldShowFiltered) {
-    filteredBox.classList.add('d-none');
-    allBox.classList.remove('d-none');
-    return;
-  }
+	if (!shouldShowFiltered) {
+		filteredBox.classList.add('d-none');
+		allBox.classList.remove('d-none');
+		return;
+	}
 
-  allBox.classList.add('d-none');
-  filteredBox.classList.remove('d-none');
+	allBox.classList.add('d-none');
+	filteredBox.classList.remove('d-none');
 
-  if (!products || products.length === 0) {
-    filteredBox.innerHTML = '<p>Không có sản phẩm phù hợp.</p>';
-    return;
-  }
+	if (!products || products.length === 0) {
+		filteredBox.innerHTML = '<p>Không có sản phẩm phù hợp.</p>';
+		return;
+	}
 
-  products.forEach(p => {
-    filteredBox.innerHTML += `
+	products.forEach(p => {
+		filteredBox.innerHTML += `
       <div class="col-md-4 col-xs-6">
         <div class="product">
           <div class="product-img">
@@ -348,7 +351,7 @@ function renderFilteredProducts(products, shouldShowFiltered) {
         </div>
       </div>
     `;
-  });
+	});
 }
 
 

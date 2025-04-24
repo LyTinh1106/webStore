@@ -201,7 +201,6 @@ INSERT INTO product_image (product_id, URL) VALUES
 (1, 'ASUS_ROG_Zephyrus_G14_1.jpg'),
 (1, 'ASUS_ROG_Zephyrus_G14_2.jpg'),
 (1, 'ASUS_ROG_Zephyrus_G14_3.jpg'),
-(1, 'ASUS_ROG_Zephyrus_G14_4.jpg'),
 
 (2, 'Intel_Core_i9_13900K_1.jpg'),
 (2, 'Intel_Core_i9_13900K_2.jpg'),

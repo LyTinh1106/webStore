@@ -3,7 +3,6 @@ const express = require('express');
 const {
   createProduct,
   getProduct,
-  getProductById,
   updateProduct,
   deleteProduct,
   filterByCategory,
