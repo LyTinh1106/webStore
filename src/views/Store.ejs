@@ -68,7 +68,7 @@
 							</div>
 						</div>
 						<!-- aside Widget -->
-						
+
 						<!-- /aside Widget -->
 						<div class="aside">
 							<h3 class="aside-title">DANH MỤC</h3>
@@ -147,8 +147,8 @@
 						<!-- /aside Widget -->
 					</div>
 					<!-- /ASIDE -->
-                    
-					  
+
+
 					<!-- STORE -->
 					<div id="store" class="col-md-9">
 						<!-- store top filter -->
@@ -174,64 +174,82 @@
 								<li><a href="#"><i class="fa fa-th-list"></i></a></li>
 							</ul>
 						</div>
-						
-						  
-						  
+
+
+
 						<!-- FILTERED PRODUCTS -->
 						<div id="filtered-products" class="row d-none"></div>
-						
+
 						<div id="all-products" class="row">
 							<div id="filtered-products" class="row d-none"></div>
-						<% if (typeof keyword !== 'undefined' && keyword) { %>
-							<h3>Kết quả cho: "<%= keyword %>"</h3>
-						  <% } %>
-						  
-						  <% if (products.length === 0) { %>
-							<p>Không tìm thấy sản phẩm phù hợp.</p>
-						  <% } else { %>
-							<% products.forEach(product => { %>
-							  <!-- Hiển thị sản phẩm -->
-							<% }) %>
-						  <% } %>
-							<% products.forEach((product)=> { %>
-								<div class="col-md-4 col-xs-6">
-									<div class="product">
-										<a href="/product/<%=product.id%>">
-											<div class="product-img">
-												<img src="/images/<%= product.image || 'default.png' %>" alt="">
-											</div>
-											<div class="product-body">
-												<p class="product-category">
-													<%= product.category_name %>
-												</p>
-												<h3 class="product-name"><a href="#">
-														<%= product.name %>
-													</a></h3>
-												<h4 class="product-price">$<%= product.retail_price %>
-												</h4>
-												<div class="product-rating">
-													<% for (let i=0; i < 5; i++) { %>
-														<i class="fa fa-star"></i>
-														<% } %>
-												</div>
-												<div class="product-btns">
-													<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-															class="tooltipp">add to wishlist</span></button>
-													<button class="add-to-compare"><i class="fa fa-exchange"></i><span
-															class="tooltipp">add to compare</span></button>
-													<button class="quick-view"><i class="fa fa-eye"></i><span
-															class="tooltipp">quick view</span></button>
-												</div>
-											</div>
-											<div class="add-to-cart">
-												<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to
-													cart</button>
-											</div>
-										</a>
-										
-									</div>
-								</div>
-								<% }) %>
+							<% if (typeof keyword !=='undefined' && keyword) { %>
+								<h3>Kết quả cho: "<%= keyword %>"</h3>
+								<% } %>
+
+									<% if (products.length===0) { %>
+										<p>Không tìm thấy sản phẩm phù hợp.</p>
+										<% } else { %>
+											<% products.forEach(product=> { %>
+												<!-- Hiển thị sản phẩm -->
+												<% }) %>
+													<% } %>
+														<% products.forEach((product)=> { %>
+															<div class="col-md-4 col-xs-6">
+																<div class="product">
+																	<a href="/product/<%=product.id%>">
+																		<div class="product-img">
+																			<img src="/images/<%= product.image || 'default.png' %>"
+																				alt="">
+																		</div>
+																		<div class="product-body">
+																			<p class="product-category">
+																				<%= product.category_name %>
+																			</p>
+																			<h3 class="product-name"><a href="#">
+																					<%= product.name %>
+																				</a></h3>
+																			<h4 class="product-price">$<%=
+																					product.retail_price %>
+																			</h4>
+																			<div class="product-rating">
+																				<% for (let i=0; i < 5; i++) { %>
+																					<i class="fa fa-star"></i>
+																					<% } %>
+																			</div>
+																			<div class="product-btns">
+																				<button class="add-to-wishlist"><i
+																						class="fa fa-heart-o"></i><span
+																						class="tooltipp">add to
+																						wishlist</span></button>
+																				<!-- <button class="add-to-compare"><i class="fa fa-exchange"></i><span
+															class="tooltipp">add to compare</span></button> -->
+																				<button class="add-to-compare"
+																					data-id="<%= product.id %>"
+																					data-name="<%= product.name %>"
+																					data-image="<%= product.image %>"
+																					data-category="<%= product.category_id %>">
+																					<i class="fa fa-exchange"></i>
+																					<span class="tooltipp">So
+																						sánh</span>
+																				</button>
+
+																				<button class="quick-view"><i
+																						class="fa fa-eye"></i><span
+																						class="tooltipp">quick
+																						view</span></button>
+																			</div>
+																		</div>
+																		<div class="add-to-cart">
+																			<button class="add-to-cart-btn"><i
+																					class="fa fa-shopping-cart"></i> add
+																				to
+																				cart</button>
+																		</div>
+																	</a>
+
+																</div>
+															</div>
+															<% }) %>
 						</div>
 
 						<!-- store bottom filter -->

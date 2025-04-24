@@ -18,15 +18,48 @@ const createSpecification = (req, res) => {
 
 // Lấy theo ID
 const getSpecificationById = (req, res) => {
-  TechnicalSpecification.findById(req.params.id, (err, data) => {
+  const specId = parseInt(req.params.id);
+
+  if (isNaN(specId)) {
+    return res.status(400).json({
+      success: false,
+      message: "ID không hợp lệ.",
+    });
+  }
+
+  TechnicalSpecification.findById(specId, (err, spec) => {
     if (err) {
-      if (err.kind === "not_found") return res.status(404).json({ message: "Không tìm thấy." });
-      return res.status(500).json({ message: "Lỗi khi tìm." });
+      if (err.kind === "not_found") {
+        return res.status(404).json({
+          success: false,
+          message: "Không tìm thấy thông số kỹ thuật.",
+        });
+      }
+
+      return res.status(500).json({
+        success: false,
+        message: "Đã xảy ra lỗi khi truy xuất dữ liệu.",
+      });
     }
 
-    res.status(200).json({ message: "ok", data });
+    // Nếu specs là chuỗi JSON, parse luôn tại đây (bảo vệ phía controller)
+    if (spec.specs && typeof spec.specs === "string") {
+      try {
+        spec.specs = JSON.parse(spec.specs);
+      } catch (e) {
+        console.warn("Không thể parse specs:", e);
+        spec.specs = {};
+      }
+    }
+
+    res.status(200).json({
+      success: true,
+      message: "Lấy thông tin thành công.",
+      data: spec
+    });
   });
 };
+
 
 // Lấy theo product_id
 const getSpecificationByProductId = (req, res) => {
