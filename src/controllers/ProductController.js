@@ -7,6 +7,48 @@ const ProductImage = require("../models/ProductImageModel");
 const TechnicalSpecification = require('../models/ProductDetailModel');
 
 // [GET] /products - Hiển thị trang quản lý sản phẩm
+// const getProduct = (req, res) => {
+//   const productId = req.params.id;
+
+//   Product.findById(productId, (err, product) => {
+//     if (err) {
+//       console.error("Lỗi khi lấy sản phẩm:", err);
+//       return res.status(500).render("error", { message: "Lỗi khi lấy sản phẩm." });
+//     }
+
+//     if (!product) {
+//       return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
+//     }
+
+//     ProductImage.findByProductId(productId, (err, images) => {
+//       if (err) {
+//         console.error("Lỗi khi lấy hình ảnh:", err);
+//         return res.status(500).render("error", { message: "Lỗi khi lấy hình ảnh sản phẩm." });
+//       }
+
+//       Category.getAll((err, categories) => {
+//         if (err) {
+//           return res.status(500).render("error", { message: "Lỗi khi lấy danh mục." });
+//         }
+
+//         Brand.getAll((err, brands) => {
+//           if (err) {
+//             return res.status(500).render("error", { message: "Lỗi khi lấy nhãn hàng." });
+//           }
+
+//           res.render("Product", {
+//             user: req.user || null,
+//             product,       // 1 sản phẩm (object)
+//             images,        // mảng hình ảnh
+//             categories,
+//             brands
+//           });
+//         });
+//       });
+//     });
+//   });
+// };
+
 const getProduct = (req, res) => {
   const productId = req.params.id;
 
@@ -26,29 +68,37 @@ const getProduct = (req, res) => {
         return res.status(500).render("error", { message: "Lỗi khi lấy hình ảnh sản phẩm." });
       }
 
-      Category.getAll((err, categories) => {
-        if (err) {
-          return res.status(500).render("error", { message: "Lỗi khi lấy danh mục." });
+      // 🆕 Thêm lấy thông số kỹ thuật
+      TechnicalSpecification.findByProductId(productId, (err, spec) => {
+        if (err && err.kind !== "not_found") {
+          console.error("Lỗi khi lấy thông số kỹ thuật:", err);
+          return res.status(500).render("error", { message: "Lỗi khi lấy thông số kỹ thuật." });
         }
 
-        Brand.getAll((err, brands) => {
+        Category.getAll((err, categories) => {
           if (err) {
-            return res.status(500).render("error", { message: "Lỗi khi lấy nhãn hàng." });
+            return res.status(500).render("error", { message: "Lỗi khi lấy danh mục." });
           }
 
-          res.render("Product", {
-            user: req.user || null,
-            product,       // 1 sản phẩm (object)
-            images,        // mảng hình ảnh
-            categories,
-            brands
+          Brand.getAll((err, brands) => {
+            if (err) {
+              return res.status(500).render("error", { message: "Lỗi khi lấy nhãn hàng." });
+            }
+
+            res.render("Product", {
+              user: req.user || null,
+              product,
+              images,
+              spec: spec || null,     // 🆕 truyền spec vào view (có thể là null nếu không có)
+              categories,
+              brands
+            });
           });
         });
       });
     });
   });
 };
-
 
 const getStore = (req, res) => {
   Product.getAll(null, (err, products) => {

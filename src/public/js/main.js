@@ -110,7 +110,7 @@
 		asNavFor: '#product-imgs',
 	});
 
-	
+
 	// Product imgs Slick
 	$('#product-imgs').slick({
 		slidesToShow: 4,
@@ -234,9 +234,7 @@
 		}
 	);
 
-
 })(jQuery);
-
 // Tách lọc theo Category
 const categoryCheckboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
 categoryCheckboxes.forEach(cb => cb.addEventListener('change', filterByCategory));
