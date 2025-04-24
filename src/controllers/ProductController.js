@@ -6,48 +6,7 @@ const Brand = require("../models/BrandModel");
 const ProductImage = require("../models/ProductImageModel");
 const TechnicalSpecification = require('../models/ProductDetailModel');
 
-// [GET] /products - Hiển thị trang quản lý sản phẩm
-// const getProduct = (req, res) => {
-//   const productId = req.params.id;
 
-//   Product.findById(productId, (err, product) => {
-//     if (err) {
-//       console.error("Lỗi khi lấy sản phẩm:", err);
-//       return res.status(500).render("error", { message: "Lỗi khi lấy sản phẩm." });
-//     }
-
-//     if (!product) {
-//       return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
-//     }
-
-//     ProductImage.findByProductId(productId, (err, images) => {
-//       if (err) {
-//         console.error("Lỗi khi lấy hình ảnh:", err);
-//         return res.status(500).render("error", { message: "Lỗi khi lấy hình ảnh sản phẩm." });
-//       }
-
-//       Category.getAll((err, categories) => {
-//         if (err) {
-//           return res.status(500).render("error", { message: "Lỗi khi lấy danh mục." });
-//         }
-
-//         Brand.getAll((err, brands) => {
-//           if (err) {
-//             return res.status(500).render("error", { message: "Lỗi khi lấy nhãn hàng." });
-//           }
-
-//           res.render("Product", {
-//             user: req.user || null,
-//             product,       // 1 sản phẩm (object)
-//             images,        // mảng hình ảnh
-//             categories,
-//             brands
-//           });
-//         });
-//       });
-//     });
-//   });
-// };
 
 const getProduct = (req, res) => {
   const productId = req.params.id;
@@ -496,6 +455,64 @@ const searchProductRender = (req, res) => {
 };
 
 
+const compareProducts = (req, res) => {
+  const id1 = parseInt(req.params.id1);
+  const id2 = parseInt(req.params.id2);
+
+  Product.findById(id1, (err, product1) => {
+    if (err || !product1) {
+      return res.status(404).render('error', { message: 'Không tìm thấy sản phẩm 1' });
+    }
+
+    Product.findById(id2, (err, product2) => {
+      if (err || !product2) {
+        return res.status(404).render('error', { message: 'Không tìm thấy sản phẩm 2' });
+      }
+
+      
+      if (product1.category_id !== product2.category_id) {
+        return res.status(400).render("error", {
+          message: "Chỉ có thể so sánh các sản phẩm cùng loại."
+        });
+      }
+
+      
+      TechnicalSpecification.findByProductId(id1, (err, spec1) => {
+        if (err && err.kind !== "not_found") {
+          return res.status(500).render("error", { message: "Lỗi khi lấy thông số sản phẩm 1" });
+        }
+
+        TechnicalSpecification.findByProductId(id2, (err, spec2) => {
+          if (err && err.kind !== "not_found") {
+            return res.status(500).render("error", { message: "Lỗi khi lấy thông số sản phẩm 2" });
+          }
+
+          try {
+            product1.specs = spec1 && typeof spec1.specs === 'string' ? JSON.parse(spec1.specs) : (spec1?.specs || {});
+          } catch (e) {
+            product1.specs = {};
+          }
+
+          try {
+            product2.specs = spec2 && typeof spec2.specs === 'string' ? JSON.parse(spec2.specs) : (spec2?.specs || {});
+          } catch (e) {
+            product2.specs = {};
+          }
+
+          res.render("compare", {
+            user: req.user || null,
+            product1,
+            product2
+          });
+        });
+      });
+    });
+  });
+};
+
+
+
+
 
 module.exports = {
   getProduct,
@@ -506,5 +523,6 @@ module.exports = {
   filterByCategory,
   filterByBrand,
   filterByPrice,
-  searchProductRender
+  searchProductRender,
+  compareProducts
 };

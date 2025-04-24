@@ -8,7 +8,8 @@ const {
   filterByCategory,
   filterByBrand,
   filterByPrice,
-  searchProductRender
+  searchProductRender,
+  compareProducts
   
 
 } = require('../controllers/ProductController');
@@ -50,6 +51,8 @@ router.delete('/delete/:id', deleteProduct);
 router.post('/filter/categories', filterByCategory);
 router.post('/filter/brands', filterByBrand);
 router.post('/filter-price', filterByPrice);
+
+
 
 
 
