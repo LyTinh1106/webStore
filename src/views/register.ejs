@@ -30,10 +30,16 @@
                 </div>
 
                 <div class="terms">
-                    <input type="checkbox" id="terms">
+                    <input type="checkbox" id="terms" name="agreeTerms">
                     <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
                             Policy</a></label>
                 </div>
+                <% if (typeof message !== 'undefined' && message) { %>
+                    <div class="alert-message error">
+                      <%= message %>
+                    </div>
+                  <% } %>
+                  
 
                 <button type="submit" class="register-btn">SIGN UP</button>
             </form>

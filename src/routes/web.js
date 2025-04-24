@@ -2,12 +2,13 @@ const express = require('express')
 require('dotenv').config(); 
 
 // const {getHomePage} = require('../Controllers/HomeController')
-const {getRegister,getHomePage,getLogin, getDashboard, register, login, getForgotPassword, getResetPassword, forgotPassword, handleForgotPassword, handleResetPassword, resetPassword, verifyResetToken} = require('../controllers/AccountController')
+const {getRegister,getHomePage,getLogin, getDashboard, register, login, getForgotPassword, getResetPassword, forgotPassword, handleForgotPassword, handleResetPassword, resetPassword, verifyResetToken, verifyOtp} = require('../controllers/AccountController')
 const {getCheckout} = require('../controllers/CheckoutController')
 const {getProduct, getStore} = require('../controllers/ProductController')
 const { checkAdmin } = require('../middleware/authMiddleware');
 const { sendResetPasswordEmail} = require('../controllers/AccountController');
 const { searchProductRender } = require('../controllers/ProductController');
+
 const router = express.Router()
 
 
@@ -23,9 +24,14 @@ router.get('/dashboard', getDashboard);
 router.get('/forgot-password',getForgotPassword);
 router.get('/reset-password',getResetPassword);
 router.get('/reset-password',verifyResetToken);
+router.get('/verify-otp', (req, res) => res.render('verify-otp', { message: null }));
+router.post('/verify-otp', verifyOtp);
+
 
 router.post('/register', register)
+router.post('/verify-otp',verifyOtp);
 router.post('/login',login)
+
 
 router.post('/forgot-password',sendResetPasswordEmail);
 router.post('/reset-password',resetPassword);
