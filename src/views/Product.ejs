@@ -40,27 +40,6 @@
 <body>
 	<%- include('./header.ejs') %>
 
-		<!-- ĐƯỜNG DẪN ĐIỀU HƯỚNG -->
-		<div id="breadcrumb" class="section">
-			<!-- container -->
-			<div class="container">
-				<!-- row -->
-				<div class="row">
-					<div class="col-md-12">
-						<ul class="breadcrumb-tree">
-							<li><a href="#">Trang Chủ</a></li>
-							<li><a href="#">Tất Cả Danh Mục</a></li>
-							<li><a href="#">Phụ Kiện</a></li>
-							<li><a href="#">Tai Nghe</a></li>
-							<li class="active">Tên sản phẩm hiển thị ở đây</li>
-						</ul>
-					</div>
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
-		<!-- /ĐƯỜNG DẪN ĐIỀU HƯỚNG -->
 
 
 		<!-- SECTION -->
@@ -202,7 +181,38 @@
 								<div id="tab2" class="tab-pane fade in">
 									<div class="row">
 										<div class="col-md-12">
-											<p>Đéo có gì ở đây hết</p>
+											<% if (spec && spec.specs) { %>
+												<h3 class="mb-3">Thông số kỹ thuật:</h3>
+												<div id="specs-container">
+													<div class="fade-overlay"></div>
+													<table class="specs-table">
+														<tbody>
+															<% for (let key in spec.specs) { const
+																label=key.replace(/_/g, ' ' ); const
+																values=String(spec.specs[key]) .replace(/"/g, '' )
+																.split(',') .map(val=> val.trim())
+																.filter(val => val.length > 0)
+																.join('<br>');
+																%>
+																<tr>
+																	<th>
+																		<%= label %>
+																	</th>
+																	<td><%- values %></td>
+																</tr>
+																<% } %>
+														</tbody>
+													</table>
+												</div>
+
+												<div class="specs-toggle-wrapper text-center">
+													<a href="javascript:void(0)" id="toggle-specs-link"
+														class="specs-link">
+														<span class="link-text">Xem thêm</span> 
+													</a>
+												</div>
+
+												<% } %>
 										</div>
 									</div>
 								</div>
@@ -572,6 +582,7 @@
 			<script src="/js/slick.min.js"></script>
 			<script src="/js/nouislider.min.js"></script>
 			<script src="/js/jquery.zoom.min.js"></script>
+			<script src="/js/specsToggle.js"></script>
 			<script src="/js/main.js"></script>
 
 
