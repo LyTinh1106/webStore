@@ -16,7 +16,7 @@ router.get('/register', getRegister)
 router.get('/homepage', getHomePage)
 router.get('/login', getLogin)
 router.get('/checkout',getCheckout)
-router.get('/product',getProduct)
+router.get('/product/:id',getProduct)
 router.get('/store', searchProductRender);
 router.get('/store/all',getStore)
 router.get('/dashboard', getDashboard);
