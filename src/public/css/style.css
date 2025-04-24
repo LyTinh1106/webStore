@@ -2535,5 +2535,63 @@ hr {
 .specs-link:hover {
   color: #1d4ed8;
 }
+  
 
+/*compare*/
+.compare-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-top: 1px solid #ddd;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  z-index: 1000;
+  display: none ;
+}
+
+.compare-product-slot {
+  width: 200px;
+  height: 100px;
+  margin: 0 10px;
+  border: 1px dashed #ccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  font-size: 14px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.compare-product-slot img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  margin-bottom: 5px;
+}
+
+.compare-button {
+  margin-left: auto;
+  padding: 10px 20px;
+  background: gray;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.compare-button:disabled {
+  background: #ccc;
+  cursor: not-allowed;
+}
+
+.clear-button {
+  margin-left: 10px;
+  background: none;
+  border: none;
+  color: #007bff;
+  cursor: pointer;
+}
 

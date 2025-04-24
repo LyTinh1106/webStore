@@ -7,8 +7,7 @@ const {getCheckout} = require('../controllers/CheckoutController')
 const {getProduct, getStore} = require('../controllers/ProductController')
 const { checkAdmin } = require('../middleware/authMiddleware');
 const { sendResetPasswordEmail} = require('../controllers/AccountController');
-const { searchProductRender } = require('../controllers/ProductController');
-
+const { searchProductRender,compareProducts } = require('../controllers/ProductController');
 const router = express.Router()
 
 
@@ -38,5 +37,6 @@ router.post('/reset-password',resetPassword);
 router.post('/send-reset-code', sendResetPasswordEmail)
 router.post('/send-reset-code/:token', resetPassword);
 router.post('/reset-password/:token', resetPassword);
+router.get('/compare/:id1/:id2', compareProducts);
 
 module.exports = router
