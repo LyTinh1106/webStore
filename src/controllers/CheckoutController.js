@@ -1,6 +1,11 @@
 const connection = require('../config/database')
 
 
+const getCart = (req,res) => {
+  res.render('cart', {
+      user: req.user || null 
+    });
+};
 
 const getCheckout = (req,res) => {
     res.render('checkout', {
@@ -9,4 +14,4 @@ const getCheckout = (req,res) => {
 };
 
 
-module.exports = {getCheckout}
+module.exports = {getCheckout, getCart}
