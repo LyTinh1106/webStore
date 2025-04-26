@@ -29,6 +29,38 @@
 //Brand
 
 //modal add brand form
+function saveScrollAndTabAndReload() {
+    const scrollY = window.scrollY;
+    const activeTabId = document.querySelector('.nav-link.active')?.id;
+
+    if (activeTabId) {
+        localStorage.setItem("activeTabId", activeTabId);
+    }
+    localStorage.setItem("scrollPosition", scrollY);
+
+    // ⚡ Không dùng location.reload(), dùng href nhẹ nhàng
+    window.location.href = window.location.pathname;
+}
+
+window.addEventListener("DOMContentLoaded", function () {
+    const savedTabId = localStorage.getItem("activeTabId");
+    const savedScrollY = localStorage.getItem("scrollPosition");
+
+    if (savedTabId) {
+        const tabTrigger = document.getElementById(savedTabId);
+        if (tabTrigger) {
+            const tab = new bootstrap.Tab(tabTrigger);
+            tab.show();
+        }
+        localStorage.removeItem("activeTabId");
+    }
+
+    if (savedScrollY) {
+        window.scrollTo(0, parseInt(savedScrollY));
+        localStorage.removeItem("scrollPosition");
+    }
+});
+
 document.getElementById("addBrandForm").addEventListener("submit", async function (e) {
     e.preventDefault(); // Ngăn reload mặc định của form
 
@@ -49,12 +81,7 @@ document.getElementById("addBrandForm").addEventListener("submit", async functio
         });
 
         if (response.ok) {
-            // Lưu vị trí cuộn
-            const scrollY = window.scrollY;
-            localStorage.setItem("scrollPosition", scrollY);
-
-            // Reload lại trang
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
             document.body.innerHTML = text;
@@ -82,12 +109,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 });
 
                 if (response.ok) {
-                    // Lưu vị trí cuộn
-                    const scrollY = window.scrollY;
-                    localStorage.setItem("scrollPosition", scrollY);
-
-                    // Reload lại trang
-                    location.reload();
+                    saveScrollAndTabAndReload()
                 } else {
                     const text = await response.text();
                     alert("Xóa thất bại: " + text);
@@ -130,12 +152,7 @@ document.getElementById("updateBrandForm").addEventListener("submit", async func
         });
 
         if (response.ok) {
-            // Lưu vị trí cuộn
-            const scrollY = window.scrollY;
-            localStorage.setItem("scrollPosition", scrollY);
-
-            // Reload lại trang
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
             document.body.innerHTML = text;
@@ -156,9 +173,6 @@ document.querySelectorAll(".editBrandBtn").forEach(btn => {
         document.getElementById("updateBrandName").value = brandName;
     });
 });
-
-
-
 
 //Category
 
@@ -183,10 +197,7 @@ document.getElementById("addCategoryForm").addEventListener("submit", async func
         });
 
         if (response.ok) {
-            const scrollY = window.scrollY;
-            localStorage.setItem("scrollPosition", scrollY);
-
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
             document.body.innerHTML = text;
@@ -224,9 +235,7 @@ document.querySelectorAll(".delete-category-btn").forEach(button => {
             });
 
             if (response.ok) {
-                const scrollY = window.scrollY;
-                localStorage.setItem("scrollPosition", scrollY);
-                location.reload();
+                saveScrollAndTabAndReload()
             } else {
                 const text = await response.text();
                 alert("Không xóa được danh mục: " + text);
@@ -284,7 +293,7 @@ document.getElementById("updateCategoryForm").addEventListener("submit", async f
         });
 
         if (response.ok) {
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
             alert("Có lỗi xảy ra: " + text);
@@ -396,12 +405,8 @@ document.getElementById("addVoucherForm").addEventListener("submit", async funct
         });
 
         if (response.ok) {
-            // Lưu vị trí cuộn
-            const scrollY = window.scrollY;
-            localStorage.setItem("voucherScrollPosition", scrollY);
 
-            // Reload lại trang
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
             document.body.innerHTML = text; // fallback lỗi server
@@ -432,9 +437,7 @@ document.querySelectorAll(".delete-voucher-btn").forEach(button => {
             });
 
             if (response.ok) {
-                const scrollY = window.scrollY;
-                localStorage.setItem("voucherScrollPosition", scrollY);
-                location.reload();
+                saveScrollAndTabAndReload()
             } else {
                 const text = await response.text();
                 alert("Không thể xóa voucher: " + text);
@@ -496,12 +499,7 @@ document.getElementById("editVoucherForm").addEventListener("submit", async func
         });
 
         if (response.ok) {
-            // Lưu vị trí scroll
-            const scrollY = window.scrollY;
-            localStorage.setItem("voucherScrollPosition", scrollY);
-
-            // Reload
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const result = await response.json();
             messageBox.textContent = result.message || "Cập nhật thất bại!";
@@ -527,10 +525,8 @@ document.querySelectorAll(".edit-voucher-btn").forEach(btn => {
 });
 
 
-
 //supplier
 //add supplier modal form
-//modal add brand form
 document.getElementById("addSupplierForm").addEventListener("submit", async function (e) {
     e.preventDefault(); // Ngăn reload mặc định của form
 
@@ -559,12 +555,7 @@ document.getElementById("addSupplierForm").addEventListener("submit", async func
         });
 
         if (response.ok) {
-            // Lưu vị trí cuộn
-            const scrollY = window.scrollY;
-            localStorage.setItem("scrollPosition", scrollY);
-
-            // Reload lại trang
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
             document.body.innerHTML = text;
@@ -594,9 +585,7 @@ document.querySelectorAll(".delete-supplier-btn").forEach(button => {
             });
 
             if (response.ok) {
-                const scrollY = window.scrollY;
-                localStorage.setItem("supplierScrollPosition", scrollY);
-                location.reload();
+                saveScrollAndTabAndReload()
             } else {
                 const text = await response.text();
                 alert("Không thể xóa nhà cung cấp: " + text);
@@ -639,9 +628,7 @@ document.getElementById("updateSupplierForm").addEventListener("submit", async f
         });
 
         if (response.ok) {
-            const scrollY = window.scrollY;
-            localStorage.setItem("scrollPosition", scrollY);
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
             document.body.innerHTML = text;
@@ -841,11 +828,7 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
             alert(result.message || "Thêm sản phẩm thành công!");
             form.reset();
 
-            // 👇 Lưu vị trí cuộn trước khi reload
-            sessionStorage.setItem("scrollPosition", window.scrollY);
-
-            // 👇 Reload lại trang
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             alert((result.message || "Thêm sản phẩm thất bại."));
         }
@@ -857,38 +840,42 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
 });
 // xóa product
 // Xử lý nút xóa sản phẩm
+function saveScrollAndTabAndReload() {
+    const scrollY = window.scrollY;
+    const activeTabId = document.querySelector('.nav-link.active')?.id;
+
+    if (activeTabId) {
+        localStorage.setItem("activeTabId", activeTabId);
+    }
+    localStorage.setItem("scrollPosition", scrollY);
+
+    window.location.href = window.location.pathname; // reload nhẹ trang
+}
+
+// Xử lý nút xóa sản phẩm
 document.querySelectorAll(".delete-product-btn").forEach(button => {
     button.addEventListener("click", async function () {
         const productId = this.dataset.id; // Lấy productId từ data-id của nút xóa
 
-        // Cảnh báo xác nhận xóa sản phẩm
         const isConfirmed = confirm("Bạn có chắc chắn muốn xóa sản phẩm này không?");
-        if (!isConfirmed) return; // Nếu người dùng không xác nhận, dừng lại
+        if (!isConfirmed) return; // Nếu không xác nhận thì dừng lại
 
         try {
-            // Gửi yêu cầu DELETE đến API
             const response = await fetch(`/api/product/delete/${productId}`, {
                 method: "DELETE"
             });
 
             if (response.ok) {
-                // Nếu xóa thành công, tìm dòng sản phẩm và xóa nó khỏi giao diện
-                const row = document.getElementById(`product-${productId}`);
-                if (row) {
-                    row.remove();  // Xóa dòng sản phẩm khỏi bảng
-                    alert("Sản phẩm đã được xóa thành công!"); // Thông báo thành công
-                } else {
-                    console.error('Không tìm thấy dòng sản phẩm trong bảng.');
-                    alert("Không thể tìm thấy sản phẩm để xóa.");
-                }
+                alert("Sản phẩm đã được xóa thành công!");
+
+                // ✅ Sau khi xóa xong, lưu vị trí + tab rồi reload lại
+                saveScrollAndTabAndReload();
             } else {
-                // Nếu API trả về lỗi
                 const errorText = await response.text();
                 console.error("Lỗi khi xóa sản phẩm:", errorText);
                 alert("Không thể xóa sản phẩm. Lỗi: " + errorText);
             }
         } catch (err) {
-            // Xử lý lỗi khi gửi yêu cầu
             console.error("Lỗi khi xóa sản phẩm:", err);
             alert("Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.");
         }
@@ -948,9 +935,7 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
         });
 
         if (response.ok) {
-            const scrollY = window.scrollY;
-            localStorage.setItem("scrollPosition", scrollY);
-            location.reload();
+            saveScrollAndTabAndReload()
         } else {
             const errorText = await response.text();
             document.body.innerHTML = errorText; // Debug nếu lỗi
