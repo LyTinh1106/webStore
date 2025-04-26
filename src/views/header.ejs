@@ -76,8 +76,8 @@
                                     <h5>TỔNG TIỀN: 0 VNĐ</h5>
                                 </div>
                                 <div class="cart-btns">
-                                    <a href="#">Xem Giỏ Hàng</a>
-                                    <a href="#">Thanh Toán <i class="fa fa-arrow-circle-right"></i></a>
+                                    <a href="/cart">Xem Giỏ Hàng</a>
+                                    <a href="/checkout">Thanh Toán <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -87,11 +87,20 @@
                         <div class="dropdown Account">
                             <a a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-user-o me-1"></i>
-                                <% if (user && user.emails && user.emails[0]) { %>
-                                    <%= user.emails[0].value.split('@')[0] %>
-                                        <% } else { %>
-                                            Guest
-                                            <% } %>
+                                <% if (user) { %>
+                                    <% 
+                                      let email = '';
+                                      if (user.emails && user.emails[0]) {
+                                        email = user.emails[0].value;
+                                      } else if (user.email) {
+                                        email = user.email;
+                                      }
+                                    %>
+                                    <%= email.split('@')[0] %>
+                                  <% } else { %>
+                                    Guest
+                                  <% } %>
+                                  
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <% if (user) { %>

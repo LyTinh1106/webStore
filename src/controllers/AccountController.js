@@ -21,8 +21,9 @@ const getHomePage = (req, res) => {
     }
 
     res.render('HomePage', {
-      user: req.user || null,
-      products
+      user: req.user || req.session.user || null,
+      products,
+
     });
   });
 };
@@ -470,6 +471,8 @@ const login = (req, res) => {
 
 
 
+
+
 module.exports = {
   create,
   findAll,
@@ -490,5 +493,6 @@ module.exports = {
   sendResetPasswordEmail,
   resetPassword,
   verifyResetToken,
-  verifyOtp
+  verifyOtp,
+  
 }
