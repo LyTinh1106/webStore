@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông Tin Tài Khoản</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+	<!-- Bootstrap -->
+	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
+
+	<!-- Slick -->
+	<link type="text/css" rel="stylesheet" href="/css/slick.css" />
+	<link type="text/css" rel="stylesheet" href="/css/slick-theme.css" />
+
+	<!-- nouislider -->
+	<link type="text/css" rel="stylesheet" href="/css/nouislider.min.css" />
+
+	<!-- Font Awesome Icon -->
+	<link rel="stylesheet" href="/css/font-awesome.min.css">
+
+	<!-- Custom stlylesheet -->
+	<link type="text/css" rel="stylesheet" href="/css/style.css" />
+    <style>
+        body {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        .account-container {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+            margin-top: 30px;
+        }
+        .left-panel {
+            background-color: #f8f9fa;
+            padding: 20px;
+            height: 100%;
+            border-right: 1px solid #ddd;
+        }
+        .right-panel {
+            padding: 30px;
+        }
+        .nav-pills > li > a {
+            color: #555;
+            border-radius: 4px;
+            margin-bottom: 10px;
+            transition: all 0.3s;
+        }
+        .nav-pills > li.active > a, 
+        .nav-pills > li.active > a:hover, 
+        .nav-pills > li.active > a:focus {
+            background-color: #337ab7;
+            color: white;
+        }
+        .nav-pills > li > a:hover {
+            background-color: #eee;
+        }
+        .tab-content {
+            padding-top: 20px;
+        }
+        .user-info {
+            margin-bottom: 20px;
+        }
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #eee;
+            display: block;
+            text-align: center;
+            line-height: 100px;
+            font-size: 40px;
+            color: #777;
+            margin: 0 auto 15px;
+        }
+        .logout-btn {
+            width: 100%;
+            margin-top: 20px;
+        }
+        .order-item {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-bottom: 15px;
+        }
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .badge {
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: normal;
+        }
+        .badge-success {
+            background-color: #5cb85c;
+        }
+        .badge-warning {
+            background-color: #f0ad4e;
+        }
+    </style>
+</head>
+<body>
+    <%- include('./header.ejs') %>
+    <div class="container">
+        <h2 class="text-center">Thông Tin Tài Khoản</h2>
+        
+        <div class="account-container">
+            <div class="row">
+                <!-- Panel 1: Menu điều hướng -->
+                <div class="col-md-3 left-panel">
+                    <div class="user-info text-center">
+                        <div class="user-avatar">
+                            <span class="glyphicon glyphicon-user"></span>
+                        </div>
+                        <h4>Nguyễn Văn A</h4>
+                        <p class="text-muted">nguyenvana@example.com</p>
+                    </div>
+                    
+                    <ul class="nav nav-pills nav-stacked" role="tablist">
+                        <li role="presentation" class="active">
+                            <a href="#customer-info" aria-controls="customer-info" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-user"></span> Thông Tin Khách Hàng
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#order-history" aria-controls="order-history" role="tab" data-toggle="tab">
+                                <span class="glyphicon glyphicon-list-alt"></span> Lịch Sử Đơn Hàng
+                            </a>
+                        </li>
+                        <li role="presentation">
+                            <a href="#" id="logout-button" class="btn btn-danger logout-btn">
+                                <span class="glyphicon glyphicon-log-out"></span> Đăng Xuất
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                
+                <!-- Panel 2: Hiển thị nội dung -->
+                <div class="col-md-9 right-panel">
+                    <div class="tab-content">
+                        <!-- Tab Thông Tin Khách Hàng -->
+                        <div role="tabpanel" class="tab-pane active" id="customer-info">
+                            <h3>Thông Tin Khách Hàng</h3>
+                            <form>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="fullName">Họ và tên</label>
+                                            <input type="text" class="form-control" id="fullName" value="Nguyễn Văn A">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email" value="nguyenvana@example.com">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="phone">Số điện thoại</label>
+                                            <input type="tel" class="form-control" id="phone" value="0912345678">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group">
+                                            <label for="dob">Ngày sinh</label>
+                                            <input type="date" class="form-control" id="dob" value="1990-01-01">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="address">Địa chỉ</label>
+                                    <textarea class="form-control" id="address" rows="3">123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Cập Nhật Thông Tin</button>
+                            </form>
+                        </div>
+                        
+                        <!-- Tab Lịch Sử Đơn Hàng -->
+                        <div role="tabpanel" class="tab-pane" id="order-history">
+                            <h3>Lịch Sử Đơn Hàng</h3>
+                            
+                            <div class="order-item">
+                                <div class="order-header">
+                                    <div>
+                                        <strong>Mã đơn hàng:</strong> #ORD12345
+                                    </div>
+                                    <div>
+                                        <span class="badge badge-success">Đã giao hàng</span>
+                                    </div>
+                                </div>
+                                <div class="order-details">
+                                    <p><strong>Ngày đặt:</strong> 15/04/2025</p>
+                                    <p><strong>Tổng tiền:</strong> 1.250.000đ</p>
+                                    <p><strong>Phương thức thanh toán:</strong> Thanh toán khi nhận hàng</p>
+                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi tiết</button>
+                                </div>
+                            </div>
+                            
+                            <div class="order-item">
+                                <div class="order-header">
+                                    <div>
+                                        <strong>Mã đơn hàng:</strong> #ORD12344
+                                    </div>
+                                    <div>
+                                        <span class="badge badge-warning">Đang vận chuyển</span>
+                                    </div>
+                                </div>
+                                <div class="order-details">
+                                    <p><strong>Ngày đặt:</strong> 10/04/2025</p>
+                                    <p><strong>Tổng tiền:</strong> 850.000đ</p>
+                                    <p><strong>Phương thức thanh toán:</strong> Chuyển khoản ngân hàng</p>
+                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi tiết</button>
+                                </div>
+                            </div>
+                            
+                            <div class="order-item">
+                                <div class="order-header">
+                                    <div>
+                                        <strong>Mã đơn hàng:</strong> #ORD12343
+                                    </div>
+                                    <div>
+                                        <span class="badge badge-success">Đã giao hàng</span>
+                                    </div>
+                                </div>
+                                <div class="order-details">
+                                    <p><strong>Ngày đặt:</strong> 28/03/2025</p>
+                                    <p><strong>Tổng tiền:</strong> 2.100.000đ</p>
+                                    <p><strong>Phương thức thanh toán:</strong> Thẻ tín dụng</p>
+                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi tiết</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <%- include('./footer.ejs') %>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    
+    <script>
+        // JavaScript để xử lý các sự kiện
+        $(document).ready(function() {
+            // Xử lý nút đăng xuất
+            $('#logout-button').click(function(e) {
+                e.preventDefault();
+                if(confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                    alert('Đã đăng xuất thành công!');
+                    // Trong thực tế, sẽ chuyển hướng tới trang đăng nhập
+                    // window.location.href = 'login.html';
+                }
+            });
+            
+            // Xử lý nút chi tiết đơn hàng
+            $('.view-detail-btn').click(function() {
+                var orderID = $(this).closest('.order-item').find('.order-header div:first-child').text().split('#')[1].trim();
+                alert('Xem chi tiết đơn hàng ' + orderID);
+                // Trong thực tế, sẽ hiện modal hoặc chuyển đến trang chi tiết
+            });
+            
+            // Xử lý form cập nhật thông tin
+            $('#customer-info form').submit(function(e) {
+                e.preventDefault();
+                alert('Thông tin đã được cập nhật thành công!');
+            });
+        });
+    </script>
+</body>
+</html>
