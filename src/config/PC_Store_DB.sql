@@ -177,12 +177,18 @@ JOIN
 
 
 INSERT INTO brand (brand_name) VALUES
-('ASUS'), ('Acer'), ('Gigabyte'), ('Intel'), ('AMD'),
-('Corsair'), ('Logitech'), ('Razer'), ('HP'), ('Dell');
+('ASUS'),('Acer'),('Gigabyte'),('Intel'),('AMD'),
+('Corsair'),('Logitech'),('Razer'),('HP'),('Dell'),
+('Lenovo'),('NVIDIA'),('Tenda'),('TP-Link'),('ASRock'),
+('Corsair'),('Kingston'),('Zowie'),('SteelSeries'),('Akko'),
+('Samsung'),('LG'),('Secretlab'),('Anda Seat'),('E-Dra'),('Razer'),
+('HyperX'),('Deepcool'),('Arctic'),('Flydigi'),('Gamesir'),
+('Xbox'),('Sony'),('8BitDo'),('NZXT'),('Thermaltake'),
+('Pulsar'),('Lian-li');
 
 INSERT INTO category (name) VALUES
-('Laptop'), ('CPU'), ('GPU'), ('Mainboard'), ('RAM'),
-('SSD'), ('Power Supply'), ('Mouse'), ('Keyboard'), ('Monitor');
+('Laptop'),('CPU'),('GPU'),('Mainboard'),('RAM'),('SSD'),('Power Supply'),('Chuột'),('Bàn phím'),('Màn hình'),
+('Ghế - Bàn'),('Tai nghe'),('Thiết bị mạng'),('Tản nhiệt'),('Micro - Webcam'),('Lót chuột'),('Tay cầm'),('Case');
 
 INSERT INTO product (fancy_id, name, description, import_price, retail_price, brand_id, category_id, origin, warranty)
 VALUES
