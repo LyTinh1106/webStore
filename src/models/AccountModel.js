@@ -147,4 +147,5 @@ Account.updatePasswordByEmail = (email, hashedPassword, result) => {
 };
 
 
+
 module.exports = Account;
