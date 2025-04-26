@@ -45,7 +45,7 @@
                         <div class="dropdown">
                             <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-shopping-cart"></i>
-                                <span>Your Cart</span>
+                                <span>Giỏ Hàng</span>
                                 <div class="qty">0</div>
                             </a>
 
@@ -55,39 +55,34 @@
                                         style="text-align:center; color:#fd1111ec; font-style:italic; display:none; padding: 15px 10px;">
                                         Chưa có sản phẩm nào trong giỏ hàng
                                     </div>
-                                    <!-- <div class="product-widget">
-                                        <div class="product-img">
-                                            <img src="/images/product01.png" alt="">
-                                        </div>
-                                        <div class="product-body">
-                                            <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-                                        </div>
-                                        <button class="delete"><i class="fa fa-close"></i></button>
-                                    </div> -->
 
-                                    <!-- <div class="product-widget">
-                                        <div class="product-img">
-                                            <img src="/images/product02.png" alt="">
-                                        </div>
-                                        <div class="product-body">
-                                            <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                            <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-                                        </div>
-                                        <button class="delete"><i class="fa fa-close"></i></button>
-                                    </div> -->
+
+                                    <!-- Ví dụ mẫu sản phẩm -->
+                                    <!--
+            <div class="product-widget">
+                <div class="product-img">
+                    <img src="/images/product01.png" alt="">
+                </div>
+                <div class="product-body">
+                    <h3 class="product-name"><a href="#">Tên sản phẩm ở đây</a></h3>
+                    <h4 class="product-price"><span class="qty">1x</span>980.000 VNĐ</h4>
+                </div>
+                <button class="delete"><i class="fa fa-close"></i></button>
+            </div>
+            -->
                                 </div>
                                 <div class="cart-summary">
-                                    <small> Item(s) selected</small>
-                                    <h5>SUBTOTAL: $00.00</h5>
+                                    <small>Số sản phẩm đã chọn</small>
+                                    <h5>TỔNG TIỀN: 0 VNĐ</h5>
                                 </div>
                                 <div class="cart-btns">
-                                    <a href="#">View Cart</a>
-                                    <a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+                                    <a href="#">Xem Giỏ Hàng</a>
+                                    <a href="#">Thanh Toán <i class="fa fa-arrow-circle-right"></i></a>
                                 </div>
                             </div>
                         </div>
                         <!-- /Cart -->
+
                         <!--Account-->
                         <div class="dropdown Account">
                             <a a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
@@ -143,15 +138,23 @@
             <!-- responsive-nav -->
             <div id="responsive-nav">
                 <!-- NAV -->
-                <ul class="main-nav nav navbar-nav">
+                <ul class="main-nav nav navbar-nav" id="nav-categories">
+                    <li class="active"><a href="/" data-id="0">Trang Chủ</a></li>
+                    <li><a href="/store/all" data-id="0">Sản Phẩm</a></li>
+                    <li><a href="#" data-id="1">Laptop</a></li>
+                    <li><a href="#" data-id="2">CPU</a></li>
+                    <li><a href="#" data-id="3">GPU</a></li>
+                    <li><a href="#" data-id="4">MainBoard</a></li>
+                    <li><a href="#" data-id="5">RAM</a></li>
+                    <li><a href="#" data-id="6">SSD</a></li>
+                    <li><a href="#" data-id="7">Power Supply</a></li>
+                    <li><a href="#" data-id="8">Mouse</a></li>
+                    <li><a href="#" data-id="9">KeyBoard</a></li>
+                    <li><a href="#" data-id="10">Monitor</a></li>
 
-                    <li class="active"><a href="/">Trang Chủ</a></li>
-                    <li><a href="/store/all">Sản Phẩm</a></li>
-                    <li><a href="#">Laptop</a></li>
-                    <li><a href="#">Chuột</a></li>
-                    <li><a href="#">Bàn phím</a></li>
-                    <li><a href="#">Màn hình</a></li>
                 </ul>
+
+
                 <!-- /NAV -->
             </div>
             <!-- /responsive-nav -->

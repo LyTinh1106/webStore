@@ -71,6 +71,15 @@
 										<div class="banner-item">
 											<img src="/images/banner5.jpg" alt="Banner 5" class="banner-img">
 										</div>
+										<div class="banner-item">
+											<img src="/images/banner6.jpg" alt="Banner 5" class="banner-img">
+										</div>
+										<div class="banner-item">
+											<img src="/images/banner7.jpg" alt="Banner 5" class="banner-img">
+										</div>
+										<div class="banner-item">
+											<img src="/images/banner8.jpg" alt="Banner 5" class="banner-img">
+										</div>
 									</div>
 									<div id="banner-slick-nav" class="banners-slick-nav"></div>
 								</div>
@@ -139,12 +148,13 @@
 														<h3 class="product-name"><a href="#">
 																<%= product.name %>
 															</a></h3>
-														<h4 class="product-price">
-															$<%= product.retail_price %>
+															<h4 class="product-price">
+																<%= product.retail_price %> VNĐ
 																<!-- <% if (product.old_price) { %>
-																		  <del class="product-old-price">$<%= product.old_price %></del>
-																	<% } %> -->
-														</h4>
+																  <del class="product-old-price"><%= product.old_price.toLocaleString('vi-VN') %> VNĐ</del>
+																<% } %> -->
+															  </h4>
+															  
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
