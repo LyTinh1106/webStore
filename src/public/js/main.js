@@ -351,6 +351,45 @@ function renderFilteredProducts(products, shouldShowFiltered) {
     `;
 	});
 }
+// header chuyển trang + lọc
+
+const navLinks = document.querySelectorAll('#nav-categories a');
+
+navLinks.forEach(link => {
+  link.addEventListener('click', async function (e) {
+    const href = this.getAttribute('href');
+    const categoryId = this.getAttribute('data-id');
+
+    if (href === '/' || href === '/store/all') {
+      // Nếu là Trang Chủ hoặc Sản Phẩm => cho chuyển trang bình thường
+      return;
+    }
+
+    // Nếu là Laptop, Chuột, Bàn phím, Màn hình => chặn chuyển trang
+    e.preventDefault();
+
+    // Xóa active tất cả li
+    navLinks.forEach(link => link.parentElement.classList.remove('active'));
+
+    // Active li mới click
+    this.parentElement.classList.add('active');
+
+    // Bỏ hết check cũ ở category filter
+    document.querySelectorAll('.category-filter input[type="checkbox"]').forEach(cb => cb.checked = false);
+
+    // Check đúng checkbox tương ứng category_id
+    const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+    if (targetCheckbox) {
+      targetCheckbox.checked = true;
+    }
+
+    // Gọi filter theo checkbox mới
+    filterByCategory();
+  });
+});
+
+
+
 
 
 
