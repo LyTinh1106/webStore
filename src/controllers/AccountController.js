@@ -2,7 +2,7 @@ const Account = require("../models/AccountModel");
 const bcrypt = require("bcrypt");
 const Category = require('../models/CategoryModel')
 const Brand = require('../models/BrandModel')
-const Product = require('../models/ProductModel'); 
+const Product = require('../models/ProductModel');
 const Order = require('../models/OrderModel')
 const Shipping = require('../models/ShippingModel')
 const Supplier = require('../models/SupplierModel')
@@ -31,74 +31,73 @@ const getRegister = (req, res) => {
   res.render('register');
 };
 const getLogin = (req, res) => {
-    res.render('login');
-  };
-  const getForgotPassword = (req, res) => {
-    res.render('forgotPassword', { message: null }); // truyền message mặc định
-  };
-  const getResetPassword = (req, res) => {
-    const token = req.query.token;
-    res.render('resetPassword', { token, message: null });
-  };
+  res.render('login');
+};
+const getForgotPassword = (req, res) => {
+  res.render('forgotPassword', { message: null }); // truyền message mặc định
+};
+const getResetPassword = (req, res) => {
+  const token = req.query.token;
+  res.render('resetPassword', { token, message: null });
+};
+const getInfo = (req, res) => {
+  res.render('userInfo', { user: req.user || null });
+};
+const getDashboard = (req, res) => {
+  if (!req.session.user || req.session.user.role !== 'admin') {
+    return res.redirect('/homepage?error=Truy+cập+bị+từ+chối');
+  }
 
-  
-
-  const getDashboard = (req, res) => {
-    if (!req.session.user || req.session.user.role !== 'admin') {
-      return res.redirect('/homepage?error=Truy+cập+bị+từ+chối');
+  Account.getAll(null, (err, accounts) => {
+    if (err) {
+      return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách tài khoản' });
     }
-  
-    Account.getAll(null, (err, accounts) => {
+
+    Category.getAll((err, categories) => {
       if (err) {
-        return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách tài khoản' });
+        return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách danh mục' });
       }
-  
-      Category.getAll((err, categories) => {
+
+      Brand.getAll((err, brands) => {
         if (err) {
-          return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách danh mục' });
+          return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhãn hàng' });
         }
-  
-        Brand.getAll((err, brands) => {
+
+        Product.getAll(null, (err, products) => {
           if (err) {
-            return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhãn hàng' });
+            return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách sản phẩm' });
           }
-  
-          Product.getAll(null, (err, products) => {
+
+          Order.getAll((err, orders) => {
             if (err) {
-              return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách sản phẩm' });
+              return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách đơn hàng' });
             }
-  
-            Order.getAll((err, orders) => {
+
+            Shipping.getAll((err, shippings) => {
               if (err) {
-                return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách đơn hàng' });
+                return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
               }
-  
-              Shipping.getAll((err, shippings) => {
+
+              Supplier.getAll((err, suppliers) => {
                 if (err) {
-                  return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
+                  return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
                 }
-  
-                Supplier.getAll((err, suppliers) => {
+
+                Voucher.getAll(null, (err, vouchers) => {
                   if (err) {
-                    return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
+                    return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
                   }
-  
-                  Voucher.getAll(null, (err, vouchers) => {
-                    if (err) {
-                      return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
-                    }
-  
-                    res.render('dashboard', {
-                      user: req.session.user,
-                      accounts,
-                      categories,
-                      brands,
-                      products,
-                      orders,
-                      shippings,
-                      suppliers,
-                      vouchers
-                    });
+
+                  res.render('dashboard', {
+                    user: req.session.user,
+                    accounts,
+                    categories,
+                    brands,
+                    products,
+                    orders,
+                    shippings,
+                    suppliers,
+                    vouchers
                   });
                 });
               });
@@ -107,58 +106,59 @@ const getLogin = (req, res) => {
         });
       });
     });
-  };
+  });
+};
 
-  //Forgot password
-  const sendResetPasswordEmail = async (req, res) => {
-    const { email } = req.body;
-  
-    try {
-      // Sử dụng model thay vì db.query trực tiếp
-      Account.findByEmail(email, (err, account) => {
-        if (err || !account) {
-          return res.status(404).json({ message: "Email không tồn tại" });
-        }
-  
-        // Tạo JWT token
-        const token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '1h' });
-        const resetLink = `http://localhost:9000/reset-password?token=${token}`;
+//Forgot password
+const sendResetPasswordEmail = async (req, res) => {
+  const { email } = req.body;
 
-  
-        // Cấu hình Gmail
-        const transporter = nodemailer.createTransport({
-          service: 'Gmail',
-          auth: {
-            user: 'nguyencongvinh2909@gmail.com',
-            pass: process.env.EMAIL_PASS,  
-          },
-        });
-  
-        const mailOptions = {
-          from: 'nguyencongvinh2909@gmail.com',
-          to: email,
-          subject: 'Đặt lại mật khẩu',
-          html: `
+  try {
+    // Sử dụng model thay vì db.query trực tiếp
+    Account.findByEmail(email, (err, account) => {
+      if (err || !account) {
+        return res.status(404).json({ message: "Email không tồn tại" });
+      }
+
+      // Tạo JWT token
+      const token = jwt.sign({ email }, process.env.SECRET_KEY, { expiresIn: '1h' });
+      const resetLink = `http://localhost:9000/reset-password?token=${token}`;
+
+
+      // Cấu hình Gmail
+      const transporter = nodemailer.createTransport({
+        service: 'Gmail',
+        auth: {
+          user: 'nguyencongvinh2909@gmail.com',
+          pass: process.env.EMAIL_PASS,
+        },
+      });
+
+      const mailOptions = {
+        from: 'nguyencongvinh2909@gmail.com',
+        to: email,
+        subject: 'Đặt lại mật khẩu',
+        html: `
             <p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>
             <p>Click vào liên kết sau trong vòng 1 giờ:</p>
             <a href="${resetLink}">${resetLink}</a>
           `,
-        };
-        
-        // Gửi email và kiểm tra lỗi
-        transporter.sendMail(mailOptions, (error, info) => {
-          if (error) {
-            return res.status(500).json({ message: "Lỗi khi gửi email" });
-          }
-          res.send('123')
-        });
+      };
+
+      // Gửi email và kiểm tra lỗi
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          return res.status(500).json({ message: "Lỗi khi gửi email" });
+        }
+        res.send('123')
       });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ message: "Lỗi server!" });
-    }
-  };
-  
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Lỗi server!" });
+  }
+};
+
 //reset pass
 const resetPassword = async (req, res) => {
   const { email, newPassword, token } = req.body;
@@ -207,7 +207,7 @@ const verifyResetToken = (req, res) => {
     res.render('reset-password', { token: null, error: 'Token không hợp lệ.' });
   }
 };
-  
+
 
 
 
@@ -432,42 +432,42 @@ const verifyOtp = (req, res) => {
   });
 };
 
-  
-  
-  // dang nhap
-  const login = (req, res) => {
-    const { email, password } = req.body;
-  
-    if (!email || !password) {
-      return res.status(400).render("login", { message: "Vui lòng điền đầy đủ email và mật khẩu." });
+
+
+// dang nhap
+const login = (req, res) => {
+  const { email, password } = req.body;
+
+  if (!email || !password) {
+    return res.status(400).render("login", { message: "Vui lòng điền đầy đủ email và mật khẩu." });
+  }
+
+  Account.findByEmail(email, async (err, account) => {
+    if (err || !account) {
+      return res.status(401).render("login", { message: "Email không tồn tại." });
     }
-  
-    Account.findByEmail(email, async (err, account) => {
-      if (err || !account) {
-        return res.status(401).render("login", { message: "Email không tồn tại." });
-      }
-  
-      const isMatch = await bcrypt.compare(password, account.password);
-  
-      if (!isMatch) {
-        return res.status(401).render("login", { message: "Mật khẩu không đúng." });
-      }
-  
-      req.session.user = {
-        id: account.id,
-        email: account.email,
-        role: account.role,
-      };
-  
-      
-      if (account.role === "admin") {
-        return res.redirect("/dashboard");
-      } else {
-        return res.redirect("/homepage");
-      }
-    });
-  };
-  
+
+    const isMatch = await bcrypt.compare(password, account.password);
+
+    if (!isMatch) {
+      return res.status(401).render("login", { message: "Mật khẩu không đúng." });
+    }
+
+    req.session.user = {
+      id: account.id,
+      email: account.email,
+      role: account.role,
+    };
+
+
+    if (account.role === "admin") {
+      return res.redirect("/dashboard");
+    } else {
+      return res.redirect("/homepage");
+    }
+  });
+};
+
 
 
 module.exports = {
@@ -482,6 +482,7 @@ module.exports = {
   getHomePage,
   getRegister,
   getLogin,
+  getInfo,
   register,
   login,
   getForgotPassword,

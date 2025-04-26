@@ -749,6 +749,40 @@
                                                 data-name="<%= brand.brand_name %>">
                                                 <i class="fas fa-edit"></i>
                                             </a>
+
+                                            <!-- Modal Cập Nhật Nhãn Hàng -->
+                                            <div class="modal fade" id="updateBrandModal" tabindex="-1"
+                                                aria-labelledby="updateBrandModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="updateBrandModalLabel">Cập
+                                                                nhật nhãn
+                                                                hàng</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form id="updateBrandForm">
+                                                                <input type="hidden" id="brandId">
+                                                                <div class="mb-3">
+                                                                    <label for="updateBrandName" class="form-label">Tên
+                                                                        nhãn
+                                                                        hàng</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="updateBrandName" name="brand_name" required>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Hủy</button>
+                                                            <button type="submit" form="updateBrandForm"
+                                                                class="btn btn-primary">Cập nhật</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <!-- Nút xóa -->
                                             <button class="btn btn-sm btn-danger delete-brand-btn"
                                                 data-id="<%= brand.brand_id %>">
@@ -817,40 +851,6 @@
                                                 class="btn btn-sm btn-info">
                                                 <i class="fas fa-edit"></i>
                                             </a>
-
-                                            <!-- Modal Cập Nhật Nhãn Hàng -->
-                                            <div class="modal fade" id="updateBrandModal" tabindex="-1"
-                                                aria-labelledby="updateBrandModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="updateBrandModalLabel">Cập
-                                                                nhật nhãn
-                                                                hàng</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Đóng"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form id="updateBrandForm">
-                                                                <input type="hidden" id="brandId">
-                                                                <div class="mb-3">
-                                                                    <label for="updateBrandName" class="form-label">Tên
-                                                                        nhãn
-                                                                        hàng</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="updateBrandName" name="brand_name" required>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Hủy</button>
-                                                            <button type="submit" form="updateBrandForm"
-                                                                class="btn btn-primary">Cập nhật</button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
 
                                             <form action="/shippings/<%= shipping.id_shipping %>/delete" method="POST"
                                                 style="display:inline;">
