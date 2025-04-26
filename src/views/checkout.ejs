@@ -2,180 +2,249 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Electro - HTML Ecommerce Template</title>
+  <title>Electro - HTML Ecommerce Template</title>
 
-	<!-- Google font -->
-	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
-	<!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
+  <!-- Bootstrap -->
+  <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
 
-	<!-- Slick -->
-	<link type="text/css" rel="stylesheet" href="/css/slick.css" />
-	<link type="text/css" rel="stylesheet" href="/css/slick-theme.css" />
+  <!-- Slick -->
+  <link type="text/css" rel="stylesheet" href="/css/slick.css" />
+  <link type="text/css" rel="stylesheet" href="/css/slick-theme.css" />
 
-	<!-- nouislider -->
-	<link type="text/css" rel="stylesheet" href="/css/nouislider.min.css" />
+  <!-- nouislider -->
+  <link type="text/css" rel="stylesheet" href="/css/nouislider.min.css" />
 
-	<!-- Font Awesome Icon -->
-	<link rel="stylesheet" href="/css/font-awesome.min.css">
+  <!-- Font Awesome Icon -->
+  <link rel="stylesheet" href="/css/font-awesome.min.css">
 
-	<!-- Custom stlylesheet -->
-	<link type="text/css" rel="stylesheet" href="/css/style.css" />
+  <!-- Custom stylesheet -->
+  <link type="text/css" rel="stylesheet" href="/css/style.css" />
 
-	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-	<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
+  <style>
+    .form-group .d-flex > * {
+      flex: 1;
+    }
+    .d-flex {
+      display: flex;
+      gap: 10px;
+    }
+  </style>
 
 </head>
 
 <body>
-	<%- include('./header.ejs') %>
-	<!-- ĐƯỜNG DẪN -->
-	<div id="breadcrumb" class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-12">
-					<h3 class="breadcrumb-header">Thanh Toán</h3>
-					<ul class="breadcrumb-tree">
-						<li><a href="#">Trang Chủ</a></li>
-						<li class="active">Thanh Toán</li>
-					</ul>
-				</div>
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /ĐƯỜNG DẪN -->
 
+  <%- include('./header.ejs') %>
 
-	<!-- SECTION -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
+  <!-- ĐƯỜNG DẪN -->
+  <div id="breadcrumb" class="section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h3 class="breadcrumb-header">Thanh Toán</h3>
+          <ul class="breadcrumb-tree">
+            <li><a href="#">Trang Chủ</a></li>
+            <li class="active">Thanh Toán</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
 
-				<div class="col-md-7">
-					<!-- Billing Details -->
-					<div class="billing-details">
-						<div class="section-title">
-							<h3 class="title">ĐỊA CHỈ THANH TOÁN</h3>
-						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="first-name" placeholder="Họ">
-						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="last-name" placeholder="Tên">
-						</div>
-						<div class="form-group">
-							<input class="input" type="email" name="email" placeholder="Email">
-						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="address" placeholder="Địa chỉ">
-						</div>
-						<div class="form-group">
-							<input class="input" type="tel" name="tel" placeholder="Số điện thoại">
-						</div>
-						
-						<div class="form-group">
-							
-						</div>
-					</div>
+  <!-- SECTION -->
+  <div class="section">
+    <div class="container">
+      <div class="row">
 
-					<!-- Order notes -->
-					<div class="order-notes">
-						<textarea class="input" placeholder="Ghi chú đơn hàng"></textarea>
-					</div>					
-					<!-- /Order notes -->
-				</div>
+        <div class="col-md-7">
+          <!-- Billing Details -->
+          <div class="billing-details">
+            <div class="section-title">
+              <h3 class="title">ĐỊA CHỈ THANH TOÁN</h3>
+            </div>
 
-				<!-- Order Details -->
-				<div class="col-md-5 order-details">
-					<div class="section-title text-center">
-						<h3 class="title">ĐƠN HÀNG CỦA BẠN</h3>
-					</div>
-					<div class="order-summary">
-						<div class="order-col">
-							<div><strong>Sản Phẩm</strong></div>
-							<div><strong>Thành Tiền</strong></div>
-						</div>
-						<div class="order-products">
-							<div class="order-col">
-								<div>1x Product Name Goes Here</div>
-								<div>$980.00</div>
-							</div>
-							<div class="order-col">
-								<div>2x Product Name Goes Here</div>
-								<div>$980.00</div>
-							</div>
-						</div>
-						<div class="order-col">
-							<div>Giao hàng</div>
-							<div><strong>MIỄN PHÍ</strong></div>
-						</div>						
-						<div class="order-col">
-							<div><strong>Tổng Tiền</strong></div>
-							<div><strong class="order-total">$2940.00</strong></div>
-						</div>
-					</div>
-					<div class="payment-method">
-						<div class="input-radio">
-							<input type="radio" name="payment" id="payment-1">
-							<label for="payment-1">
-								<span></span>
-								Thanh toán tiền mặt
-							</label>
-						</div>
-						
-						<div class="input-radio">
-							<input type="radio" name="payment" id="payment-3">
-							<label for="payment-3">
-								<span></span>
-								Thanh toán trực tuyến
-							</label>
-						</div>
-					</div>
-					<div class="input-checkbox">
-						<input type="checkbox" id="terms">
-						<label for="terms">
-							<span></span>
-							Tôi đã đọc và chấp nhận <a href="#">các điều khoản và điều kiện</a>
-						</label>
-					</div>
-					<a href="#" class="primary-btn order-submit">Đặt hàng</a>
-				</div>
-				<!-- /Order Details -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /SECTION -->
+            <div class="form-group">
+              <input class="input form-control" type="text" name="first-name" placeholder="Họ">
+            </div>
+            <div class="form-group">
+              <input class="input form-control" type="text" name="last-name" placeholder="Tên">
+            </div>
+            <div class="form-group">
+              <input class="input form-control" type="email" name="email" placeholder="Email">
+            </div>
 
-	<!-- FOOTER -->
-	<%- include('./footer.ejs') %>
-	<!-- /FOOTER -->
+            <!-- Địa chỉ chia 3 combobox -->
+            <div class="form-group">
+              <div class="d-flex">
+                <select class="input form-control" id="province" name="province">
+                  <option value="">Chọn Tỉnh, Thành phố</option>
+                </select>
+                <select class="input form-control" id="district" name="district">
+                  <option value="">Chọn Quận, Huyện</option>
+                </select>
+                <select class="input form-control" id="ward" name="ward">
+                  <option value="">Chọn Phường, Xã</option>
+                </select>
+              </div>
+            </div>
 
-	<!-- jQuery Plugins -->
-	<script src="/js/jquery.min.js"></script>
-	<script src="/js/bootstrap.min.js"></script>
-	<script src="/js/slick.min.js"></script>
-	<script src="/js/nouislider.min.js"></script>
-	<script src="/js/jquery.zoom.min.js"></script>
-	<script src="/js/main.js"></script>
+            <div class="form-group">
+              <input class="input form-control" type="text" id="street" name="street" placeholder="Số nhà, tên đường">
+            </div>
 
+            <div class="form-group">
+              <input class="input form-control" type="tel" name="tel" placeholder="Số điện thoại">
+            </div>
+
+          </div>
+
+          <!-- Order notes -->
+          <div class="order-notes">
+            <textarea class="input form-control" placeholder="Ghi chú đơn hàng"></textarea>
+          </div>
+          <!-- /Order notes -->
+        </div>
+
+        <!-- Order Details -->
+        <div class="col-md-5 order-details">
+          <div class="section-title text-center">
+            <h3 class="title">ĐƠN HÀNG CỦA BẠN</h3>
+          </div>
+          <div class="order-summary">
+            <div class="order-col">
+              <div><strong>Sản Phẩm</strong></div>
+              <div><strong>Thành Tiền</strong></div>
+            </div>
+            <div class="order-products">
+              <div class="order-col">
+                <div>1x Product Name Goes Here</div>
+                <div>$980.00</div>
+              </div>
+              <div class="order-col">
+                <div>2x Product Name Goes Here</div>
+                <div>$980.00</div>
+              </div>
+            </div>
+            <div class="order-col">
+              <div>Giao hàng</div>
+              <div><strong>MIỄN PHÍ</strong></div>
+            </div>
+            <div class="order-col">
+              <div><strong>Tổng Tiền</strong></div>
+              <div><strong class="order-total">$2940.00</strong></div>
+            </div>
+          </div>
+          <div class="payment-method">
+            <div class="input-radio">
+              <input type="radio" name="payment" id="payment-1">
+              <label for="payment-1">
+                <span></span>
+                Thanh toán tiền mặt
+              </label>
+            </div>
+            <div class="input-radio">
+              <input type="radio" name="payment" id="payment-3">
+              <label for="payment-3">
+                <span></span>
+                Thanh toán trực tuyến
+              </label>
+            </div>
+          </div>
+          <div class="input-checkbox">
+            <input type="checkbox" id="terms">
+            <label for="terms">
+              <span></span>
+              Tôi đã đọc và chấp nhận <a href="#">các điều khoản và điều kiện</a>
+            </label>
+          </div>
+          <a href="#" class="primary-btn order-submit">Đặt hàng</a>
+        </div>
+        <!-- /Order Details -->
+
+      </div>
+    </div>
+  </div>
+  <!-- /SECTION -->
+
+  <%- include('./footer.ejs') %>
+
+  <!-- jQuery Plugins -->
+  <script src="/js/jquery.min.js"></script>
+  <script src="/js/bootstrap.min.js"></script>
+  <script src="/js/slick.min.js"></script>
+  <script src="/js/nouislider.min.js"></script>
+  <script src="/js/jquery.zoom.min.js"></script>
+  <script src="/js/main.js"></script>
+
+  <!-- Để sau này fetch API tỉnh thành động -->
+  <script>
+	document.addEventListener("DOMContentLoaded", function () {
+	  const provinceSelect = document.getElementById("province");
+	  const districtSelect = document.getElementById("district");
+	  const wardSelect = document.getElementById("ward");
+	
+	  // Hàm lấy danh sách tỉnh
+	  fetch("https://provinces.open-api.vn/api/p/")
+		.then(response => response.json())
+		.then(provinces => {
+		  provinces.forEach(province => {
+			const option = document.createElement("option");
+			option.value = province.code;
+			option.textContent = province.name;
+			provinceSelect.appendChild(option);
+		  });
+		});
+	
+	  // Khi chọn Tỉnh
+	  provinceSelect.addEventListener("change", function () {
+		const provinceCode = this.value;
+	
+		districtSelect.innerHTML = '<option value="">Chọn Quận, Huyện</option>';
+		wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
+	
+		if (!provinceCode) return;
+	
+		fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
+		  .then(response => response.json())
+		  .then(data => {
+			data.districts.forEach(district => {
+			  const option = document.createElement("option");
+			  option.value = district.code;
+			  option.textContent = district.name;
+			  districtSelect.appendChild(option);
+			});
+		  });
+	  });
+	
+	  // Khi chọn Quận/Huyện
+	  districtSelect.addEventListener("change", function () {
+		const districtCode = this.value;
+	
+		wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
+	
+		if (!districtCode) return;
+	
+		fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
+		  .then(response => response.json())
+		  .then(data => {
+			data.wards.forEach(ward => {
+			  const option = document.createElement("option");
+			  option.value = ward.code;
+			  option.textContent = ward.name;
+			  wardSelect.appendChild(option);
+			});
+		  });
+	  });
+	});
+	</script>
+	
 
 </body>
 
