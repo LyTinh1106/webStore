@@ -1,6 +1,5 @@
 document.addEventListener("DOMContentLoaded", function () {
-  let cartData = [];
-
+  let cartData = JSON.parse(localStorage.getItem('cart')) || [];
   function formatVND(value) {
     return value.toLocaleString('vi-VN') + ' VNĐ';
   }
@@ -50,6 +49,7 @@ document.addEventListener("DOMContentLoaded", function () {
     summaryText.innerText = `${totalQty} sản phẩm đã chọn`;
     subtotal.innerText = `TỔNG CỘNG: ${formatVND(totalPrice)}`;
     document.querySelector('.cart-dropdown').style.display = 'block';
+    localStorage.setItem('cart', JSON.stringify(cartData));
   }
 
   window.removeFromCart = function (productName) {
@@ -87,6 +87,7 @@ document.addEventListener("DOMContentLoaded", function () {
   if (detailBtn) {
     detailBtn.addEventListener('click', function (e) {
       e.preventDefault();
+     
 
       const name = document.getElementById('detail-name')?.innerText.trim();
       const priceText = document.getElementById('detail-price')?.innerText.trim().replace(/[^\d.]/g, '');
@@ -106,4 +107,6 @@ document.addEventListener("DOMContentLoaded", function () {
       updateCartUI();
     });
   }
+  updateCartUI();
+  
 });
