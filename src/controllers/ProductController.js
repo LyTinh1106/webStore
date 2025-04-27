@@ -45,10 +45,10 @@ const getProduct = (req, res) => {
             }
 
             res.render("Product", {
-              user: req.user || null,
+              user: req.user || req.session.user || null,
               product,
               images,
-              spec: spec || null,     // 🆕 truyền spec vào view (có thể là null nếu không có)
+              spec: spec || null,    
               categories,
               brands
             });
