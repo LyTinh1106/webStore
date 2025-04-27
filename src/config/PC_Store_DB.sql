@@ -86,7 +86,7 @@ CREATE TABLE voucher (
 -- Bảng account
 CREATE TABLE account (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    email VARCHAR(255) NOT NULL,
+    email VARCHAR(191) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('admin','customer') DEFAULT 'customer'
 );
@@ -97,9 +97,10 @@ CREATE TABLE customer (
     first_name VARCHAR(255),
     last_name VARCHAR(255),
     gender ENUM('male','female'),
-    email VARCHAR(255),
+    email VARCHAR(191),
     phone VARCHAR(50),
-    address TEXT
+    address TEXT,
+    FOREIGN KEY (EMAIL) REFERENCES account(email)
 );
 
 -- Bảng order_table
@@ -164,12 +165,6 @@ JOIN
     category c ON p.category_id = c.id
 JOIN 
     brand b ON p.brand_id = b.brand_id;
-
-
-
-
-
-
 
 
 
