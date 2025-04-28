@@ -15,6 +15,7 @@ const ImportingDetail = require('./importingdetail');
 const Shipping = require('./shipping');
 const Customer = require('./customer');
 const Account = require('./account')
+const Checkout = require('./checkout')
 
 
 // ✅ Dùng đúng biến apiRouters
@@ -32,5 +33,6 @@ apiRouters.use('/importing', Importing);
 apiRouters.use('/importing-detail', ImportingDetail);
 apiRouters.use('/shipping', Shipping);
 apiRouters.use('/customer', Customer);
+apiRouters.use('/checkout',Checkout)
 
 module.exports = apiRouters;
