@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 const getCart = (req, res) => {
   res.render('cart', {
-    user: req.user || null 
+    user: req.user || req.session.user || null,
   });
 };
 
