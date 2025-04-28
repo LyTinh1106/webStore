@@ -2190,7 +2190,7 @@ textarea.input {
 
 
 /* Form login */
-.body-register, .body-login, .body-forgotPassword, .body-resetPassword{
+.body-register, .body-login, .body-forgotPassword, .body-resetPassword, .body-otp{
     margin: 0;
     padding: 0;
     box-sizing: border-box;
@@ -2204,7 +2204,7 @@ textarea.input {
     background-size: 100%;
 }
 
-.register-container, .login-container, .forgotPassword-container, .resetPassword-container {
+.register-container, .login-container, .forgotPassword-container, .resetPassword-container, .otp-container {
   width: 100%;
   max-width: 400px;
   padding: 40px 30px;
@@ -2213,7 +2213,7 @@ textarea.input {
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
-.register-container h1, .login-container h1, .forgotPassword-container h1, .resetPassword-container h1 {
+.register-container h1, .login-container h1, .forgotPassword-container h1, .resetPassword-container h1, .otp-container h1 {
   text-align: center;
   margin-bottom: 30px;
   color: #333;
@@ -2269,7 +2269,7 @@ textarea.input {
   text-decoration: none;
 }
 
-.register-btn, .login-btn, .forgotPassword-btn, .resetPassword-btn {
+.register-btn, .login-btn, .forgotPassword-btn, .resetPassword-btn, .otp-btn {
   width: 100%;
   padding: 12px;
   background: rgba(0, 0, 0, 0.7);
@@ -2282,7 +2282,7 @@ textarea.input {
   transition: transform 0.3s ease;
 }
 
-.login-btn:hover, .register-btn:hover, .forgotPassword-btn:hover, .resetPassword-btn:hover {
+.login-btn:hover, .register-btn:hover, .forgotPassword-btn:hover, .resetPassword-btn:hover, .otp-btn:hover {
   transform: translateY(-2px);
 }
 
@@ -2447,6 +2447,43 @@ hr {
 .d-none {
   display: none !important;
 }
+
+/*otp*/
+.otp-inputs {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 20px 0;
+}
+
+.otp-inputs input {
+  width: 40px;
+  height: 40px;
+  text-align: center;
+  font-size: 18px;
+  border: 1px solid #ccc;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 6px;
+}
+
+
+.otp-container .resend {
+  margin-top: 5px;
+  font-size: 14px;
+  text-align: center;
+  color: #4e4d4d;
+  text-align: center;
+}
+
+.otp-container p {
+  text-align: center;
+}
+.otp-container .resend a {
+  color: #2563eb;
+  text-decoration: none;
+  margin-left: 4px;
+}
+
 
 /* specs*/
 .specs-table {

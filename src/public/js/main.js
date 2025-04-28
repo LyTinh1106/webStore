@@ -100,40 +100,40 @@
 
 	/////////////////////////////////////////
 
-// Product Main img Slick
-$('#product-main-img').slick({
+	// Product Main img Slick
+	$('#product-main-img').slick({
 		infinite: true,
-	speed: 300,
-	dots: true,
-	arrows: true,
-	fade: true,
+		speed: 300,
+		dots: true,
+		arrows: true,
+		fade: true,
 		asNavFor: '#product-imgs',
-  });
+	});
 
-  
-  // Product imgs Slick
-  $('#product-imgs').slick({
-	slidesToShow: 4,
-	slidesToScroll: 1,
-	arrows: true,
+
+	// Product imgs Slick
+	$('#product-imgs').slick({
+		slidesToShow: 4,
+		slidesToScroll: 1,
+		arrows: true,
 		centerMode: false,
-	focusOnSelect: true,
-	centerPadding: 0,
+		focusOnSelect: true,
+		centerPadding: 0,
 		vertical: true,
-	asNavFor: '#product-main-img',
+		asNavFor: '#product-main-img',
 		infinite: true,
-	responsive: [{
-	  breakpoint: 991,
-	  settings: {
+		responsive: [{
+			breakpoint: 991,
+			settings: {
 				vertical: false,
 				arrows: false,
 				dots: true,
 				infinite: true,
-	  }
+			}
 		},
 		]
-  });
-  
+	});
+
 	// Product img zoom
 	var zoomMainProduct = document.getElementById('product-main-img');
 	if (zoomMainProduct) {
@@ -356,36 +356,36 @@ function renderFilteredProducts(products, shouldShowFiltered) {
 const navLinks = document.querySelectorAll('#nav-categories a');
 
 navLinks.forEach(link => {
-  link.addEventListener('click', async function (e) {
-    const href = this.getAttribute('href');
-    const categoryId = this.getAttribute('data-id');
+	link.addEventListener('click', async function (e) {
+		const href = this.getAttribute('href');
+		const categoryId = this.getAttribute('data-id');
 
-    if (href === '/' || href === '/store/all') {
-      // Nếu là Trang Chủ hoặc Sản Phẩm => cho chuyển trang bình thường
-      return;
-    }
+		if (href === '/' || href === '/store/all') {
+			// Nếu là Trang Chủ hoặc Sản Phẩm => cho chuyển trang bình thường
+			return;
+		}
 
-    // Nếu là Laptop, Chuột, Bàn phím, Màn hình => chặn chuyển trang
-    e.preventDefault();
+		// Nếu là Laptop, Chuột, Bàn phím, Màn hình => chặn chuyển trang
+		e.preventDefault();
 
-    // Xóa active tất cả li
-    navLinks.forEach(link => link.parentElement.classList.remove('active'));
+		// Xóa active tất cả li
+		navLinks.forEach(link => link.parentElement.classList.remove('active'));
 
-    // Active li mới click
-    this.parentElement.classList.add('active');
+		// Active li mới click
+		this.parentElement.classList.add('active');
 
-    // Bỏ hết check cũ ở category filter
-    document.querySelectorAll('.category-filter input[type="checkbox"]').forEach(cb => cb.checked = false);
+		// Bỏ hết check cũ ở category filter
+		document.querySelectorAll('.category-filter input[type="checkbox"]').forEach(cb => cb.checked = false);
 
-    // Check đúng checkbox tương ứng category_id
-    const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
-    if (targetCheckbox) {
-      targetCheckbox.checked = true;
-    }
+		// Check đúng checkbox tương ứng category_id
+		const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+		if (targetCheckbox) {
+			targetCheckbox.checked = true;
+		}
 
-    // Gọi filter theo checkbox mới
-    filterByCategory();
-  });
+		// Gọi filter theo checkbox mới
+		filterByCategory();
+	});
 });
 
 
@@ -393,7 +393,7 @@ navLinks.forEach(link => {
 
 
 
-  
-	
+
+
 
 
