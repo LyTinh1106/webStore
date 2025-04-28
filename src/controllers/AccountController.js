@@ -140,9 +140,30 @@ const sendResetPasswordEmail = async (req, res) => {
         to: email,
         subject: 'Đặt lại mật khẩu',
         html: `
-            <p>Bạn vừa yêu cầu đặt lại mật khẩu.</p>
-            <p>Click vào liên kết sau trong vòng 1 giờ:</p>
-            <a href="${resetLink}">${resetLink}</a>
+            <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
+  <tr>
+    <td style="background-color: #4a90e2; height: 10px; line-height: 10px; font-size: 0;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="background-color: #f8f9fa; padding: 30px 25px; text-align: center;">
+      <h2 style="color: #2c3e50; margin: 0 0 20px 0; font-size: 22px; font-weight: bold;">Đặt lại mật khẩu</h2>
+      <p style="color: #505050; font-size: 16px; margin: 0 0 20px 0;">Bạn vừa yêu cầu đặt lại mật khẩu cho tài khoản của mình.</p>
+      <p style="color: #505050; font-size: 16px; margin: 0 0 25px 0;">Vui lòng nhấp vào nút bên dưới để tiếp tục:</p>
+      <div style="margin: 30px 0;">
+        <a href="${resetLink}" style="background-color: #4a90e2; color: #ffffff; padding: 12px 30px; text-decoration: none; border-radius: 4px; font-weight: bold; display: inline-block; font-size: 16px;">Đặt lại mật khẩu</a>
+      </div>
+      <p style="color: #e74c3c; font-size: 15px; margin: 25px 0;">
+        <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-clock-outline-512.png" width="18" height="18" style="vertical-align: middle; margin-right: 5px;" alt="Clock">
+        Liên kết có hiệu lực trong <strong>1 giờ</strong>
+      </p>
+      <div style="background-color: #ffffff; border: 1px solid #e0e0e0; border-radius: 4px; padding: 15px; margin: 25px 0; text-align: left;">
+        <p style="color: #505050; font-size: 14px; margin: 0 0 5px 0;">Nếu nút không hoạt động, vui lòng sao chép và dán URL sau vào trình duyệt:</p>
+        <a href="${resetLink}" style="word-break: break-all; color: #4a90e2; font-size: 14px;">${resetLink}</a>
+      </div>
+      <p style="color: #7f8c8d; font-size: 14px; margin: 20px 0 0 0; padding-top: 20px; border-top: 1px solid #e0e0e0;">Nếu bạn không yêu cầu đặt lại mật khẩu, vui lòng bỏ qua email này hoặc liên hệ hỗ trợ ngay.</p>
+    </td>
+  </tr>
+</table>
           `,
       };
 
@@ -370,7 +391,26 @@ const register = async (req, res) => {
         from: process.env.EMAIL_USER,
         to: email,
         subject: "Mã OTP xác minh tài khoản",
-        html: `<p>Mã OTP của bạn là: <strong>${otp}</strong></p><p>OTP có hiệu lực trong 5 phút.</p>`
+        html: `
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
+  <tr>
+    <td style="background-color: #4a90e2; height: 10px; line-height: 10px; font-size: 0;">&nbsp;</td>
+  </tr>
+  <tr>
+    <td style="background-color: #f8f9fa; padding: 30px 25px; text-align: center;">
+      <h2 style="color: #2c3e50; margin: 0 0 20px 0; font-size: 22px; font-weight: bold;">Xác thực bảo mật tài khoản</h2>
+      <p style="color: #505050; font-size: 16px; margin: 0 0 25px 0;">Vui lòng sử dụng mã OTP sau đây để hoàn tất quá trình xác thực:</p>
+      <div style="background-color: #ffffff; border-radius: 6px; padding: 15px 20px; display: inline-block; margin: 0 auto 25px auto; border: 1px solid #e0e0e0;">
+        <span style="font-size: 36px; letter-spacing: 5px; color: #4a90e2; font-weight: bold;">${otp}</span>
+      </div>
+      <p style="color: #e74c3c; font-size: 15px; margin: 0 0 25px 0;">
+        <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-clock-outline-512.png" width="18" height="18" style="vertical-align: middle; margin-right: 5px;" alt="Clock">
+        Mã có hiệu lực trong <strong>5 phút</strong>
+      </p>
+      <p style="color: #7f8c8d; font-size: 14px; margin: 20px 0 0 0; padding-top: 20px; border-top: 1px solid #e0e0e0;">Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này hoặc liên hệ hỗ trợ.</p>
+    </td>
+  </tr>
+</table>`
       };
 
       transporter.sendMail(mailOptions, (error, info) => {
@@ -494,5 +534,5 @@ module.exports = {
   resetPassword,
   verifyResetToken,
   verifyOtp,
-  
+
 }
