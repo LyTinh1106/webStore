@@ -76,7 +76,7 @@ const getStore = (req, res) => {
         }
 
         res.render("Store", {
-          user: req.user || null,
+          user: req.user || req.session.user || null,
           products,
           categories,
           brands
