@@ -1,132 +1,75 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Verify OTP</title>
-  <style>
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: #d6d3f0;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
 
-    .otp-container {
-      background-color: white;
-      padding: 30px 40px;
-      border-radius: 12px;
-      text-align: center;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-    }
-
-    .otp-container h2 {
-      margin-bottom: 10px;
-    }
-
-    .otp-inputs {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 20px 0;
-    }
-
-    .otp-inputs input {
-      width: 40px;
-      height: 40px;
-      text-align: center;
-      font-size: 18px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    .otp-container button {
-      padding: 10px 20px;
-      background-color: #2563eb;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .otp-container .resend {
-      margin-top: 15px;
-      font-size: 14px;
-    }
-
-    .otp-container .resend a {
-      color: #2563eb;
-      text-decoration: none;
-      margin-left: 4px;
-    }
-  </style>
-  <link rel="stylesheet" href="/css/verify-otp.css" />
+  <link rel="stylesheet" href="/css/style.css" />
 </head>
+
 <body>
-  <div class="otp-container">
-    <h2>Verify</h2>
-    
-    <p>Nhập mã OTP được gửi về Email </p>
-    <form id="otpForm">
-      <div class="otp-inputs">
-        <input type="text" name="otp1" maxlength="1" required />
-        <input type="text" name="otp2" maxlength="1" required />
-        <input type="text" name="otp3" maxlength="1" required />
-        <input type="text" name="otp4" maxlength="1" required />
-        <input type="text" name="otp5" maxlength="1" required />
-        <input type="text" name="otp6" maxlength="1" required />
+  <div class="body-otp">
+    <div class="otp-container">
+      <h1>Verify</h1>
+
+      <p>Nhập mã OTP được gửi về Email </p>
+      <form id="otpForm">
+        <div class="otp-inputs">
+          <input type="text" name="otp1" maxlength="1" required />
+          <input type="text" name="otp2" maxlength="1" required />
+          <input type="text" name="otp3" maxlength="1" required />
+          <input type="text" name="otp4" maxlength="1" required />
+          <input type="text" name="otp5" maxlength="1" required />
+          <input type="text" name="otp6" maxlength="1" required />
+        </div>
+        <button type="submit" class="otp-btn">Verify</button>
+      </form>
+      <div class="resend">
+        Didn't receive code? <a href="#">Request again</a>
       </div>
-      <button type="submit">Verify</button>
-    </form>
-    <div class="resend">
-      Didn't receive code? <a href="#">Request again</a>
     </div>
   </div>
 
-  <script>
+
+  <!-- <script>
     const form = document.getElementById("otpForm");
     const inputs = document.querySelectorAll(".otp-inputs input");
-  
-    // Tự động chuyển focus khi nhập và xóa
+
     inputs.forEach((input, index) => {
       input.addEventListener("input", () => {
         if (input.value && index < inputs.length - 1) {
           inputs[index + 1].focus();
         }
       });
-  
+
       input.addEventListener("keydown", (e) => {
         if (e.key === "Backspace" && !input.value && index > 0) {
           inputs[index - 1].focus();
         }
       });
     });
-  
-    // Gửi OTP khi ấn nút
+
     form.addEventListener("submit", async (e) => {
       e.preventDefault();
-  
+
       const otp = Array.from(inputs).map(i => i.value).join("");
-  
+
       if (otp.length !== 6) {
         alert("Vui lòng nhập đủ 6 số.");
         return;
       }
-  
+
       try {
         const response = await fetch("/verify-otp", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ otp })
         });
-  
+
         const result = await response.json();
-  
+
         if (result.success) {
           window.location.href = "/login";
         } else {
@@ -137,8 +80,9 @@
         alert("Có lỗi xảy ra khi xác minh OTP.");
       }
     });
-  </script>
-  
-  
+  </script> -->
+
+  <script src="js/otp.js"></script>
 </body>
+
 </html>
