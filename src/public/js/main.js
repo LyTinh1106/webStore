@@ -31,7 +31,6 @@
 	);
 	/////////////////////////////////////////
 
-
 	// Products Slick
 	$('.products-slick').each(function () {
 		var $this = $(this),
@@ -109,7 +108,6 @@
 		fade: true,
 		asNavFor: '#product-imgs',
 	});
-
 
 	// Product imgs Slick
 	$('#product-imgs').slick({
@@ -211,6 +209,7 @@
 
 	}
 	/////////////////////////////////////////
+
 	// Dropdown toggle on click + hover
 	$('.account-dropdown').on('click', function (e) {
 		e.stopPropagation();
@@ -315,7 +314,11 @@ function renderFilteredProducts(products, shouldShowFiltered) {
 	filteredBox.classList.remove('d-none');
 
 	if (!products || products.length === 0) {
-		filteredBox.innerHTML = '<p>Không có sản phẩm phù hợp.</p>';
+		filteredBox.innerHTML = `
+		<div class="message-notify">
+  			<p>Không có sản phẩm phù hợp.</p>
+		</div>
+		`;
 		return;
 	}
 

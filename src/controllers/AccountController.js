@@ -42,7 +42,7 @@ const getResetPassword = (req, res) => {
   res.render('resetPassword', { token, message: null });
 };
 const getInfo = (req, res) => {
-  res.render('userInfo', { user: req.user || null });
+  res.render('userInfo', { user: req.user || req.session.user || null });
 };
 const getDashboard = (req, res) => {
   if (!req.session.user || req.session.user.role !== 'admin') {
