@@ -4,6 +4,10 @@ document.addEventListener("DOMContentLoaded", function () {
     return value.toLocaleString('vi-VN') + ' VNĐ';
   }
 
+  function saveCartData() {
+    localStorage.setItem('cart', JSON.stringify(cartData));
+  }
+
   function updateCartUI() {
     const cartList = document.querySelector('.cart-list');
     const cartQty = document.querySelector('.header-ctn .qty');
@@ -50,6 +54,8 @@ document.addEventListener("DOMContentLoaded", function () {
     subtotal.innerText = `TỔNG CỘNG: ${formatVND(totalPrice)}`;
     document.querySelector('.cart-dropdown').style.display = 'block';
     localStorage.setItem('cart', JSON.stringify(cartData));
+
+    saveCartData();
   }
 
   window.removeFromCart = function (productName) {
