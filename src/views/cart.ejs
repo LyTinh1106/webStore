@@ -21,80 +21,6 @@
 
 	<!-- Custom stlylesheet -->
 	<link type="text/css" rel="stylesheet" href="/css/style.css" />
-    <style>
-        .cart-item {
-            border-bottom: 1px solid #eee;
-            padding: 15px 0;
-        }
-        .product-image {
-            width: 100px;
-            height: 100px;
-            object-fit: cover;
-        }
-        .quantity-control {
-            display: flex;
-            align-items: center;
-        }
-        .quantity-btn {
-            width: 30px;
-            height: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            cursor: pointer;
-        }
-        .quantity-input {
-            width: 50px;
-            text-align: center;
-            border: 1px solid #dee2e6;
-            height: 30px;
-            margin: 0 5px;
-        }
-        .cart-summary {
-            background-color: #f8f9fa;
-            padding: 20px;
-            border-radius: 5px;
-        }
-        .remove-item {
-            color: #dc3545;
-            cursor: pointer;
-        }
-        .coupon-input {
-            max-width: 200px;
-        }
-        .product-price {
-            font-weight: 500;
-            color: #0d6efd;
-        }
-        .total-price {
-            font-size: 1.2rem;
-            font-weight: bold;
-            color: #0d6efd;
-        }
-        .section-title {
-            position: relative;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-        .section-title:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 2px;
-            background-color: #0d6efd;
-        }
-        .continue-shopping-btn {
-            text-decoration: none;
-        }
-        .checkout-btn {
-            padding: 12px 25px;
-            font-weight: 500;
-        }
-    </style>
 </head>
 <body>
     <%- include('./header.ejs') %>
@@ -177,7 +103,7 @@
                     <button id="checkoutButton" class="btn btn-primary w-100 checkout-btn">Tiến hành thanh toán</button>
                     
                     <div class="mt-3 text-center">
-                        <a href="#" class="continue-shopping-btn">
+                        <a href="/" class="continue-shopping-btn">
                             <i class="fas fa-arrow-left me-2"></i>Tiếp tục mua sắm
                         </a>
                     </div>

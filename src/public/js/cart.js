@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+  
   function formatVND(value) {
     return value.toLocaleString('vi-VN') + ' VNĐ';
   }
@@ -21,19 +22,23 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalPrice = 0;
 
     if (cartData.length === 0) {
+      cartList.innerHTML = `
+      <div class="cart-message-notify">
+  			<p>Không có sản phẩm trong giỏ hàng. </p>
+		  </div>
+      `;
       if (emptyMsg) emptyMsg.style.display = 'block';
       cartQty.innerText = '0';
       summaryText.innerText = `Chưa có sản phẩm nào`;
       subtotal.innerText = `TỔNG CỘNG: 0 VNĐ`;
+      document.querySelector('.cart-dropdown').style.display = 'none'; // Thêm dòng này để ẩn dropdown nếu trống
+      localStorage.setItem('cart', JSON.stringify(cartData)); // Lưu lại cart rỗng
       return;
     } else {
       if (emptyMsg) emptyMsg.style.display = 'none';
     }
 
-    cartData.forEach(product => {
-      totalQty += product.qty;
-      totalPrice += product.price * product.qty;
-
+    cartData.forEach((product, index) => {
       const productHTML = `
         <div class="product-widget">
           <div class="product-img">
@@ -43,10 +48,13 @@ document.addEventListener("DOMContentLoaded", function () {
             <h3 class="product-name"><a href="#">${product.name}</a></h3>
             <h4 class="product-price"><span class="qty">${product.qty}x</span> ${formatVND(product.price)}</h4>
           </div>
-          <button class="delete" onclick="removeFromCart('${product.name}')"><i class="fa fa-close"></i></button>
+          <button class="delete" data-index="${index}"><i class="fa fa-close"></i></button>
         </div>
       `;
       cartList.insertAdjacentHTML('beforeend', productHTML);
+
+      totalQty += product.qty;
+      totalPrice += product.price * product.qty;
     });
 
     cartQty.innerText = totalQty;
@@ -55,9 +63,18 @@ document.addEventListener("DOMContentLoaded", function () {
     document.querySelector('.cart-dropdown').style.display = 'block';
     localStorage.setItem('cart', JSON.stringify(cartData));
 
+    // Bắt sự kiện click vào nút xóa sản phẩm
+    document.querySelectorAll('.delete').forEach(button => {
+      button.addEventListener('click', function () {
+        const index = parseInt(this.getAttribute('data-index'));
+        cartData.splice(index, 1); // Xóa sản phẩm khỏi mảng
+        updateCartUI(); // Cập nhật lại giao diện
+      });
+    });
     saveCartData();
   }
 
+  // Xử lý xóa từ tên sản phẩm
   window.removeFromCart = function (productName) {
     cartData = cartData.filter(p => p.name !== productName);
     updateCartUI();
@@ -72,7 +89,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
       const img = productCard.querySelector('.product-img img')?.getAttribute('src') || '/images/noImage.jpg';
       const name = productCard.querySelector('.product-name')?.innerText.trim();
-      const priceText = productCard.querySelector('.product-price')?.innerText.trim().replace(/[^\d.]/g, '') || '0';
+      const priceText = productCard.querySelector('.product-price')?.innerText.trim().replace(/[^\d]/g, '') || '0';
       const price = parseFloat(priceText);
 
       if (!name || isNaN(price)) return;
@@ -90,13 +107,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // Xử lý từ trang chi tiết sản phẩm
   const detailBtn = document.getElementById('detail-add-to-cart');
+  
   if (detailBtn) {
     detailBtn.addEventListener('click', function (e) {
       e.preventDefault();
-     
 
       const name = document.getElementById('detail-name')?.innerText.trim();
-      const priceText = document.getElementById('detail-price')?.innerText.trim().replace(/[^\d.]/g, '');
+      const priceText = document.getElementById('detail-price')?.innerText.trim().replace(/[^\d]/g, '');
       const price = parseFloat(priceText);
       const qty = parseInt(document.getElementById('detail-qty')?.value) || 1;
       const img = document.querySelector('#product-main-img img')?.getAttribute('src') || '/images/noImage.jpg';
@@ -113,6 +130,6 @@ document.addEventListener("DOMContentLoaded", function () {
       updateCartUI();
     });
   }
+
   updateCartUI();
-  
 });
