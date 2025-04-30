@@ -491,6 +491,7 @@ textarea.input {
 \*----------------------------*/
 
 .header-search {
+  margin-top: 20px;
   padding: 15px 0px;
 
 }
@@ -2531,7 +2532,7 @@ textarea.input {
 hr {
   border: none;
   height: 1px;
-  background: linear-gradient(to right, #E4E7ED, #626262, #E4E7ED);
+  background: #cfcfcf;
   margin: 20px 0;
 }
 
@@ -2747,8 +2748,8 @@ hr {
 }
 
 .product-image {
-  width: 100px;
-  height: 100px;
+  width: 80px;
+  height: 80px;
   object-fit: cover;
 }
 
@@ -2766,6 +2767,7 @@ hr {
   background-color: #f8f9fa;
   border: 1px solid #dee2e6;
   cursor: pointer;
+  padding: 0;
 }
 
 .quantity-input {
@@ -2773,7 +2775,41 @@ hr {
   text-align: center;
   border: 1px solid #dee2e6;
   height: 30px;
-  margin: 0 5px;
+  padding: 0;
+}
+
+.minus{
+  border-radius: 5px 0 0 5px;
+  border-right: none;
+  color: #0d6efd;
+}
+
+.plus{
+  border-radius: 0 5px 5px 0;
+  border-left: none;
+  color: #0d6efd;
+}
+
+.minus:hover{
+  background-color: #0d6efd;
+  color: #f1f1f1;
+}
+
+.plus:hover{
+  background-color: #0d6efd;
+  color: #f1f1f1;
+}
+
+.minus:active {
+  background-color: #2409d2;
+  color: #ffffff;
+  transform: scale(0.97);
+}
+
+.plus:active {
+  background-color: #2409d2;
+  color: #ffffff;
+  transform: scale(0.97);
 }
 
 .cart-summary {
@@ -2791,7 +2827,7 @@ hr {
   max-width: 200px;
 }
 
-.product-price {
+.cart-product-price {
   font-weight: 500;
   color: #0d6efd;
 }
@@ -2823,7 +2859,93 @@ hr {
 }
 
 .checkout-btn {
+  width: 100%;
   padding: 12px 25px;
+  border-radius: 24px;
+  margin: 10px 0 10px;
   font-weight: 500;
 }
+
+.payment-icon {
+  max-height: 50px;
+  max-width: auto;
+}
+
+.empty-cart-container {
+  margin: 50px 0 50px;
+  font-style: italic;
+  color: #a9a9a9
+}
+
+.empty-cart-container h5 {
+  font-style: italic;
+  color: #a9a9a9
+}
+
+.return-to-homepage {
+  margin-top: 50px;
+  font-style: italic;
+  color: #a9a9a9
+}
+
+.return-to-homepage:hover {
+  font-style: italic;
+  color: #0d6efd
+}
+
+.coupon-group {
+  display: flex;
+  margin-top: 10px;
+  border: 10px;
+}
+
+.coupon-input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 5px 0 0 5px;
+  border: 1px solid;
+  border-right: none;
+}
+
+.apply-btn {
+  padding: 8px 16px;
+  color: #007bff;
+  border: 1px solid #007bff;
+  background-color: rgba(0, 123, 255, 0.1);
+  border-radius: 0 5px 5px 0;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.apply-btn:hover{
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.apply-btn:active{
+  background-color: #2409d2;
+  color: #ffffff;
+  transform: scale(0.97);
+}
+
+.col-md-1, .col-md-4{
+  padding: 0;
+  margin-top: 25px;  
+}
+
+.col-md-3{
+  margin-top: 20px;
+  padding: 0;
+}
+
+.cart-product-name{
+  font-weight: 700;
+}
+
+.couponSection{
+  margin-bottom: 20px;
+}
+
+
+
 
