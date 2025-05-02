@@ -18,21 +18,21 @@ const Account = require('./account')
 const Checkout = require('./checkout')
 
 
-// ✅ Dùng đúng biến apiRouters
-apiRouters.use('/brand', Brand);
-apiRouters.use('/product', Product);
-apiRouters.use('/voucher', Voucher);
-apiRouters.use('/supplier', Supplier);
-apiRouters.use('/cart', Cart);
-apiRouters.use('/account', Account);  
-apiRouters.use('/category', Category);
-apiRouters.use('/order', Order);
-apiRouters.use('/product-detail', ProductDetail);
-apiRouters.use('/product-image', ProductImage);
-apiRouters.use('/importing', Importing);
-apiRouters.use('/importing-detail', ImportingDetail);
-apiRouters.use('/shipping', Shipping);
-apiRouters.use('/customer', Customer);
-apiRouters.use('/checkout',Checkout)
+    // ✅ Dùng đúng biến apiRouters
+    apiRouters.use('/brand', Brand);
+    apiRouters.use('/product', Product);
+    apiRouters.use('/voucher', Voucher);
+    apiRouters.use('/supplier', Supplier);
+    apiRouters.use('/cart', Cart);
+    apiRouters.use('/account', Account);  
+    apiRouters.use('/category', Category);
+    apiRouters.use('/order', Order);
+    apiRouters.use('/product-detail', ProductDetail);
+    apiRouters.use('/product-image', ProductImage);
+    apiRouters.use('/importing', Importing);
+    apiRouters.use('/importing-detail', ImportingDetail);
+    apiRouters.use('/shipping', Shipping);
+    apiRouters.use('/customer', Customer);
+    apiRouters.use('/checkout',Checkout)
 
 module.exports = apiRouters;
