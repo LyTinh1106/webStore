@@ -20,11 +20,12 @@ const createMomoPayment = (req, res) => {
   const accessKey = process.env.MOMO_ACCESS_KEY;
   const secretkey = process.env.MOMO_SECRET_KEY;
   const requestId = partnerCode + new Date().getTime();
-  const orderId = requestId;
+  const baseOrderId = req.query.orderId || "default";
+  const orderId = `${baseOrderId}-${Date.now()}`;
   const orderInfo = "Thanh toán đơn hàng qua MoMo";
   const redirectUrl = process.env.MOMO_REDIRECT_URL;
   const ipnUrl = process.env.MOMO_IPN_URL;
-  const amount = "1000"; // Ví dụ cố định 50,000đ (sau lấy từ giỏ hàng)
+  const amount = req.query.amount;
   const requestType = "captureWallet";
   const extraData = "";
 
