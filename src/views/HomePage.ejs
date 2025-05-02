@@ -54,7 +54,7 @@
 							<div class="banner-tabs">
 								<!-- tab -->
 								<div id="banner-tab" class="tab-pane active">
-									
+
 									<div class="banners-slick" data-nav="#banner-slick-nav">
 										<!-- banner -->
 										<a href="/store/all">
@@ -97,7 +97,7 @@
 												<img src="../images/banner8.jpg" alt="Banner 8-" class="banner-img">
 											</div>
 										</a>
-										
+
 									</div>
 									<div id="banner-slick-nav" class="banners-slick-nav"></div>
 								</div>
@@ -147,7 +147,9 @@
 										<% products.forEach((product)=> { %>
 											<div class="product">
 												<a href="/product/<%=product.id%>">
-													<span class="d-none product-id"><%=product.id%></span>
+													<span class="d-none product-id">
+														<%=product.id%>
+													</span>
 													<div class="product-img">
 														<img src="/images/<%= product.image || 'noImage.jpg' %>"
 															alt="ảnh sản phẩm">
@@ -167,13 +169,13 @@
 														<h3 class="product-name"><a href="#">
 																<%= product.name %>
 															</a></h3>
-															<h4 class="product-price">
-																<%= product.retail_price %> VNĐ
+														<h4 class="product-price">
+															<%= product.retail_price %> VNĐ
 																<!-- <% if (product.old_price) { %>
 																  <del class="product-old-price"><%= product.old_price.toLocaleString('vi-VN') %> VNĐ</del>
 																<% } %> -->
-															  </h4>
-															  
+														</h4>
+
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
@@ -181,19 +183,24 @@
 																<% } %>
 														</div>
 														<div class="product-btns">
-															<button class="add-to-compare"><i
-																	class="fa fa-exchange"></i><span class="tooltipp">add to
-																	compare</span></button>
-															<button class="quick-view"><i class="fa fa-eye"></i><span
-																	class="tooltipp">quick view</span></button>
+															<button class="add-to-compare" data-id="<%= product.id %>"
+																data-name="<%= product.name %>"
+																data-image="<%= product.image %>"
+																data-category="<%= product.category_id %>">
+																<i class="fa fa-exchange"></i>
+																<span class="tooltipp">So
+																	sánh</span>
+															</button>
+
 														</div>
 													</div>
 													<div class="add-to-cart">
-														<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i>
+														<button class="add-to-cart-btn"><i
+																class="fa fa-shopping-cart"></i>
 															add to cart</button>
 													</div>
 												</a>
-												
+
 
 											</div>
 
@@ -759,7 +766,7 @@
 </body>
 
 
-	
-	
+
+
 
 </html>

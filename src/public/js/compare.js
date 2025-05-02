@@ -31,7 +31,7 @@ function renderCompareBar() {
         <div>
           <img src="/images/${compareList[i].image}" alt="${compareList[i].name}">
           <p>${compareList[i].name}</p>
-          <button onclick="removeFromCompare(${i})" style="position:absolute;top:2px;right:2px;">&times;</button>
+          <button class="remove-compare-btn" onclick="removeFromCompare(${i})">&times;</button>
         </div>`
       : `<div onclick="openProductSelector(${i})">+ Thêm sản phẩm</div>`;
   }

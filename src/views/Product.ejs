@@ -52,12 +52,12 @@
 					<div class="col-md-5 col-md-push-2">
 						<div id="product-main-img">
 							<% images.forEach(img=> { %>
-							  <div class="product-preview">
-								<img src="/images/<%= img.URL %>" alt="Hình sản phẩm">
-							  </div>
-							<% }) %>
+								<div class="product-preview">
+									<img src="/images/<%= img.URL %>" alt="Hình sản phẩm">
+								</div>
+								<% }) %>
 
-						  </div>
+						</div>
 					</div>
 					<!-- /Product main img -->
 
@@ -65,74 +65,75 @@
 					<div class="col-md-2  col-md-pull-5">
 						<div id="product-imgs">
 							<% images.forEach(img=> { %>
-							  <div class="product-preview">
-								<img src="/images/<%= img.URL %>" alt="Hình sản phẩm">
-							  </div>
-							<% }) %>
-						  </div>
+								<div class="product-preview">
+									<img src="/images/<%= img.URL %>" alt="Hình sản phẩm">
+								</div>
+								<% }) %>
+						</div>
 					</div>
 					<!-- /Product thumb imgs -->
 
 					<!-- Chi tiết sản phẩm -->
-<div class="col-md-5">
-	<div class="product-details">
-	  <!-- Tên sản phẩm -->
-	  <h2 class="product-name" id="detail-name">
-		<%= product.name %>
-	  </h2>
-  
-	  <div>
-		<div class="product-rating">
-		  <i class="fa fa-star"></i>
-		  <i class="fa fa-star"></i>
-		  <i class="fa fa-star"></i>
-		  <i class="fa fa-star"></i>
-		  <i class="fa fa-star-o"></i>
-		</div>
-		<a class="review-link" href="#">10 Đánh giá | Thêm đánh giá của bạn</a>
-	  </div>
-  
-	  <!-- Giá sản phẩm -->
-	  <div>
-		<h3 class="product-price" id="detail-price">
-		  <%= product.retail_price %> VNĐ <del class="product-old-price">25.590.000</del>
-		</h3>
-	  </div>
-  
-	  <p>
-		<%= product.description %>
-	  </p>
-  
-	  <!-- Thêm vào giỏ hàng -->
-	  <div class="add-to-cart">
-		<div class="qty-label">
-		  Số lượng
-		  <div class="input-number">
-			<input type="number" id="detail-qty" value="1" min="1">
-			<span class="qty-up">+</span>
-			<span class="qty-down">-</span>
-		  </div>
-		</div>
-  
-		<!-- Nút thêm -->
-		<button id="detail-add-to-cart" class="add-to-cart-btn">
-		  <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
-		</button>
-	  </div>
-  
-	  <ul class="product-btns">
-		<li><a href="#"><i class="fa fa-heart-o"></i> Thêm vào yêu thích</a></li>
-		<li><a href="#"><i class="fa fa-exchange"></i> So sánh</a></li>
-	  </ul>
-  
-	  <ul class="product-links">
-		<li>Danh mục:</li>
-		<li><a href="#"><%= product.category_name %></a></li>
-	  </ul>
-	</div>
-  </div>
-  <!-- /Chi tiết sản phẩm -->
-  
+					<div class="col-md-5">
+						<div class="product-details">
+							<!-- Tên sản phẩm -->
+							<h2 class="product-name" id="detail-name">
+								<%= product.name %>
+							</h2>
+
+							<div>
+								<div class="product-rating">
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star"></i>
+									<i class="fa fa-star-o"></i>
+								</div>
+								<a class="review-link" href="#">10 Đánh giá | Thêm đánh giá của bạn</a>
+							</div>
+
+							<!-- Giá sản phẩm -->
+							<div>
+								<h3 class="product-price" id="detail-price">
+									<%= product.retail_price %> VNĐ <del class="product-old-price">25.590.000</del>
+								</h3>
+							</div>
+
+							<p>
+								<%= product.description %>
+							</p>
+
+							<!-- Thêm vào giỏ hàng -->
+							<div class="add-to-cart">
+								<div class="qty-label">
+									Số lượng
+									<div class="input-number">
+										<input type="number" id="detail-qty" value="1" min="1">
+										<span class="qty-up">+</span>
+										<span class="qty-down">-</span>
+									</div>
+								</div>
+
+								<!-- Nút thêm -->
+								<button id="detail-add-to-cart" class="add-to-cart-btn">
+									<i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
+								</button>
+							</div>
+
+							<ul class="product-btns">
+								<li><a href="#"><i class="fa fa-exchange"></i> So sánh</a></li>
+							</ul>
+
+							<ul class="product-links">
+								<li>Danh mục:</li>
+								<li><a href="#">
+										<%= product.category_name %>
+									</a></li>
+							</ul>
+						</div>
+					</div>
+					<!-- /Chi tiết sản phẩm -->
+
 
 
 					<!-- Tab sản phẩm -->
@@ -190,7 +191,7 @@
 												<div class="specs-toggle-wrapper text-center">
 													<a href="javascript:void(0)" id="toggle-specs-link"
 														class="specs-link">
-														<span class="link-text">Xem thêm</span> 
+														<span class="link-text">Xem thêm</span>
 													</a>
 												</div>
 
@@ -413,7 +414,7 @@
 					<div class="col-md-3 col-xs-6">
 						<div class="product">
 							<div class="product-img">
-								<img src=".//images/product01.png" alt="">
+								<img src="/images/product01.png" alt="">
 								<div class="product-label">
 									<span class="sale">-30%</span>
 								</div>
@@ -446,7 +447,7 @@
 					<div class="col-md-3 col-xs-6">
 						<div class="product">
 							<div class="product-img">
-								<img src=".//images/product02.png" alt="">
+								<img src="/images/product02.png" alt="">
 								<div class="product-label">
 									<span class="new">NEW</span>
 								</div>
@@ -486,7 +487,7 @@
 					<div class="col-md-3 col-xs-6">
 						<div class="product">
 							<div class="product-img">
-								<img src=".//images/product03.png" alt="">
+								<img src="/images/product03.png" alt="">
 							</div>
 							<div class="product-body">
 								<p class="product-category">Category</p>
@@ -521,7 +522,7 @@
 					<div class="col-md-3 col-xs-6">
 						<div class="product">
 							<div class="product-img">
-								<img src=".//images/product04.png" alt="">
+								<img src="/images/product04.png" alt="">
 							</div>
 							<div class="product-body">
 								<p class="product-category">Category</p>
