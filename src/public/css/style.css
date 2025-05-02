@@ -141,9 +141,20 @@ textarea.input {
 }
 
 /*-- Number input --*/
+.price-range {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.price-separator {
+  font-size: 20px;
+  font-weight: bold;
+}
 
 .input-number {
   position: relative;
+  width: 100px;
 }
 
 .input-number input[type="number"]::-webkit-inner-spin-button,
@@ -154,13 +165,14 @@ textarea.input {
 
 .input-number input[type="number"] {
   appearance: none;
-  /*notice here*/
   -moz-appearance: textfield;
   height: 40px;
   width: 100%;
   border: 1px solid #E4E7ED;
   background-color: #FFF;
-  padding: 0px 35px 0px 15px;
+  padding: 0px 35px 0px 12px;
+  border-radius: 4px;
+  font-size: 14px;
 }
 
 .input-number .qty-up,
@@ -169,6 +181,7 @@ textarea.input {
   display: block;
   width: 20px;
   height: 20px;
+  line-height: 20px;
   border: 1px solid #E4E7ED;
   background-color: #FFF;
   text-align: center;
@@ -184,11 +197,13 @@ textarea.input {
   right: 0;
   top: 0;
   border-bottom: 0px;
+  border-radius: 0 4px 0 0;
 }
 
 .input-number .qty-down {
   right: 0;
   bottom: 0;
+  border-radius: 0 0 4px 0;
 }
 
 .input-number .qty-up:hover,
@@ -2668,12 +2683,13 @@ hr {
 
 
 /*compare*/
+
 .compare-bar {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
-  background: white;
+  background: #f1f1f1;
   border-top: 1px solid #ddd;
   display: flex;
   align-items: center;
@@ -2684,9 +2700,11 @@ hr {
 
 .compare-product-slot {
   width: 200px;
-  height: 100px;
+  height: 150px;
   margin: 0 10px;
-  border: 1px dashed #ccc;
+  border: 2px dashed #ccc;
+  background: #ffffff;
+  border-radius: 5px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2706,10 +2724,26 @@ hr {
 .compare-button {
   margin-left: auto;
   padding: 10px 20px;
+  border-radius: 5px;
   background: gray;
   color: white;
   border: none;
   cursor: pointer;
+}
+
+.remove-compare-btn {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  border-radius: 5px;
+  border: 1px #ff0000;
+  color: #ff0000;
+  background-color: rgba(255, 0, 0, 0.304);
+}
+
+.remove-compare-btn:hover {
+  color: #ffffff;
+  background-color: #ff0000;
 }
 
 .compare-button:disabled {
@@ -2717,12 +2751,71 @@ hr {
   cursor: not-allowed;
 }
 
+.compare-table {
+  border-radius: 12px;
+  overflow: hidden;
+  background: #ffffff;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+.compare-table thead th {
+  background-color: #343a40;
+  color: #fff;
+  border: none;
+  text-transform: uppercase;
+  padding: 16px;
+}
+
+.compare-table tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+.compare-table tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.compare-table td {
+  padding: 14px 20px;
+  vertical-align: middle;
+  border-color: #dee2e6;
+}
+
+.compare-table td:first-child {
+  font-weight: 600;
+  color: #333;
+  background-color: #f1f1f1;
+}
+
+.spec-diff {
+  background-color: #fff3cd !important;
+  font-weight: bold;
+  color: #c0392b;
+}
+
+.compareTitle{
+  margin-top: 10px;
+}
+
 .clear-button {
   margin-left: 10px;
   background: none;
   border: none;
+  padding: 10px;
   color: #007bff;
   cursor: pointer;
+}
+
+.clear-button:hover {
+  color: #ffffff;
+  background-color: #007bff;
+  border-radius: 5px;
+}
+
+.clear-button:active {
+  background-color: #2409d2;
+  color: #ffffff;
+  border-radius: 5px;
+  transform: scale(0.97);
 }
 
 /*store*/
@@ -2732,6 +2825,13 @@ hr {
   font-style: italic;
   margin-top: 20px;
 }
+
+#price-slider {
+  max-width: 95%;
+  margin-left: 6px;
+}
+
+
 
 /*cart*/
 .cart-message-notify {
@@ -2778,24 +2878,24 @@ hr {
   padding: 0;
 }
 
-.minus{
+.minus {
   border-radius: 5px 0 0 5px;
   border-right: none;
   color: #0d6efd;
 }
 
-.plus{
+.plus {
   border-radius: 0 5px 5px 0;
   border-left: none;
   color: #0d6efd;
 }
 
-.minus:hover{
+.minus:hover {
   background-color: #0d6efd;
   color: #f1f1f1;
 }
 
-.plus:hover{
+.plus:hover {
   background-color: #0d6efd;
   color: #f1f1f1;
 }
@@ -2917,35 +3017,32 @@ hr {
   transition: background-color 0.3s;
 }
 
-.apply-btn:hover{
+.apply-btn:hover {
   background-color: #007bff;
   color: #ffffff;
 }
 
-.apply-btn:active{
+.apply-btn:active {
   background-color: #2409d2;
   color: #ffffff;
   transform: scale(0.97);
 }
 
-.col-md-1, .col-md-4{
+.col-md-1,
+.col-md-4 {
   padding: 0;
-  margin-top: 25px;  
+  margin-top: 25px;
 }
 
-.col-md-3{
+.col-md-3 {
   margin-top: 20px;
   padding: 0;
 }
 
-.cart-product-name{
+.cart-product-name {
   font-weight: 700;
 }
 
-.couponSection{
+.couponSection {
   margin-bottom: 20px;
 }
-
-
-
-

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -13,76 +14,62 @@
   <link rel="stylesheet" href="/css/font-awesome.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <link type="text/css" rel="stylesheet" href="/css/style.css" />
-
-  <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      display: flex;
-      flex-direction: column;
-    }
-
-    main {
-      flex: 1;
-    }
-
-    .spec-diff {
-      background-color: #fff3cd !important;
-    }
-  </style>
 </head>
+
 <body>
 
   <%- include('./header.ejs') %>
 
-  <main>
-    <div class="container mt-5 mb-5">
-      <h2 class="text-center mb-4">So sánh sản phẩm</h2>
+    <main>
+      <div class="container mt-5 mb-5">
+        <h2 class="text-center mb-4 compareTitle">So sánh sản phẩm</h2>
 
-      <table class="table table-bordered">
-        <thead>
-          <tr>
-            <th class="text-start">Thông số</th>
-            <th class="text-start"><%= product1.name %></th>
-            <th class="text-start"><%= product2.name %></th>
-          </tr>
-        </thead>
-        <tbody>
-          <%
-            const allKeys = Array.from(new Set([
-              ...Object.keys(product1.specs || {}),
-              ...Object.keys(product2.specs || {})
-            ]));
-      
-            allKeys.forEach(key => {
+        <table class="table table-bordered table-striped compare-table">
+          <thead>
+            <tr>
+              <th class="text-start">Thông số</th>
+              <th class="text-start">
+                <%= product1.name %>
+              </th>
+              <th class="text-start">
+                <%= product2.name %>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <% const allKeys=Array.from(new Set([ ...Object.keys(product1.specs || {}), ...Object.keys(product2.specs ||
+              {}) ])); allKeys.forEach(key=> {
               const val1 = product1.specs[key] || '-';
               const val2 = product2.specs[key] || '-';
               const isDifferent = val1 !== val2;
-          %>
-            <tr>
-              <td class="text-start"><%= key %></td>
-              <td class="text-start <%= isDifferent ? 'spec-diff' : '' %>"><%= val1 %></td>
-              <td class="text-start <%= isDifferent ? 'spec-diff' : '' %>"><%= val2 %></td>
-            </tr>
-          <% }) %>
-        </tbody>
-      </table>
-      
-    </div>
-  </main>
+              %>
+              <tr>
+                <td class="text-start">
+                  <%= key %>
+                </td>
+                <td class="text-start <%= isDifferent ? 'spec-diff' : '' %>">
+                  <%= val1 %>
+                </td>
+                <td class="text-start <%= isDifferent ? 'spec-diff' : '' %>">
+                  <%= val2 %>
+                </td>
+              </tr>
+              <% }) %>
+          </tbody>
+        </table>
 
-  <%- include('./footer.ejs') %>
+      </div>
+    </main>
 
-  <script src="/js/jquery.min.js"></script>
-  <script src="/js/bootstrap.min.js"></script>
-  <script src="/js/slick.min.js"></script>
-  <script src="/js/nouislider.min.js"></script>
-  <script src="/js/jquery.zoom.min.js"></script>
-  <script src="/js/main.js"></script>
+    <%- include('./footer.ejs') %>
+
+      <script src="/js/jquery.min.js"></script>
+      <script src="/js/bootstrap.min.js"></script>
+      <script src="/js/slick.min.js"></script>
+      <script src="/js/nouislider.min.js"></script>
+      <script src="/js/jquery.zoom.min.js"></script>
+      <script src="/js/main.js"></script>
 
 </body>
+
 </html>
