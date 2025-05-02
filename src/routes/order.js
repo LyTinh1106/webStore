@@ -4,7 +4,7 @@ const {
   getOrderById,
   getAllOrders,
   updateOrder,
-  deleteOrder
+  deleteOrder,
 } = require('../controllers/OrderController');
 
 const router = express.Router();

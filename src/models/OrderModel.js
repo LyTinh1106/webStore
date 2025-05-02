@@ -1,6 +1,6 @@
 const sql = require('../config/database');
 
-const Order = function(order) {
+const Order = function (order) {
   this.created_at = order.created_at;
   this.payment_method = order.payment_method;
   this.order_status = order.order_status;
@@ -34,6 +34,21 @@ Order.findById = (id, result) => {
     }
   });
 };
+
+Order.findByAccountId = (account_id, result) => {
+  sql.query("SELECT o.*, a.email FROM order_table o JOIN account a ON o.account_id = a.id WHERE a.id = ?", [account_id], (err, res) => {
+    if (err) {
+      result(null, err);
+      return;
+    }
+    if (res.length) {
+      result(null, res); // Trả về toàn bộ danh sách
+    } else {
+      result({ kind: "not_found" }, null);
+    }
+  });
+
+}
 
 
 Order.getAll = (result) => {
