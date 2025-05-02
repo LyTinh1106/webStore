@@ -12,6 +12,7 @@
     <div class="body-login">
         <div class="login-container">
             <h1>Login</h1>
+        
 
             <form action="/login" method="post">
                 <div class="input-group">
@@ -23,11 +24,17 @@
                     <label for="password">Password</label>
                     <input type="password" id="password" placeholder="Type your password" name="password">
                 </div>
+                <% if (message) { %>
+                    <div class="error-message" style="color: rgb(0, 0, 0); text-align: center; margin-bottom: 10px;">
+                      <%= message %>
+                    </div>
+                  <% } %>
 
                 <div class="forgot-password">
                     <p><a href="/forgot-password">Quên mật khẩu?</a></p>
 
                 </div>
+                
 
                 <button type="submit" class="login-btn">LOGIN</button>
             </form>
