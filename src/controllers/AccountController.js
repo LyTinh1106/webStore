@@ -32,8 +32,9 @@ const getRegister = (req, res) => {
   res.render('register');
 };
 const getLogin = (req, res) => {
-  res.render('login');
+  res.render("login", { message: null });
 };
+
 const getForgotPassword = (req, res) => {
   res.render('forgotPassword', { message: null }); // truyền message mặc định
 };
@@ -480,18 +481,24 @@ const login = (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).render("login", { message: "Vui lòng điền đầy đủ email và mật khẩu." });
+    return res.status(400).render("login", {
+      message: "Vui lòng điền đầy đủ email và mật khẩu.",
+    });
   }
 
   Account.findByEmail(email, async (err, account) => {
     if (err || !account) {
-      return res.status(401).render("login", { message: "Email không tồn tại." });
+      return res.status(401).render("login", {
+        message: "Tài khoản hoặc mật khẩu không hợp lệ.",
+      });
     }
 
     const isMatch = await bcrypt.compare(password, account.password);
 
     if (!isMatch) {
-      return res.status(401).render("login", { message: "Mật khẩu không đúng." });
+      return res.status(401).render("login", {
+        message: "Tài khoản hoặc mật khẩu không hợp lệ.",
+      });
     }
 
     req.session.user = {
@@ -500,7 +507,6 @@ const login = (req, res) => {
       role: account.role,
     };
 
-
     if (account.role === "admin") {
       return res.redirect("/dashboard");
     } else {
@@ -508,6 +514,7 @@ const login = (req, res) => {
     }
   });
 };
+
 
 
 

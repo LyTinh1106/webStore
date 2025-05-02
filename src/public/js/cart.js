@@ -108,31 +108,35 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // Xử lý từ trang chi tiết sản phẩm
-  const detailBtn = document.getElementById('detail-add-to-cart');
+const detailBtn = document.getElementById('detail-add-to-cart');
 
-  if (detailBtn) {
-    detailBtn.addEventListener('click', function (e) {
-      e.preventDefault();
+if (detailBtn) {
+  detailBtn.addEventListener('click', function (e) {
+    e.preventDefault();
 
-      const id = productCard.querySelector('.product-id')?.innerText.trim();
-      const name = document.getElementById('detail-name')?.innerText.trim();
-      const priceText = document.getElementById('detail-price')?.innerText.trim().replace(/[^\d]/g, '');
-      const price = parseFloat(priceText);
-      const qty = parseInt(document.getElementById('detail-qty')?.value) || 1;
-      const img = document.querySelector('#product-main-img img')?.getAttribute('src') || '/images/noImage.jpg';
+    const id = document.getElementById('detail-id')?.innerText.trim() || document.getElementById('detail-id')?.value.trim();
+    const name = document.getElementById('detail-name')?.innerText.trim();
 
-      if (!name || isNaN(price) || isNaN(qty) || qty < 1) return;
+    const priceText = document.getElementById('detail-price')?.innerText.trim();
+    const cleanedPrice = priceText.replaceAll('.', '').replace(/[^\d]/g, ''); // xóa dấu . và ký tự ngoài số
+    const price = parseInt(cleanedPrice); // dùng parseInt vì giá không có phần thập phân
 
-      const existingProduct = cartData.find(p => p.name === name);
-      if (existingProduct) {
-        existingProduct.qty += qty;
-      } else {
-        cartData.push({ id, img, name, price, qty });
-      }
+    const qty = parseInt(document.getElementById('detail-qty')?.value) || 1;
+    const img = document.querySelector('#product-main-img img')?.getAttribute('src') || '/images/noImage.jpg';
 
-      updateCartUI();
-    });
-  }
+    if (!name || isNaN(price) || isNaN(qty) || qty < 1) return;
+
+    const existingProduct = cartData.find(p => p.name === name);
+    if (existingProduct) {
+      existingProduct.qty += qty;
+    } else {
+      cartData.push({ id, img, name, price, qty });
+    }
+
+    updateCartUI();
+  });
+}
+
 
   updateCartUI();
 
