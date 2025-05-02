@@ -128,14 +128,14 @@
             </div>
             <div class="payment-method">
               <div class="input-radio">
-                <input type="radio" name="payment" id="payment-1">
+                <input type="radio" name="payment" id="payment-1" value="COD">
                 <label for="payment-1">
                   <span></span>
                   Thanh toán tiền mặt
                 </label>
               </div>
               <div class="input-radio">
-                <input type="radio" name="payment" id="payment-3">
+                <input type="radio" name="payment" id="payment-3" value="MoMo">
                 <label for="payment-3">
                   <span></span>
                   Thanh toán trực tuyến
@@ -149,7 +149,8 @@
                 Tôi đã đọc và chấp nhận <a href="#">các điều khoản và điều kiện</a>
               </label>
             </div>
-            <a href="/api/checkout/payment/momo" class="primary-btn order-submit">Đặt hàng</a>
+            <button id="placeOrderBtn" class="primary-btn order-submit">Đặt hàng</button>
+            
           </div>
           <!-- /Order Details -->
 
@@ -258,6 +259,53 @@
         }
 
         document.addEventListener('DOMContentLoaded', renderCheckout);
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+    renderCheckout();
+// thanh toán
+document.getElementById("placeOrderBtn").addEventListener("click", async function (e) {
+    e.preventDefault();
+
+    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+    const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || "COD";
+    const accountId = "<%= user?.id %>"; 
+
+    const orderData = {
+      account_id: accountId,
+      payment_method: paymentMethod,
+      total_payment: total,
+      cartItems: JSON.stringify(cart)
+    };
+
+    try {
+      const response = await fetch("/api/order/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(orderData)
+      });
+
+      if (!response.ok) {
+        throw new Error("Đặt hàng thất bại.");
+      }
+
+      const result = await response.json();
+
+      if (paymentMethod === "MoMo") {
+        
+        window.location.href = result.payUrl;
+      } else {
+        
+        window.location.href = "userInfo";
+      }
+    } catch (err) {
+      alert("Lỗi: " + err.message);
+    }
+  });
+});
 
       </script>
 

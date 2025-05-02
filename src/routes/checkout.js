@@ -3,6 +3,6 @@ const { getCheckout, getCart, createMomoPayment } = require('../controllers/Chec
 const router = express.Router();
 
 
-router.get('/payment/momo', createMomoPayment); 
+ 
 
 module.exports = router;
