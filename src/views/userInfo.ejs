@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,6 +21,7 @@
             font-family: 'Montserrat', sans-serif;
             background-color: #f5f8fc;
         }
+
         .account-container {
             background: #ffffff;
             border-radius: 12px;
@@ -27,12 +29,14 @@
             margin-top: 40px;
             overflow: hidden;
         }
+
         .left-panel {
             background: #e8f4fd;
             padding: 25px 20px;
             border-right: 1px solid #ddd;
             min-height: 100%;
         }
+
         .user-avatar {
             width: 110px;
             height: 110px;
@@ -45,71 +49,86 @@
             font-size: 42px;
             color: #337ab7;
         }
+
         .user-info h4 {
             margin-bottom: 5px;
         }
+
         .user-info p {
             font-size: 14px;
             color: #666;
         }
-        .nav-pills > li > a {
+
+        .nav-pills>li>a {
             color: #333;
             margin-bottom: 10px;
             border-radius: 8px;
             padding: 10px;
             transition: 0.3s;
         }
-        .nav-pills > li.active > a, 
-        .nav-pills > li > a:hover {
+
+        .nav-pills>li.active>a,
+        .nav-pills>li>a:hover {
             background-color: #00AEEF;
             color: #fff;
         }
+
         .right-panel {
             padding: 35px;
         }
+
         .tab-content h3 {
             margin-bottom: 25px;
         }
+
         .form-group label {
             font-weight: 500;
         }
+
         .btn-primary {
             background-color: #00AEEF;
             border: none;
             border-radius: 8px;
             padding: 10px 20px;
         }
+
         .btn-primary:hover {
             background-color: #0096c7;
         }
+
         .order-item {
             background: #f9f9f9;
             border-radius: 8px;
             padding: 20px;
             margin-bottom: 20px;
-            box-shadow: 0 0 5px rgba(0,0,0,0.05);
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
         }
+
         .order-header {
             display: flex;
             justify-content: space-between;
             margin-bottom: 12px;
         }
+
         .badge-success {
             background-color: #28a745;
             padding: 6px 10px;
             border-radius: 5px;
         }
+
         .badge-warning {
             background-color: #ffc107;
             padding: 6px 10px;
             border-radius: 5px;
         }
+
         .logout-btn {
             margin-top: 20px;
             display: block;
             width: 100%;
             text-align: center;
         }
+
         @media (max-width: 768px) {
             .left-panel {
                 margin-bottom: 20px;
@@ -119,143 +138,147 @@
         }
     </style>
 </head>
+
 <body>
     <%- include('./header.ejs') %>
 
-    <div class="container">
-        <h2 class="text-center">Thông Tin Tài Khoản</h2>
+        <div class="container">
+            <h2 class="text-center">Thông Tin Tài Khoản</h2>
 
-        <div class="account-container">
-            <div class="row">
-                <div class="col-md-3 left-panel">
-                    <div class="user-info text-center">
-                        <div class="user-avatar">
-                            <i class="fa fa-user"></i>
+            <div class="account-container">
+                <div class="row">
+                    <div class="col-md-3 left-panel">
+                        <div class="user-info text-center">
+                            <div class="user-avatar">
+                                <i class="fa fa-user"></i>
+                            </div>
+                            <h4>Nguyễn Văn A</h4>
+                            <p>nguyenvana@example.com</p>
                         </div>
-                        <h4>Nguyễn Văn A</h4>
-                        <p>nguyenvana@example.com</p>
+
+                        <ul class="nav nav-pills nav-stacked" role="tablist">
+                            <li role="presentation" class="active">
+                                <a href="#customer-info" aria-controls="customer-info" role="tab" data-toggle="tab">
+                                    <i class="fa fa-user"></i> Thông Tin Khách Hàng
+                                </a>
+                            </li>
+                            <li role="presentation">
+                                <a href="#order-history" aria-controls="order-history" role="tab" data-toggle="tab">
+                                    <i class="fa fa-history"></i> Lịch Sử Đơn Hàng
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#" id="logout-button" class="btn btn-danger logout-btn">
+                                    <i class="fa fa-sign-out"></i> Đăng Xuất
+                                </a>
+                            </li>
+                        </ul>
                     </div>
 
-                    <ul class="nav nav-pills nav-stacked" role="tablist">
-                        <li role="presentation" class="active">
-                            <a href="#customer-info" aria-controls="customer-info" role="tab" data-toggle="tab">
-                                <i class="fa fa-user"></i> Thông Tin Khách Hàng
-                            </a>
-                        </li>
-                        <li role="presentation">
-                            <a href="#order-history" aria-controls="order-history" role="tab" data-toggle="tab">
-                                <i class="fa fa-history"></i> Lịch Sử Đơn Hàng
-                            </a>
-                        </li>
-                        <li>
-                            <a href="#" id="logout-button" class="btn btn-danger logout-btn">
-                                <i class="fa fa-sign-out"></i> Đăng Xuất
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="col-md-9 right-panel">
-                    <div class="tab-content">
-                        <div role="tabpanel" class="tab-pane active" id="customer-info">
-                            <h3>Thông Tin Khách Hàng</h3>
-                            <form>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="fullName">Họ và tên</label>
-                                            <input type="text" class="form-control" id="fullName" value="Nguyễn Văn A">
+                    <div class="col-md-9 right-panel">
+                        <div class="tab-content">
+                            <div role="tabpanel" class="tab-pane active" id="customer-info">
+                                <h3>Thông Tin Khách Hàng</h3>
+                                <form>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="fullName">Họ và tên</label>
+                                                <input type="text" class="form-control" id="fullName"
+                                                    value="Nguyễn Văn A">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="email" class="form-control" id="email"
+                                                    value="nguyenvana@example.com">
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email" value="nguyenvana@example.com">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="phone">Số điện thoại</label>
+                                                <input type="tel" class="form-control" id="phone" value="0912345678">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="dob">Ngày sinh</label>
+                                                <input type="date" class="form-control" id="dob" value="1990-01-01">
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="phone">Số điện thoại</label>
-                                            <input type="tel" class="form-control" id="phone" value="0912345678">
-                                        </div>
+                                    <div class="form-group">
+                                        <label for="address">Địa chỉ</label>
+                                        <textarea class="form-control" id="address"
+                                            rows="3">123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</textarea>
                                     </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <label for="dob">Ngày sinh</label>
-                                            <input type="date" class="form-control" id="dob" value="1990-01-01">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="address">Địa chỉ</label>
-                                    <textarea class="form-control" id="address" rows="3">123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary">Cập Nhật Thông Tin</button>
-                            </form>
-                        </div>
-
-                        <div role="tabpanel" class="tab-pane" id="order-history">
-                            <h3>Lịch Sử Đơn Hàng</h3>
-
-                            <div class="order-item">
-                                <div class="order-header">
-                                    <div><strong>Mã đơn hàng:</strong> #ORD12345</div>
-                                    <div><span class="badge badge-success">Đã giao hàng</span></div>
-                                </div>
-                                <div class="order-details">
-                                    <p><strong>Ngày đặt:</strong> 15/04/2025</p>
-                                    <p><strong>Tổng tiền:</strong> 1.250.000đ</p>
-                                    <p><strong>Phương thức thanh toán:</strong> COD</p>
-                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi tiết</button>
-                                </div>
+                                    <button type="submit" class="btn btn-primary">Cập Nhật Thông Tin</button>
+                                </form>
                             </div>
 
-                            <div class="order-item">
-                                <div class="order-header">
-                                    <div><strong>Mã đơn hàng:</strong> #ORD12344</div>
-                                    <div><span class="badge badge-warning">Đang vận chuyển</span></div>
-                                </div>
-                                <div class="order-details">
-                                    <p><strong>Ngày đặt:</strong> 10/04/2025</p>
-                                    <p><strong>Tổng tiền:</strong> 850.000đ</p>
-                                    <p><strong>Phương thức thanh toán:</strong> Chuyển khoản</p>
-                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi tiết</button>
-                                </div>
-                            </div>
+                            <div role="tabpanel" class="tab-pane" id="order-history">
+                                <h3>Lịch Sử Đơn Hàng</h3>
+                                <% if (orders.length> 0) { %>
+                                    <% orders.forEach(order=> { %>
+                                        <div class="order-item-container">
+                                            <div class="order-item">
+                                                <div class="order-header">
+                                                    <div><strong>Mã đơn hàng:</strong> #ORD<%= order.id%></div>
+                                                    <div><span class="badge badge-success"><%= order.order_status%></span></div>
+                                                </div>
+                                                <div class="order-details">
+                                                    <p><strong>Ngày đặt:</strong><%= new Date(order.created_at).toLocaleDateString('vi-VN') %></p>
+                                                    <p><strong>Tổng tiền:</strong> <%= order.total_payment %>đ</p>
+                                                    <p><strong>Phương thức thanh toán:</strong><%= order.payment_method %></p>
+                                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi tiết</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="7" class="text-center">Không có đơn hàng nào.</td>
+                                                </tr>
+                                                <% } %>
 
+
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    <%- include('./footer.ejs') %>
+        <%- include('./footer.ejs') %>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
-    <script>
-        $(document).ready(function() {
-            $('#logout-button').click(function(e) {
-                e.preventDefault();
-                if(confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-                    alert('Đã đăng xuất!');
-                }
-            });
+            <script>
+                $(document).ready(function () {
+                    $('#logout-button').click(function (e) {
+                        e.preventDefault();
+                        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                            alert('Đã đăng xuất!');
+                        }
+                    });
 
-            $('.view-detail-btn').click(function() {
-                const orderID = $(this).closest('.order-item').find('.order-header div:first-child').text().split('#')[1].trim();
-                alert('Chi tiết đơn hàng #' + orderID);
-            });
+                    $('.view-detail-btn').click(function () {
+                        const orderID = $(this).closest('.order-item').find('.order-header div:first-child').text().split('#')[1].trim();
+                        alert('Chi tiết đơn hàng #' + orderID);
+                    });
 
-            $('#customer-info form').submit(function(e) {
-                e.preventDefault();
-                alert('Cập nhật thành công!');
-            });
-        });
-    </script>
+                    $('#customer-info form').submit(function (e) {
+                        e.preventDefault();
+                        alert('Cập nhật thành công!');
+                    });
+                });
+
+            </script>
 </body>
+
 </html>

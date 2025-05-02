@@ -42,7 +42,29 @@ const getResetPassword = (req, res) => {
   res.render('resetPassword', { token, message: null });
 };
 const getInfo = (req, res) => {
-  res.render('userInfo', { user: req.user || req.session.user || null });
+  // res.render('userInfo', { user: req.user || req.session.user || null, });
+  const account_id = req.user?.id || req.session?.user?.id;
+
+  Order.findByAccountId(account_id, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        res.status(404).render("userInfo", {
+          user: req.user || req.session.user || null,
+          orders: [], // không có đơn hàng
+          message: "Không tìm thấy đơn hàng nào."
+        });
+      } else {
+        res.status(500).render("error", {
+          message: "Đã xảy ra lỗi khi truy xuất đơn hàng."
+        });
+      }
+    } else {
+      res.render("userInfo", {
+        user: req.user || req.session.user || null,
+        orders: data
+      });
+    }
+  });
 };
 const getDashboard = (req, res) => {
   if (!req.session.user || req.session.user.role !== 'admin') {
