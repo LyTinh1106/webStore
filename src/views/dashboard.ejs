@@ -23,13 +23,13 @@
             <h4 class="text-center mb-4">Tech Admin</h4>
             <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                 <li class="nav-item">
-                    <a class="nav-link active" id="v-dashboard-tab" data-bs-toggle="pill"
-                        data-bs-target="#dashboard" type="button" role="tab"> 
+                    <a class="nav-link active" id="v-dashboard-tab" data-bs-toggle="pill" data-bs-target="#dashboard"
+                        type="button" role="tab">
                         <i class="fas fa-tachometer-alt me-2"></i>Dashboard</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="v-orders-tab" data-bs-toggle="pill" data-bs-target="#orders"
-                        type="button" role="tab">
+                    <a class="nav-link" id="v-orders-tab" data-bs-toggle="pill" data-bs-target="#orders" type="button"
+                        role="tab">
                         <i class="fas fa-shopping-cart me-2"></i>Đơn hàng</a>
                 </li>
                 <li class="nav-item">
@@ -43,8 +43,8 @@
                         <i class="fas fa-list me-2"></i>Loại sản phẩm</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" id="v-brands-tab" data-bs-toggle="pill" data-bs-target="#brands"
-                        type="button" role="tab">
+                    <a class="nav-link" id="v-brands-tab" data-bs-toggle="pill" data-bs-target="#brands" type="button"
+                        role="tab">
                         <i class="fas fa-tags me-2"></i>Nhãn hàng</a>
                 </li>
                 <li class="nav-item">
@@ -147,7 +147,7 @@
                                 <th>Mã ĐH</th>
                                 <th>Khách hàng</th>
                                 <th>Ngày đặt</th>
-                                <th>Phương thức thanh toán</th>
+                                <th>Phương thức</th>
                                 <th>Tổng tiền</th>
                                 <th>Trạng thái</th>
                                 <th>Thao tác</th>
@@ -160,7 +160,7 @@
                                         <td>#<%= order.id %>
                                         </td>
                                         <td>
-                                            <%= order.email || 'Không rõ' %>
+                                            <%= order.account_email || order.email || 'Không rõ' %>
                                         </td>
                                         <td>
                                             <%= new Date(order.created_at).toLocaleDateString('vi-VN') %>
@@ -169,7 +169,7 @@
                                             <%= order.payment_method %>
                                         </td>
                                         <td>
-                                            <%= order.total_payment %> VNĐ
+                                            <%= order.total_payment.toLocaleString('vi-VN') %> VNĐ
                                         </td>
                                         <td>
                                             <% if (order.order_status==='Đã giao' ) { %>
@@ -191,15 +191,26 @@
                                                             <% } %>
                                         </td>
                                         <td>
-                                            <a href="/orders/<%= order.id %>" class="btn btn-sm btn-primary"><i
-                                                    class="fas fa-eye"></i></a>
-                                            <a href="/orders/<%= order.id %>/edit" class="btn btn-sm btn-info"><i
-                                                    class="fas fa-edit"></i></a>
-                                            <form action="/orders/<%= order.id %>/delete" method="POST"
-                                                class="d-inline">
-                                                <button type="submit" class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Bạn có chắc muốn xóa đơn hàng này?')"><i
-                                                        class="fas fa-trash"></i></button>
+                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
+                                                data-bs-target="#orderDetailModal" data-id="<%= order.id %>"
+                                                data-email="<%= order.account_email || order.email %>"
+                                                data-name="<%= order.fullname || '' %>"
+                                                data-phone="<%= order.phone || '' %>"
+                                                data-date="<%= new Date(order.created_at).toLocaleDateString('vi-VN') %>"
+                                                data-payment="<%= order.payment_method %>"
+                                                data-total="<%= order.total_payment %>"
+                                                data-address="<%= order.address || '' %>"
+                                                data-note="<%= order.note || '' %>"
+                                                data-status="<%= order.order_status %>">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+
+                                            <form action="/order/<%= order.id %>" method="POST" class="d-inline"
+                                                onsubmit="return confirm('Bạn có chắc muốn xóa đơn hàng này?')">
+                                                <input type="hidden" name="_method" value="DELETE">
+                                                <button type="submit" class="btn btn-sm btn-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
                                             </form>
                                         </td>
                                     </tr>
@@ -210,19 +221,119 @@
                                             </tr>
                                             <% } %>
                         </tbody>
-
                     </table>
                 </div>
-                <!-- <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-end">
-                    <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Sau</a></li>
-                </ul>
-            </nav> -->
             </div>
+
+            <!-- Modal Chi tiết đơn hàng -->
+            <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <form id="orderUpdateForm" method="POST">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Chi tiết đơn hàng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" name="_method" value="PUT">
+                                <input type="hidden" name="order_status" value="Đã giao">
+                                <input type="hidden" name="order_id" id="modalOrderId">
+
+                                <p><strong>Họ tên:</strong> <span id="modalOrderName"></span></p>
+                                <p><strong>Email:</strong> <span id="modalOrderEmail"></span></p>
+                                <p><strong>Số điện thoại:</strong> <span id="modalOrderPhone"></span></p>
+                                <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
+                                <p><strong>Phương thức thanh toán:</strong> <span id="modalOrderPayment"></span></p>
+                                <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
+                                <p><strong>Tổng tiền:</strong> <span id="modalOrderTotal"></span></p>
+                                <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
+
+                                <h6>Danh sách sản phẩm:</h6>
+                                <ul class="list-group mb-3">
+                                    <% if (orderDetails && orderDetails.length> 0) { %>
+                                        <% orderDetails.forEach(item=> { %>
+                                            <li class="list-group-item">
+                                                <%= item.quantity %>x <%= item.product_name %> - <%=
+                                                            item.subtotalprice.toLocaleString('vi-VN') %> VNĐ
+                                            </li>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <li class="list-group-item text-danger">Không có sản phẩm nào.</li>
+                                                    <% } %>
+                                </ul>
+
+                                <div class="mb-3">
+                                    <label><strong>Trạng thái hiện tại:</strong></label><br>
+                                    <span id="modalOrderStatusDisplay" class="badge bg-info">Đang xử lý</span>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-success">Duyệt đơn hàng</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Script -->
+            <script>
+                function formatVND(value) {
+                    return Number(value).toLocaleString('vi-VN') + ' VNĐ';
+                }
+
+                document.addEventListener('show.bs.modal', async function (event) {
+                    const modal = event.target;
+                    if (modal.id !== 'orderDetailModal') return;
+
+                    const button = event.relatedTarget;
+                    const id = button.getAttribute('data-id');
+
+                    document.getElementById('orderUpdateForm').action = `/api/order-detail/${id}`;
+                    document.getElementById('modalOrderId').value = id;
+                    document.getElementById('modalOrderEmail').innerText = button.getAttribute('data-email') || '(Không có)';
+                    document.getElementById('modalOrderName').innerText = button.getAttribute('data-name') || '(Không có)';
+                    document.getElementById('modalOrderPhone').innerText = button.getAttribute('data-phone') || '(Không có)';
+                    document.getElementById('modalOrderDate').innerText = button.getAttribute('data-date');
+                    document.getElementById('modalOrderPayment').innerText = button.getAttribute('data-payment');
+                    document.getElementById('modalOrderAddress').innerText = button.getAttribute('data-address') || '(Không có)';
+                    document.getElementById('modalOrderTotal').innerText = formatVND(button.getAttribute('data-total') || 0);
+                    document.getElementById('modalOrderNote').innerText = button.getAttribute('data-note') || '(Không có)';
+
+                    const status = button.getAttribute('data-status');
+                    const badge = document.getElementById('modalOrderStatusDisplay');
+                    badge.className = 'badge';
+                    badge.classList.add(
+                        status === 'Đã giao' ? 'bg-success' :
+                            status === 'Đang chờ' ? 'bg-warning' :
+                                status === 'Đã hủy' ? 'bg-danger' : 'bg-info'
+                    );
+                    badge.innerText = status;
+
+                    const productList = document.getElementById('modalOrderProducts');
+                    productList.innerHTML = `<li class="list-group-item text-muted">\u0110ang tải...</li>`;
+                    try {
+                        const res = await fetch(`/order/${id}`);
+                        const data = await res.json();
+                        productList.innerHTML = '';
+                        if (data.length === 0) {
+                            productList.innerHTML = `<li class="list-group-item text-danger">Không có sản phẩm nào.</li>`;
+                        } else {
+                            data.forEach(item => {
+                                const li = document.createElement('li');
+                                li.className = 'list-group-item';
+                                li.innerText = `${item.quantity}x ${item.product_name} - ${formatVND(item.subtotalprice)}`;
+                                productList.appendChild(li);
+                            });
+                        }
+                    } catch (err) {
+                        productList.innerHTML = `<li class="list-group-item text-danger">Lỗi khi tải sản phẩm.</li>`;
+                    }
+                });
+            </script>
+
 
             <!-- Products Section -->
             <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="v-products-tab">
@@ -756,7 +867,8 @@
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="updateBrandModalLabel">Cập nhật nhãn hàng</h5>
+                                                            <h5 class="modal-title" id="updateBrandModalLabel">Cập nhật
+                                                                nhãn hàng</h5>
                                                             <button type="button" class="btn-close"
                                                                 data-bs-dismiss="modal" aria-label="Đóng"></button>
                                                         </div>

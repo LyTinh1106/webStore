@@ -55,17 +55,17 @@
               <div class="section-title">
                 <h3 class="title">ĐỊA CHỈ THANH TOÁN</h3>
               </div>
-
+          
               <div class="form-group">
-                <input class="input form-control" type="text" name="first-name" placeholder="Họ">
+                <input class="input form-control" type="text" name="first_name" placeholder="Họ">
               </div>
               <div class="form-group">
-                <input class="input form-control" type="text" name="last-name" placeholder="Tên">
+                <input class="input form-control" type="text" name="last_name" placeholder="Tên">
               </div>
               <div class="form-group">
                 <input class="input form-control" type="email" name="email" placeholder="Email">
               </div>
-
+          
               <!-- Địa chỉ chia 3 combobox -->
               <div class="form-group">
                 <div class="d-flex">
@@ -80,23 +80,24 @@
                   </select>
                 </div>
               </div>
-
+          
               <div class="form-group">
                 <input class="input form-control" type="text" id="street" name="street" placeholder="Số nhà, tên đường">
               </div>
-
+          
               <div class="form-group">
-                <input class="input form-control" type="tel" name="tel" placeholder="Số điện thoại">
+                <input class="input form-control" type="tel" name="phone" placeholder="Số điện thoại">
               </div>
-
+          
             </div>
-
+          
             <!-- Order notes -->
             <div class="order-notes">
-              <textarea class="input form-control" placeholder="Ghi chú đơn hàng"></textarea>
+              <textarea class="input form-control" name="note" placeholder="Ghi chú đơn hàng"></textarea>
             </div>
             <!-- /Order notes -->
           </div>
+          
 
           <!-- Order Details -->
           <div class="col-md-5 order-details">
@@ -169,145 +170,165 @@
       <script src="/js/jquery.zoom.min.js"></script>
       <script src="/js/main.js"></script>
 
-      <!-- Để sau này fetch API tỉnh thành động -->
-      <script>
-        document.addEventListener("DOMContentLoaded", function () {
-          const provinceSelect = document.getElementById("province");
-          const districtSelect = document.getElementById("district");
-          const wardSelect = document.getElementById("ward");
+<!-- Để sau này fetch API tỉnh thành động -->
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    function formatVND(value) {
+      return value.toLocaleString("vi-VN") + " VNĐ";
+    }
 
-          // Hàm lấy danh sách tỉnh
-          fetch("https://provinces.open-api.vn/api/p/")
-            .then(response => response.json())
-            .then(provinces => {
-              provinces.forEach(province => {
-                const option = document.createElement("option");
-                option.value = province.code;
-                option.textContent = province.name;
-                provinceSelect.appendChild(option);
-              });
-            });
+    function renderCheckout() {
+      const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+      const container = document.querySelector(".order-products");
+      const totalElement = document.querySelector(".order-total");
+      container.innerHTML = "";
 
-          // Khi chọn Tỉnh
-          provinceSelect.addEventListener("change", function () {
-            const provinceCode = this.value;
-
-            districtSelect.innerHTML = '<option value="">Chọn Quận, Huyện</option>';
-            wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
-
-            if (!provinceCode) return;
-
-            fetch(`https://provinces.open-api.vn/api/p/${provinceCode}?depth=2`)
-              .then(response => response.json())
-              .then(data => {
-                data.districts.forEach(district => {
-                  const option = document.createElement("option");
-                  option.value = district.code;
-                  option.textContent = district.name;
-                  districtSelect.appendChild(option);
-                });
-              });
-          });
-
-          // Khi chọn Quận/Huyện
-          districtSelect.addEventListener("change", function () {
-            const districtCode = this.value;
-
-            wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
-
-            if (!districtCode) return;
-
-            fetch(`https://provinces.open-api.vn/api/d/${districtCode}?depth=2`)
-              .then(response => response.json())
-              .then(data => {
-                data.wards.forEach(ward => {
-                  const option = document.createElement("option");
-                  option.value = ward.code;
-                  option.textContent = ward.name;
-                  wardSelect.appendChild(option);
-                });
-              });
-          });
-        });
-        function formatVND(value) {
-          return value.toLocaleString('vi-VN') + ' VNĐ';
-        }
-
-        function renderCheckout() {
-          const cartData = JSON.parse(localStorage.getItem('cart')) || [];
-          const orderProductsContainer = document.querySelector('.order-products');
-          const orderTotalElement = document.querySelector('.order-total');
-
-          orderProductsContainer.innerHTML = ''; // Clear cũ nếu có
-
-          let totalPrice = 0;
-
-          cartData.forEach(product => {
-            const productTotal = product.price * product.qty;
-            totalPrice += productTotal;
-
-            const productHTML = `
-      <div class="order-col">
-        <div>${product.qty}x ${product.name}</div>
-        <div>${formatVND(productTotal)}</div>
-      </div>
-    `;
-            orderProductsContainer.insertAdjacentHTML('beforeend', productHTML);
-          });
-
-          orderTotalElement.innerText = formatVND(totalPrice);
-        }
-
-        document.addEventListener('DOMContentLoaded', renderCheckout);
-
-
-    document.addEventListener('DOMContentLoaded', () => {
-    renderCheckout();
-// thanh toán
-document.getElementById("placeOrderBtn").addEventListener("click", async function (e) {
-    e.preventDefault();
-
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
-    const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || "COD";
-    const accountId = "<%= user?.id %>"; 
-
-    const orderData = {
-      account_id: accountId,
-      payment_method: paymentMethod,
-      total_payment: total,
-      cartItems: JSON.stringify(cart)
-    };
-
-    try {
-      const response = await fetch("/api/order/create", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(orderData)
+      let total = 0;
+      cartData.forEach(product => {
+        const subtotal = product.price * product.qty;
+        total += subtotal;
+        container.insertAdjacentHTML("beforeend", `
+          <div class="order-col">
+            <div>${product.qty}x ${product.name}</div>
+            <div>${formatVND(subtotal)}</div>
+          </div>
+        `);
       });
 
-      if (!response.ok) {
-        throw new Error("Đặt hàng thất bại.");
-      }
-
-      const result = await response.json();
-
-      if (paymentMethod === "MoMo") {
-        
-        window.location.href = result.payUrl;
-      } else {
-        
-        window.location.href = "userInfo";
-      }
-    } catch (err) {
-      alert("Lỗi: " + err.message);
+      totalElement.innerText = formatVND(total);
     }
-  });
-});
 
-      </script>
+    renderCheckout();
+
+    // Load địa phương
+    const provinceSelect = document.getElementById("province");
+    const districtSelect = document.getElementById("district");
+    const wardSelect = document.getElementById("ward");
+
+    fetch("https://provinces.open-api.vn/api/p/")
+      .then(res => res.json())
+      .then(provinces => {
+        provinces.forEach(p => {
+          const opt = document.createElement("option");
+          opt.value = p.code;
+          opt.textContent = p.name;
+          provinceSelect.appendChild(opt);
+        });
+      });
+
+    provinceSelect.addEventListener("change", () => {
+      const code = provinceSelect.value;
+      districtSelect.innerHTML = '<option value="">Chọn Quận, Huyện</option>';
+      wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
+      if (!code) return;
+
+      fetch(`https://provinces.open-api.vn/api/p/${code}?depth=2`)
+        .then(res => res.json())
+        .then(data => {
+          data.districts.forEach(d => {
+            const opt = document.createElement("option");
+            opt.value = d.code;
+            opt.textContent = d.name;
+            districtSelect.appendChild(opt);
+          });
+        });
+    });
+
+    districtSelect.addEventListener("change", () => {
+      const code = districtSelect.value;
+      wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
+      if (!code) return;
+
+      fetch(`https://provinces.open-api.vn/api/d/${code}?depth=2`)
+        .then(res => res.json())
+        .then(data => {
+          data.wards.forEach(w => {
+            const opt = document.createElement("option");
+            opt.value = w.code;
+            opt.textContent = w.name;
+            wardSelect.appendChild(opt);
+          });
+        });
+    });
+
+    // Submit đơn hàng
+    document.getElementById("placeOrderBtn").addEventListener("click", async function (e) {
+      e.preventDefault();
+
+      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+      if (cart.length === 0) {
+        alert("Giỏ hàng trống.");
+        return;
+      }
+
+      const first_name = document.querySelector('[name="first_name"]')?.value.trim() || '';
+      const last_name = document.querySelector('[name="last_name"]')?.value.trim() || '';
+      const street = document.querySelector('[name="street"]')?.value.trim() || '';
+      const phone = document.querySelector('[name="phone"]')?.value.trim() || '';
+      const email = document.querySelector('[name="email"]')?.value.trim() || '';
+      const note = document.querySelector('[name="note"]')?.value.trim() || '';
+
+      const province = provinceSelect.selectedIndex > 0
+        ? provinceSelect.options[provinceSelect.selectedIndex].textContent.trim()
+        : '';
+      const district = districtSelect.selectedIndex > 0
+        ? districtSelect.options[districtSelect.selectedIndex].textContent.trim()
+        : '';
+      const ward = wardSelect.selectedIndex > 0
+        ? wardSelect.options[wardSelect.selectedIndex].textContent.trim()
+        : '';
+
+      const fullname = `${first_name} ${last_name}`.trim();
+      const address = `${street}, ${ward}, ${district}, ${province}`.trim();
+      const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || "COD";
+      const accountId = "<%= user?.id %>";
+
+      if (!first_name || !last_name || !email || !phone || !street || !province || !district || !ward) {
+        alert("Vui lòng điền đầy đủ thông tin đặt hàng.");
+        return;
+      }
+
+      const orderData = {
+        account_id: accountId,
+        fullname,
+        phone,
+        email,
+        address,
+        note,
+        payment_method: paymentMethod,
+        total_payment: cart.reduce((sum, item) => sum + item.price * item.qty, 0),
+        cartItems: JSON.stringify(cart)
+      };
+
+      console.log("🚀 Dữ liệu gửi đi:", orderData);
+
+      try {
+        const response = await fetch("/api/order/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(orderData)
+        });
+
+        if (!response.ok) throw new Error("Đặt hàng thất bại");
+
+        const result = await response.json();
+        localStorage.removeItem("cart");
+
+        if (paymentMethod === "MoMo") {
+          window.location.href = result.payUrl;
+        } else {
+          alert("Đặt hàng thành công!");
+          window.location.href = "/userInfo";
+        }
+      } catch (err) {
+        alert("Lỗi gửi đơn hàng: " + err.message);
+      }
+    });
+  });
+</script>
+
+
+      
 
 
 </body>

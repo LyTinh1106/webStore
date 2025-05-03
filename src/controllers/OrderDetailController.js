@@ -18,11 +18,24 @@ const createOrderDetail = (req, res) => {
 
 // Lấy chi tiết đơn hàng theo order_id
 const getDetailsByOrderId = (req, res) => {
-  const orderId = req.params.orderId;
+  const id = req.params.id;
 
-  OrderDetail.findByOrderId(orderId, (err, data) => {
-    if (err) return res.status(500).json({ message: "Lỗi khi lấy chi tiết đơn hàng." });
-    res.status(200).json(data);
+  Order.findById(id, (err, order) => {
+    if (err) {
+      return res.status(500).render("error", { message: "Không tìm thấy đơn hàng." });
+    }
+
+    OrderDetail.findByOrderId(id, (err, details) => {
+      if (err) {
+        return res.status(500).render("error", { message: "Không lấy được chi tiết sản phẩm." });
+      }
+
+      res.render("orderDashboard", {
+        order,
+        orderDetails: details,
+        mode: "edit"
+      });
+    });
   });
 };
 

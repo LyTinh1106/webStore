@@ -8,6 +8,7 @@ const Supplier = require('./supplier');
 const Cart = require('./cart');
 const Category = require('./category');
 const Order = require('./order');
+const OrderDetail = require('./orderdetail');
 const ProductDetail = require('./productdetail');
 const ProductImage = require('./productimage');
 const Importing = require('./importing');
@@ -27,6 +28,7 @@ const Checkout = require('./checkout')
     apiRouters.use('/account', Account);  
     apiRouters.use('/category', Category);
     apiRouters.use('/order', Order);
+    apiRouters.use('/order-detail', OrderDetail);
     apiRouters.use('/product-detail', ProductDetail);
     apiRouters.use('/product-image', ProductImage);
     apiRouters.use('/importing', Importing);

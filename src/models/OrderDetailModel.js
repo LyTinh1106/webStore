@@ -22,7 +22,14 @@ OrderDetail.create = (newDetail, result) => {
 
 
 OrderDetail.findByOrderId = (orderId, result) => {
-  sql.query("SELECT * FROM order_detail WHERE order_id = ?", [orderId], (err, res) => {
+  const query = `
+    SELECT od.*, p.name AS product_name 
+    FROM order_detail od
+    JOIN product p ON od.product_id = p.id
+    WHERE od.order_id = ?
+  `;
+
+  sql.query(query, [orderId], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -32,6 +39,7 @@ OrderDetail.findByOrderId = (orderId, result) => {
     result(null, res);
   });
 };
+
 
 
 OrderDetail.getAll = (result) => {
