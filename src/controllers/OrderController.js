@@ -37,7 +37,17 @@ exports.getOrderById = (req, res) => {
 
 exports.createOrder = async (req, res) => {
   try {
-    const { account_id, payment_method, total_payment, cartItems } = req.body;
+    const {
+      account_id,
+      payment_method,
+      total_payment,
+      cartItems,
+      fullname,
+      email,
+      phone,
+      address,
+      note
+    } = req.body;
 
     if (!account_id || !payment_method || !total_payment || !cartItems) {
       return res.status(400).json({ error: "Thiếu thông tin đơn hàng." });
@@ -48,7 +58,12 @@ exports.createOrder = async (req, res) => {
       payment_method,
       order_status: 'approving',
       account_id,
-      total_payment
+      total_payment,
+      fullname,
+      email,
+      phone,
+      address,
+      note
     };
 
     Order.create(newOrder, async (err, createdOrder) => {
@@ -57,7 +72,6 @@ exports.createOrder = async (req, res) => {
       const orderId = createdOrder.id;
       const items = JSON.parse(cartItems);
 
-      // Duyệt từng item theo cách tuần tự
       for (let item of items) {
         const detail = {
           order_id: orderId,
@@ -74,7 +88,6 @@ exports.createOrder = async (req, res) => {
         });
       }
 
-      // ✅ Trả kết quả cuối cùng
       if (payment_method === "MoMo") {
         return res.json({
           message: "Tạo đơn hàng thành công",
@@ -89,7 +102,6 @@ exports.createOrder = async (req, res) => {
     res.status(500).json({ error: "Đã xảy ra lỗi khi tạo đơn hàng." });
   }
 };
-
 
 
 

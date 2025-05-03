@@ -4,6 +4,7 @@ const Category = require('../models/CategoryModel')
 const Brand = require('../models/BrandModel')
 const Product = require('../models/ProductModel');
 const Order = require('../models/OrderModel')
+const OrderDetail = require('../models/OrderDetailModel')
 const Shipping = require('../models/ShippingModel')
 const Supplier = require('../models/SupplierModel')
 const Voucher = require('../models/VoucherModel')
@@ -69,7 +70,7 @@ const getInfo = (req, res) => {
 };
 const getDashboard = (req, res) => {
   if (!req.session.user || req.session.user.role !== 'admin') {
-    return res.redirect('/homepage?error=Truy+cập+bị+từ+chối');
+    return res.redirect('/homepage?error=Truy+c%E1%BA%ADp+b%E1%BB%8B+t%E1%BB%AB+ch%E1%BB%91i');
   }
 
   Account.getAll(null, (err, accounts) => {
@@ -97,31 +98,38 @@ const getDashboard = (req, res) => {
               return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách đơn hàng' });
             }
 
-            Shipping.getAll((err, shippings) => {
+            OrderDetail.getAll((err, orderDetails) => {
               if (err) {
-                return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
+                return res.status(500).render('error', { message: 'Lỗi khi lấy chi tiết đơn hàng' });
               }
 
-              Supplier.getAll((err, suppliers) => {
+              Shipping.getAll((err, shippings) => {
                 if (err) {
-                  return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
+                  return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
                 }
 
-                Voucher.getAll(null, (err, vouchers) => {
+                Supplier.getAll((err, suppliers) => {
                   if (err) {
-                    return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
+                    return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
                   }
 
-                  res.render('dashboard', {
-                    user: req.session.user,
-                    accounts,
-                    categories,
-                    brands,
-                    products,
-                    orders,
-                    shippings,
-                    suppliers,
-                    vouchers
+                  Voucher.getAll(null, (err, vouchers) => {
+                    if (err) {
+                      return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
+                    }
+
+                    res.render('dashboard', {
+                      user: req.session.user,
+                      accounts,
+                      categories,
+                      brands,
+                      products,
+                      orders,
+                      orderDetails,
+                      shippings,
+                      suppliers,
+                      vouchers
+                    });
                   });
                 });
               });
@@ -132,6 +140,8 @@ const getDashboard = (req, res) => {
     });
   });
 };
+
+module.exports = { getDashboard };
 
 //Forgot password
 const sendResetPasswordEmail = async (req, res) => {
