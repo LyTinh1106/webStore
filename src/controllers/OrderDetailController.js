@@ -1,4 +1,5 @@
 const OrderDetail = require('../models/OrderDetailModel');
+const Order = require('../models/OrderModel'); 
 
 // Thêm chi tiết đơn hàng
 const createOrderDetail = (req, res) => {
@@ -18,26 +19,17 @@ const createOrderDetail = (req, res) => {
 
 // Lấy chi tiết đơn hàng theo order_id
 const getDetailsByOrderId = (req, res) => {
-  const id = req.params.id;
+  const id = req.params.orderId;
 
-  Order.findById(id, (err, order) => {
+  OrderDetail.findByOrderId(id, (err, details) => {
     if (err) {
-      return res.status(500).render("error", { message: "Không tìm thấy đơn hàng." });
+      return res.status(500).json({ message: 'Lỗi khi lấy chi tiết sản phẩm.' });
     }
 
-    OrderDetail.findByOrderId(id, (err, details) => {
-      if (err) {
-        return res.status(500).render("error", { message: "Không lấy được chi tiết sản phẩm." });
-      }
-
-      res.render("orderDashboard", {
-        order,
-        orderDetails: details,
-        mode: "edit"
-      });
-    });
+    res.json(details); // ✅ Trả JSON để fetch xử lý
   });
 };
+
 
 // Lấy toàn bộ chi tiết đơn hàng
 const getAllOrderDetails = (req, res) => {
