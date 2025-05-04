@@ -98,10 +98,10 @@ const getDashboard = (req, res) => {
               return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách đơn hàng' });
             }
 
-            OrderDetail.getAll((err, orderDetails) => {
-              if (err) {
-                return res.status(500).render('error', { message: 'Lỗi khi lấy chi tiết đơn hàng' });
-              }
+            // OrderDetail.findByOrderId(order.id, (err, details) => {
+            //   if (err) {
+            //     return res.status(500).render('error', { message: 'Lỗi khi lấy chi tiết đơn hàng' });
+            //   }
 
               Shipping.getAll((err, shippings) => {
                 if (err) {
@@ -125,7 +125,7 @@ const getDashboard = (req, res) => {
                       brands,
                       products,
                       orders,
-                      orderDetails,
+                      // orderDetails,
                       shippings,
                       suppliers,
                       vouchers
@@ -138,7 +138,7 @@ const getDashboard = (req, res) => {
         });
       });
     });
-  });
+  
 };
 
 module.exports = { getDashboard };

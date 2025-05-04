@@ -157,7 +157,7 @@
                             <% if (orders.length> 0) { %>
                                 <% orders.forEach(order=> { %>
                                     <tr>
-                                        <td>#<%= order.id %>
+                                        <td>#ORD<%= order.id %>
                                         </td>
                                         <td>
                                             <%= order.account_email || order.email || 'Không rõ' %>
@@ -172,11 +172,11 @@
                                             <%= order.total_payment.toLocaleString('vi-VN') %> VNĐ
                                         </td>
                                         <td>
-                                            <% if (order.order_status==='Đã giao' ) { %>
+                                            <% if (order.order_status==='completed' ) { %>
                                                 <span class="badge bg-success">
                                                     <%= order.order_status %>
                                                 </span>
-                                                <% } else if (order.order_status==='Đang chờ' ) { %>
+                                                <% } else if (order.order_status==='approving' ) { %>
                                                     <span class="badge bg-warning">
                                                         <%= order.order_status %>
                                                     </span>
@@ -251,18 +251,10 @@
                                 <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
 
                                 <h6>Danh sách sản phẩm:</h6>
-                                <ul class="list-group mb-3">
-                                    <% if (orderDetails && orderDetails.length> 0) { %>
-                                        <% orderDetails.forEach(item=> { %>
-                                            <li class="list-group-item">
-                                                <%= item.quantity %>x <%= item.product_name %> - <%=
-                                                            item.subtotalprice.toLocaleString('vi-VN') %> VNĐ
-                                            </li>
-                                            <% }) %>
-                                                <% } else { %>
-                                                    <li class="list-group-item text-danger">Không có sản phẩm nào.</li>
-                                                    <% } %>
+                                <ul id="modalOrderProducts" class="list-group mb-3">
+                                    <li class="list-group-item text-muted">Đang tải...</li>
                                 </ul>
+
 
                                 <div class="mb-3">
                                     <label><strong>Trạng thái hiện tại:</strong></label><br>
@@ -315,7 +307,7 @@
                     const productList = document.getElementById('modalOrderProducts');
                     productList.innerHTML = `<li class="list-group-item text-muted">\u0110ang tải...</li>`;
                     try {
-                        const res = await fetch(`/order/${id}`);
+                        const res = await fetch(`/api/order-detail/${id}`);
                         const data = await res.json();
                         productList.innerHTML = '';
                         if (data.length === 0) {
