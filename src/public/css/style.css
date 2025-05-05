@@ -3028,8 +3028,8 @@ hr {
   transform: scale(0.97);
 }
 
-.col-md-1,
-.col-md-4 {
+.col-md-1.cart,
+.col-md-4.cart {
   padding: 0;
   margin-top: 25px;
 }
@@ -3046,3 +3046,4 @@ hr {
 .couponSection {
   margin-bottom: 20px;
 }
+

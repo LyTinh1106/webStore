@@ -136,7 +136,7 @@ exports.deleteOrder = (req, res) => {
 
   Order.delete(id, (err, result) => {
     if (err) {
-      console.error('❌ Lỗi khi xóa đơn hàng:', err);
+      console.error(' Lỗi khi xóa đơn hàng:', err);
       return res.status(500).json({ message: 'Xóa thất bại' });
     }
 

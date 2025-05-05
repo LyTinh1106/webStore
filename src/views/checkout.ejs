@@ -318,7 +318,7 @@
           window.location.href = result.payUrl;
         } else {
           alert("Đặt hàng thành công!");
-          window.location.href = "/userInfo";
+          window.location.href = "/userInfo?tab=order-history";
         }
       } catch (err) {
         alert("Lỗi gửi đơn hàng: " + err.message);
