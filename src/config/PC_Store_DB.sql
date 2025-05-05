@@ -206,7 +206,10 @@ VALUES
 ('P007', 'Samsung 970 EVO 1TB', 'NVMe M.2 SSD', 100, 120, 6, 6, 'Korea', '60'),
 ('P008', 'Cooler Master 750W PSU', '80+ Gold Power Supply', 90, 110, 6, 7, 'China', '60'),
 ('P009', 'Logitech G Pro Wireless', 'Gaming mouse lightweight', 80, 100, 7, 8, 'China', '24'),
-('P010', 'Razer Huntsman Mini', 'Compact gaming keyboard RGB', 85, 105, 8, 9, 'Singapore', '24');
+('P010', 'Razer Huntsman Mini', 'Compact gaming keyboard RGB', 85, 105, 8, 9, 'Singapore', '24'),
+('P011', 'Samsung 57" Odyssey Neo G9', 'Màn hình cong 57 inch 240Hz cho gaming', 1700, 1900, 6, 10, 'Korea', '36'),
+('P012', 'iBUYPOWER Pro Gaming Case', 'Vỏ case gaming chuyên dụng có LED RGB', 90, 120, 10, 11, 'USA', '24');
+
 
 INSERT INTO product_image (product_id, URL) VALUES
 (1, 'ASUS_ROG_Zephyrus_G14_1.jpg'),
@@ -249,7 +252,16 @@ INSERT INTO product_image (product_id, URL) VALUES
 
 (10, 'Razer_Huntsman_Mini_1.jpg'),
 (10, 'Razer_Huntsman_Mini_2.jpg'),
-(10, 'Razer_Huntsman_Mini_3.jpg');
+(10, 'Razer_Huntsman_Mini_3.jpg'),
+
+(11, 'Case_Asus_ROG_Hyperion_1.jpg'),
+(11, 'Case_Asus_ROG_Hyperion_2.jpg'),
+(11, 'Case_Asus_ROG_Hyperion_3.jpg'),
+
+(12, 'Samsung_57_inch_Odyssey_Neo_G9_1.jpg'),
+(12, 'Samsung_57_inch_Odyssey_Neo_G9_2.jpg'),
+(12, 'Samsung_57_inch_Odyssey_Neo_G9_3.jpg');
+
 
 INSERT INTO technical_specification (specs, product_id) VALUES
 -- Product 1: Laptop
