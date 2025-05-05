@@ -134,18 +134,33 @@ Order.updateById = (id, order, result) => {
   );
 };
 
-Order.remove = (id, result) => {
-  sql.query("DELETE FROM order_table WHERE id = ?", [id], (err, res) => {
-    if (err) {
-      result(null, err);
+Order.delete = (id, result) => {
+  // Xóa sản phẩm trong đơn hàng trước
+  sql.query("DELETE FROM order_detail WHERE order_id = ?", [id], (err1, res1) => {
+    if (err1) {
+      console.error("❌ Lỗi khi xóa order_detail:", err1);
+      result(err1, null);
       return;
     }
-    if (res.affectedRows === 0) {
-      result({ kind: "not_found" }, null);
-      return;
-    }
-    result(null, res);
+
+    // Sau đó xóa chính đơn hàng
+    sql.query("DELETE FROM order_table WHERE id = ?", [id], (err2, res2) => {
+      if (err2) {
+        console.error("❌ Lỗi khi xóa order_table:", err2);
+        result(err2, null);
+        return;
+      }
+
+      if (res2.affectedRows === 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      result(null, res2);
+    });
   });
 };
+
+
 
 module.exports = Order;

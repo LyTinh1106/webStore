@@ -205,13 +205,13 @@
                                                 <i class="fas fa-eye"></i>
                                             </button>
 
-                                            <form action="/order/<%= order.id %>" method="POST" class="d-inline"
-                                                onsubmit="return confirm('Bạn có chắc muốn xóa đơn hàng này?')">
-                                                <input type="hidden" name="_method" value="DELETE">
+                                            <form action="/order/<%= order.id %>" method="POST"
+                                                class="d-inline order-delete-form" data-id="<%= order.id %>">
                                                 <button type="submit" class="btn btn-sm btn-danger">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
                                             </form>
+
                                         </td>
                                     </tr>
                                     <% }) %>
@@ -224,6 +224,36 @@
                     </table>
                 </div>
             </div>
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    document.querySelectorAll('.order-delete-form').forEach(form => {
+                        form.addEventListener('submit', async (e) => {
+                            e.preventDefault();
+                            if (!confirm('Bạn có chắc muốn xóa đơn hàng này?')) return;
+
+                            const orderId = form.getAttribute('data-id');
+                            try {
+                                const res = await fetch(`/api/order/${orderId}`, {
+                                    method: 'DELETE',
+                                    headers: { 'Content-Type': 'application/json' }
+                                });
+
+
+                                if (res.ok) {
+                                    form.closest('tr').remove(); // Xóa dòng khỏi giao diện
+                                } else {
+                                    alert('Không thể xóa đơn hàng.');
+                                }
+                            } catch (err) {
+                                alert('Đã xảy ra lỗi khi xóa đơn hàng.');
+                                console.error(err);
+                            }
+                        });
+                    });
+                });
+            </script>
+
+
 
             <!-- Modal Chi tiết đơn hàng -->
             <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel"
