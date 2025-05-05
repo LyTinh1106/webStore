@@ -168,8 +168,8 @@ JOIN
 
 DELIMITER //
 
-CREATE TRIGGER trg_delete_orderdetails_after_order
-AFTER DELETE ON order_table
+CREATE TRIGGER trg_delete_orderdetails_before_order
+BEFORE DELETE ON order_table
 FOR EACH ROW
 BEGIN
     DELETE FROM order_detail
