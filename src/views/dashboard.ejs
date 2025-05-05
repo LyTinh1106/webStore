@@ -229,7 +229,7 @@
             <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog modal-lg">
-                    <form id="orderUpdateForm" method="POST">
+                    <form id="orderUpdateForm">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h5 class="modal-title">Chi tiết đơn hàng</h5>
@@ -262,7 +262,8 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="submit" class="btn btn-success">Duyệt đơn hàng</button>
+                                <button type="submit" form="orderUpdateForm" class="btn btn-success">Duyệt đơn
+                                    hàng</button>
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                             </div>
                         </div>
@@ -296,6 +297,7 @@
 
                     const status = button.getAttribute('data-status');
                     const badge = document.getElementById('modalOrderStatusDisplay');
+                    document.getElementById("orderUpdateForm").dataset.status = status;
                     badge.className = 'badge';
                     badge.classList.add(
                         status === 'Đã giao' ? 'bg-success' :
@@ -322,6 +324,43 @@
                         }
                     } catch (err) {
                         productList.innerHTML = `<li class="list-group-item text-danger">Lỗi khi tải sản phẩm.</li>`;
+                    }
+                });
+
+                document.getElementById("orderUpdateForm").addEventListener("submit", async function (e) {
+                    e.preventDefault();
+
+                    const orderId = document.getElementById("modalOrderId").value.trim();
+                    const status = document.getElementById("orderUpdateForm").dataset.status; // Lấy từ dataset
+
+                    if (!orderId || !status) {
+                        alert("Thiếu thông tin đơn hàng.");
+                        return;
+                    }
+
+                    if (status !== "approving") {
+                        return;
+                    }
+
+                    try {
+                        const response = await fetch(`/api/order/status/${orderId}`, {
+                            method: "PUT",
+                            headers: {
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify({ status: "approving" })
+                        });
+
+                        if (response.ok) {
+                            // alert("Đơn hàng đã chuyển sang trạng thái 'Đang giao hàng'.");
+                            saveScrollAndTabAndReload();
+                        } else {
+                            const text = await response.text();
+                            alert("Có lỗi xảy ra khi cập nhật đơn hàng: " + text);
+                        }
+                    } catch (error) {
+                        alert("Lỗi khi gửi yêu cầu cập nhật đơn hàng.");
+                        console.error(error);
                     }
                 });
             </script>

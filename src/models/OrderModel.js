@@ -148,4 +148,23 @@ Order.remove = (id, result) => {
   });
 };
 
+Order.UpdateStatusById = (id, result) => {
+  sql.query(
+    `UPDATE order_table SET order_status = "on delivering" WHERE id = ?`,
+    [id],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+      if (res.affectedRows == 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+      console.log("updated order: ", { id });
+      result(null, { id });
+    }
+  );
+};
 module.exports = Order;

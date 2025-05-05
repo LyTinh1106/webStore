@@ -166,7 +166,17 @@ JOIN
 JOIN 
     brand b ON p.brand_id = b.brand_id;
 
+DELIMITER //
 
+CREATE TRIGGER trg_delete_orderdetails_after_order
+AFTER DELETE ON order_table
+FOR EACH ROW
+BEGIN
+    DELETE FROM order_detail
+    WHERE order_id = OLD.id;
+END //
+
+DELIMITER ;
 
 
 
