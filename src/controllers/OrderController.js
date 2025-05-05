@@ -144,3 +144,19 @@ exports.deleteOrder = (req, res) => {
   });
 };
 
+exports.updateStatus = (req, res) => {
+  const id = req.params.id;
+  if(req.body.status === "approving"){
+    Order.UpdateStatusById(id, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          return res.status(404).json({ message: `Không tìm thấy đơn hàng với ID ${id}` });
+        } else {
+          res.status(500).json({ message: "Có lỗi xảy ra khi cập nhật đơn hàng." });
+        }
+      } else {
+        return res.status(201).json({ success: true, message: "Cập nhật category thành công!", order: data });
+      }
+    });
+  };
+};
