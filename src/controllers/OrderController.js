@@ -134,16 +134,13 @@ exports.updateOrder = (req, res) => {
 exports.deleteOrder = (req, res) => {
   const id = req.params.id;
 
-  Order.remove(id, (err, data) => {
+  Order.delete(id, (err, result) => {
     if (err) {
-      if (err.kind === "not_found") {
-        res.status(404).render("error", { message: `Không tìm thấy đơn hàng với ID ${id}.` });
-      } else {
-        res.status(500).render("error", { message: "Lỗi khi xóa đơn hàng." });
-      }
-    } else {
-      res.redirect("/orders");
+      console.error('❌ Lỗi khi xóa đơn hàng:', err);
+      return res.status(500).json({ message: 'Xóa thất bại' });
     }
+
+    res.json({ message: 'Xóa thành công' });
   });
 };
 
