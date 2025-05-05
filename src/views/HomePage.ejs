@@ -315,6 +315,203 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
+       
+		<!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- section title -->
+					<div class="col-md-12">
+						<div class="section-title">
+							<h3 class="title">Case</h3>
+							<div class="section-nav">
+								<ul class="section-tab-nav tab-nav">
+									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
+									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
+									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
+									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /section title -->
+
+					<!-- Products tab & slick -->
+					<div class="col-md-12">
+						<div class="row">
+							<div class="products-tabs">
+								<!-- tab -->
+								<div id="tab2" class="tab-pane fade in active">
+									<div class="products-slick text-left" data-nav="#slick-nav-2">
+										<% products.forEach(product=> {
+											if (product.category_name === 'Case') { %>
+											<div class="product">
+												<a href="/product/<%= product.id %>">
+													<span class="d-none product-id">
+														<%= product.id %>
+													</span>
+													<div class="product-img">
+														<img src="/images/<%= product.image || 'noImage.jpg' %>"
+															alt="ảnh sản phẩm">
+														<div class="product-label">
+															<% if (product.sale_percent) { %>
+																<span class="sale">-<%= product.sale_percent %>%</span>
+																<% } %>
+																	<% if (product.is_new) { %>
+																		<span class="new">NEW</span>
+																		<% } %>
+														</div>
+													</div>
+													<div class="product-body">
+														<p class="product-category">
+															<%= product.category_name %>
+														</p>
+														<h3 class="product-name"><a href="#">
+																<%= product.name %>
+															</a></h3>
+														<h4 class="product-price">
+															<%= product.retail_price %> VNĐ
+														</h4>
+														<div class="product-rating">
+															<% for (let i=0; i < 5; i++) { %>
+																<i
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star-o' %>"></i>
+																<% } %>
+														</div>
+														<div class="product-btns">
+															<button class="add-to-compare" data-id="<%= product.id %>"
+																data-name="<%= product.name %>"
+																data-image="<%= product.image %>"
+																data-category="<%= product.category_id %>">
+																<i class="fa fa-exchange"></i>
+																<span class="tooltipp">So sánh</span>
+															</button>
+														</div>
+													</div>
+													<div class="add-to-cart">
+														<button class="add-to-cart-btn"><i
+																class="fa fa-shopping-cart"></i> add to cart</button>
+													</div>
+												</a>
+											</div>
+											<% }}); %>
+									</div>
+									<div id="slick-nav-2" class="spotlight-products-slick-nav"></div>
+								</div>
+								<!-- /tab -->
+							</div>
+						</div>
+					</div>
+					<!-- /Products tab & slick -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+		 <!-- //Màn Hinh -->
+		  
+		 <!-- SECTION -->
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+					<!-- section title -->
+					<div class="col-md-12">
+						<div class="section-title">
+							<h3 class="title">Màn Hình</h3>
+							<div class="section-nav">
+								<ul class="section-tab-nav tab-nav">
+									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
+									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
+									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
+									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
+								</ul>
+							</div>
+						</div>
+					</div>
+					<!-- /section title -->
+
+					<!-- Products tab & slick -->
+					<div class="col-md-12">
+						<div class="row">
+							<div class="products-tabs">
+								<!-- tab -->
+								<div id="tab2" class="tab-pane fade in active">
+									<div class="products-slick text-left" data-nav="#slick-nav-2">
+										<% products.forEach(product=> {
+											if (product.category_name === 'Màn hình') { %>
+											<div class="product">
+												<a href="/product/<%= product.id %>">
+													<span class="d-none product-id">
+														<%= product.id %>
+													</span>
+													<div class="product-img">
+														<img src="/images/<%= product.image || 'noImage.jpg' %>"
+															alt="ảnh sản phẩm">
+														<div class="product-label">
+															<% if (product.sale_percent) { %>
+																<span class="sale">-<%= product.sale_percent %>%</span>
+																<% } %>
+																	<% if (product.is_new) { %>
+																		<span class="new">NEW</span>
+																		<% } %>
+														</div>
+													</div>
+													<div class="product-body">
+														<p class="product-category">
+															<%= product.category_name %>
+														</p>
+														<h3 class="product-name"><a href="#">
+																<%= product.name %>
+															</a></h3>
+														<h4 class="product-price">
+															<%= product.retail_price %> VNĐ
+														</h4>
+														<div class="product-rating">
+															<% for (let i=0; i < 5; i++) { %>
+																<i
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star-o' %>"></i>
+																<% } %>
+														</div>
+														<div class="product-btns">
+															<button class="add-to-compare" data-id="<%= product.id %>"
+																data-name="<%= product.name %>"
+																data-image="<%= product.image %>"
+																data-category="<%= product.category_id %>">
+																<i class="fa fa-exchange"></i>
+																<span class="tooltipp">So sánh</span>
+															</button>
+														</div>
+													</div>
+													<div class="add-to-cart">
+														<button class="add-to-cart-btn"><i
+																class="fa fa-shopping-cart"></i> add to cart</button>
+													</div>
+												</a>
+											</div>
+											<% }}); %>
+									</div>
+									<div id="slick-nav-2" class="spotlight-products-slick-nav"></div>
+								</div>
+								<!-- /tab -->
+							</div>
+						</div>
+					</div>
+					<!-- /Products tab & slick -->
+				</div>
+				<!-- /row -->
+			</div>
+			<!-- /container -->
+		</div>
+		<!-- /SECTION -->
+
+		
+
+		
 
 
 		<!-- SECTION -->
