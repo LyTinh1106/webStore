@@ -192,12 +192,12 @@ if (detailBtn) {
               <img src="${product.img}" alt="${product.name}" class="product-image">
               </a>
             </div>
-            <div class="col-md-4">
+            <div class="col-md-4 cart">
               <a href="/product/${product.id}">  
                 <span class="cart-product-name">${product.name}</span>
               </a>   
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 cart">
                 <span class="cart-product-price">${formatVND(product.price)}</span>
             </div>
             <div class="col-md-3">

@@ -105,9 +105,10 @@
         }
 
         .order-header {
+            margin-bottom: 20px;
             display: flex;
             justify-content: space-between;
-            margin-bottom: 12px;
+            align-items: center;
         }
 
         .badge-success {
@@ -178,45 +179,61 @@
                     <div class="col-md-9 right-panel">
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="customer-info">
-                                <h3>Thông Tin Khách Hàng</h3>
-                                <form>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="fullName">Họ và tên</label>
-                                                <input type="text" class="form-control" id="fullName"
-                                                    value="Nguyễn Văn A">
+                                <h3 class="text-center mb-4">Thông tin tài khoản</h3>
+                                    <form>
+                                        <!-- Họ và Tên -->
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="lastName">Họ</label>
+                                                    <input type="text" class="form-control" id="lastName" placeholder="Họ">
+                                                </div>
+                                            </div>
+    
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="firstName">Tên</label>
+                                                    <input type="text" class="form-control" id="firstName" placeholder="Tên">
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="email">Email</label>
-                                                <input type="email" class="form-control" id="email"
-                                                    value="nguyenvana@example.com">
-                                            </div>
+    
+                                        <!-- Giới tính -->
+                                        <div class="col"></div>
+                                        <div class="form-group">
+                                            <label>Giới tính</label><br>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="gender" value="Nam" checked> Nam
+                                            </label>
+                                            <label class="radio-inline">
+                                                <input type="radio" name="gender" value="Nữ"> Nữ
+                                            </label>
                                         </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="phone">Số điện thoại</label>
-                                                <input type="tel" class="form-control" id="phone" value="0912345678">
-                                            </div>
+    
+                                        <!-- Số điện thoại -->
+                                        <div class="form-group">
+                                            <label for="phone">Số điện thoại</label>
+                                            <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại">
                                         </div>
-                                        <div class="col-md-6">
-                                            <div class="form-group">
-                                                <label for="dob">Ngày sinh</label>
-                                                <input type="date" class="form-control" id="dob" value="1990-01-01">
-                                            </div>
+    
+                                        <!-- Email -->
+                                        <div class="form-group">
+                                            <label for="email">Email</label>
+                                            <input type="email" class="form-control" id="email"
+                                            placeholder="Email">
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="address">Địa chỉ</label>
-                                        <textarea class="form-control" id="address"
-                                            rows="3">123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh</textarea>
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Cập Nhật Thông Tin</button>
-                                </form>
+    
+                                        <!-- Địa chỉ -->
+                                        <div class="form-group">
+                                            <label for="address">Địa chỉ</label>
+                                            <textarea class="form-control" id="address"
+                                                rows="3" placeholder="123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh"></textarea>
+                                        </div>
+    
+                                        <!-- Nút lưu -->
+                                        <button type="submit" class="btn btn-primary px-4 py-2">Cập Nhật Thông
+                                            Tin</button>
+                                    </form>
                             </div>
 
                             <div role="tabpanel" class="tab-pane" id="order-history">
@@ -226,18 +243,28 @@
                                         <div class="order-item-container">
                                             <div class="order-item">
                                                 <div class="order-header">
-                                                    <div><strong>Mã đơn hàng:</strong> #ORD<%= order.id%></div>
-                                                    <div><span class="badge badge-success"><%= order.order_status%></span></div>
+                                                    <div><strong>Mã đơn hàng:</strong> #ORD<%= order.id%>
+                                                    </div>
+                                                    <div><span class="badge badge-success">
+                                                            <%= order.order_status%>
+                                                        </span></div>
                                                 </div>
                                                 <div class="order-details">
-                                                    <p><strong>Ngày đặt:</strong><%= new Date(order.created_at).toLocaleDateString('vi-VN') %></p>
-                                                    <p><strong>Tổng tiền:</strong> <%= order.total_payment %>đ</p>
-                                                    <p><strong>Phương thức thanh toán:</strong><%= order.payment_method %></p>
-                                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi tiết</button>
+                                                    <p><strong>Ngày đặt:</strong>
+                                                        <%= new Date(order.created_at).toLocaleDateString('vi-VN') %>
+                                                    </p>
+                                                    <p><strong>Tổng tiền:</strong>
+                                                        <%= order.total_payment %>đ
+                                                    </p>
+                                                    <p><strong>Phương thức thanh toán:</strong>
+                                                        <%= order.payment_method %>
+                                                    </p>
+                                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi
+                                                        tiết</button>
                                                 </div>
                                             </div>
                                         </div>
-                                        
+
                                         <% }) %>
                                             <% } else { %>
                                                 <tr>
@@ -278,6 +305,31 @@
                     });
                 });
 
+                $(document).ready(function () {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const tabId = urlParams.get("tab");
+
+                    if (tabId) {
+                        $('.nav-pills a[href="#' + tabId + '"]').tab('show');
+                    }
+
+                    $('#logout-button').click(function (e) {
+                        e.preventDefault();
+                        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
+                            alert('Đã đăng xuất!');
+                        }
+                    });
+
+                    $('.view-detail-btn').click(function () {
+                        const orderID = $(this).closest('.order-item').find('.order-header div:first-child').text().split('#')[1].trim();
+                        alert('Chi tiết đơn hàng #' + orderID);
+                    });
+
+                    $('#customer-info form').submit(function (e) {
+                        e.preventDefault();
+                        alert('Cập nhật thành công!');
+                    });
+                });
             </script>
 </body>
 
