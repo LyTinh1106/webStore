@@ -154,7 +154,12 @@
                                 <i class="fa fa-user"></i>
                             </div>
                             <h4>Nguyễn Văn A</h4>
-                            <p>nguyenvana@example.com</p>
+                            <% let displayEmail="Không có email" ; if (user) { if (user.emails && user.emails[0]) {
+                                displayEmail=user.emails[0].value; } else if (user.email) { displayEmail=user.email; } }
+                                %>
+                                <span>
+                                    <%= displayEmail %>
+                                </span>
                         </div>
 
                         <ul class="nav nav-pills nav-stacked" role="tablist">
@@ -180,60 +185,61 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="customer-info">
                                 <h3 class="text-center mb-4">Thông tin tài khoản</h3>
-                                    <form>
-                                        <!-- Họ và Tên -->
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="lastName">Họ</label>
-                                                    <input type="text" class="form-control" id="lastName" placeholder="Họ">
-                                                </div>
-                                            </div>
-    
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="firstName">Tên</label>
-                                                    <input type="text" class="form-control" id="firstName" placeholder="Tên">
-                                                </div>
+                                <form>
+                                    <!-- Họ và Tên -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="lastName">Họ</label>
+                                                <input type="text" class="form-control" id="lastName" placeholder="Họ">
                                             </div>
                                         </div>
-    
-                                        <!-- Giới tính -->
-                                        <div class="col"></div>
-                                        <div class="form-group">
-                                            <label>Giới tính</label><br>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="gender" value="Nam" checked> Nam
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="gender" value="Nữ"> Nữ
-                                            </label>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="firstName">Tên</label>
+                                                <input type="text" class="form-control" id="firstName"
+                                                    placeholder="Tên">
+                                            </div>
                                         </div>
-    
-                                        <!-- Số điện thoại -->
-                                        <div class="form-group">
-                                            <label for="phone">Số điện thoại</label>
-                                            <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại">
-                                        </div>
-    
-                                        <!-- Email -->
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email"
-                                            placeholder="Email">
-                                        </div>
-    
-                                        <!-- Địa chỉ -->
-                                        <div class="form-group">
-                                            <label for="address">Địa chỉ</label>
-                                            <textarea class="form-control" id="address"
-                                                rows="3" placeholder="123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh"></textarea>
-                                        </div>
-    
-                                        <!-- Nút lưu -->
-                                        <button type="submit" class="btn btn-primary px-4 py-2">Cập Nhật Thông
-                                            Tin</button>
-                                    </form>
+                                    </div>
+
+                                    <!-- Giới tính -->
+                                    <div class="col"></div>
+                                    <div class="form-group">
+                                        <label>Giới tính</label><br>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="gender" value="Nam" checked> Male
+                                        </label>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="gender" value="Nữ"> Female
+                                        </label>
+                                    </div>
+
+                                    <!-- Số điện thoại -->
+                                    <div class="form-group">
+                                        <label for="phone">Số điện thoại</label>
+                                        <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại">
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Email"
+                                            value="<%= user.email%>">
+                                    </div>
+
+                                    <!-- Địa chỉ -->
+                                    <div class="form-group">
+                                        <label for="address">Địa chỉ</label>
+                                        <textarea class="form-control" id="address" rows="3"
+                                            placeholder="123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh"></textarea>
+                                    </div>
+
+                                    <!-- Nút lưu -->
+                                    <button type="submit" class="btn btn-primary px-4 py-2">Cập Nhật Thông
+                                        Tin</button>
+                                </form>
                             </div>
 
                             <div role="tabpanel" class="tab-pane" id="order-history">

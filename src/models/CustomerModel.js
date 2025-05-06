@@ -1,6 +1,6 @@
 const sql = require('../config/database');
 
-const Customer = function(customer) {
+const Customer = function (customer) {
   this.first_name = customer.first_name;
   this.last_name = customer.last_name;
   this.gender = customer.gender;
@@ -114,5 +114,22 @@ Customer.remove = (id, result) => {
     result(null, res);
   });
 };
+
+Customer.getIdByEmail = (email, result) => {
+  sql.query("SELECT id FROM customer WHERE email LIKE ?", [email], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      result(null, res[0]);
+      return;
+    }
+
+    result({ kind: "not_found" }, null);
+  });
+}
 
 module.exports = Customer;
