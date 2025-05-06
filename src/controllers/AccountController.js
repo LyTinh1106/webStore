@@ -4,6 +4,7 @@ const Category = require('../models/CategoryModel')
 const Brand = require('../models/BrandModel')
 const Product = require('../models/ProductModel');
 const Order = require('../models/OrderModel')
+const Customer = require('../models/CustomerModel')
 const OrderDetail = require('../models/OrderDetailModel')
 const Shipping = require('../models/ShippingModel')
 const Supplier = require('../models/SupplierModel')
@@ -43,31 +44,72 @@ const getResetPassword = (req, res) => {
   const token = req.query.token;
   res.render('resetPassword', { token, message: null });
 };
-const getInfo = (req, res) => {
-  // res.render('userInfo', { user: req.user || req.session.user || null, });
-  const account_id = req.user?.id || req.session?.user?.id;
 
-  Order.findByAccountId(account_id, (err, data) => {
+// const getInfo = (req, res) => {
+//   const account_id = req.user?.id || req.session?.user?.id;
+
+//   Order.findByAccountId(account_id, (err, data) => {
+//     if (err) {
+//       if (err.kind === "not_found") {
+//         res.status(404).render("userInfo", {
+//           user: req.user || req.session.user || null,
+//           orders: [], // không có đơn hàng
+//           message: "Không tìm thấy đơn hàng nào."
+//         });
+//       } else {
+//         res.status(500).render("error", {
+//           message: "Đã xảy ra lỗi khi truy xuất đơn hàng."
+//         });
+//       }
+//     } else {
+//       res.render("userInfo", {
+//         user: req.user || req.session.user || null,
+//         orders: data
+//       });
+//     }
+//   });
+// };
+const getInfo = (req, res) => {
+  const user = req.user || req.session.user || null;
+  const account_id = user?.id;
+
+  if (!user || !user.email) {
+    return res.status(400).send("Không tìm thấy thông tin người dùng hoặc email.");
+  }
+
+  Order.findByAccountId(account_id, (err, orders) => {
     if (err) {
       if (err.kind === "not_found") {
-        res.status(404).render("userInfo", {
-          user: req.user || req.session.user || null,
-          orders: [], // không có đơn hàng
-          message: "Không tìm thấy đơn hàng nào."
+        // Không có đơn hàng nhưng vẫn lấy customer info
+        Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+          return res.status(404).render("userInfo", {
+            user: user,
+            orders: [],
+            customer: customerInfo || null,
+            message: "Không tìm thấy đơn hàng nào."
+          });
         });
       } else {
-        res.status(500).render("error", {
-          message: "Đã xảy ra lỗi khi truy xuất đơn hàng."
-        });
+        return res.status(500).send("Đã xảy ra lỗi khi truy xuất đơn hàng.");
       }
-    } else {
-      res.render("userInfo", {
-        user: req.user || req.session.user || null,
-        orders: data
-      });
     }
+
+    // Có đơn hàng, tiếp tục lấy thông tin customer
+    Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+      if (errCustomer && errCustomer.kind !== "not_found") {
+        return res.status(500).send("Đã xảy ra lỗi khi truy xuất thông tin khách hàng.");
+      }
+
+      res.render("userInfo", {
+        user: user,
+        orders: orders,
+        customer: customerInfo || null,
+        message: null
+      });
+    });
   });
 };
+
 const getDashboard = (req, res) => {
   if (!req.session.user || req.session.user.role !== 'admin') {
     return res.redirect('/homepage?error=Truy+c%E1%BA%ADp+b%E1%BB%8B+t%E1%BB%AB+ch%E1%BB%91i');
@@ -103,33 +145,32 @@ const getDashboard = (req, res) => {
             //     return res.status(500).render('error', { message: 'Lỗi khi lấy chi tiết đơn hàng' });
             //   }
 
-              Shipping.getAll((err, shippings) => {
+            Shipping.getAll((err, shippings) => {
+              if (err) {
+                return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
+              }
+
+              Supplier.getAll((err, suppliers) => {
                 if (err) {
-                  return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
+                  return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
                 }
 
-                Supplier.getAll((err, suppliers) => {
+                Voucher.getAll(null, (err, vouchers) => {
                   if (err) {
-                    return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
+                    return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
                   }
 
-                  Voucher.getAll(null, (err, vouchers) => {
-                    if (err) {
-                      return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
-                    }
-
-                    res.render('dashboard', {
-                      user: req.session.user,
-                      accounts,
-                      categories,
-                      brands,
-                      products,
-                      orders,
-                      // orderDetails,
-                      shippings,
-                      suppliers,
-                      vouchers
-                    });
+                  res.render('dashboard', {
+                    user: req.session.user,
+                    accounts,
+                    categories,
+                    brands,
+                    products,
+                    orders,
+                    // orderDetails,
+                    shippings,
+                    suppliers,
+                    vouchers
                   });
                 });
               });
@@ -138,7 +179,8 @@ const getDashboard = (req, res) => {
         });
       });
     });
-  
+  });
+
 };
 
 module.exports = { getDashboard };

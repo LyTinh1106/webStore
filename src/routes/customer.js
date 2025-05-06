@@ -4,15 +4,17 @@ const {
   getAllCustomers,
   getCustomerById,
   updateCustomer,
-  deleteCustomer
+  deleteCustomer,
+  checkMailById,
 } = require('../controllers/CustomerController');
 
 const router = express.Router();
 
 router.get('/', getAllCustomers);       // GET /customer?search=...
 router.get('/:id', getCustomerById);   // GET by ID
-router.post('/', createCustomer);       // POST
-router.put('/:id', updateCustomer);    // PUT
-router.delete('/:id', deleteCustomer); // DELETE
+router.get('/check/:email', checkMailById);   // GET by ID
+router.post('/create', createCustomer);       // POST
+router.put('/update/:id', updateCustomer);    // PUT
+router.delete('/delete/:id', deleteCustomer); // DELETE
 
 module.exports = router;

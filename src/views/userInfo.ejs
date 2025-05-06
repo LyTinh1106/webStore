@@ -153,8 +153,13 @@
                             <div class="user-avatar">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <h4>Nguyễn Văn A</h4>
-                            <p>nguyenvana@example.com</p>
+                            <h4><%= (customer && customer.last_name && customer.first_name) ? customer.last_name + " " + customer.first_name : "User" %></h4>
+                            <% let displayEmail="Không có email" ; if (user) { if (user.emails && user.emails[0]) {
+                                displayEmail=user.emails[0].value; } else if (user.email) { displayEmail=user.email; } }
+                                %>
+                                <span>
+                                    <%= displayEmail %>
+                                </span>
                         </div>
 
                         <ul class="nav nav-pills nav-stacked" role="tablist">
@@ -169,7 +174,7 @@
                                 </a>
                             </li>
                             <li>
-                                <a href="#" id="logout-button" class="btn btn-danger logout-btn">
+                                <a href="/logout" id="logout-button" class="btn btn-danger logout-btn">
                                     <i class="fa fa-sign-out"></i> Đăng Xuất
                                 </a>
                             </li>
@@ -180,60 +185,124 @@
                         <div class="tab-content">
                             <div role="tabpanel" class="tab-pane active" id="customer-info">
                                 <h3 class="text-center mb-4">Thông tin tài khoản</h3>
-                                    <form>
-                                        <!-- Họ và Tên -->
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="lastName">Họ</label>
-                                                    <input type="text" class="form-control" id="lastName" placeholder="Họ">
-                                                </div>
-                                            </div>
-    
-                                            <div class="col-md-6">
-                                                <div class="form-group">
-                                                    <label for="firstName">Tên</label>
-                                                    <input type="text" class="form-control" id="firstName" placeholder="Tên">
-                                                </div>
+                                <form id="customer-form">
+                                    <input type="hidden" id="customerId">
+                                    <!-- Họ và Tên -->
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="lastName">Họ</label>
+                                                <input type="text" class="form-control" id="firstName" placeholder="Tên"
+                                                    value="<%= customer ? customer.first_name : '' %>">
                                             </div>
                                         </div>
-    
-                                        <!-- Giới tính -->
-                                        <div class="col"></div>
-                                        <div class="form-group">
-                                            <label>Giới tính</label><br>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="gender" value="Nam" checked> Nam
-                                            </label>
-                                            <label class="radio-inline">
-                                                <input type="radio" name="gender" value="Nữ"> Nữ
-                                            </label>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="firstName">Tên</label>
+                                                <input type="text" class="form-control" id="lastName" placeholder="Họ"
+                                                    value="<%= customer ? customer.last_name : '' %>">
+                                            </div>
                                         </div>
-    
-                                        <!-- Số điện thoại -->
-                                        <div class="form-group">
-                                            <label for="phone">Số điện thoại</label>
-                                            <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại">
-                                        </div>
-    
-                                        <!-- Email -->
-                                        <div class="form-group">
-                                            <label for="email">Email</label>
-                                            <input type="email" class="form-control" id="email"
-                                            placeholder="Email">
-                                        </div>
-    
-                                        <!-- Địa chỉ -->
-                                        <div class="form-group">
-                                            <label for="address">Địa chỉ</label>
-                                            <textarea class="form-control" id="address"
-                                                rows="3" placeholder="123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh"></textarea>
-                                        </div>
-    
-                                        <!-- Nút lưu -->
-                                        <button type="submit" class="btn btn-primary px-4 py-2">Cập Nhật Thông
-                                            Tin</button>
-                                    </form>
+                                    </div>
+
+                                    <!-- Giới tính -->
+                                    <div class="form-group">
+                                        <label>Giới tính</label><br>
+                                        <label class="radio-inline">
+                                            <input type="radio" name="gender" value="male"
+                                              <%= customer && customer.gender === 'male' ? 'checked' : '' %>> Nam
+                                          </label>
+                                        
+                                          <label class="radio-inline">
+                                            <input type="radio" name="gender" value="female"
+                                              <%= customer && customer.gender === 'female' ? 'checked' : '' %>> Nữ
+                                          </label>
+                                    </div>
+
+                                    <!-- Số điện thoại -->
+                                    <div class="form-group">
+                                        <label for="phone">Số điện thoại</label>
+                                        <input type="tel" class="form-control" id="phone" placeholder="Số điện thoại"
+                                            value="<%= customer ? customer.phone : '' %>">
+                                    </div>
+
+                                    <!-- Email -->
+                                    <div class="form-group">
+                                        <label for="email">Email</label>
+                                        <input type="email" class="form-control" id="email" placeholder="Email"
+                                            value="<%=(user.emails && user.emails[0] && user.emails[0].value) || user.email%>">
+                                    </div>
+
+                                    <!-- Địa chỉ -->
+                                    <div class="form-group">
+                                        <label for="address">Địa chỉ</label>
+                                        <textarea class="form-control" id="address" rows="3"
+                                            placeholder="123 Đường ABC, Quận XYZ, TP. Hồ Chí Minh"><%= customer ? customer.address : '' %></textarea>
+
+                                    </div>
+
+                                    <!-- Nút lưu -->
+                                    <button type="submit" class="btn btn-primary px-4 py-2">Cập Nhật Thông
+                                        Tin</button>
+                                </form>
+                                <script>
+                                    document.getElementById("customer-form").addEventListener("submit", async function (e) {
+                                        e.preventDefault();
+
+                                        const customer = {
+                                            first_name: document.getElementById("firstName").value.trim(),
+                                            last_name: document.getElementById("lastName").value.trim(),
+                                            gender: document.querySelector("input[name='gender']:checked")?.value || "",
+                                            email: document.getElementById("email").value.trim(),
+                                            phone: document.getElementById("phone").value.trim(),
+                                            address: document.getElementById("address").value.trim(),
+                                        };
+
+                                        // Kiểm tra dữ liệu bắt buộc
+                                        if (!customer.first_name || !customer.last_name || !customer.email) {
+                                            alert("Vui lòng nhập đầy đủ Họ, Tên và Email.");
+                                            return;
+                                        }
+
+                                        try {
+                                            const checkRes = await fetch(`/api/customer/check/${encodeURIComponent(customer.email)}`);
+                                            if (checkRes.ok) {
+                                                const existing = await checkRes.json();
+                                                // Đã tồn tại -> gọi cập nhật
+                                                const updateRes = await fetch(`/api/customer/update/${existing.id}`, {
+                                                    method: "PUT",
+                                                    headers: { "Content-Type": "application/json" },
+                                                    body: JSON.stringify(customer),
+                                                });
+
+                                                const updateResult = await updateRes.json();
+                                                if (updateRes.ok) {
+                                                    alert("Cập nhật thành công!");
+                                                } else {
+                                                    alert(updateResult.message || "Lỗi cập nhật");
+                                                }
+                                            } else {
+                                                // Không tồn tại -> tạo mới
+                                                const createRes = await fetch("/api/customer/create", {
+                                                    method: "POST",
+                                                    headers: { "Content-Type": "application/json" },
+                                                    body: JSON.stringify(customer),
+                                                });
+
+                                                const createResult = await createRes.json();
+                                                if (createRes.ok) {
+                                                    // alert("Tạo khách hàng mới thành công!");
+                                                } else {
+                                                    alert(createResult.message || "Lỗi tạo mới");
+                                                }
+                                            }
+                                        } catch (error) {
+                                            console.error("Lỗi:", error);
+                                            alert("Có lỗi xảy ra.");
+                                        }
+                                    });
+                                </script>
                             </div>
 
                             <div role="tabpanel" class="tab-pane" id="order-history">
@@ -287,22 +356,13 @@
 
             <script>
                 $(document).ready(function () {
-                    $('#logout-button').click(function (e) {
-                        e.preventDefault();
-                        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-                            alert('Đã đăng xuất!');
-                        }
-                    });
 
                     $('.view-detail-btn').click(function () {
                         const orderID = $(this).closest('.order-item').find('.order-header div:first-child').text().split('#')[1].trim();
                         alert('Chi tiết đơn hàng #' + orderID);
                     });
 
-                    $('#customer-info form').submit(function (e) {
-                        e.preventDefault();
-                        alert('Cập nhật thành công!');
-                    });
+
                 });
 
                 $(document).ready(function () {
@@ -313,22 +373,11 @@
                         $('.nav-pills a[href="#' + tabId + '"]').tab('show');
                     }
 
-                    $('#logout-button').click(function (e) {
-                        e.preventDefault();
-                        if (confirm('Bạn có chắc chắn muốn đăng xuất?')) {
-                            alert('Đã đăng xuất!');
-                        }
-                    });
-
                     $('.view-detail-btn').click(function () {
                         const orderID = $(this).closest('.order-item').find('.order-header div:first-child').text().split('#')[1].trim();
                         alert('Chi tiết đơn hàng #' + orderID);
                     });
 
-                    $('#customer-info form').submit(function (e) {
-                        e.preventDefault();
-                        alert('Cập nhật thành công!');
-                    });
                 });
             </script>
 </body>
