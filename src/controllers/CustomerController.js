@@ -87,10 +87,23 @@ const deleteCustomer = (req, res) => {
   });
 };
 
+//check mail
+const checkMailById = (req, res) => {
+  const email = decodeURIComponent(req.params.email);
+  Customer.getIdByEmail(email, (err, data) => {
+    if (err) {
+      if (err.kind === 'not_found') return res.status(404).send({ message: 'Không tìm thấy' });
+      return res.status(500).send({ message: 'Lỗi truy vấn' });
+    }
+    res.send(data);
+  });
+};
+
 module.exports = {
   createCustomer,
   getAllCustomers,
   getCustomerById,
   updateCustomer,
   deleteCustomer,
+  checkMailById,
 };

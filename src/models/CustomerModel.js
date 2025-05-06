@@ -132,4 +132,21 @@ Customer.getIdByEmail = (email, result) => {
   });
 }
 
+Customer.getByEmail = (email, result) =>{
+  sql.query("SELECT * FROM customer WHERE email like ?", [email], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(err, null);
+      return;
+    }
+
+    if (res.length) {
+      result(null, res[0]);
+      return;
+    }
+
+    result({ kind: "not_found" }, null);
+  });
+};
+
 module.exports = Customer;
