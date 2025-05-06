@@ -209,7 +209,32 @@ VALUES
 ('P010', 'Razer Huntsman Mini', 'Compact gaming keyboard RGB', 85, 105, 8, 9, 'Singapore', '24'),
 ('P011', 'Samsung 57" Odyssey Neo G9', 'Màn hình cong 57 inch 240Hz cho gaming', 1700, 1900, 6, 10, 'Korea', '36'),
 ('P012', 'iBUYPOWER Pro Gaming Case', 'Vỏ case gaming chuyên dụng có LED RGB', 90, 120, 10, 11, 'USA', '24');
+-- Laptop (id = 1)
+('P013', 'Laptop ASUS TUF Gaming F15', 'Laptop gaming hiệu năng cao dòng TUF của ASUS', 950, 1200, 1, 1, 'Taiwan', '24'),
+('P014', 'Laptop Razer Book 13', 'Laptop cao cấp thiết kế mỏng nhẹ của Razer', 1100, 1400, 2, 1, 'USA', '12'),
+('P015', 'Laptop Acer Predator Helios 16 Neo', 'Laptop gaming mạnh mẽ của Acer dòng Predator', 980, 1300, 3, 1, 'Taiwan', '24'),
+('P016', 'Laptop Lenovo LOQ', 'Laptop gaming giá tốt từ Lenovo', 880, 1100, 4, 1, 'China', '24'),
 
+-- Chuột (id = 8)
+('P017', 'Chuột Gaming ASUS ROG Harpe Ace', 'Chuột gaming cao cấp đến từ ASUS', 70, 100, 1, 8, 'Taiwan', '12'),
+('P018', 'Chuột Razer Basilisk V3 Pro', 'Chuột Razer hiệu năng cao với thiết kế công thái học', 75, 110, 2, 8, 'USA', '12'),
+('P019', 'Chuột Logitech G502 X Plus Lightspeed', 'Chuột Logitech cao cấp với cảm biến HERO', 80, 120, 5, 8, 'Switzerland', '24'),
+('P020', 'Chuột Corsair Nightsabre RGB Wireless', 'Chuột không dây cao cấp từ Corsair', 85, 115, 6, 8, 'USA', '24'),
+('P021', 'Chuột SteelSeries Aerox 5 Wireless', 'Chuột gaming siêu nhẹ không dây của SteelSeries', 78, 110, 7, 8, 'Denmark', '12'),
+('P022', 'Chuột Razer DeathAdder Essential', 'Chuột phổ thông bán chạy của Razer', 25, 40, 2, 8, 'USA', '12'),
+
+-- Màn hình (id = 10)
+('P023', 'ASUS ROG Swift PG32UQX', 'Màn hình gaming cao cấp ASUS ROG Swift PG32UQX', 800, 1100, 10, 10, 'Taiwan', '36'),
+('P024', 'Alienware AW5520QF', 'Màn hình gaming OLED 55 inch Alienware AW5520QF', 3000, 3700, 11, 10, 'USA', '36'),
+('P025', 'LG 27 inch UltraGear 27GN950', 'Màn hình gaming LG UltraGear 27GN950 27 inch 4K', 500, 650, 12, 10, 'Korea', '24'),
+('P026', 'Samsung 27 inch Odyssey 3D G90XF', 'Màn hình Samsung Odyssey G90XF 27 inch cong 3D', 750, 950, 13, 10, 'Korea', '24'),
+
+-- Case (id = 18)
+('P027', 'Case Asus ProArt PA602', 'Vỏ case cao cấp dành cho thiết kế đồ họa Asus ProArt PA602', 130, 170, 10, 18, 'Taiwan', '24'),
+('P028', 'Case Asus TUFGAMING GT502', 'Vỏ case gaming mạnh mẽ Asus TUFGAMING GT502', 100, 140, 10, 18, 'Taiwan', '24'),
+('P029', 'Case Corsair Obsidian 1000D', 'Case full tower cao cấp Corsair Obsidian 1000D', 250, 330, 14, 18, 'USA', '36'),
+('P030', 'Case Lian-li DK07', 'Case kiêm bàn làm việc độc đáo Lian-li DK07', 1000, 1300, 15, 18, 'Taiwan', '36'),
+('P031', 'Case Thermaltake DistroCase 350p', 'Case trong suốt thiết kế độc lạ Thermaltake DistroCase 350p', 500, 650, 16, 18, 'Taiwan', '36');
 
 INSERT INTO product_image (product_id, URL) VALUES
 (1, 'ASUS_ROG_Zephyrus_G14_1.jpg'),
@@ -260,7 +285,84 @@ INSERT INTO product_image (product_id, URL) VALUES
 
 (12, 'Samsung_57_inch_Odyssey_Neo_G9_1.jpg'),
 (12, 'Samsung_57_inch_Odyssey_Neo_G9_2.jpg'),
-(12, 'Samsung_57_inch_Odyssey_Neo_G9_3.jpg');
+(12, 'Samsung_57_inch_Odyssey_Neo_G9_3.jpg'),
+
+(13, 'Laptop_ASUS_TUF_Gaming_F15_1.jpg'),
+(13, 'Laptop_ASUS_TUF_Gaming_F15_2.jpg'),
+(13, 'Laptop_ASUS_TUF_Gaming_F15_3.jpg'),
+
+(14, 'Laptop_Razer_Book_13_1.jpg'),
+(14, 'Laptop_Razer_Book_13_2.jpg'),
+(14, 'Laptop_Razer_Book_13_3.jpg'),
+
+(14, 'Laptop_Acer_Predator_Helios_16_Neo_1.jpg'),
+(14, 'Laptop_Acer_Predator_Helios_16_Neo_2.jpg'),
+(14, 'Laptop_Acer_Predator_Helios_16_Neo_3.jpg'),
+
+(15, 'Laptop_Lenovo_LOQ_1.jpg'),
+(15, 'Laptop_Lenovo_LOQ_2.jpg'),
+(15, 'Laptop_Lenovo_LOQ_3.jpg'),
+
+(16, 'Chuột_Gaming_ASUS_ROG_Harpe_Ace_1.jpg'),
+(16, 'Chuột_Gaming_ASUS_ROG_Harpe_Ace_2.jpg'),
+(16, 'Chuột_Gaming_ASUS_ROG_Harpe_Ace_3.jpg'),
+
+(17, 'Chuột_Razer_Basilisk_V3_Pro_1.jpg'),
+(17, 'Chuột_Razer_Basilisk_V3_Pro_2.jpg'),
+(17, 'Chuột_Razer_Basilisk_V3_Pro_3.jpg'),
+
+(18, 'Chuột_Logitech_G502_X_Plus_LightSpeed_1.jpg'),
+(18, 'Chuột_Logitech_G502_X_Plus_LightSpeed_2.jpg'),
+(18, 'Chuột_Logitech_G502_X_Plus_LightSpeed_3.jpg'),
+
+(19, 'Chuột_KhôngDây_Corsair_Nightsabre_RGB_1.jpg'),
+(19, 'Chuột_KhôngDây_Corsair_Nightsabre_RGB_2.jpg'),
+(19, 'Chuột_KhôngDây_Corsair_Nightsabre_RGB_3.jpg'),
+
+(20, 'Chuột_SteelSeries_Aerox_5_Wireless_1.jpg'),
+(20, 'Chuột_SteelSeries_Aerox_5_Wireless_2.jpg'),
+(20, 'Chuột_SteelSeries_Aerox_5_Wireless_3.jpg'),
+
+(21, 'Chuột_Razer_DeathAdder_Essential_1.jpg'),
+(21, 'Chuột_Razer_DeathAdder_Essential_2.jpg'),
+(21, 'Chuột_Razer_DeathAdder_Essential_3.jpg'),
+
+(22, 'Asus_32_inch_ROG_SWIFT_PG32UQX_1.jpg'),
+(22, 'Asus_32_inch_ROG_SWIFT_PG32UQX_2.jpg'),
+(22, 'Asus_32_inch_ROG_SWIFT_PG32UQX_3.jpg'),
+
+(23, 'Alienware_55_inch_AW5520QF_1.jpg'),
+(23, 'Alienware_55_inch_AW5520QF_2.jpg'),
+(23, 'Alienware_55_inch_AW5520QF_3.jpg');
+
+(24, 'LG_27_inch_UltraGear_27GN950_1.jpg'),
+(24, 'LG_27_inch_UltraGear_27GN950_2.jpg'),
+(24, 'LG_27_inch_UltraGear_27GN950_3.jpg'),
+
+(25, 'Samsung_27_inch_Odyssey_3D_G90XF_1.jpg'),
+(25, 'Samsung_27_inch_Odyssey_3D_G90XF_2.jpg'),
+(25, 'Samsung_27_inch_Odyssey_3D_G90XF_3.jpg'),
+
+(26, 'Case_Asus_ProArt_PA602_1.jpg'),
+(26, 'Case_Asus_ProArt_PA602_2.jpg'),
+(26, 'Case_Asus_ProArt_PA602_3.jpg'),
+
+(27, 'Case_Asus_TUFGAMING_GT502_1.jpg'),
+(27, 'Case_Asus_TUFGAMING_GT502_2.jpg'),
+(27, 'Case_Asus_TUFGAMING_GT502_3.jpg'),
+
+(28, 'Case_Corsair_Obsidian_1000D_1.jpg'),
+(28, 'Case_Corsair_Obsidian_1000D_2.jpg'),
+(28, 'Case_Corsair_Obsidian_1000D_3.jpg'),
+
+(29, 'Case_Lian-li_DK07_1.jpg'),
+(29, 'Case_Lian-li_DK07_2.jpg'),
+(29, 'Case_Lian-li_DK07_3.jpg'),
+
+(30, 'Case_Thermaltake_DistroCase_350p_1.jpg'),
+(30, 'Case_Thermaltake_DistroCase_350p_2.jpg'),
+(30, 'Case_Thermaltake_DistroCase_350p_3.jpg');
+
 
 
 INSERT INTO technical_specification (specs, product_id) VALUES
