@@ -64,6 +64,7 @@ const getResetPassword = (req, res) => {
 };
 
 
+
 const getInfo = (req, res) => {
   const user = req.user || req.session.user || null;
   const account_id = user?.id;
@@ -73,33 +74,23 @@ const getInfo = (req, res) => {
   }
 
   Order.findByAccountId(account_id, (err, orders) => {
-    if (err) {
-      if (err.kind === "not_found") {
-        // Không có đơn hàng nhưng vẫn lấy customer info
-        Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
-          return res.status(404).render("userInfo", {
-            user: user,
-            orders: [],
-            customer: customerInfo || null,
-            message: "Không tìm thấy đơn hàng nào."
-          });
-        });
-      } else {
-        return res.status(500).send("Đã xảy ra lỗi khi truy xuất đơn hàng.");
-      }
+    const orderList = (err && err.kind === "not_found") ? [] : orders;
+
+    if (err && err.kind !== "not_found") {
+      return res.status(500).send("Đã xảy ra lỗi khi truy xuất đơn hàng.");
     }
 
-    // Có đơn hàng, tiếp tục lấy thông tin customer
     Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+      // Nếu lỗi khác "not_found" mới chặn, còn lại vẫn render
       if (errCustomer && errCustomer.kind !== "not_found") {
         return res.status(500).send("Đã xảy ra lỗi khi truy xuất thông tin khách hàng.");
       }
 
       res.render("userInfo", {
         user: user,
-        orders: orders,
+        orders: orderList || [],
         customer: customerInfo || null,
-        message: null
+        message: (orderList.length === 0 ? "Không tìm thấy đơn hàng nào." : null)
       });
     });
   });
