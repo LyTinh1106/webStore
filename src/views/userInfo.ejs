@@ -279,6 +279,7 @@
                                                 const updateResult = await updateRes.json();
                                                 if (updateRes.ok) {
                                                     alert("Cập nhật thành công!");
+                                                    location.reload();
                                                 } else {
                                                     alert(updateResult.message || "Lỗi cập nhật");
                                                 }
@@ -292,7 +293,8 @@
 
                                                 const createResult = await createRes.json();
                                                 if (createRes.ok) {
-                                                    // alert("Tạo khách hàng mới thành công!");
+                                                    alert("Thêm thông tin thành công!");
+                                                    location.reload();
                                                 } else {
                                                     alert(createResult.message || "Lỗi tạo mới");
                                                 }
