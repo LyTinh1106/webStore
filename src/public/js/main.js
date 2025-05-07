@@ -302,6 +302,9 @@ async function filterByPrice(min, max) {
 function renderFilteredProducts(products, shouldShowFiltered) {
 	const filteredBox = document.getElementById('filtered-products');
 	const allBox = document.getElementById('all-products');
+	function formatVND(value) {
+		return value.toLocaleString('vi-VN') + '₫';
+	  }
 	filteredBox.innerHTML = '';
 
 	if (!shouldShowFiltered) {
@@ -319,20 +322,26 @@ function renderFilteredProducts(products, shouldShowFiltered) {
   			<p>Không có sản phẩm phù hợp.</p>
 		</div>
 		`;
+		$('#store-nav').hide();
 		return;
+	}
+	else{
+		$('#store-nav').hide();
 	}
 
 	products.forEach(p => {
 		filteredBox.innerHTML += `
       <div class="col-md-4 col-xs-6">
         <div class="product">
-          <div class="product-img">
+        <a href="/product/${p.id}">
+			<div class="product-img">
             <img src="/images/${p.image}" alt="${p.name}">
-          </div>
-          <div class="product-body">
+        </div>
+		</a> 
+        <div class="product-body">
             <p class="product-category">${p.category_name || ''}</p>
-            <h3 class="product-name"><a href="#">${p.name}</a></h3>
-            <h4 class="product-price">$${p.retail_price}</h4>
+            <h3 class="product-name"><a href="/product/${p.id}">${p.name}</a></h3>
+            <h4 class="product-price">${formatVND(p.retail_price)} VNĐ</h4>
             <div class="product-rating">
 												<i class="fa fa-star"></i>
 												<i class="fa fa-star"></i>
@@ -341,13 +350,11 @@ function renderFilteredProducts(products, shouldShowFiltered) {
 												<i class="fa fa-star"></i>
 			</div>
             <div class="product-btns">
-              <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
               <button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-              <button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
             </div>
           </div>
           <div class="add-to-cart">
-            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng</button>
           </div>
         </div>
       </div>

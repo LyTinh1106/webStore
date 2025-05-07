@@ -76,7 +76,7 @@
 						<!-- aside Widget -->
 
 						<!-- /aside Widget -->
-						<div class="aside">
+						<!-- <div class="aside">
 							<h3 class="aside-title">DANH MỤC</h3>
 							<div class="checkbox-filter category-filter">
 								<% categories.forEach((category, index)=> { %>
@@ -90,6 +90,26 @@
 									</div>
 									<% }) %>
 							</div>
+						</div> -->
+						<div class="aside">
+							<h3 class="aside-title">DANH MỤC</h3>
+							<div class="checkbox-filter category-filter">
+								<% categories.forEach((category, index)=> { %>
+									<div class="input-checkbox category-item <%= index >= 10 ? 'd-none' : '' %>">
+										<input type="checkbox" id="category-<%= index %>" name="category"
+											value="<%= category.id %>">
+										<label for="category-<%= index %>">
+											<span></span>
+											<%= category.name %>
+										</label>
+									</div>
+									<% }) %>
+							</div>
+
+							<% if (categories.length> 10) { %>
+								<button id="toggle-category-btn" class="btn btn-link mt-2 show-full-toggle-btn">Xem tất
+									cả</button>
+								<% } %>
 						</div>
 
 						<!-- Kết quả -->
@@ -100,7 +120,7 @@
 							<h3 class="aside-title">THƯƠNG HIỆU</h3>
 							<div class="checkbox-filter brand-filter">
 								<% brands.forEach((brand, index)=> { %>
-									<div class="input-checkbox">
+									<div class="input-checkbox brand-item <%= index >= 10 ? 'd-none' : '' %>">
 										<input type="checkbox" id="brand-<%= index %>" name="brand"
 											value="<%= brand.brand_id %>">
 										<label for="brand-<%= index %>">
@@ -110,42 +130,41 @@
 									</div>
 									<% }) %>
 							</div>
-						</div>
 
-						
-						
-						<!-- /aside Widget -->
+							<% if (brands.length> 10) { %>
+								<button id="toggle-brand-btn" class="btn btn-link mt-2">Xem tất cả</button>
+								<% } %>
+						</div>
+						<script>
+							document.addEventListener('DOMContentLoaded', function () {
+								function setupToggle(buttonId, itemClass) {
+									const toggleBtn = document.getElementById(buttonId);
+									let isExpanded = false;
+
+									toggleBtn?.addEventListener('click', function () {
+										const items = document.querySelectorAll(`.${itemClass}`);
+										items.forEach((item, index) => {
+											if (index >= 10) {
+												item.classList.toggle('d-none', isExpanded);
+											}
+										});
+
+										isExpanded = !isExpanded;
+										toggleBtn.textContent = isExpanded ? 'Thu gọn' : 'Xem tất cả';
+									});
+								}
+
+								setupToggle('toggle-category-btn', 'category-item');
+								setupToggle('toggle-brand-btn', 'brand-item');
+							});
+						</script>
+
 					</div>
 					<!-- /ASIDE -->
 
 
 					<!-- STORE -->
 					<div id="store" class="col-md-9">
-						<!-- store top filter -->
-						<div class="store-filter clearfix">
-							<div class="store-sort">
-								<label>
-									Sort By:
-									<select class="input-select">
-										<option value="0">Popular</option>
-										<option value="1">Position</option>
-									</select>
-								</label>
-								<label>
-									Show:
-									<select class="input-select">
-										<option value="0">20</option>
-										<option value="1">50</option>
-									</select>
-								</label>
-							</div>
-							<ul class="store-grid">
-								<li class="active"><i class="fa fa-th"></i></li>
-								<li><a href="#"><i class="fa fa-th-list"></i></a></li>
-							</ul>
-						</div>
-
-
 
 						<!-- FILTERED PRODUCTS -->
 						<div id="filtered-products" class="row d-none"></div>
@@ -178,7 +197,9 @@
 																			<p class="product-category">
 																				<%= product.category_name %>
 																			</p>
-																			<h3 class="product-name"><a href="#">
+																			<h3 class="product-name"
+																				title="<%= product.name %>"><a
+																					href="/product/<%=product.id%>">
 																					<%= product.name %>
 																				</a></h3>
 																			<h4 class="product-price">
@@ -191,26 +212,23 @@
 																					<% } %>
 																			</div>
 																			<div class="product-btns">
-																				
-																				
+
+
 																				<button class="add-to-compare"
 																					data-id="<%= product.id %>"
 																					data-name="<%= product.name %>"
 																					data-image="<%= product.image %>"
 																					data-category="<%= product.category_id %>">
 																					<i class="fa fa-exchange"></i>
-																					<span class="tooltipp">So
-																						sánh</span>
+																					<span class="tooltipp">So sánh</span>
 																				</button>
 
-																				
+
 																			</div>
 																		</div>
 																		<div class="add-to-cart">
-																			<button class="add-to-cart-btn"><i
-																					class="fa fa-shopping-cart"></i> add
-																				to
-																				cart</button>
+																			<button class="add-to-cart-btn">
+																				<i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
 																		</div>
 																	</a>
 
@@ -220,8 +238,7 @@
 						</div>
 
 						<!-- store bottom filter -->
-						<div class="store-filter clearfix">
-							<span class="store-qty">Showing 20-100 products</span>
+						<div class="store-filter clearfix" id="store-nav">
 							<ul class="store-pagination">
 								<li class="active">1</li>
 								<li><a href="#">2</a></li>

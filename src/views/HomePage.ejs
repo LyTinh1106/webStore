@@ -166,7 +166,7 @@
 														<p class="product-category">
 															<%= product.category_name || 'Danh mục' %>
 														</p>
-														<h3 class="product-name"><a href="/product/<%=product.id%>">
+														<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -188,8 +188,7 @@
 																data-image="<%= product.image %>"
 																data-category="<%= product.category_id %>">
 																<i class="fa fa-exchange"></i>
-																<span class="tooltipp">So
-																	sánh</span>
+																<span class="tooltipp">So sánh</span>
 															</button>
 
 														</div>
@@ -197,7 +196,7 @@
 													<div class="add-to-cart">
 														<button class="add-to-cart-btn"><i
 																class="fa fa-shopping-cart"></i>
-															add to cart</button>
+															Thêm vào giỏ hàng</button>
 													</div>
 												</a>
 
@@ -272,7 +271,7 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name"><a href="/product/<%=product.id%>">
+														<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -297,7 +296,7 @@
 													</div>
 													<div class="add-to-cart">
 														<button class="add-to-cart-btn"><i
-																class="fa fa-shopping-cart"></i> add to cart</button>
+																class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
 													</div>
 												</a>
 											</div>
@@ -369,7 +368,7 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name"><a href="/product/<%=product.id%>">
+														<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -394,7 +393,7 @@
 													</div>
 													<div class="add-to-cart">
 														<button class="add-to-cart-btn"><i
-																class="fa fa-shopping-cart"></i> add to cart</button>
+																class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
 													</div>
 												</a>
 											</div>
@@ -467,7 +466,7 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name"><a href="/product/<%=product.id%>">
+														<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -492,7 +491,7 @@
 													</div>
 													<div class="add-to-cart">
 														<button class="add-to-cart-btn"><i
-																class="fa fa-shopping-cart"></i> add to cart</button>
+																class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
 													</div>
 												</a>
 											</div>
@@ -550,7 +549,7 @@
 													<p class="product-category">
 														<%= product.category_name %>
 													</p>
-													<h3 class="product-name"><a href="/product/<%= product.id %>">
+													<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%= product.id %>">
 															<%= product.name %>
 														</a></h3>
 													<h4 class="product-price">
@@ -596,7 +595,7 @@
 													<p class="product-category">
 														<%= product.category_name %>
 													</p>
-													<h3 class="product-name"><a href="/product/<%= product.id %>">
+													<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%= product.id %>">
 															<%= product.name %>
 														</a></h3>
 													<h4 class="product-price">
@@ -643,7 +642,7 @@
 													<p class="product-category">
 														<%= product.category_name %>
 													</p>
-													<h3 class="product-name"><a href="/product/<%= product.id %>">
+													<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%= product.id %>">
 															<%= product.name %>
 														</a></h3>
 													<h4 class="product-price">
