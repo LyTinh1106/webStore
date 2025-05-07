@@ -15,24 +15,17 @@ const getProduct = (req, res) => {
   const user = req.user || req.session.user || null;
 
   Product.findById(productId, (err, product) => {
-    if (err) {
-      console.error("Lỗi khi lấy sản phẩm:", err);
-      return res.status(500).render("error", { message: "Lỗi khi lấy sản phẩm." });
-    }
-
-    if (!product) {
+    if (err || !product) {
       return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
     }
 
     ProductImage.findByProductId(productId, (err, images) => {
       if (err) {
-        console.error("Lỗi khi lấy hình ảnh:", err);
-        return res.status(500).render("error", { message: "Lỗi khi lấy hình ảnh sản phẩm." });
+        return res.status(500).render("error", { message: "Lỗi khi lấy ảnh sản phẩm." });
       }
 
       TechnicalSpecification.findByProductId(productId, (err, spec) => {
         if (err && err.kind !== "not_found") {
-          console.error("Lỗi khi lấy thông số kỹ thuật:", err);
           return res.status(500).render("error", { message: "Lỗi khi lấy thông số kỹ thuật." });
         }
 
@@ -43,35 +36,45 @@ const getProduct = (req, res) => {
 
           Brand.getAll((err, brands) => {
             if (err) {
-              return res.status(500).render("error", { message: "Lỗi khi lấy nhãn hàng." });
+              return res.status(500).render("error", { message: "Lỗi khi lấy thương hiệu." });
             }
 
-            if (!user || !user.email) {
-              return res.render("Product", {
-                user: null,
-                customer: null,
-                product,
-                images,
-                spec: spec || null,
-                categories,
-                brands
-              });
-            }
+            // ✅ Truy vấn sản phẩm liên quan cùng danh mục (trừ sản phẩm hiện tại)
+            const query = `
+              SELECT p.*, pi.URL AS image, c.name AS category_name
+              FROM product p
+              LEFT JOIN product_image pi ON pi.id = (
+                SELECT id FROM product_image WHERE product_id = p.id ORDER BY id ASC LIMIT 1
+              )
+              LEFT JOIN category c ON c.id = p.category_id
+              WHERE p.category_id = ? AND p.id != ?
+              LIMIT 6
+            `;
+            sql.query(query, [product.category_id, product.id], (err, relatedProducts) => {
+              if (err) relatedProducts = [];
 
-            // ✅ Gọi lấy customer theo email
-            Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
-              if (errCustomer && errCustomer.kind !== "not_found") {
-                return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
-              }
+              const renderPage = (customerInfo = null) => {
+                res.render("Product", {
+                  user,
+                  customer: customerInfo,
+                  product,
+                  images,
+                  spec: spec || null,
+                  categories,
+                  brands,
+                  relatedProducts
+                });
+              };
 
-              res.render("Product", {
-                user,
-                customer: customerInfo || null,
-                product,
-                images,
-                spec: spec || null,
-                categories,
-                brands
+              // Nếu không có user
+              if (!user || !user.email) return renderPage();
+
+              // Nếu có user, lấy thêm customer info
+              Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+                if (errCustomer && errCustomer.kind !== "not_found") {
+                  return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
+                }
+                renderPage(customerInfo || null);
               });
             });
           });
@@ -80,6 +83,7 @@ const getProduct = (req, res) => {
     });
   });
 };
+
 
 const getStore = (req, res) => {
   const user = req.user || req.session.user || null;
