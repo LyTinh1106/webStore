@@ -197,7 +197,7 @@ if (detailBtn) {
                 <span class="cart-product-name">${product.name}</span>
               </a>   
             </div>
-            <div class="col-md-1 cart">
+            <div class="col-md-2 cart">
                 <span class="cart-product-price">${formatVND(product.price)}</span>
             </div>
             <div class="col-md-3">
@@ -207,7 +207,7 @@ if (detailBtn) {
                     <div class="quantity-btn plus" data-name="${product.name}"><i class="fa fa-plus" aria-hidden="true"></i></div>
                 </div>
             </div>
-            <div class="col-md-1">
+            <div class="col-md-1 cart">
                 <i class="fas fa-trash remove-item" data-name="${product.name}"></i>
             </div>
         </div>
