@@ -55,49 +55,54 @@
               <div class="section-title">
                 <h3 class="title">ĐỊA CHỈ THANH TOÁN</h3>
               </div>
-          
+
               <div class="form-group">
-                <input class="input form-control" type="text" name="first_name" placeholder="Họ">
+                <input class="input form-control" type="text" name="first_name" placeholder="Họ"
+                  value="<%= customer ? customer.last_name : '' %>">
               </div>
               <div class="form-group">
-                <input class="input form-control" type="text" name="last_name" placeholder="Tên">
+                <input class="input form-control" type="text" name="last_name" placeholder="Tên"
+                  value="<%= customer ? customer.first_name : '' %>">
               </div>
               <div class="form-group">
-                <input class="input form-control" type="email" name="email" placeholder="Email">
+                <input class="input form-control" type="email" name="email" placeholder="Email"
+                  value="<%=(user.emails && user.emails[0] && user.emails[0].value) || user.email%>">
               </div>
-          
+
               <!-- Địa chỉ chia 3 combobox -->
               <div class="form-group">
+                <input type="hidden" id="hiddenAddress" value="<%= customer ? customer.address : '' %>">
                 <div class="d-flex">
                   <select class="input form-control" id="province" name="province">
-                    <option value="">Chọn Tỉnh, Thành phố</option>
+                    <option value=""> Tỉnh, Thành phố</option>
                   </select>
                   <select class="input form-control" id="district" name="district">
-                    <option value="">Chọn Quận, Huyện</option>
+                    <option value=""> Quận, Huyện</option>
                   </select>
                   <select class="input form-control" id="ward" name="ward">
-                    <option value="">Chọn Phường, Xã</option>
+                    <option value=""> Phường, Xã</option>
                   </select>
                 </div>
               </div>
-          
+
               <div class="form-group">
                 <input class="input form-control" type="text" id="street" name="street" placeholder="Số nhà, tên đường">
               </div>
-          
+
               <div class="form-group">
-                <input class="input form-control" type="tel" name="phone" placeholder="Số điện thoại">
+                <input class="input form-control" type="tel" name="phone" placeholder="Số điện thoại"
+                  value="<%= customer ? customer.phone : '' %>">
               </div>
-          
+
             </div>
-          
+
             <!-- Order notes -->
             <div class="order-notes">
               <textarea class="input form-control" name="note" placeholder="Ghi chú đơn hàng"></textarea>
             </div>
             <!-- /Order notes -->
           </div>
-          
+
 
           <!-- Order Details -->
           <div class="col-md-5 order-details">
@@ -151,7 +156,7 @@
               </label>
             </div>
             <button id="placeOrderBtn" class="primary-btn order-submit">Đặt hàng</button>
-            
+
           </div>
           <!-- /Order Details -->
 
@@ -170,165 +175,165 @@
       <script src="/js/jquery.zoom.min.js"></script>
       <script src="/js/main.js"></script>
 
-<!-- Để sau này fetch API tỉnh thành động -->
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-    function formatVND(value) {
-      return value.toLocaleString("vi-VN") + " VNĐ";
-    }
-
-    function renderCheckout() {
-      const cartData = JSON.parse(localStorage.getItem("cart")) || [];
-      const container = document.querySelector(".order-products");
-      const totalElement = document.querySelector(".order-total");
-      container.innerHTML = "";
-
-      let total = 0;
-      cartData.forEach(product => {
-        const subtotal = product.price * product.qty;
-        total += subtotal;
-        container.insertAdjacentHTML("beforeend", `
-          <div class="order-col">
-            <div>${product.qty}x ${product.name}</div>
-            <div>${formatVND(subtotal)}</div>
-          </div>
-        `);
-      });
-
-      totalElement.innerText = formatVND(total);
-    }
-
-    renderCheckout();
-
-    // Load địa phương
-    const provinceSelect = document.getElementById("province");
-    const districtSelect = document.getElementById("district");
-    const wardSelect = document.getElementById("ward");
-
-    fetch("https://provinces.open-api.vn/api/p/")
-      .then(res => res.json())
-      .then(provinces => {
-        provinces.forEach(p => {
-          const opt = document.createElement("option");
-          opt.value = p.code;
-          opt.textContent = p.name;
-          provinceSelect.appendChild(opt);
-        });
-      });
-
-    provinceSelect.addEventListener("change", () => {
-      const code = provinceSelect.value;
-      districtSelect.innerHTML = '<option value="">Chọn Quận, Huyện</option>';
-      wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
-      if (!code) return;
-
-      fetch(`https://provinces.open-api.vn/api/p/${code}?depth=2`)
-        .then(res => res.json())
-        .then(data => {
-          data.districts.forEach(d => {
-            const opt = document.createElement("option");
-            opt.value = d.code;
-            opt.textContent = d.name;
-            districtSelect.appendChild(opt);
-          });
-        });
-    });
-
-    districtSelect.addEventListener("change", () => {
-      const code = districtSelect.value;
-      wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
-      if (!code) return;
-
-      fetch(`https://provinces.open-api.vn/api/d/${code}?depth=2`)
-        .then(res => res.json())
-        .then(data => {
-          data.wards.forEach(w => {
-            const opt = document.createElement("option");
-            opt.value = w.code;
-            opt.textContent = w.name;
-            wardSelect.appendChild(opt);
-          });
-        });
-    });
-
-    // Submit đơn hàng
-    document.getElementById("placeOrderBtn").addEventListener("click", async function (e) {
-      e.preventDefault();
-
-      const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-      if (cart.length === 0) {
-        alert("Giỏ hàng trống.");
-        return;
-      }
-
-      const first_name = document.querySelector('[name="first_name"]')?.value.trim() || '';
-      const last_name = document.querySelector('[name="last_name"]')?.value.trim() || '';
-      const street = document.querySelector('[name="street"]')?.value.trim() || '';
-      const phone = document.querySelector('[name="phone"]')?.value.trim() || '';
-      const email = document.querySelector('[name="email"]')?.value.trim() || '';
-      const note = document.querySelector('[name="note"]')?.value.trim() || '';
-
-      const province = provinceSelect.selectedIndex > 0
-        ? provinceSelect.options[provinceSelect.selectedIndex].textContent.trim()
-        : '';
-      const district = districtSelect.selectedIndex > 0
-        ? districtSelect.options[districtSelect.selectedIndex].textContent.trim()
-        : '';
-      const ward = wardSelect.selectedIndex > 0
-        ? wardSelect.options[wardSelect.selectedIndex].textContent.trim()
-        : '';
-
-      const fullname = `${first_name} ${last_name}`.trim();
-      const address = `${street}, ${ward}, ${district}, ${province}`.trim();
-      const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || "COD";
-      const accountId = "<%= user?.id %>";
-
-      if (!first_name || !last_name || !email || !phone || !street || !province || !district || !ward) {
-        alert("Vui lòng điền đầy đủ thông tin đặt hàng.");
-        return;
-      }
-
-      const orderData = {
-        account_id: accountId,
-        fullname,
-        phone,
-        email,
-        address,
-        note,
-        payment_method: paymentMethod,
-        total_payment: cart.reduce((sum, item) => sum + item.price * item.qty, 0),
-        cartItems: JSON.stringify(cart)
-      };
-
-      console.log("🚀 Dữ liệu gửi đi:", orderData);
-
-      try {
-        const response = await fetch("/api/order/create", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(orderData)
-        });
-
-        if (!response.ok) throw new Error("Đặt hàng thất bại");
-
-        const result = await response.json();
-        localStorage.removeItem("cart");
-
-        if (paymentMethod === "MoMo") {
-          window.location.href = result.payUrl;
-        } else {
-          alert("Đặt hàng thành công!");
-          window.location.href = "/userInfo?tab=order-history";
-        }
-      } catch (err) {
-        alert("Lỗi gửi đơn hàng: " + err.message);
-      }
-    });
-  });
-</script>
-
-
+      <!-- Để sau này fetch API tỉnh thành động -->
+      <script>
+        document.addEventListener("DOMContentLoaded", function () {
+          function formatVND(value) {
+            return value.toLocaleString("vi-VN") + " VNĐ";
+          }
       
+          function renderCheckout() {
+            const cartData = JSON.parse(localStorage.getItem("cart")) || [];
+            const container = document.querySelector(".order-products");
+            const totalElement = document.querySelector(".order-total");
+            container.innerHTML = "";
+      
+            let total = 0;
+            cartData.forEach(product => {
+              const subtotal = product.price * product.qty;
+              total += subtotal;
+              container.insertAdjacentHTML("beforeend", `
+                <div class="order-col">
+                  <div>${product.qty}x ${product.name}</div>
+                  <div>${formatVND(subtotal)}</div>
+                </div>
+              `);
+            });
+      
+            totalElement.innerText = formatVND(total);
+          }
+      
+          renderCheckout();
+      
+          // Load địa phương
+          const provinceSelect = document.getElementById("province");
+          const districtSelect = document.getElementById("district");
+          const wardSelect = document.getElementById("ward");
+      
+          fetch("https://provinces.open-api.vn/api/p/")
+            .then(res => res.json())
+            .then(provinces => {
+              provinces.forEach(p => {
+                const opt = document.createElement("option");
+                opt.value = p.code;
+                opt.textContent = p.name;
+                provinceSelect.appendChild(opt);
+              });
+            });
+      
+          provinceSelect.addEventListener("change", () => {
+            const code = provinceSelect.value;
+            districtSelect.innerHTML = '<option value="">Chọn Quận, Huyện</option>';
+            wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
+            if (!code) return;
+      
+            fetch(`https://provinces.open-api.vn/api/p/${code}?depth=2`)
+              .then(res => res.json())
+              .then(data => {
+                data.districts.forEach(d => {
+                  const opt = document.createElement("option");
+                  opt.value = d.code;
+                  opt.textContent = d.name;
+                  districtSelect.appendChild(opt);
+                });
+              });
+          });
+      
+          districtSelect.addEventListener("change", () => {
+            const code = districtSelect.value;
+            wardSelect.innerHTML = '<option value="">Chọn Phường, Xã</option>';
+            if (!code) return;
+      
+            fetch(`https://provinces.open-api.vn/api/d/${code}?depth=2`)
+              .then(res => res.json())
+              .then(data => {
+                data.wards.forEach(w => {
+                  const opt = document.createElement("option");
+                  opt.value = w.code;
+                  opt.textContent = w.name;
+                  wardSelect.appendChild(opt);
+                });
+              });
+          });
+      
+          // Submit đơn hàng
+          document.getElementById("placeOrderBtn").addEventListener("click", async function (e) {
+            e.preventDefault();
+      
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            if (cart.length === 0) {
+              alert("Giỏ hàng trống.");
+              return;
+            }
+      
+            const first_name = document.querySelector('[name="first_name"]')?.value.trim() || '';
+            const last_name = document.querySelector('[name="last_name"]')?.value.trim() || '';
+            const street = document.querySelector('[name="street"]')?.value.trim() || '';
+            const phone = document.querySelector('[name="phone"]')?.value.trim() || '';
+            const email = document.querySelector('[name="email"]')?.value.trim() || '';
+            const note = document.querySelector('[name="note"]')?.value.trim() || '';
+      
+            const province = provinceSelect.selectedIndex > 0
+              ? provinceSelect.options[provinceSelect.selectedIndex].textContent.trim()
+              : '';
+            const district = districtSelect.selectedIndex > 0
+              ? districtSelect.options[districtSelect.selectedIndex].textContent.trim()
+              : '';
+            const ward = wardSelect.selectedIndex > 0
+              ? wardSelect.options[wardSelect.selectedIndex].textContent.trim()
+              : '';
+      
+            const fullname = `${first_name} ${last_name}`.trim();
+            const address = `${street}, ${ward}, ${district}, ${province}`.trim();
+            const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || "COD";
+            const accountId = "<%= user?.id %>";
+      
+            if (!first_name || !last_name || !email || !phone || !street || !province || !district || !ward) {
+              alert("Vui lòng điền đầy đủ thông tin đặt hàng.");
+              return;
+            }
+      
+            const orderData = {
+              account_id: accountId,
+              fullname,
+              phone,
+              email,
+              address,
+              note,
+              payment_method: paymentMethod,
+              total_payment: cart.reduce((sum, item) => sum + item.price * item.qty, 0),
+              cartItems: JSON.stringify(cart)
+            };
+      
+            console.log("🚀 Dữ liệu gửi đi:", orderData);
+      
+            try {
+              const response = await fetch("/api/order/create", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(orderData)
+              });
+      
+              if (!response.ok) throw new Error("Đặt hàng thất bại");
+      
+              const result = await response.json();
+              localStorage.removeItem("cart");
+      
+              if (paymentMethod === "MoMo") {
+                window.location.href = result.payUrl;
+              } else {
+                alert("Đặt hàng thành công!");
+                window.location.href = "/userInfo?tab=order-history";
+              }
+            } catch (err) {
+              alert("Lỗi gửi đơn hàng: " + err.message);
+            }
+          });
+        });
+      </script>
+
+
+
 
 
 </body>
