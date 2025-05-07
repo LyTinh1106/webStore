@@ -17,15 +17,33 @@ const jwt = require('jsonwebtoken');
 const saltRounds = 10;
 
 const getHomePage = (req, res) => {
+  const user = req.user || req.session.user || null;
+
   Product.getAll(null, (err, products) => {
     if (err) {
       return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm." });
     }
 
-    res.render('HomePage', {
-      user: req.user || req.session.user || null,
-      products,
+    if (!user || !user.email) {
+      // Nếu chưa đăng nhập, không cần tìm customer
+      return res.render('HomePage', {
+        user: null,
+        customer: null,
+        products
+      });
+    }
 
+    // Lấy thông tin họ tên nếu có
+    Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+      if (errCustomer && errCustomer.kind !== "not_found") {
+        return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
+      }
+
+      res.render('HomePage', {
+        user,
+        customer: customerInfo || null,
+        products
+      });
     });
   });
 };
@@ -45,30 +63,7 @@ const getResetPassword = (req, res) => {
   res.render('resetPassword', { token, message: null });
 };
 
-// const getInfo = (req, res) => {
-//   const account_id = req.user?.id || req.session?.user?.id;
 
-//   Order.findByAccountId(account_id, (err, data) => {
-//     if (err) {
-//       if (err.kind === "not_found") {
-//         res.status(404).render("userInfo", {
-//           user: req.user || req.session.user || null,
-//           orders: [], // không có đơn hàng
-//           message: "Không tìm thấy đơn hàng nào."
-//         });
-//       } else {
-//         res.status(500).render("error", {
-//           message: "Đã xảy ra lỗi khi truy xuất đơn hàng."
-//         });
-//       }
-//     } else {
-//       res.render("userInfo", {
-//         user: req.user || req.session.user || null,
-//         orders: data
-//       });
-//     }
-//   });
-// };
 const getInfo = (req, res) => {
   const user = req.user || req.session.user || null;
   const account_id = user?.id;
@@ -205,13 +200,13 @@ const sendResetPasswordEmail = async (req, res) => {
       const transporter = nodemailer.createTransport({
         service: 'Gmail',
         auth: {
-          user: 'nguyencongvinh2909@gmail.com',
+          user: process.env.EMAIL_USER,
           pass: process.env.EMAIL_PASS,
         },
       });
 
       const mailOptions = {
-        from: 'nguyencongvinh2909@gmail.com',
+        from: process.env.EMAIL_USER,
         to: email,
         subject: 'Đặt lại mật khẩu',
         html: `

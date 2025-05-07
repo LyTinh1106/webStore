@@ -51,7 +51,7 @@
 
                             <div class="cart-dropdown" style="display: none;">
                                 <div class="cart-list">
-                                      
+
                                 </div>
                                 <div class="cart-summary">
                                     <small>Số sản phẩm đã chọn</small>
@@ -69,24 +69,21 @@
                         <div class="dropdown Account">
                             <a a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
                                 <i class="fa fa-user-o me-1"></i>
-                                <% if (user) { %>
-                                    <% 
-                                      let email = '';
-                                      if (user.emails && user.emails[0]) {
-                                        email = user.emails[0].value;
-                                      } else if (user.email) {
-                                        email = user.email;
-                                      }
-                                    %>
-                                    <%= email.split('@')[0] %>
-                                  <% } else { %>
-                                    Guest
-                                  <% } %>
-                                  
+                                <span>
+                                    <% if (!user) { %>
+                                        Guest
+                                        <% } else if (customer && customer.last_name && customer.first_name) { %>
+                                            <%= customer.last_name + " " + customer.first_name %>
+                                                <% } else { %>
+                                                    User
+                                                    <% } %>
+
+                                </span>
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 <% if (user) { %>
-                                    <li><a class="dropdown-item" href="/userInfo"><i class="fas fa-user me-2"></i> Hồ sơ</a>
+                                    <li><a class="dropdown-item" href="/userInfo"><i class="fas fa-user me-2"></i> Hồ
+                                            sơ</a>
                                     </li>
                                     <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a>
                                     </li>

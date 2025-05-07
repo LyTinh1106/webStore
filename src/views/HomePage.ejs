@@ -126,12 +126,12 @@
 						<div class="section-title">
 							<h3 class="title">Sản Phẩm Mới</h3>
 							<div class="section-nav">
-								<ul class="section-tab-nav tab-nav">
+								<!-- <ul class="section-tab-nav tab-nav">
 									<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
 									<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
 									<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
 									<li><a data-toggle="tab" href="#tab1">Phụ Kiện</a></li>
-								</ul>
+								</ul> -->
 							</div>
 						</div>
 					</div>
@@ -166,7 +166,7 @@
 														<p class="product-category">
 															<%= product.category_name || 'Danh mục' %>
 														</p>
-														<h3 class="product-name"><a href="#">
+														<h3 class="product-name"><a href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -231,12 +231,12 @@
 						<div class="section-title">
 							<h3 class="title">LapTop</h3>
 							<div class="section-nav">
-								<ul class="section-tab-nav tab-nav">
+								<!-- <ul class="section-tab-nav tab-nav">
 									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
 									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
 									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
 									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
-								</ul>
+								</ul> -->
 							</div>
 						</div>
 					</div>
@@ -272,7 +272,7 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name"><a href="#">
+														<h3 class="product-name"><a href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -281,7 +281,7 @@
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star-o' %>"></i>
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -315,7 +315,7 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-       
+
 		<!-- SECTION -->
 		<div class="section">
 			<!-- container -->
@@ -327,12 +327,12 @@
 						<div class="section-title">
 							<h3 class="title">Case</h3>
 							<div class="section-nav">
-								<ul class="section-tab-nav tab-nav">
+								<!-- <ul class="section-tab-nav tab-nav">
 									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
 									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
 									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
 									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
-								</ul>
+								</ul> -->
 							</div>
 						</div>
 					</div>
@@ -368,7 +368,7 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name"><a href="#">
+														<h3 class="product-name"><a href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -377,7 +377,7 @@
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star-o' %>"></i>
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -411,9 +411,9 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-		 <!-- //Màn Hinh -->
-		  
-		 <!-- SECTION -->
+		<!-- //Màn Hinh -->
+
+		<!-- SECTION -->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
@@ -424,12 +424,12 @@
 						<div class="section-title">
 							<h3 class="title">Màn Hình</h3>
 							<div class="section-nav">
-								<ul class="section-tab-nav tab-nav">
+								<!-- <ul class="section-tab-nav tab-nav">
 									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
 									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
 									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
 									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
-								</ul>
+								</ul> -->
 							</div>
 						</div>
 					</div>
@@ -465,7 +465,7 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name"><a href="#">
+														<h3 class="product-name"><a href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -474,7 +474,7 @@
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star-o' %>"></i>
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -509,141 +509,161 @@
 		</div>
 		<!-- /SECTION -->
 
-		
 
-		
+
+
 
 
 		<!-- SECTION -->
-<div class="section">
-	<!-- container -->
-	<div class="container">
-	  <!-- row -->
-	  <div class="row">
-  
-		<!-- CỘT 1: Chuột -->
-		<div class="col-md-4 col-xs-6">
-		  <div class="section-title">
-			<h4 class="title">Chuột</h4>
-			<div class="section-nav">
-			  <div id="slick-nav-3" class="products-slick-nav"></div>
-			</div>
-		  </div>
-  
-		  <div class="products-widget-slick" data-nav="#slick-nav-3">
-			<% 
-			  const chuot = products.filter(p => p.category_name === 'Chuột');
-			  for (let i = 0; i < chuot.length; i += 3) {
-				const group = chuot.slice(i, i + 3);
-			%>
-			<div>
-			  <% group.forEach(product => { %>
-			  <div class="product-widget">
-				<div class="product-img">
-				  <img src="/images/<%= product.image || 'noImage.jpg' %>" alt="<%= product.name %>">
+		<div class="section">
+			<!-- container -->
+			<div class="container">
+				<!-- row -->
+				<div class="row">
+
+					<!-- CỘT 1: Chuột -->
+					<div class="col-md-4 col-xs-6">
+						<div class="section-title">
+							<h4 class="title">Chuột</h4>
+							<div class="section-nav">
+								<div id="slick-nav-3" class="products-slick-nav"></div>
+							</div>
+						</div>
+
+						<div class="products-widget-slick" data-nav="#slick-nav-3">
+							<% const mouse = products.filter(p=> p.category_name === 'Chuột');
+								for (let i = 0; i < mouse.length; i +=3) { const group=mouse.slice(i, i + 3); %>
+									<div>
+										<% group.forEach(product=> { %>
+											<div class="product-widget">
+												<a href="/product/<%= product.id %>">
+													<div class="product-img">
+														<img src="/images/<%= product.image || 'noImage.jpg' %>"
+															alt="<%= product.name %>">
+													</div>
+												</a>
+
+												<div class="product-body">
+													<p class="product-category">
+														<%= product.category_name %>
+													</p>
+													<h3 class="product-name"><a href="/product/<%= product.id %>">
+															<%= product.name %>
+														</a></h3>
+													<h4 class="product-price">
+														<%= product.retail_price %> VNĐ
+															<% if (product.old_price) { %>
+																<del class="product-old-price">
+																	<%= product.old_price %> VNĐ
+																</del>
+																<% } %>
+													</h4>
+												</div>
+											</div>
+											<% }) %>
+									</div>
+									<% } %>
+						</div>
+					</div>
+
+					<!-- CỘT 2: Bàn phím -->
+					<div class="col-md-4 col-xs-6">
+						<div class="section-title">
+							<h4 class="title">Bàn phím</h4>
+							<div class="section-nav">
+								<div id="slick-nav-4" class="products-slick-nav"></div>
+							</div>
+						</div>
+
+						<div class="products-widget-slick" data-nav="#slick-nav-4">
+							<% const keyboard = products.filter(p=> p.category_name === 'Bàn phím');
+								for (let i = 0; i < keyboard.length; i +=3) { const group=keyboard.slice(i, i + 3); %>
+									<div>
+										<% group.forEach(product=> { %>
+											<div class="product-widget">
+												<a href="/product/<%= product.id %>">
+													<div class="product-img">
+														<img src="/images/<%= product.image || 'noImage.jpg' %>"
+															alt="<%= product.name %>">
+													</div>
+												</a>
+
+												<div class="product-body">
+													<p class="product-category">
+														<%= product.category_name %>
+													</p>
+													<h3 class="product-name"><a href="/product/<%= product.id %>">
+															<%= product.name %>
+														</a></h3>
+													<h4 class="product-price">
+														<%= product.retail_price %> VNĐ
+															<% if (product.old_price) { %>
+																<del class="product-old-price">
+																	<%= product.old_price %> VNĐ
+																</del>
+																<% } %>
+													</h4>
+												</div>
+											</div>
+											<% }) %>
+									</div>
+									<% } %>
+						</div>
+					</div>
+
+					<div class="clearfix visible-sm visible-xs"></div>
+
+					<!-- CỘT 3: CPU -->
+					<div class="col-md-4 col-xs-6">
+						<div class="section-title">
+							<h4 class="title">CPU</h4>
+							<div class="section-nav">
+								<div id="slick-nav-5" class="products-slick-nav"></div>
+							</div>
+						</div>
+
+						<div class="products-widget-slick" data-nav="#slick-nav-5">
+							<% const cpu = products.filter(p=> p.category_name === 'CPU');
+								for (let i = 0; i < cpu.length; i +=3) { const group=cpu.slice(i, i + 3); %>
+									<div>
+										<% group.forEach(product=> { %>
+											<div class="product-widget">
+												<a href="/product/<%= product.id %>">
+													<div class="product-img">
+														<img src="/images/<%= product.image || 'noImage.jpg' %>"
+															alt="<%= product.name %>">
+													</div>
+												</a>
+												<div class="product-body">
+													<p class="product-category">
+														<%= product.category_name %>
+													</p>
+													<h3 class="product-name"><a href="/product/<%= product.id %>">
+															<%= product.name %>
+														</a></h3>
+													<h4 class="product-price">
+														<%= product.retail_price %> VNĐ
+															<% if (product.old_price) { %>
+																<del class="product-old-price">
+																	<%= product.old_price %> VNĐ
+																</del>
+																<% } %>
+													</h4>
+												</div>
+											</div>
+											<% }) %>
+									</div>
+									<% } %>
+						</div>
+					</div>
+
 				</div>
-				<div class="product-body">
-				  <p class="product-category"><%= product.category_name %></p>
-				  <h3 class="product-name"><a href="/product/<%= product.id %>"><%= product.name %></a></h3>
-				  <h4 class="product-price">
-					<%= product.retail_price %> VNĐ
-					<% if (product.old_price) { %>
-					  <del class="product-old-price"><%= product.old_price %> VNĐ</del>
-					<% } %>
-				  </h4>
-				</div>
-			  </div>
-			  <% }) %>
+				<!-- /row -->
 			</div>
-			<% } %>
-		  </div>
+			<!-- /container -->
 		</div>
-  
-		<!-- CỘT 2: Bàn phím -->
-		<div class="col-md-4 col-xs-6">
-		  <div class="section-title">
-			<h4 class="title">Bàn phím</h4>
-			<div class="section-nav">
-			  <div id="slick-nav-4" class="products-slick-nav"></div>
-			</div>
-		  </div>
-  
-		  <div class="products-widget-slick" data-nav="#slick-nav-4">
-			<% 
-			  const banPhim = products.filter(p => p.category_name === 'Bàn phím');
-			  for (let i = 0; i < banPhim.length; i += 3) {
-				const group = banPhim.slice(i, i + 3);
-			%>
-			<div>
-			  <% group.forEach(product => { %>
-			  <div class="product-widget">
-				<div class="product-img">
-				  <img src="/images/<%= product.image || 'noImage.jpg' %>" alt="<%= product.name %>">
-				</div>
-				<div class="product-body">
-				  <p class="product-category"><%= product.category_name %></p>
-				  <h3 class="product-name"><a href="/product/<%= product.id %>"><%= product.name %></a></h3>
-				  <h4 class="product-price">
-					<%= product.retail_price %> VNĐ
-					<% if (product.old_price) { %>
-					  <del class="product-old-price"><%= product.old_price %> VNĐ</del>
-					<% } %>
-				  </h4>
-				</div>
-			  </div>
-			  <% }) %>
-			</div>
-			<% } %>
-		  </div>
-		</div>
-  
-		<div class="clearfix visible-sm visible-xs"></div>
-  
-		<!-- CỘT 3: CPU -->
-		<div class="col-md-4 col-xs-6">
-		  <div class="section-title">
-			<h4 class="title">CPU</h4>
-			<div class="section-nav">
-			  <div id="slick-nav-5" class="products-slick-nav"></div>
-			</div>
-		  </div>
-  
-		  <div class="products-widget-slick" data-nav="#slick-nav-5">
-			<% 
-			  const cpu = products.filter(p => p.category_name === 'CPU');
-			  for (let i = 0; i < cpu.length; i += 3) {
-				const group = cpu.slice(i, i + 3);
-			%>
-			<div>
-			  <% group.forEach(product => { %>
-			  <div class="product-widget">
-				<div class="product-img">
-				  <img src="/images/<%= product.image || 'noImage.jpg' %>" alt="<%= product.name %>">
-				</div>
-				<div class="product-body">
-				  <p class="product-category"><%= product.category_name %></p>
-				  <h3 class="product-name"><a href="/product/<%= product.id %>"><%= product.name %></a></h3>
-				  <h4 class="product-price">
-					<%= product.retail_price %> VNĐ
-					<% if (product.old_price) { %>
-					  <del class="product-old-price"><%= product.old_price %> VNĐ</del>
-					<% } %>
-				  </h4>
-				</div>
-			  </div>
-			  <% }) %>
-			</div>
-			<% } %>
-		  </div>
-		</div>
-  
-	  </div>
-	  <!-- /row -->
-	</div>
-	<!-- /container -->
-  </div>
-  <!-- /SECTION -->
-  
+		<!-- /SECTION -->
+
 
 
 		<%- include('./footer.ejs') %>
@@ -657,9 +677,5 @@
 			<script src="js/main.js"></script>
 			<script src="js/cart.js"></script>
 </body>
-
-
-
-
 
 </html>

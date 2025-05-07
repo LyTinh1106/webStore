@@ -4,12 +4,15 @@ const Product = require("../models/ProductModel");
 const Category = require("../models/CategoryModel");
 const Brand = require("../models/BrandModel");
 const ProductImage = require("../models/ProductImageModel");
+const Customer = require('../models/CustomerModel')
 const TechnicalSpecification = require('../models/ProductDetailModel');
+
 
 
 
 const getProduct = (req, res) => {
   const productId = req.params.id;
+  const user = req.user || req.session.user || null;
 
   Product.findById(productId, (err, product) => {
     if (err) {
@@ -27,7 +30,6 @@ const getProduct = (req, res) => {
         return res.status(500).render("error", { message: "Lỗi khi lấy hình ảnh sản phẩm." });
       }
 
-      // 🆕 Thêm lấy thông số kỹ thuật
       TechnicalSpecification.findByProductId(productId, (err, spec) => {
         if (err && err.kind !== "not_found") {
           console.error("Lỗi khi lấy thông số kỹ thuật:", err);
@@ -44,13 +46,33 @@ const getProduct = (req, res) => {
               return res.status(500).render("error", { message: "Lỗi khi lấy nhãn hàng." });
             }
 
-            res.render("Product", {
-              user: req.user || req.session.user || null,
-              product,
-              images,
-              spec: spec || null,    
-              categories,
-              brands
+            if (!user || !user.email) {
+              return res.render("Product", {
+                user: null,
+                customer: null,
+                product,
+                images,
+                spec: spec || null,
+                categories,
+                brands
+              });
+            }
+
+            // ✅ Gọi lấy customer theo email
+            Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+              if (errCustomer && errCustomer.kind !== "not_found") {
+                return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
+              }
+
+              res.render("Product", {
+                user,
+                customer: customerInfo || null,
+                product,
+                images,
+                spec: spec || null,
+                categories,
+                brands
+              });
             });
           });
         });
@@ -60,6 +82,8 @@ const getProduct = (req, res) => {
 };
 
 const getStore = (req, res) => {
+  const user = req.user || req.session.user || null;
+
   Product.getAll(null, (err, products) => {
     if (err) {
       return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm trong cửa hàng." });
@@ -75,19 +99,33 @@ const getStore = (req, res) => {
           return res.status(500).render("error", { message: "Lỗi khi lấy thương hiệu." });
         }
 
-        res.render("Store", {
-          user: req.user || req.session.user || null,
-          products,
-          categories,
-          brands
+        if (!user || !user.email) {
+          return res.render("Store", {
+            user: null,
+            customer: null,
+            products,
+            categories,
+            brands
+          });
+        }
+
+        Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+          if (errCustomer && errCustomer.kind !== "not_found") {
+            return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
+          }
+
+          res.render("Store", {
+            user,
+            customer: customerInfo || null,
+            products,
+            categories,
+            brands
+          });
         });
       });
     });
   });
-
-
 };
-
 
 // [POST] /products - Tạo sản phẩm mới
 const fs = require('fs').promises; // Thêm module fs để đọc file
@@ -458,6 +496,7 @@ const searchProductRender = (req, res) => {
 const compareProducts = (req, res) => {
   const id1 = parseInt(req.params.id1);
   const id2 = parseInt(req.params.id2);
+  const user = req.user || req.session.user || null;
 
   Product.findById(id1, (err, product1) => {
     if (err || !product1) {
@@ -469,14 +508,12 @@ const compareProducts = (req, res) => {
         return res.status(404).render('error', { message: 'Không tìm thấy sản phẩm 2' });
       }
 
-      
       if (product1.category_id !== product2.category_id) {
         return res.status(400).render("error", {
           message: "Chỉ có thể so sánh các sản phẩm cùng loại."
         });
       }
 
-      
       TechnicalSpecification.findByProductId(id1, (err, spec1) => {
         if (err && err.kind !== "not_found") {
           return res.status(500).render("error", { message: "Lỗi khi lấy thông số sản phẩm 1" });
@@ -499,17 +536,34 @@ const compareProducts = (req, res) => {
             product2.specs = {};
           }
 
-          res.render("compare", {
-            user: req.user || null,
-            product1,
-            product2
+          // Nếu không có thông tin user (hoặc không có email) thì render luôn với customer là null
+          if (!user || !user.email) {
+            return res.render("compare", {
+              user,
+              customer: null,
+              product1,
+              product2
+            });
+          }
+
+          // Lấy thông tin khách hàng theo email
+          Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+            if (errCustomer && errCustomer.kind !== "not_found") {
+              return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
+            }
+
+            res.render("compare", {
+              user,
+              customer: customerInfo || null,
+              product1,
+              product2
+            });
           });
         });
       });
     });
   });
 };
-
 
 
 

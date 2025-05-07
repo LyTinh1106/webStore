@@ -1,16 +1,52 @@
 const connection = require('../config/database');
 const https = require('https');
 const crypto = require('crypto');
+const Customer = require('../models/CustomerModel')
 
 const getCart = (req, res) => {
-  res.render('cart', {
-    user: req.user || req.session.user || null,
+  const user = req.user || req.session.user || null;
+
+  if (!user || !user.email) {
+    return res.render('cart', {
+      user: null,
+      customer: null
+    });
+  }
+
+  Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+    if (errCustomer && errCustomer.kind !== "not_found") {
+      return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
+    }
+
+    res.render('cart', {
+      user,
+      customer: customerInfo || null
+    });
   });
 };
 
+
 const getCheckout = (req, res) => {
-  res.render('checkout', {
-    user: req.user || req.session.user || null,
+  const user = req.user || req.session.user || null;
+
+  if (!user || !user.email) {
+    return res.render('checkout', {
+      user: null,
+      customer: null,
+      message: 'Không tìm thấy thông tin người dùng.'
+    });
+  }
+
+  Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+    if (errCustomer && errCustomer.kind !== "not_found") {
+      return res.status(500).send("Đã xảy ra lỗi khi truy xuất thông tin khách hàng.");
+    }
+
+    res.render('checkout', {
+      user: user,
+      customer: customerInfo || null,
+      message: null
+    });
   });
 };
 
