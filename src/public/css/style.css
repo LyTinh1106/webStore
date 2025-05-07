@@ -3047,3 +3047,9 @@ hr {
   margin-bottom: 20px;
 }
 
+/* Vùng chứa slick nav */
+.products-slick-nav {
+  position: relative;
+  height: 0;
+}
+
