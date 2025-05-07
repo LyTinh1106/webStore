@@ -4,7 +4,8 @@ const {
   getVoucherById,
   getAllVouchers,
   updateVoucher,
-  deleteVoucher
+  deleteVoucher,
+  applyVoucher
 } = require('../controllers/VoucherController');
 
 const router = express.Router();
@@ -14,5 +15,5 @@ router.get('/', getAllVouchers); // Lấy tất cả voucher (có thể lọc th
 router.get('/:id', getVoucherById); // Lấy voucher theo ID
 router.put('/update/:id', updateVoucher); // Cập nhật voucher
 router.delete('/delete/:id', deleteVoucher); // Xoá voucher
-
+router.post('/apply',applyVoucher);
 module.exports = router;

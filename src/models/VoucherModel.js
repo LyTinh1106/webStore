@@ -133,5 +133,17 @@ Voucher.remove = (id, result) => {
     result(null, res);
   });
 };
+Voucher.findByCodeAndValidDate = (code, currentDate, result) => {
+  const query = `
+    SELECT * FROM voucher 
+    WHERE voucher_code = ? AND date_start <= ? AND date_end >= ?
+    LIMIT 1
+  `;
+  sql.query(query, [code, currentDate, currentDate], (err, res) => {
+    if (err) return result(err, null);
+    if (res.length) return result(null, res[0]);
+    result(null, null);
+  });
+};
 
 module.exports = Voucher;

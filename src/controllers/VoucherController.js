@@ -89,3 +89,19 @@ exports.deleteVoucher = (req, res) => {
     }
   });
 };
+// [POST] /vouchers/apply - Áp dụng mã giảm giá
+exports.applyVoucher = (req, res) => {
+  const code = req.body.code?.trim();
+  if (!code) {
+    return res.status(200).json({ success: false, message: "Không có mã được áp dụng." });
+  }
+
+  const now = new Date().toISOString().slice(0, 19).replace("T", " ");
+
+  Voucher.findByCodeAndValidDate(code, now, (err, data) => {
+    if (err) return res.status(500).json({ error: "Lỗi server" });
+    if (!data) return res.status(404).json({ error: "Mã không hợp lệ hoặc hết hạn" });
+
+    return res.status(200).json({ success: true, voucher: data });
+  });
+};

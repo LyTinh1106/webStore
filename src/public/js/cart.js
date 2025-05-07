@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", function () {
   let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+  let globalVoucherDiscount = 0;
 
   function formatVND(value) {
     return value.toLocaleString('vi-VN') + ' VNĐ';
@@ -216,13 +217,15 @@ if (detailBtn) {
         cartItemsContainer.append(itemHTML);
       });
 
-      const shipping = 30000;
-      const discount = 0;
+      const discount = Math.floor(subtotal * globalVoucherDiscount / 100);
       const total = subtotal + shipping - discount;
+      
 
 
       $('#subtotal').text(formatCurrency(subtotal));
       $('#totalPrice').text(formatCurrency(total));
+      $('#discountAmount').text(formatCurrency(discount));
+
     }
 
     function updateStorage() {
@@ -293,6 +296,30 @@ if (detailBtn) {
 
     window.location.href = '/checkout';
   });
+});
+
+
+
+$('#applyVoucherBtn').on('click', function () {
+  const code = $('#voucherCode').val().trim();
+  if (!code) return alert('Vui lòng nhập mã giảm giá');
+
+  fetch('/vouchers/apply', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code })
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        globalVoucherDiscount = 0;
+        return alert(data.error || 'Mã không hợp lệ hoặc đã hết hạn');
+      }
+
+      globalVoucherDiscount = parseInt(data.voucher.voucher_value); // %
+      renderCart(); // Gọi lại để cập nhật giảm giá
+    })
+    .catch(() => alert('Đã xảy ra lỗi khi áp dụng mã'));
 });
 
 

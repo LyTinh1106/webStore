@@ -639,7 +639,7 @@ textarea.input {
 
 .cart-dropdown .cart-btns>a {
   display: inline-block;
-  width: calc(50% - 0px);
+  width: 100%;
   padding: 12px;
   background-color: #1B56FD;
   color: #FFF;
