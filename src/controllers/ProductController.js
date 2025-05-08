@@ -87,49 +87,57 @@ const getProduct = (req, res) => {
 
 const getStore = (req, res) => {
   const user = req.user || req.session.user || null;
+  const keyword = req.query.q || null;
+  const categoryId = req.query.category || null;
 
-  Product.getAll(null, (err, products) => {
-    if (err) {
-      return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm trong cửa hàng." });
-    }
+  // 🆕 Thêm phân trang
+  const page = parseInt(req.query.page) || 1;
+  const limit = 9;
+  const offset = (page - 1) * limit;
+
+  const filterValue = keyword || categoryId || null;
+
+  Product.getAllWithPagination(filterValue, limit, offset, (err, products, totalCount) => {
+    if (err) return res.status(500).render("error", { message: "Lỗi khi lấy sản phẩm" });
+
+    const totalPages = Math.ceil(totalCount / limit);
 
     Category.getAll((err, categories) => {
-      if (err) {
-        return res.status(500).render("error", { message: "Lỗi khi lấy danh sách danh mục." });
-      }
+      if (err) return res.status(500).render("error", { message: "Lỗi khi lấy danh mục." });
 
       Brand.getAll((err, brands) => {
-        if (err) {
-          return res.status(500).render("error", { message: "Lỗi khi lấy thương hiệu." });
-        }
+        if (err) return res.status(500).render("error", { message: "Lỗi khi lấy thương hiệu." });
 
-        if (!user || !user.email) {
-          return res.render("Store", {
-            user: null,
-            customer: null,
+        const renderStore = (customer) => {
+          res.render("Store", {
+            user,
+            customer,
             products,
             categories,
-            brands
+            brands,
+            selectedCategory: categoryId,
+            keyword,
+            currentPage: page,
+            totalPages
           });
-        }
+        };
+
+        if (!user || !user.email) return renderStore(null);
 
         Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
           if (errCustomer && errCustomer.kind !== "not_found") {
             return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
           }
 
-          res.render("Store", {
-            user,
-            customer: customerInfo || null,
-            products,
-            categories,
-            brands
-          });
+          renderStore(customerInfo || null);
         });
       });
     });
   });
 };
+
+
+
 
 // [POST] /products - Tạo sản phẩm mới
 const fs = require('fs').promises; // Thêm module fs để đọc file
@@ -365,7 +373,6 @@ const filterByCategory = (req, res) => {
     WHERE p.category_id IN (${placeholders})
   `;
 
-  const sql = require('../config/database');
   sql.query(query, categoryIds, (err, result) => {
     if (err) {
       console.error("Lỗi lọc danh mục:", err);
@@ -462,7 +469,9 @@ const searchProductRender = (req, res) => {
           SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
         )
       `;
-    return sql.query(query, [], (_, results) => loadData(results || []));
+      return sql.query(query, [], (_, results) => loadData(results || []));
+
+      
   }
 
   const exactQuery = `
