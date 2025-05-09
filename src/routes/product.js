@@ -9,8 +9,8 @@ const {
   filterByBrand,
   filterByPrice,
   searchProductRender,
-  compareProducts
-  
+  compareProducts,
+  filterCombined
 
 } = require('../controllers/ProductController');
 const upload = require('../middleware/upload')
@@ -51,6 +51,7 @@ router.delete('/delete/:id', deleteProduct);
 router.post('/filter/categories', filterByCategory);
 router.post('/filter/brands', filterByBrand);
 router.post('/filter-price', filterByPrice);
+router.post('/filter', filterCombined);
 
 
 

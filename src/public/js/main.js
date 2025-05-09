@@ -202,10 +202,10 @@
 			handle ? priceInputMax.value = value : priceInputMin.value = value
 		});
 		priceSlider.noUiSlider.on('change', function (values) {
-			const min = Math.round(values[0]);
-			const max = Math.round(values[1]);
-			filterByPrice(min, max);
-		});
+	priceMin.value = Math.round(values[0]);
+	priceMax.value = Math.round(values[1]);
+	applyCombinedFilter(); // ✅ gọi đúng hàm gộp
+});
 
 	}
 	/////////////////////////////////////////
@@ -234,70 +234,33 @@
 	);
 
 })(jQuery);
-// Tách lọc theo Category
 const categoryCheckboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
-categoryCheckboxes.forEach(cb => cb.addEventListener('change', filterByCategory));
-
-async function filterByCategory() {
-	const category_ids = Array.from(categoryCheckboxes)
-		.filter(cb => cb.checked)
-		.map(cb => cb.value);
-
-	const res = await fetch('/api/product/filter/categories', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ category_ids })
-	});
-
-	const products = await res.json();
-	renderFilteredProducts(products, category_ids.length > 0);
-}
-
-
-// Tách lọc theo Brand
 const brandCheckboxes = document.querySelectorAll('.brand-filter input[type="checkbox"]');
-brandCheckboxes.forEach(cb => cb.addEventListener('change', filterByBrand));
-
-async function filterByBrand() {
-	const brand_ids = Array.from(brandCheckboxes)
-		.filter(cb => cb.checked)
-		.map(cb => cb.value);
-
-	const res = await fetch('/api/product/filter/brands', {
-		method: 'POST',
-		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ brand_ids })
-	});
-
-	const products = await res.json();
-	renderFilteredProducts(products, brand_ids.length > 0);
-}
-// tách lọc theo thanh kéo trượt giá
 const priceMin = document.getElementById('price-min');
 const priceMax = document.getElementById('price-max');
 
-priceMin.addEventListener('change', () => {
+// Add listeners
+[...categoryCheckboxes, ...brandCheckboxes].forEach(cb => cb.addEventListener('change', applyCombinedFilter));
+priceMin.addEventListener('change', applyCombinedFilter);
+priceMax.addEventListener('change', applyCombinedFilter);
+
+async function applyCombinedFilter() {
+	const category_ids = Array.from(categoryCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
+	const brand_ids = Array.from(brandCheckboxes).filter(cb => cb.checked).map(cb => cb.value);
 	const min = parseInt(priceMin.value) || 0;
 	const max = parseInt(priceMax.value) || 999999;
-	filterByPrice(min, max);
-});
 
-priceMax.addEventListener('change', () => {
-	const min = parseInt(priceMin.value) || 0;
-	const max = parseInt(priceMax.value) || 999999;
-	filterByPrice(min, max);
-});
-
-async function filterByPrice(min, max) {
-	const res = await fetch('/api/product/filter-price', {
+	const res = await fetch('/api/product/filter', {
 		method: 'POST',
 		headers: { 'Content-Type': 'application/json' },
-		body: JSON.stringify({ min, max })
+		body: JSON.stringify({ category_ids, brand_ids, min, max })
 	});
 
 	const products = await res.json();
-	renderFilteredProducts(products, true);
+	const shouldShowFiltered = category_ids.length > 0 || brand_ids.length > 0 || min > 0 || max < 999999;
+	renderFilteredProducts(products, shouldShowFiltered);
 }
+
 
 // Hàm render sản phẩm lọc
 function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
