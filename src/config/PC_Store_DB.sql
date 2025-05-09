@@ -111,6 +111,10 @@ CREATE TABLE order_table (
     order_status ENUM('approving', 'on delivering', 'delivered', 'completed'),
     account_id INT,
     total_payment FLOAT,
+    fullname VARCHAR(255),
+    phone VARCHAR(50),
+    address TEXT,
+    note TEXT,
     FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
@@ -166,6 +170,13 @@ JOIN
 JOIN 
     brand b ON p.brand_id = b.brand_id;
 
+CREATE VIEW view_dashboard_summary AS
+SELECT
+    (SELECT SUM(total_payment) FROM order_table) AS total_revenue,
+    (SELECT COUNT(*) FROM order_table) AS total_orders,
+    (SELECT COUNT(DISTINCT account_id) FROM order_table) AS total_customers,
+    (SELECT COUNT(*) FROM product) AS total_products;
+
 DELIMITER //
 
 CREATE TRIGGER trg_delete_orderdetails_before_order
@@ -178,12 +189,50 @@ END //
 
 DELIMITER ;
 
+DELIMITER //
 
-ALTER TABLE order_table 
-ADD COLUMN fullname VARCHAR(255),
-ADD COLUMN phone VARCHAR(50),
-ADD COLUMN address TEXT,
-ADD COLUMN note TEXT;
+CREATE PROCEDURE get_monthly_revenue(IN target_year INT)
+BEGIN
+    -- Trả về 12 tháng và doanh thu mỗi tháng, kể cả khi không có đơn hàng
+    SELECT 
+        m.month,
+        IFNULL(SUM(o.total_payment), 0) - IFNULL(SUM(p.retail_price * od.quantity), 0) AS revenue
+    FROM
+        (
+            -- Tạo danh sách 12 tháng (1 đến 12)
+            SELECT 1 AS month UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL
+            SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL
+            SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12
+        ) AS m
+    LEFT JOIN order_table o ON MONTH(o.created_at) = m.month AND YEAR(o.created_at) = target_year
+    LEFT JOIN order_detail od ON o.id = od.order_id
+    LEFT JOIN product p ON od.product_id = p.id
+    GROUP BY m.month
+    ORDER BY m.month;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE get_sold_quantity_by_product(IN target_year INT)
+BEGIN
+    SELECT 
+        p.name AS product_name,
+        SUM(od.quantity) AS total_quantity
+    FROM 
+        order_table o
+    JOIN 
+        order_detail od ON o.id = od.order_id
+    JOIN 
+        product p ON od.product_id = p.id
+    WHERE 
+        YEAR(o.created_at) = target_year
+    GROUP BY 
+        p.id, p.name;
+END //
+
+DELIMITER ;
 
 INSERT INTO brand (brand_name) VALUES
 ('ASUS'),
@@ -230,13 +279,13 @@ INSERT INTO category (name) VALUES
 ('Mainboard'),
 ('RAM'),
 ('SSD'),
-('Power Supply'),
+('Nguồn'),
 ('Chuột'),
 ('Bàn phím'),
 ('Màn hình'),
-('Ghế - Bàn'),
+('Ghế'),
 ('Tai nghe'),
-('Thiết bị mạng'),
+('Thiết bị mạng'),  
 ('Tản nhiệt'),
 ('Micro - Webcam'),
 ('Lót chuột'),
@@ -1314,29 +1363,408 @@ INSERT INTO customer (first_name, last_name, gender, email, phone, address) VALU
 ('Nguyen', 'K', 'male', 'user9@gmail.com', '0999999999', 'Hà Nội'),
 ('Tran', 'L', 'female', 'user10@gmail.com', '0900000000', 'TP.HCM');
 
-INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment) VALUES
-('2025-04-01 10:00:00', 'COD', 'completed', 2, 1700),
-('2025-04-02 12:30:00', 'Bank Transfer', 'delivered', 3, 370),
-('2025-04-03 14:00:00', 'COD', 'on delivering', 4, 950),
-('2025-04-04 09:00:00', 'COD', 'approving', 5, 150),
-('2025-04-05 11:15:00', 'Credit Card', 'completed', 6, 600),
-('2025-04-06 16:45:00', 'COD', 'delivered', 7, 120),
-('2025-04-07 13:00:00', 'Bank Transfer', 'completed', 8, 110),
-('2025-04-08 15:30:00', 'COD', 'on delivering', 9, 640),
-('2025-04-09 17:00:00', 'COD', 'approving', 10, 105),
-('2025-04-10 10:00:00', 'Credit Card', 'completed', 2, 100);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-01-05 00:00:00', 'vnpay', 'completed', 1, 11977009, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-01-14 00:00:00', 'vnpay', 'delivered', 2, 21489140, 'Tran Binh', '0922222222', 'TP.HCM', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-01-23 00:00:00', 'vnpay', 'delivered', 3, 24547754, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-02-01 00:00:00', 'vnpay', 'delivered', 4, 12672054, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-02-10 00:00:00', 'cash', 'approving', 5, 36947555, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-02-19 00:00:00', 'momo', 'approving', 6, 36366301, 'Dang G', '0966666666', 'Huế', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-02-28 00:00:00', 'vnpay', 'on delivering', 7, 14507554, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-03-08 00:00:00', 'cash', 'delivered', 8, 20261743, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-03-17 00:00:00', 'vnpay', 'on delivering', 9, 46519367, 'Nguyen K', '0999999999', 'Hà Nội', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-03-26 00:00:00', 'cash', 'approving', 10, 12876164, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-04-04 00:00:00', 'cash', 'on delivering', 1, 32869210, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-04-13 00:00:00', 'vnpay', 'delivered', 2, 43116001, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-04-22 00:00:00', 'vnpay', 'approving', 3, 22245330, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-05-01 00:00:00', 'vnpay', 'delivered', 4, 35856517, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-05-10 00:00:00', 'vnpay', 'completed', 5, 46127461, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-05-19 00:00:00', 'momo', 'delivered', 6, 32294349, 'Dang G', '0966666666', 'Huế', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-05-28 00:00:00', 'momo', 'approving', 7, 12834911, 'Do H', '0977777777', 'Bình Dương', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-06-06 00:00:00', 'momo', 'completed', 8, 49780785, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-06-15 00:00:00', 'vnpay', 'approving', 9, 44783682, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-06-24 00:00:00', 'momo', 'completed', 10, 48838084, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-07-03 00:00:00', 'vnpay', 'on delivering', 1, 19653725, 'Nguyen An', '0911111111', 'Hà Nội', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-07-12 00:00:00', 'vnpay', 'approving', 2, 38346932, 'Tran Binh', '0922222222', 'TP.HCM', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-07-21 00:00:00', 'vnpay', 'approving', 3, 11464494, 'Le Chi', '0933333333', 'Đà Nẵng', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-07-30 00:00:00', 'momo', 'approving', 4, 48368288, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-08-08 00:00:00', 'cash', 'delivered', 5, 26579777, 'Hoang E', '0955555555', 'Hải Phòng', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-08-17 00:00:00', 'cash', 'on delivering', 6, 41540695, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-08-26 00:00:00', 'momo', 'on delivering', 7, 27285129, 'Do H', '0977777777', 'Bình Dương', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-09-04 00:00:00', 'cash', 'delivered', 8, 48468268, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-09-13 00:00:00', 'vnpay', 'delivered', 9, 35666511, 'Nguyen K', '0999999999', 'Hà Nội', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-09-22 00:00:00', 'cash', 'approving', 10, 35680513, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-10-01 00:00:00', 'vnpay', 'completed', 1, 17962744, 'Nguyen An', '0911111111', 'Hà Nội', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-10-10 00:00:00', 'momo', 'approving', 2, 43354541, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-10-19 00:00:00', 'cash', 'delivered', 3, 40860614, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-10-28 00:00:00', 'vnpay', 'on delivering', 4, 24842800, 'Pham Dung', '0944444444', 'Cần Thơ', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-11-06 00:00:00', 'vnpay', 'approving', 5, 27118152, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-11-15 00:00:00', 'momo', 'completed', 6, 17712750, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-11-24 00:00:00', 'cash', 'on delivering', 7, 37717140, 'Do H', '0977777777', 'Bình Dương', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-12-03 00:00:00', 'vnpay', 'on delivering', 8, 42708511, 'Vo I', '0988888888', 'Nha Trang', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-12-12 00:00:00', 'cash', 'on delivering', 9, 42101693, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2024-12-21 00:00:00', 'vnpay', 'completed', 10, 25010107, 'Tran L', '0900000000', 'TP.HCM', '');
 
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES
-(1, 1, 1, 1700),
-(2, 3, 1, 370),
-(3, 4, 1, 950),
-(4, 5, 1, 150),
-(5, 6, 8, 600),
-(6, 7, 1, 120),
-(7, 8, 1, 110),
-(8, 9, 8, 640),
-(9, 10, 1, 105),
-(10, 9, 1, 100);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-11-07 00:00:00', 'cash', 'approving', 10, 15034625, 'Tran L', '0900000000', 'TP.HCM', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-05-13 00:00:00', 'momo', 'approving', 10, 45152200, 'Tran L', '0900000000', 'TP.HCM', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-01-05 00:00:00', 'momo', 'completed', 10, 41826253, 'Tran L', '0900000000', 'TP.HCM', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-01-12 00:00:00', 'cash', 'on delivering', 4, 46101890, 'Pham Dung', '0944444444', 'Cần Thơ', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-08-23 00:00:00', 'momo', 'approving', 2, 42165749, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-07-15 00:00:00', 'vnpay', 'approving', 10, 31063881, 'Tran L', '0900000000', 'TP.HCM', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-10-29 00:00:00', 'cash', 'completed', 7, 32852570, 'Do H', '0977777777', 'Bình Dương', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-08-17 00:00:00', 'vnpay', 'on delivering', 2, 34369072, 'Tran Binh', '0922222222', 'TP.HCM', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-09-17 00:00:00', 'vnpay', 'on delivering', 4, 27544207, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-04-26 00:00:00', 'momo', 'delivered', 8, 42054677, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-01-20 00:00:00', 'momo', 'approving', 9, 26728113, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-05-27 00:00:00', 'momo', 'approving', 10, 30880606, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-08-19 00:00:00', 'cash', 'completed', 8, 41038667, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-01-15 00:00:00', 'vnpay', 'completed', 5, 13359156, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-04-04 00:00:00', 'momo', 'on delivering', 5, 40408649, 'Hoang E', '0955555555', 'Hải Phòng', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-05-12 00:00:00', 'cash', 'approving', 10, 35953676, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-05-05 00:00:00', 'vnpay', 'on delivering', 1, 16926517, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-01-05 00:00:00', 'cash', 'completed', 4, 30131810, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-07-11 00:00:00', 'momo', 'completed', 1, 34784452, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-10-21 00:00:00', 'cash', 'completed', 10, 40604255, 'Tran L', '0900000000', 'TP.HCM', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-06-26 00:00:00', 'momo', 'delivered', 5, 12064530, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-01-23 00:00:00', 'momo', 'on delivering', 10, 27524895, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-05-16 00:00:00', 'momo', 'approving', 4, 25544855, 'Pham Dung', '0944444444', 'Cần Thơ', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-01-29 00:00:00', 'momo', 'delivered', 5, 11327069, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-10-15 00:00:00', 'cash', 'completed', 1, 10020440, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-09-18 00:00:00', 'vnpay', 'on delivering', 1, 33614334, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-11-22 00:00:00', 'vnpay', 'delivered', 2, 47596211, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-03-11 00:00:00', 'cash', 'on delivering', 10, 12813368, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-03-18 00:00:00', 'momo', 'on delivering', 4, 31516099, 'Pham Dung', '0944444444', 'Cần Thơ', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-07-12 00:00:00', 'vnpay', 'delivered', 7, 10976144, 'Do H', '0977777777', 'Bình Dương', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-03-06 00:00:00', 'vnpay', 'delivered', 7, 46503184, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-06-12 00:00:00', 'momo', 'on delivering', 9, 39581818, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-04-02 00:00:00', 'momo', 'on delivering', 5, 30398926, 'Hoang E', '0955555555', 'Hải Phòng', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-08-10 00:00:00', 'momo', 'delivered', 2, 29866718, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2022-12-06 00:00:00', 'vnpay', 'completed', 4, 33434632, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-10-12 00:00:00', 'vnpay', 'on delivering', 6, 47900838, 'Dang G', '0966666666', 'Huế', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-10-03 00:00:00', 'cash', 'completed', 4, 35025269, 'Pham Dung', '0944444444', 'Cần Thơ', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-10-25 00:00:00', 'vnpay', 'delivered', 10, 11188492, 'Tran L', '0900000000', 'TP.HCM', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-03-01 00:00:00', 'vnpay', 'delivered', 9, 44360874, 'Nguyen K', '0999999999', 'Hà Nội', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-04-21 00:00:00', 'cash', 'approving', 6, 11125638, 'Dang G', '0966666666', 'Huế', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-09-09 00:00:00', 'momo', 'on delivering', 5, 47267092, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-02-01 00:00:00', 'cash', 'approving', 5, 23058738, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-03-01 00:00:00', 'momo', 'approving', 6, 20995235, 'Dang G', '0966666666', 'Huế', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-07-03 00:00:00', 'momo', 'on delivering', 9, 21186211, 'Nguyen K', '0999999999', 'Hà Nội', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-02-19 00:00:00', 'vnpay', 'on delivering', 9, 13217326, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-09-30 00:00:00', 'vnpay', 'on delivering', 5, 44272156, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-03-09 00:00:00', 'cash', 'completed', 1, 13982103, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-04-09 00:00:00', 'vnpay', 'delivered', 4, 39482757, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-11-29 00:00:00', 'cash', 'delivered', 3, 13488731, 'Le Chi', '0933333333', 'Đà Nẵng', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-05-31 00:00:00', 'momo', 'completed', 10, 14065325, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-12-06 00:00:00', 'vnpay', 'on delivering', 5, 32165871, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-11-04 00:00:00', 'momo', 'completed', 2, 26793719, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-04-18 00:00:00', 'vnpay', 'completed', 10, 16150506, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-12-02 00:00:00', 'vnpay', 'completed', 3, 19379714, 'Le Chi', '0933333333', 'Đà Nẵng', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-05-30 00:00:00', 'cash', 'on delivering', 9, 39620614, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-04-04 00:00:00', 'momo', 'completed', 10, 18100169, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-02-15 00:00:00', 'cash', 'delivered', 8, 18134528, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-06-23 00:00:00', 'vnpay', 'completed', 4, 24939559, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-07-26 00:00:00', 'vnpay', 'on delivering', 1, 27508141, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-07-14 00:00:00', 'vnpay', 'completed', 2, 12377237, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-03-27 00:00:00', 'vnpay', 'approving', 7, 46419204, 'Do H', '0977777777', 'Bình Dương', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-12-30 00:00:00', 'vnpay', 'delivered', 7, 43151124, 'Do H', '0977777777', 'Bình Dương', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-10-12 00:00:00', 'momo', 'on delivering', 8, 16122822, 'Vo I', '0988888888', 'Nha Trang', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-03-25 00:00:00', 'momo', 'approving', 8, 41794611, 'Vo I', '0988888888', 'Nha Trang', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2021-05-06 00:00:00', 'momo', 'approving', 8, 42290928, 'Vo I', '0988888888', 'Nha Trang', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-04-15 00:00:00', 'cash', 'completed', 5, 33810200, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-12-20 00:00:00', 'cash', 'completed', 1, 42541189, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-09-28 00:00:00', 'vnpay', 'approving', 3, 31510948, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-07-21 00:00:00', 'cash', 'approving', 1, 22484590, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-08-22 00:00:00', 'vnpay', 'delivered', 3, 39351206, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-08-14 00:00:00', 'vnpay', 'delivered', 10, 48675502, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-04-12 00:00:00', 'momo', 'approving', 1, 48723030, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-12-21 00:00:00', 'vnpay', 'delivered', 5, 39823308, 'Hoang E', '0955555555', 'Hải Phòng', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-11-25 00:00:00', 'cash', 'completed', 5, 48296065, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-02-12 00:00:00', 'cash', 'completed', 3, 48377048, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-10-03 00:00:00', 'momo', 'completed', 9, 17658205, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-10-11 00:00:00', 'cash', 'delivered', 6, 18520798, 'Dang G', '0966666666', 'Huế', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-02-20 00:00:00', 'cash', 'delivered', 6, 31955379, 'Dang G', '0966666666', 'Huế', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-09-08 00:00:00', 'momo', 'approving', 7, 49414794, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-09-07 00:00:00', 'vnpay', 'completed', 7, 13312190, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-05-26 00:00:00', 'vnpay', 'completed', 8, 46628934, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-07-28 00:00:00', 'momo', 'approving', 9, 20004100, 'Nguyen K', '0999999999', 'Hà Nội', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-10-05 00:00:00', 'vnpay', 'approving', 10, 24554897, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-07-06 00:00:00', 'vnpay', 'delivered', 10, 39596547, 'Tran L', '0900000000', 'TP.HCM', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-08-04 00:00:00', 'momo', 'completed', 6, 34621369, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-03-17 00:00:00', 'vnpay', 'completed', 7, 25747228, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-03-10 00:00:00', 'momo', 'approving', 1, 35733808, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-12-17 00:00:00', 'vnpay', 'approving', 7, 17549460, 'Do H', '0977777777', 'Bình Dương', '');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-11-10 00:00:00', 'vnpay', 'approving', 7, 20994746, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2020-09-05 00:00:00', 'cash', 'completed', 4, 23142771, 'Pham Dung', '0944444444', 'Cần Thơ', '');
+
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-28 00:00:00', 'vnpay', 'completed', 5, 18563378, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-22 00:00:00', 'momo', 'delivered', 4, 39031421, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-12 00:00:00', 'cash', 'approving', 8, 34350334, 'Vo I', '0988888888', 'Nha Trang', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-25 00:00:00', 'vnpay', 'on delivering', 5, 23100622, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-09 00:00:00', 'cash', 'approving', 8, 42813601, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-10 00:00:00', 'vnpay', 'delivered', 7, 38728055, 'Do H', '0977777777', 'Bình Dương', 'Giao buổi sáng');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-27 00:00:00', 'cash', 'completed', 10, 43217006, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-09 00:00:00', 'cash', 'completed', 4, 16999832, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao tận tay');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-03 00:00:00', 'vnpay', 'on delivering', 7, 18793260, 'Do H', '0977777777', 'Bình Dương', 'Kiểm tra trước khi nhận');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note) VALUES ('2023-12-24 00:00:00', 'vnpay', 'completed', 10, 25085740, 'Tran L', '0900000000', 'TP.HCM', '');
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (1, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (2, 6, 2, 18343356);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (3, 9, 1, 12619602);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (4, 7, 1, 9720846);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (5, 1, 3, 22529073);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (5, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (5, 9, 1, 12619602);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (6, 2, 3, 30134190);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (6, 3, 1, 5025668);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (6, 7, 1, 9720846);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (7, 9, 1, 12619602);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (7, 3, 1, 5025668);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (8, 6, 2, 18343356);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (8, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (9, 1, 2, 15019382);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (9, 9, 2, 25239204);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (10, 3, 2, 10051336);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (10, 6, 1, 9171678);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (11, 3, 2, 10051336);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (11, 1, 3, 22529073);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (11, 2, 1, 10044730);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (12, 5, 1, 14984160);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (12, 2, 2, 20089460);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (12, 9, 1, 12619602);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (13, 7, 2, 19441692);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (13, 1, 1, 7509691);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (14, 3, 3, 15077004);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (14, 2, 2, 20089460);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (14, 9, 1, 12619602);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (15, 6, 3, 27515034);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (15, 9, 1, 12619602);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (15, 2, 1, 10044730);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (16, 8, 3, 21105372);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (16, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (17, 4, 1, 8856835);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (18, 1, 3, 22529073);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (18, 2, 1, 10044730);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (18, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (19, 7, 3, 29162538);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (20, 6, 3, 27515034);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (20, 4, 2, 17713670);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (21, 3, 3, 15077004);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (22, 6, 2, 18343356);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (23, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (24, 4, 1, 8856835);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (24, 8, 2, 14070248);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (24, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (25, 10, 2, 24239278);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (26, 3, 2, 10051336);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (26, 5, 2, 29968320);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (26, 2, 1, 10044730);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (27, 5, 1, 14984160);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (28, 6, 3, 27515034);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (28, 8, 2, 14070248);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (28, 1, 1, 7509691);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (29, 7, 1, 9720846);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (29, 1, 1, 7509691);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (30, 8, 2, 14070248);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (30, 5, 1, 14984160);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (30, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (31, 1, 2, 15019382);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (32, 5, 2, 29968320);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (32, 4, 1, 8856835);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (32, 1, 1, 7509691);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (33, 7, 1, 9720846);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (34, 5, 1, 14984160);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (34, 6, 1, 9171678);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (34, 8, 1, 7035124);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (35, 5, 1, 14984160);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (36, 2, 1, 10044730);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (37, 7, 2, 19441692);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (37, 6, 1, 9171678);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (38, 6, 2, 18343356);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (38, 7, 1, 9720846);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (38, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (39, 1, 3, 22529073);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (39, 5, 1, 14984160);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (39, 10, 1, 12119639);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (40, 7, 1, 9720846);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (40, 10, 1, 12119639);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (41, 10, 1, 12375949);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (42, 5, 3, 29542593);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (42, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (43, 2, 3, 36115659);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (43, 5, 1, 9847531);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (44, 4, 2, 21596326);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (44, 8, 3, 23122998);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (44, 6, 1, 7436814);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (45, 8, 2, 15415332);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (45, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (46, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (47, 2, 2, 24077106);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (47, 10, 1, 12375949);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (48, 4, 3, 32394489);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (48, 5, 1, 9847531);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (49, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (49, 9, 1, 14709833);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (50, 8, 2, 15415332);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (50, 1, 2, 20995966);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (51, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (52, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (52, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (52, 9, 1, 14709833);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (53, 10, 3, 37127847);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (54, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (55, 5, 3, 29542593);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (56, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (56, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (56, 4, 1, 10798163);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (57, 8, 2, 15415332);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (57, 6, 1, 7436814);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (58, 1, 2, 20995966);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (59, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (60, 2, 2, 24077106);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (60, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (61, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (61, 5, 1, 9847531);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (62, 2, 2, 24077106);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (63, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (63, 5, 1, 9847531);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (63, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (64, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (65, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (66, 4, 1, 10798163);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (66, 8, 2, 15415332);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (66, 10, 1, 12375949);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (67, 9, 3, 44129499);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (68, 9, 1, 14709833);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (69, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (69, 7, 1, 8184771);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (69, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (70, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (71, 4, 3, 32394489);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (72, 4, 3, 32394489);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (72, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (73, 8, 3, 23122998);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (74, 10, 2, 24751898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (74, 6, 1, 7436814);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (75, 7, 3, 24554313);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (75, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (76, 5, 3, 29542593);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (76, 4, 1, 10798163);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (77, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (77, 8, 2, 15415332);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (78, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (79, 8, 3, 23122998);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (79, 9, 1, 14709833);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (79, 6, 1, 7436814);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (80, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (81, 4, 2, 21596326);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (82, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (83, 6, 2, 14873628);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (83, 5, 1, 9847531);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (84, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (84, 7, 1, 8184771);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (85, 10, 1, 12375949);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (86, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (87, 9, 1, 14709833);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (88, 2, 2, 24077106);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (88, 10, 1, 12375949);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (89, 7, 1, 8184771);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (89, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (90, 9, 1, 14709833);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (91, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (91, 4, 1, 10798163);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (92, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (92, 4, 1, 10798163);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (93, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (94, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (95, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (95, 5, 1, 9847531);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (96, 4, 1, 10798163);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (96, 5, 1, 9847531);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (97, 9, 1, 14709833);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (97, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (98, 2, 2, 24077106);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (99, 6, 2, 14873628);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (99, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (100, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (101, 7, 2, 16369542);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (101, 8, 2, 15415332);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (102, 3, 2, 29805796);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (103, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (103, 6, 1, 7436814);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (104, 7, 1, 8184771);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (104, 10, 2, 24751898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (104, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (105, 9, 1, 14709833);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (105, 6, 3, 22310442);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (105, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (106, 6, 1, 7436814);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (106, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (107, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (108, 6, 1, 7436814);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (108, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (109, 6, 3, 22310442);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (110, 10, 3, 37127847);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (111, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (111, 5, 3, 29542593);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (112, 2, 2, 24077106);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (112, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (113, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (113, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (113, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (114, 9, 3, 44129499);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (114, 7, 1, 8184771);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (115, 1, 1, 10497983);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (115, 10, 3, 37127847);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (116, 6, 2, 14873628);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (116, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (117, 8, 2, 15415332);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (118, 8, 2, 15415332);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (119, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (120, 10, 1, 12375949);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (121, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (122, 4, 1, 10798163);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (123, 5, 1, 9847531);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (123, 2, 1, 12038553);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (123, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (124, 7, 2, 16369542);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (125, 5, 2, 19695062);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (125, 7, 1, 8184771);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (125, 4, 1, 10798163);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (126, 6, 3, 22310442);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (126, 8, 1, 7707666);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (127, 5, 3, 29542593);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (127, 10, 1, 12375949);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (128, 7, 1, 8184771);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (128, 5, 1, 9847531);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (129, 10, 1, 12375949);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (129, 3, 1, 14902898);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (130, 4, 2, 21596326);
+
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (131, 5, 1, 9572424);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (131, 7, 1, 9959402);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (132, 9, 2, 19432040);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (132, 4, 2, 18827408);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (133, 6, 1, 6346295);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (133, 9, 2, 19432040);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (134, 3, 2, 11765020);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (134, 6, 1, 6346295);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (134, 9, 1, 9716020);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (135, 2, 2, 18091782);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (135, 8, 1, 7515392);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (135, 1, 1, 11021993);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (136, 6, 1, 6346295);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (137, 2, 2, 18091782);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (137, 4, 1, 9413704);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (138, 9, 1, 9716020);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (149, 2, 2, 18091782);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (150, 1, 2, 22043986);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (150, 8, 1, 7515392);
 
 INSERT INTO shipping (shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address) VALUES
 ('2025-04-02', 'GHN', 'completed', 1, 1, 'Hà Nội'),
@@ -1361,3 +1789,15 @@ INSERT INTO cart (id_customer, id_product, quantity) VALUES
 (8, 7, 1),
 (9, 4, 1),
 (10, 1, 1);
+
+INSERT INTO account (email, password, role) VALUES
+('user1@gmail.com', '$2y$10$hashpassword01', 'customer'),
+('user2@gmail.com', '$2y$10$hashpassword02', 'customer'),
+('user3@gmail.com', '$2y$10$hashpassword03', 'customer'),
+('user4@gmail.com', '$2y$10$hashpassword04', 'customer'),
+('user5@gmail.com', '$2y$10$hashpassword05', 'customer'),
+('user6@gmail.com', '$2y$10$hashpassword06', 'customer'),
+('user7@gmail.com', '$2y$10$hashpassword07', 'customer'),
+('user8@gmail.com', '$2y$10$hashpassword08', 'customer'),
+('user9@gmail.com', '$2y$10$hashpassword09', 'customer'),
+('user10@gmail.com', '$2y$10$hashpassword10', 'customer');

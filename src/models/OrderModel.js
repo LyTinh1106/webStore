@@ -1,3 +1,4 @@
+const { or } = require('sequelize');
 const sql = require('../config/database');
 
 const Order = function (order) {
@@ -99,7 +100,7 @@ Order.findByAccountId = (account_id, result) => {
 
 
 Order.getAll = (result) => {
-  sql.query("SELECT o.*, a.email FROM order_table o JOIN account a on o.account_id = a.id " , (err, res) => {
+  sql.query("SELECT o.*, a.email FROM order_table o JOIN account a on o.account_id = a.id ", (err, res) => {
     if (err) {
       result(null, err);
       return;
@@ -178,6 +179,79 @@ Order.UpdateStatusById = (id, result) => {
       }
       console.log("updated order: ", { id });
       result(null, { id });
+    }
+  );
+};
+
+Order.GetRevenueByMonthOfYear = (year, result) => {
+  sql.query(
+    `CALL get_monthly_revenue(?);`,
+    [year],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      const data = res[0]; 
+
+      if (!data || data.length === 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("Revenue of year:", data);
+      result(null, data);
+    }
+  );
+};
+
+Order.GetProuctQuantityByYear = (year, result) => {
+  sql.query(
+    `CALL get_sold_quantity_by_product(?);`,
+    [year],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      const data = res[0];
+      if (!data || data.length === 0) {
+        result({ kind: "not_found"}, data);
+        return;
+      }
+      console.log("Sold product in year:", data);
+      result(null, data);
+    }
+  );
+};
+
+Order.GetExistingYear = (result) => {
+  sql.query(`
+    SELECT DISTINCT YEAR(created_at) AS year
+    FROM order_table
+    ORDER BY year DESC;
+    `,
+    (err, res) => {
+      if(err) {
+        result(null, err);
+        return;
+      }
+      result(null, res);
+    });
+};
+
+Order.GetStats = (result) =>{
+  sql.query(`SELECT * FROM view_dashboard_summary`,
+    (err, res) => {
+      if(err) {
+        result(null, err);
+        return;
+      }
+      result(null, res);
     }
   );
 };

@@ -96,67 +96,59 @@ const getInfo = (req, res) => {
   });
 };
 
+
+
 const getDashboard = (req, res) => {
   if (!req.session.user || req.session.user.role !== 'admin') {
     return res.redirect('/homepage?error=Truy+c%E1%BA%ADp+b%E1%BB%8B+t%E1%BB%AB+ch%E1%BB%91i');
   }
 
   Account.getAll(null, (err, accounts) => {
-    if (err) {
-      return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách tài khoản' });
-    }
+    if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách tài khoản' });
 
     Category.getAll((err, categories) => {
-      if (err) {
-        return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách danh mục' });
-      }
+      if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách danh mục' });
 
       Brand.getAll((err, brands) => {
-        if (err) {
-          return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhãn hàng' });
-        }
+        if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhãn hàng' });
 
         Product.getAll(null, (err, products) => {
-          if (err) {
-            return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách sản phẩm' });
-          }
+          if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách sản phẩm' });
 
           Order.getAll((err, orders) => {
-            if (err) {
-              return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách đơn hàng' });
-            }
-
-            // OrderDetail.findByOrderId(order.id, (err, details) => {
-            //   if (err) {
-            //     return res.status(500).render('error', { message: 'Lỗi khi lấy chi tiết đơn hàng' });
-            //   }
+            if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách đơn hàng' });
 
             Shipping.getAll((err, shippings) => {
-              if (err) {
-                return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
-              }
+              if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách vận chuyển' });
 
               Supplier.getAll((err, suppliers) => {
-                if (err) {
-                  return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
-                }
+                if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách nhà cung cấp' });
 
                 Voucher.getAll(null, (err, vouchers) => {
-                  if (err) {
-                    return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
-                  }
+                  if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách voucher' });
 
-                  res.render('dashboard', {
-                    user: req.session.user,
-                    accounts,
-                    categories,
-                    brands,
-                    products,
-                    orders,
-                    // orderDetails,
-                    shippings,
-                    suppliers,
-                    vouchers
+                  Order.GetExistingYear((err, years) => {
+                    if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách năm đơn hàng' });
+
+                    Order.GetStats((err, statsData) => {
+                      if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy thống kê tổng quan' });
+
+                      const stats = statsData[0];
+
+                      res.render('dashboard', {
+                        user: req.session.user,
+                        accounts,
+                        categories,
+                        brands,
+                        products,
+                        orders,
+                        shippings,
+                        suppliers,
+                        vouchers,
+                        years, // truyền biến này sang EJS
+                        stats
+                      });
+                    });
                   });
                 });
               });
@@ -166,7 +158,6 @@ const getDashboard = (req, res) => {
       });
     });
   });
-
 };
 
 module.exports = { getDashboard };

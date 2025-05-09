@@ -79,6 +79,9 @@ Product.getAll = (nameOrCategoryId, result) => {
       return;
     }
 
+
+    // console.log("products: ", res);
+    
     result(null, res);
   });
 };

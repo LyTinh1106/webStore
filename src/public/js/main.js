@@ -1,7 +1,6 @@
 
 (function ($) {
 	"use strict"
-
 	// Mobile Nav toggle
 	$('.menu-toggle > a').on('click', function (e) {
 		e.preventDefault();
@@ -306,9 +305,10 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
 	const allBox = document.getElementById('all-products');
 	const paginationBox = document.getElementById('store-nav');
 	function formatVND(value) {
-		
-		return value.toLocaleString('vi-VN') + '₫';
-	}
+		return value.toLocaleString('vi-VN');
+	  }
+
+  filteredBox.innerHTML = '';
 
 	const productsPerPage = 9;
 	const totalPages = Math.ceil(products.length / productsPerPage);
