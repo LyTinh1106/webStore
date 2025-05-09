@@ -578,6 +578,17 @@ const compareProducts = (req, res) => {
   });
 };
 
+//lọc
+const filterCombined = (req, res) => {
+  Product.filterCombined(req.body, (err, products) => {
+    if (err) {
+      console.error("Lỗi lọc sản phẩm kết hợp:", err);
+      return res.status(500).json({ error: "Lỗi server khi lọc kết hợp" });
+    }
+
+    res.json(products);
+  });
+};
 
 
 
@@ -591,5 +602,6 @@ module.exports = {
   filterByBrand,
   filterByPrice,
   searchProductRender,
+  filterCombined,
   compareProducts
 };

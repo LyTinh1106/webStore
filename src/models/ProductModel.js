@@ -159,6 +159,46 @@ Product.remove = (id, result) => {
     });
   });
 };
+// lọc
+Product.filterCombined = (filterData, result) => {
+  const { category_ids = [], brand_ids = [], min = 0, max = 999999 } = filterData;
+
+  let query = `
+    SELECT 
+      p.*, 
+      c.name AS category_name, 
+      pi.URL AS image
+    FROM product p
+    LEFT JOIN category c ON p.category_id = c.id
+    LEFT JOIN product_image pi ON pi.id = (
+      SELECT id FROM product_image 
+      WHERE product_id = p.id 
+      ORDER BY id ASC LIMIT 1
+    )
+    WHERE p.retail_price BETWEEN ? AND ?
+  `;
+
+  const params = [min, max];
+
+  if (category_ids.length > 0) {
+    query += ` AND p.category_id IN (${category_ids.map(() => '?').join(',')})`;
+    params.push(...category_ids);
+  }
+
+  if (brand_ids.length > 0) {
+    query += ` AND p.brand_id IN (${brand_ids.map(() => '?').join(',')})`;
+    params.push(...brand_ids);
+  }
+
+  sql.query(query, params, (err, res) => {
+    if (err) {
+      console.log("Lỗi khi lọc sản phẩm kết hợp: ", err);
+      result(err, null);
+      return;
+    }
+    result(null, res);
+  });
+};
 //phân trang
 Product.getAllWithPagination = (filter, limit, offset, callback) => {
   let query = `
