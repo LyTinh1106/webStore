@@ -73,7 +73,7 @@
 
                         <div class="d-flex justify-content-between mb-2">
                             <span>Tạm tính</span>
-                            <span id="subtotal">1,550,000₫</span>
+                            <span id="subtotal">0₫</span>
                         </div>
 
                         <div class="d-flex justify-content-between mb-2">
@@ -124,37 +124,7 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
             <script src="/js/main.js"></script>
             <script src="/js/cart.js"></script>
-            <script>
-                document.getElementById('applyVoucherBtn').addEventListener('click', () => {
-                    const code = document.getElementById('voucherCode').value.trim();
-                    if (!code) return alert('Vui lòng nhập mã giảm giá');
-
-                    fetch('/api/voucher/apply', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ code })
-                    })
-                        .then(res => res.json())
-                        .then(data => {
-                            if (!data.success) return alert(data.error || 'Mã không hợp lệ');
-
-                            const voucher = data.voucher;
-                            const discountPercent = voucher.voucher_value;
-
-                            const cartSubtotal = getCartSubtotal(); // 👈 lấy tổng đơn hàng gốc từ DOM
-                            const discountAmount = Math.floor(cartSubtotal * discountPercent / 100);
-                            const totalAfterDiscount = cartSubtotal - discountAmount;
-
-                            document.querySelector('total-price').innerText = `Tổng cộng: ${totalAfterDiscount.toLocaleString('vi-VN')}đ`;
-                        });
-                });
-
-                function getCartSubtotal() {
-                    // Ví dụ lấy từ thẻ chứa số tiền gốc
-                    const subtotalText = document.querySelector('.cart-subtotal').innerText.replace(/[^\d]/g, '');
-                    return parseInt(subtotalText) || 0;
-                }
-            </script>
+            
 
 </body>
 

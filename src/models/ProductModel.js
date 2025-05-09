@@ -42,25 +42,34 @@ Product.findById = (id, result) => {
   });
 };
 
-Product.getAll = (name, result) => {
+Product.getAll = (nameOrCategoryId, result) => {
   let query = `
     SELECT 
-    p.*, 
-    c.name AS category_name, 
-    pi.URL AS image
-FROM product p
-LEFT JOIN category c ON p.category_id = c.id
-LEFT JOIN product_image pi ON pi.id = (
-    SELECT id FROM product_image 
-    WHERE product_id = p.id 
-    ORDER BY id ASC 
-    LIMIT 1
-)`;
+      p.*, 
+      c.name AS category_name, 
+      pi.URL AS image
+    FROM product p
+    LEFT JOIN category c ON p.category_id = c.id
+    LEFT JOIN product_image pi ON pi.id = (
+      SELECT id FROM product_image 
+      WHERE product_id = p.id 
+      ORDER BY id ASC 
+      LIMIT 1
+    )
+  `;
+
   let params = [];
 
-  if (name) {
-    query += " WHERE p.name LIKE ?";
-    params.push(`%${name}%`);
+  if (nameOrCategoryId) {
+    // Nếu là số → xem là categoryId
+    if (!isNaN(nameOrCategoryId)) {
+      query += " WHERE p.category_id = ?";
+      params.push(nameOrCategoryId);
+    } else {
+      // Nếu là chuỗi → xem là từ khóa tìm kiếm
+      query += " WHERE p.name LIKE ?";
+      params.push(`%${nameOrCategoryId}%`);
+    }
   }
 
   sql.query(query, params, (err, res) => {
@@ -70,10 +79,13 @@ LEFT JOIN product_image pi ON pi.id = (
       return;
     }
 
+
     // console.log("products: ", res);
+    
     result(null, res);
   });
 };
+
 
 
 Product.updateById = (id, product, result) => {
@@ -147,8 +159,49 @@ Product.remove = (id, result) => {
     });
   });
 };
+//phân trang
+Product.getAllWithPagination = (filter, limit, offset, callback) => {
+  let query = `
+    SELECT SQL_CALC_FOUND_ROWS 
+      p.*, 
+      c.name AS category_name, 
+      pi.URL AS image
+    FROM product p
+    LEFT JOIN category c ON p.category_id = c.id
+    LEFT JOIN product_image pi ON pi.id = (
+      SELECT id FROM product_image 
+      WHERE product_id = p.id 
+      ORDER BY id ASC LIMIT 1
+    )
+  `;
 
-//tìm kiếm
+  let params = [];
+
+  if (filter) {
+    if (!isNaN(filter)) {
+      query += " WHERE p.category_id = ?";
+      params.push(filter);
+    } else {
+      query += " WHERE p.name LIKE ?";
+      params.push(`%${filter}%`);
+    }
+  }
+
+  query += " LIMIT ? OFFSET ?";
+  params.push(limit, offset);
+
+  sql.query(query, params, (err, res) => {
+    if (err) return callback(err, null, null);
+
+    // Lấy tổng số lượng
+    sql.query("SELECT FOUND_ROWS() as total", (err2, countRes) => {
+      if (err2) return callback(err2, null, null);
+      const totalCount = countRes[0].total;
+      callback(null, res, totalCount);
+    });
+  });
+};
+
 
 
 

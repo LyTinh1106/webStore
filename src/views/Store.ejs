@@ -240,13 +240,31 @@
 						<!-- store bottom filter -->
 						<div class="store-filter clearfix" id="store-nav">
 							<ul class="store-pagination">
-								<li class="active">1</li>
-								<li><a href="#">2</a></li>
-								<li><a href="#">3</a></li>
-								<li><a href="#">4</a></li>
-								<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
+							  <!-- Nút trái -->
+							  <li class="<%= currentPage <= 1 ? 'disabled' : '' %>">
+								<a href="?page=<%= Math.max(currentPage - 1, 1) %><%= keyword ? '&q=' + keyword : '' %>">
+								  <i class="fa fa-angle-left"></i>
+								</a>
+							  </li>
+						  
+							  <!-- Các số trang -->
+							  <% for (let i = 1; i <= totalPages; i++) { %>
+								<li class="<%= i === currentPage ? 'active' : '' %>">
+								  <a href="?page=<%= i %><%= keyword ? '&q=' + keyword : '' %>"><%= i %></a>
+								</li>
+							  <% } %>
+						  
+							  <!-- Nút phải -->
+							  <li class="<%= currentPage >= totalPages ? 'disabled' : '' %>">
+								<a href="?page=<%= Math.min(currentPage + 1, totalPages) %><%= keyword ? '&q=' + keyword : '' %>">
+								  <i class="fa fa-angle-right"></i>
+								</a>
+							  </li>
 							</ul>
-						</div>
+						  </div>
+						  
+						  
+						  
 					</div>
 
 					<!-- /STORE -->

@@ -18,6 +18,7 @@ const connection = mysql.createConnection({
 //     queueLimit:0
 //   })
 
+
 // Kiểm tra kết nối
 connection.connect((err) => {
     if (err) {
