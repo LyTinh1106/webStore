@@ -1,6 +1,5 @@
 (function ($) {
 	"use strict"
-
 	// Mobile Nav toggle
 	$('.menu-toggle > a').on('click', function (e) {
 		e.preventDefault();
@@ -303,7 +302,7 @@ function renderFilteredProducts(products, shouldShowFiltered) {
 	const filteredBox = document.getElementById('filtered-products');
 	const allBox = document.getElementById('all-products');
 	function formatVND(value) {
-		return value.toLocaleString('vi-VN') + '₫';
+		return value.toLocaleString('vi-VN');
 	  }
 	filteredBox.innerHTML = '';
 

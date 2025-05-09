@@ -7,7 +7,10 @@ exports.getAllOrders = (req, res) => {
 
   Order.getAll(status, (err, data) => {
     if (err) {
-      res.status(500).render("error", { message: err.message || "Đã xảy ra lỗi khi lấy danh sách đơn hàng." });
+      return res.status(500).json({
+        message: "Lỗi khi truy xuất đơn hàng.",
+        error: err
+      });
     } else {
       res.render("orderDashboard", { orders: data });
     }
@@ -17,24 +20,25 @@ exports.getAllOrders = (req, res) => {
 // [GET] /orders/:id - Chi tiết đơn hàng
 exports.getOrderById = (req, res) => {
   const id = req.params.id;
+
   Order.findById(id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
-        res.status(404).render("error", { message: `Không tìm thấy đơn hàng với ID ${id}.` });
-      } else {
-        res.status(500).render("error", { message: `Lỗi truy xuất đơn hàng với ID ${id}.` });
+        return res.status(404).json({ message: `Không tìm thấy đơn hàng với ID ${id}.` });
       }
-    } else {
-      res.render("orderDashboard", { order: data, mode: "edit" }); // Nếu dùng chung dashboard, thêm mode
+      return res.status(500).json({ message: `Lỗi truy xuất đơn hàng với ID ${id}.`, error: err });
     }
+
+
+    return res.render("orderDashboard", {
+      order: data,
+      mode: "edit" 
+    });
   });
 };
 
 
-
 // [POST] /orders - Tạo mới đơn hàng
-
-
 exports.createOrder = async (req, res) => {
   try {
     const {
@@ -103,8 +107,6 @@ exports.createOrder = async (req, res) => {
   }
 };
 
-
-
 // [POST] /orders/:id/update - Cập nhật đơn hàng
 exports.updateOrder = (req, res) => {
   const id = req.params.id;
@@ -146,7 +148,7 @@ exports.deleteOrder = (req, res) => {
 
 exports.updateStatus = (req, res) => {
   const id = req.params.id;
-  if(req.body.status === "approving"){
+  if (req.body.status === "approving") {
     Order.UpdateStatusById(id, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {
@@ -160,3 +162,51 @@ exports.updateStatus = (req, res) => {
     });
   };
 };
+
+exports.getRevenue = (req, res) => {
+  const year = req.params.year;
+
+  Order.GetRevenueByMonthOfYear(year, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).json({ message: `Không tìm thấy dữ liệu cho năm ${year}.` });
+      }
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu doanh thu.", error: err });
+    }
+
+    res.json({
+      revenueByMonth: data
+    });
+  });
+};
+
+exports.getProductQuantity = (req, res) => {
+  const year = req.params.year;
+  Order.GetProuctQuantityByYear(year, (err, data) =>{
+    if(err) {
+      if( err.kind === "not_found") {
+        return res.status(404).json({ message: `Không tìm thấy dữ liệu cho năm ${year}.` });
+      }
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu sản phẩm.", error: err });
+    }
+    res.json({
+      productQuantity: data
+    });
+  });
+};
+
+exports.getYear = (req, res) => {
+  Order.GetExistingYear((err, data) => {
+    if (err) {
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu.", error: err });
+    }
+    console.log("Năm tìm được:", data);
+
+    if (!data || data.length === 0) {
+      return res.status(404).json({ message: "Không tìm thấy dữ liệu năm." });
+    }
+
+    res.json({ Year: data });
+  });
+};
+

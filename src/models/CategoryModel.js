@@ -47,7 +47,7 @@ Category.getAll = (result) => {
       return;
     }
 
-    console.log("categories: ", res);
+    // console.log("categories: ", res);
     result(null, res);
   });
 };

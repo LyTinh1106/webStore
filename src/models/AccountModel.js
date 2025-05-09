@@ -71,7 +71,7 @@ Account.getAll = (email, result) => {
       return;
     }
 
-    console.log("account: ", res);
+    // console.log("account: ", res);
     result(null, res);
   });
 };

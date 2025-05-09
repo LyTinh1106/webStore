@@ -70,7 +70,7 @@ LEFT JOIN product_image pi ON pi.id = (
       return;
     }
 
-    console.log("products: ", res);
+    // console.log("products: ", res);
     result(null, res);
   });
 };

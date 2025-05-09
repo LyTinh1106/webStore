@@ -78,32 +78,6 @@
     <!-- Main Content -->
     <div class="main-content">
         <div class="tab-content" id="v-pills-tabContent">
-            <!-- Header with User Info -->
-            <!-- <div class="header-container">
-            <h2>Dashboard</h2>
-            <div class="user-info">
-                <div class="user-avatar">A</div>
-                <div class="user-details">
-                    <span class="user-name">Admin</span>
-                    <span class="user-role">Quản trị viên</span>
-                </div>
-                <div class="dropdown ms-2">
-                    <button class="btn btn-sm dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown"
-                        aria-expanded="false">
-                        <i class="fas fa-angle-down"></i>
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i> Hồ sơ</a></li>
-                        <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a></li>
-                        <li>
-                            <hr class="dropdown-divider">
-                        </li>
-                        <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i> Đăng
-                                xuất</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div> -->
 
             <!-- Stats Panels -->
             <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="v-dashboard-tab">
@@ -112,28 +86,72 @@
                     <div class="col-md-3">
                         <div class="dashboard-card revenue">
                             <div><i class="fas fa-dollar-sign"></i> Tổng doanh thu</div>
-                            <div class="value">1,250,000,000 VNĐ</div>
+                            <div class="value"><%= stats.total_revenue.toLocaleString('vi-VN') || 0%> VNĐ</div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dashboard-card orders">
                             <div><i class="fas fa-shopping-cart"></i> Đơn đặt hàng</div>
-                            <div class="value">256</div>
+                            <div class="value"><%= stats.total_orders || 0%></div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dashboard-card customers">
                             <div><i class="fas fa-users"></i> Khách hàng</div>
-                            <div class="value">125</div>
+                            <div class="value"><%= stats.total_customers || 0%></div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dashboard-card products">
                             <div><i class="fas fa-mobile-alt"></i> Sản phẩm hiện có</div>
-                            <div class="value">82</div>
+                            <div class="value"><%= stats.total_products || 0%></div>
                         </div>
                     </div>
                 </div>
+                <!-- <div class="graphDisplay">
+                    <div class="revenueGragh">
+                        <canvas id="revenueChart" style="height: 370px; width: 100%;"></canvas>
+                        <div class="yearCombobox">
+                            <select id="yearSelect" class="form-control">
+                                <% if (years && years.length> 0) { %>
+                                    <% years.forEach(y=> { %>
+                                        <option value="<%= y.year %>">
+                                            <%= y.year %>
+                                        </option>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <option disabled>Không có dữ liệu năm</option>
+                                                <% } %>
+                            </select>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="graphDisplay">
+                    <div class="row">
+                      <div class="revenueGraph col-md-6" style="height:370px;">
+                        <canvas id="revenueChart" style="height: 100%; width: 100%;"></canvas>
+                      </div>
+                      <div class="productGraph col-md-6" style="height:370px;">
+                        <canvas id="productChart" style="height: 100%; width: 100%;"></canvas>
+                      </div>
+                    </div>
+                  
+                    <div class="yearCombobox mt-3">
+                      <div class="form-group">
+                        <label for="yearSelect" class="form-label">Thống kê theo năm:</label>
+                        <select id="yearSelect" class="form-control w-auto d-inline-block">
+                          <% if (years && years.length > 0) { %>
+                            <% years.forEach(y => { %>
+                              <option value="<%= y.year %>"><%= y.year %></option>
+                            <% }) %>
+                          <% } else { %>
+                            <option disabled>Không có dữ liệu năm</option>
+                          <% } %>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
             </div>
 
 
@@ -1484,6 +1502,142 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <!-- JavaScript -->
         <script src="js/dashboardScript.js"></script>
+        <script src="js/gragh.js"></script>
+
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <!-- <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const yearSelect = document.getElementById('yearSelect');
+
+                fetch('/api/order/year')
+                    .then(response => response.json())
+                    .then(data => {
+                        const years = data.Year;
+
+                        if (!years || years.length === 0) {
+                            yearSelect.innerHTML = `<option disabled>Không có dữ liệu năm</option>`;
+                            return;
+                        }
+
+                        years.forEach(y => {
+                            const option = document.createElement('option');
+                            option.value = y.year;
+                            option.textContent = y.year;
+                            yearSelect.appendChild(option);
+                        });
+
+
+                        yearSelect.value = years[0].year;
+
+
+                    })
+                    .catch(error => {
+                        console.error('Lỗi khi lấy danh sách năm:', error);
+                    });
+            });
+
+            $(function () {
+                let chart;
+
+                function drawChart(data) {
+                    const ctx = document.getElementById('revenueChart').getContext('2d');
+
+                    data.sort((a, b) => a.month - b.month);
+
+                    const labels = data.map(d => `Tháng ${d.month}`);
+                    const values = data.map(d => d.total_payment_per_month);
+
+                    const colors = [
+                        "#3498db", "#e74c3c", "#f39c12", "#2ecc71", "#9b59b6", "#1abc9c",
+                        "#e67e22", "#16a085", "#27ae60", "#2980b9", "#d35400", "#c0392b"
+                    ];
+
+                    const hoverColors = colors.map(color => lightenColor(color, 20));
+
+                    if (chart) chart.destroy();
+
+                    chart = new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Doanh thu theo tháng (VNĐ)',
+                                data: values,
+                                backgroundColor: colors,
+                                hoverBackgroundColor: hoverColors
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Doanh thu theo tháng',
+                                    font: {
+                                        size: 22
+                                    }
+                                },
+                                legend: {
+                                    display: false
+                                },
+                                tooltip: {
+                                    callbacks: {
+                                        label: function (context) {
+                                            const value = context.parsed.y || 0;
+                                            return 'Doanh thu: ' + value.toLocaleString('vi-VN') + ' VNĐ';
+                                        }
+                                    }
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    title: {
+                                        display: true,
+                                        text: 'Doanh thu (VNĐ)'
+                                    },
+                                    beginAtZero: true
+                                }
+                            }
+                        }
+                    });
+                }
+
+                function lightenColor(hex, percent) {
+                    const num = parseInt(hex.replace("#", ""), 16);
+                    const amt = Math.round(2.55 * percent);
+                    const R = (num >> 16) + amt;
+                    const G = ((num >> 8) & 0x00FF) + amt;
+                    const B = (num & 0x0000FF) + amt;
+                    return (
+                        "#" +
+                        (
+                            0x1000000 +
+                            (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
+                            (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
+                            (B < 255 ? (B < 1 ? 0 : B) : 255)
+                        )
+                            .toString(16)
+                            .slice(1)
+                    );
+                }
+
+                let year = document.querySelector('#yearSelect').value;
+                $.getJSON(`/api/order/revenue/${year}`, function (response) {
+                    console.log("Dữ liệu từ API:", response);
+                    console.log("Kiểu:", typeof response.revenueByMonth);
+                    if (response && response.revenueByMonth && Array.isArray(response.revenueByMonth)) {
+                        drawChart(response.revenueByMonth);
+                    } else {
+                        console.warn("Không có dữ liệu hợp lệ để vẽ biểu đồ:", response);
+                    }
+                });
+            });
+        </script> -->
+
+
+
+
 </body>
 
 </html>
