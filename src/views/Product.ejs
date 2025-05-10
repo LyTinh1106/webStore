@@ -100,20 +100,9 @@
 								</h3>
 							</div>
 
-							<p>
-								<%= product.description %>
-							</p>
-
 							<!-- Thêm vào giỏ hàng -->
 							<div class="add-to-cart">
-								<div class="qty-label">
-									Số lượng
-									<div class="input-number">
-										<input type="number" id="detail-qty" value="1" min="1">
-										<span class="qty-up">+</span>
-										<span class="qty-down">-</span>
-									</div>
-								</div>
+								
 
 								<!-- Nút thêm -->
 								<button id="detail-add-to-cart" class="add-to-cart-btn">
@@ -121,9 +110,7 @@
 								</button>
 							</div>
 
-							<ul class="product-btns">
-								<li><a href="#"><i class="fa fa-exchange"></i> So sánh</a></li>
-							</ul>
+							
 
 							<ul class="product-links">
 								<li>Danh mục:</li>
@@ -154,7 +141,7 @@
 								<div id="tab1" class="tab-pane fade in active">
 									<div class="row">
 										<div class="col-md-12">
-											<p>S<%= product.description %>
+											<p><%= product.description %>
 											</p>
 										</div>
 									</div>
