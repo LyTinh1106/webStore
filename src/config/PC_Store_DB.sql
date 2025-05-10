@@ -1762,9 +1762,8 @@ INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES 
 INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (137, 2, 2, 18091782);
 INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (137, 4, 1, 9413704);
 INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (138, 9, 1, 9716020);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (149, 2, 2, 18091782);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (150, 1, 2, 22043986);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (150, 8, 1, 7515392);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (140, 2, 2, 18091782);
+
 
 INSERT INTO shipping (shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address) VALUES
 ('2025-04-02', 'GHN', 'completed', 1, 1, 'Hà Nội'),
