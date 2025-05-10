@@ -86,25 +86,33 @@
                     <div class="col-md-3">
                         <div class="dashboard-card revenue">
                             <div><i class="fas fa-dollar-sign"></i> Tổng doanh thu</div>
-                            <div class="value"><%= stats.total_revenue.toLocaleString('vi-VN') || 0%> VNĐ</div>
+                            <div class="value">
+                                <%= stats.total_revenue.toLocaleString('vi-VN') || 0%> VNĐ
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dashboard-card orders">
                             <div><i class="fas fa-shopping-cart"></i> Đơn đặt hàng</div>
-                            <div class="value"><%= stats.total_orders || 0%></div>
+                            <div class="value">
+                                <%= stats.total_orders || 0%>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dashboard-card customers">
                             <div><i class="fas fa-users"></i> Khách hàng</div>
-                            <div class="value"><%= stats.total_customers || 0%></div>
+                            <div class="value">
+                                <%= stats.total_customers || 0%>
+                            </div>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <div class="dashboard-card products">
                             <div><i class="fas fa-mobile-alt"></i> Sản phẩm hiện có</div>
-                            <div class="value"><%= stats.total_products || 0%></div>
+                            <div class="value">
+                                <%= stats.total_products || 0%>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -129,29 +137,31 @@
 
                 <div class="graphDisplay">
                     <div class="row">
-                      <div class="revenueGraph col-md-6" style="height:370px;">
-                        <canvas id="revenueChart" style="height: 100%; width: 100%;"></canvas>
-                      </div>
-                      <div class="productGraph col-md-6" style="height:370px;">
-                        <canvas id="productChart" style="height: 100%; width: 100%;"></canvas>
-                      </div>
+                        <div class="revenueGraph col-md-6" style="height:370px;">
+                            <canvas id="revenueChart" style="height: 100%; width: 100%;"></canvas>
+                        </div>
+                        <div class="productGraph col-md-6" style="height:370px;">
+                            <canvas id="productChart" style="height: 100%; width: 100%;"></canvas>
+                        </div>
                     </div>
-                  
+
                     <div class="yearCombobox mt-3">
-                      <div class="form-group">
-                        <label for="yearSelect" class="form-label">Thống kê theo năm:</label>
-                        <select id="yearSelect" class="form-control w-auto d-inline-block">
-                          <% if (years && years.length > 0) { %>
-                            <% years.forEach(y => { %>
-                              <option value="<%= y.year %>"><%= y.year %></option>
-                            <% }) %>
-                          <% } else { %>
-                            <option disabled>Không có dữ liệu năm</option>
-                          <% } %>
-                        </select>
-                      </div>
+                        <div class="form-group">
+                            <label for="yearSelect" class="form-label">Thống kê theo năm:</label>
+                            <select id="yearSelect" class="form-control w-auto d-inline-block">
+                                <% if (years && years.length> 0) { %>
+                                    <% years.forEach(y=> { %>
+                                        <option value="<%= y.year %>">
+                                            <%= y.year %>
+                                        </option>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <option disabled>Không có dữ liệu năm</option>
+                                                <% } %>
+                            </select>
+                        </div>
                     </div>
-                  </div>
+                </div>
             </div>
 
 
@@ -994,7 +1004,69 @@
             <div class="tab-pane fade" id="shipping" role="tabpanel" aria-labelledby="v-shipping-tab">
                 <h3 class="section-title">Quản lý giao hàng</h3>
                 <div class="mb-3">
-                    <button class="btn btn-success"><i class="fas fa-plus"></i> Thêm đơn giao hàng mới</button>
+                    <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addShippingModal">
+                        <i class="fas fa-plus"></i> Thêm đơn giao hàng
+                    </a>
+
+                </div>
+
+                <!-- modal addShipping -->
+                <div class="modal fade" id="addShippingModal" tabindex="-1" aria-labelledby="addShippingModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Thêm đơn giao hàng</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form id="addProductForm" enctype="multipart/form-data">
+                                    <div class="row g-3">
+                                        <div class="col-md-12">
+                                            <label for="productCode" class="form-label">Phương thức giao</label>
+                                            <input type="text" class="form-control" id="productCode" name="productCode"
+                                                required>
+                                        </div>
+                                        <div class="col-6">
+                                            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addOrderModal">
+                                                <i class="fas fa-plus"></i> Chọn đơn hàng
+                                            </a>
+
+                                        </div>
+
+                                        <input type="hidden" name="_method" value="PUT">
+                                        <input type="hidden" name="order_status" value="Đã giao">
+                                        <input type="hidden" name="order_id" id="modalOrderId">
+
+                                        <p><strong>Họ tên:</strong> <span id="modalOrderName"></span></p>
+                                        <p><strong>Email:</strong> <span id="modalOrderEmail"></span></p>
+                                        <p><strong>Số điện thoại:</strong> <span id="modalOrderPhone"></span></p>
+                                        <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
+                                        <p><strong>Phương thức thanh toán:</strong> <span id="modalOrderPayment"></span>
+                                        </p>
+                                        <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
+                                        <p><strong>Tổng tiền:</strong> <span id="modalOrderTotal"></span></p>
+                                        <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
+
+                                        <h6>Danh sách sản phẩm:</h6>
+                                        <ul id="modalOrderProducts" class="list-group mb-3">
+                                            <li class="list-group-item text-muted">Đang tải...</li>
+                                        </ul>
+
+                                    </div>
+                                </form>
+                            </div>
+
+
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản
+                                    phẩm</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table table-striped">
