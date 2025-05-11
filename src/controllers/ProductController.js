@@ -84,6 +84,40 @@ const getProduct = (req, res) => {
   });
 };
 
+const getProductByIdAPI = (req, res) => {
+  const productId = req.params.id;
+
+  Product.findById(productId, (err, product) => {
+    if (err || !product) return res.status(404).json({ success: false, message: "Không tìm thấy sản phẩm." });
+
+    ProductImage.findByProductId(productId, (err, images) => {
+      if (err) return res.status(500).json({ success: false, message: "Lỗi ảnh sản phẩm." });
+
+      TechnicalSpecification.findByProductId(productId, (err, spec) => {
+        if (err && err.kind !== "not_found") return res.status(500).json({ success: false, message: "Lỗi specs." });
+
+        let specData = {};
+        try {
+          if (spec?.specs) {
+            specData = typeof spec.specs === 'string' ? JSON.parse(spec.specs) : spec.specs;
+          }
+        } catch (e) {
+          specData = {};
+        }
+
+        res.status(200).json({
+          success: true,
+          data: {
+            ...product,
+            images,
+            specs: specData
+          }
+        });
+      });
+    });
+  });
+};
+
 
 const getStore = (req, res) => {
   const user = req.user || req.session.user || null;
@@ -594,6 +628,7 @@ const filterCombined = (req, res) => {
 
 module.exports = {
   getProduct,
+  getProductByIdAPI,
   getStore,
   createProduct,
   updateProduct,

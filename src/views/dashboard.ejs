@@ -674,6 +674,65 @@
                             </div>
                         </div>
                     </div>
+                    <!-- Modal chi tiết sản phẩm -->
+                    <div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chi tiết sản phẩm</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Đóng"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6"><strong>Mã sản phẩm:</strong> <span id="viewCode"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Tên sản phẩm:</strong> <span id="viewName"></span>
+                                        </div>
+                                        <div class="col-12"><strong>Mô tả:</strong>
+                                            <p id="viewDescription" class="mb-1"></p>
+                                        </div>
+                                        <div class="col-md-6"><strong>Giá nhập:</strong> <span
+                                                id="viewImportPrice"></span></div>
+                                        <div class="col-md-6"><strong>Giá bán:</strong> <span id="viewSalePrice"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Loại:</strong> <span id="viewCategory"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Hãng:</strong> <span id="viewBrand"></span></div>
+                                        <div class="col-md-6"><strong>Xuất xứ:</strong> <span id="viewOrigin"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Bảo hành:</strong> <span id="viewWarranty"></span>
+                                            tháng</div>
+                                    </div>
+
+                                    <hr>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <strong>Hình ảnh sản phẩm:</strong>
+                                            <div id="viewImages" class="d-flex flex-wrap gap-2 mt-2"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <strong>Thông số kỹ thuật:</strong>
+                                            <table class="table table-bordered table-sm mt-2">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Thuộc tính</th>
+                                                        <th>Giá trị</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="viewSpecs"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Thư viện SheetJS hỗ trợ đọc Excel -->
                     <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
@@ -721,8 +780,14 @@
                                             <%= product.warranty %>
                                         </td>
                                         <td>
-                                            <a href="/products/<%= product.id %>" class="btn btn-sm btn-primary"><i
-                                                    class="fas fa-eye"></i></a>
+                                            <a href="#" class="btn btn-sm btn-primary viewProductBtn"
+                                                data-bs-toggle="modal" data-bs-target="#viewProductModal"
+                                                data-id="<%= product.id %>">
+                                                <i class="fas fa-eye"></i>
+                                            </a>
+
+
+
                                             <!-- <a href="/products/<%= product.id %>/edit" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a> -->
                                             <!-- Button to trigger modal -->
                                             <a href="#" class="btn btn-sm btn-info editProductBtn"
@@ -745,6 +810,70 @@
                                                 data-id="<%= product.id %>">
                                                 <i class="fas fa-trash"></i>
                                             </button>
+                                            <script>
+                                                const viewModalEl = document.getElementById("viewProductModal");
+
+                                                viewModalEl.addEventListener("shown.bs.modal", async function (event) {
+                                                    const triggerBtn = event.relatedTarget;
+                                                    const productId = triggerBtn.dataset.id;
+
+                                                    try {
+                                                        const response = await fetch(`/api/product/${productId}`);
+                                                        const json = await response.json();
+                                                        if (!json.success) {
+                                                            alert("Không tìm thấy sản phẩm");
+                                                            return;
+                                                        }
+
+                                                        const data = json.data;
+
+                                                        // Gán dữ liệu
+                                                        document.getElementById("viewCode").textContent = data.fancy_id;
+                                                        document.getElementById("viewName").textContent = data.name;
+                                                        document.getElementById("viewDescription").textContent = data.description;
+                                                        document.getElementById("viewImportPrice").textContent = Number(data.import_price).toLocaleString('vi-VN') + " VNĐ";
+                                                        document.getElementById("viewSalePrice").textContent = Number(data.retail_price).toLocaleString('vi-VN') + " VNĐ";
+                                                        document.getElementById("viewCategory").textContent = data.category_id;
+                                                        document.getElementById("viewBrand").textContent = data.brand_id;
+                                                        document.getElementById("viewOrigin").textContent = data.origin;
+                                                        document.getElementById("viewWarranty").textContent = data.warranty;
+
+                                                        // Hình ảnh
+                                                        const imageContainer = document.getElementById("viewImages");
+                                                        imageContainer.innerHTML = "";
+                                                        if (Array.isArray(data.images) && data.images.length > 0) {
+                                                            data.images.forEach(img => {
+                                                                const imgEl = document.createElement("img");
+                                                                imgEl.src = `/images/${img.URL}`;
+                                                                imgEl.classList.add("img-thumbnail");
+                                                                imgEl.style.maxWidth = "120px";
+                                                                imgEl.style.maxHeight = "120px";
+                                                                imageContainer.appendChild(imgEl);
+                                                            });
+                                                        } else {
+                                                            imageContainer.innerHTML = `<p class="text-muted">Không có hình ảnh</p>`;
+                                                        }
+
+                                                        // Thông số kỹ thuật
+                                                        const specContainer = document.getElementById("viewSpecs");
+                                                        specContainer.innerHTML = "";
+                                                        if (!data.specs || Object.keys(data.specs).length === 0) {
+                                                            specContainer.innerHTML = `<tr><td colspan="2" class="text-muted">Không có thông số kỹ thuật</td></tr>`;
+                                                        } else {
+                                                            Object.entries(data.specs).forEach(([key, val]) => {
+                                                                const row = `<tr><td>${key.replace(/_/g, ' ')}</td><td>${Array.isArray(val) ? val.join('<br>') : val}</td></tr>`;
+                                                                specContainer.insertAdjacentHTML("beforeend", row);
+                                                            });
+                                                        }
+
+                                                    } catch (err) {
+                                                        console.error("Lỗi khi tải sản phẩm:", err);
+                                                        alert("Lỗi khi tải thông tin sản phẩm.");
+                                                    }
+                                                });
+                                            </script>
+
+
 
 
                                         </td>
@@ -1029,7 +1158,8 @@
                                                 required>
                                         </div>
                                         <div class="col-6">
-                                            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addOrderModal">
+                                            <a href="#" class="btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#addOrderModal">
                                                 <i class="fas fa-plus"></i> Chọn đơn hàng
                                             </a>
 
