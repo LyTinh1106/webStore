@@ -7,6 +7,7 @@ const configViewEngine = require('./config/ViewEngine');
 const webRouters = require('./routes/web');
 const apiRoutes = require('./routes/api')
 const bodyParser = require('body-parser');
+const path = require('path');
 
 const app = express();
 const port = process.env.PORT || 9000;
@@ -51,6 +52,8 @@ app.get("/logout", (req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
+app.use('/images', express.static(path.join(__dirname, 'src/public/images')));
 
 app.use('/', webRouters);
 app.use('/api',apiRoutes)

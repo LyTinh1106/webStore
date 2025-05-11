@@ -14,9 +14,10 @@ const {
 
 } = require('../controllers/ProductController');
 const upload = require('../middleware/upload')
-
+const { getProductByIdAPI } = require('../controllers/ProductController');
 const router = express.Router();
 
+router.get('/:id', getProductByIdAPI); // API lấy chi tiết sản phẩm theo ID
 router.get('/', getProduct);
 //tìm kiếm
 router.get('/store', searchProductRender);
