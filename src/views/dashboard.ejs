@@ -706,8 +706,6 @@
                                             tháng</div>
                                     </div>
 
-                                    <hr>
-
                                     <div class="row mt-3">
                                         <div class="col-md-12">
                                             <strong>Hình ảnh sản phẩm:</strong>
@@ -785,9 +783,6 @@
                                                 data-id="<%= product.id %>">
                                                 <i class="fas fa-eye"></i>
                                             </a>
-
-
-
                                             <!-- <a href="/products/<%= product.id %>/edit" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a> -->
                                             <!-- Button to trigger modal -->
                                             <a href="#" class="btn btn-sm btn-info editProductBtn"
@@ -833,8 +828,8 @@
                                                         document.getElementById("viewDescription").textContent = data.description;
                                                         document.getElementById("viewImportPrice").textContent = Number(data.import_price).toLocaleString('vi-VN') + " VNĐ";
                                                         document.getElementById("viewSalePrice").textContent = Number(data.retail_price).toLocaleString('vi-VN') + " VNĐ";
-                                                        document.getElementById("viewCategory").textContent = data.category_id;
-                                                        document.getElementById("viewBrand").textContent = data.brand_id;
+                                                        document.getElementById("viewCategory").textContent = data.category_name || data.category_id;
+                                                        document.getElementById("viewBrand").textContent = data.brand_name || data.brand_id;
                                                         document.getElementById("viewOrigin").textContent = data.origin;
                                                         document.getElementById("viewWarranty").textContent = data.warranty;
 
@@ -842,7 +837,7 @@
                                                         const imageContainer = document.getElementById("viewImages");
                                                         imageContainer.innerHTML = "";
                                                         if (Array.isArray(data.images) && data.images.length > 0) {
-                                                            data.images.forEach(img => {
+                                                            data.images.forEach(img => {    
                                                                 const imgEl = document.createElement("img");
                                                                 imgEl.src = `/images/${img.URL}`;
                                                                 imgEl.classList.add("img-thumbnail");
@@ -872,10 +867,6 @@
                                                     }
                                                 });
                                             </script>
-
-
-
-
                                         </td>
 
                                     </tr>
@@ -891,16 +882,6 @@
 
                     </table>
                 </div>
-
-                <!-- <nav aria-label="Page navigation">
-                <ul class="pagination justify-content-end">
-                    <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
-                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">Sau</a></li>
-                </ul>
-            </nav> -->
             </div>
 
             <!-- Categories Section -->
