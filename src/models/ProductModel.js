@@ -25,7 +25,18 @@ Product.create = (newProduct, result) => {
 };
 
 Product.findById = (id, result) => {
-  sql.query("SELECT p.*, c.name as `category_name` FROM product p LEFT JOIN category c ON c.id = p.category_id  WHERE p.id = ?", [id], (err, res) => {
+  const query = 
+    `SELECT 
+      p.*, 
+      c.name AS category_name,
+      b.brand_name
+    FROM product p
+    LEFT JOIN category c ON c.id = p.category_id
+    LEFT JOIN brand b ON b.brand_id = p.brand_id
+    WHERE p.id = ?`
+  ;
+
+  sql.query(query, [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
