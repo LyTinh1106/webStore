@@ -20,7 +20,8 @@ const Shipping = function (shipping) {
   this.id_order = shipping.id_order;
   this.shipping_address = shipping.shipping_address;
 };
-
+//Hàm tạo đơn hàng
+// ✅ Thêm đơn giao hàng
 Shipping.create = (newShipping, result) => {
   const formattedShipping = {
     ...newShipping,
@@ -29,15 +30,50 @@ Shipping.create = (newShipping, result) => {
 
   sql.query("INSERT INTO shipping SET ?", formattedShipping, (err, res) => {
     if (err) {
-      console.log("error: ", err);
-      result(err, null);
-      return;
+      console.log("❌ Lỗi khi thêm shipping:", err);
+      return result(err, null);
     }
 
-    // console.log("created shipping: ", { id: res.insertId, ...formattedShipping });
-    result(null, { id: res.insertId, ...formattedShipping });
+    const inserted = { id: res.insertId, ...formattedShipping };
+
+    // ✅ Sau khi thêm thành công thì cập nhật đơn hàng
+    Shipping.updateOrderStatusToCompleted(inserted.id_order, (updateErr, updateRes) => {
+      if (updateErr) {
+        console.log("⚠️ Tạo shipping OK nhưng lỗi khi cập nhật order:", updateErr);
+        return result(null, {
+          ...inserted,
+          orderUpdate: "failed"
+        });
+      }
+
+      result(null, {
+        ...inserted,
+        orderUpdate: "completed"
+      });
+    });
   });
 };
+
+// ✅ Cập nhật trạng thái đơn hàng thành 'completed'
+Shipping.updateOrderStatusToCompleted = (orderId, result) => {
+  sql.query(
+    `UPDATE order_table SET order_status = 'completed' WHERE id = ?`,
+    [orderId],
+    (err, res) => {
+      if (err) {
+        console.log("❌ Lỗi cập nhật trạng thái đơn hàng:", err);
+        return result(err, null);
+      }
+
+      if (res.affectedRows === 0) {
+        return result({ kind: "not_found" }, null);
+      }
+
+      result(null, { orderId, status: "completed" });
+    }
+  );
+};
+
 
 // Lấy shipping theo ID
 Shipping.findById = (id, result) => {
@@ -146,5 +182,27 @@ Shipping.remove = (id, result) => {
     result(null, res);
   });
 };
+
+Shipping.updateOrderStatusToCompleted = (orderId, result) => {
+  sql.query(
+    `UPDATE order_table SET order_status = 'completed' WHERE id = ?`,
+    [orderId],
+    (err, res) => {
+      if (err) {
+        console.log("error when updating order status:", err);
+        result(err, null);
+        return;
+      }
+
+      if (res.affectedRows === 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      result(null, { orderId, status: "completed" });
+    }
+  );
+};
+
 
 module.exports = Shipping;

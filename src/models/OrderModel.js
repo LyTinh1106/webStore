@@ -256,4 +256,34 @@ Order.GetStats = (result) =>{
   );
 };
 
+// OrderModel.js (hoặc tương đương)
+Order.getOnDeliveringBasicInfo = (result) => {
+  const query = `
+    SELECT id, fullname, phone
+    FROM order_table
+    WHERE order_status = 'on delivering'
+  `;
+  sql.query(query, (err, res) => {
+    if (err) return result(err, null);
+    result(null, res);
+  });
+};
+
+
+
+Order.findById = (id, result) => {
+  sql.query(`
+    SELECT * 
+    FROM order_table o
+    JOIN account a ON o.account_id = a.id
+    WHERE o.id = ?`,
+    [id],
+    (err, res) => {
+      if (err) return result(null, err);
+      if (res.length === 0) return result(null, null);
+      result(null, res[0]);
+    }
+  );
+};
+
 module.exports = Order;

@@ -96,4 +96,20 @@ OrderDetail.remove = (orderId, productId, result) => {
   );
 };
 
+
+
+OrderDetail.findByOrderId = (orderId, result) => {
+  const query = `
+    SELECT od.quantity, od.subtotalprice, p.name as product_name
+    FROM order_detail od
+    JOIN product p ON od.product_id = p.id
+    WHERE od.order_id = ?
+  `;
+  sql.query(query, [orderId], (err, res) => {
+    if (err) return result(err, null);
+    result(null, res);
+  });
+};
+
+
 module.exports = OrderDetail;

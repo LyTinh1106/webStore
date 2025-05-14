@@ -1005,12 +1005,12 @@
                 <h3 class="section-title">Quản lý giao hàng</h3>
                 <div class="mb-3">
                     <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addShippingModal">
-                        <i class="fas fa-plus"></i> Thêm đơn giao hàng
+                        <i class="fas fa-plus"></i> Thêm đơn giao hàng mới
                     </a>
 
                 </div>
 
-                <!-- modal addShipping -->
+                <!-- Modal thêm đơn giao hàng -->
                 <div class="modal fade" id="addShippingModal" tabindex="-1" aria-labelledby="addShippingModalLabel"
                     aria-hidden="true">
                     <div class="modal-dialog modal-xl modal-dialog-scrollable">
@@ -1020,50 +1020,96 @@
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Đóng"></button>
                             </div>
+
                             <div class="modal-body">
-                                <form id="addProductForm" enctype="multipart/form-data">
+                                <form id="addShippingForm">
                                     <div class="row g-3">
+                                        <!-- Phương thức giao hàng -->
                                         <div class="col-md-12">
-                                            <label for="productCode" class="form-label">Phương thức giao</label>
-                                            <input type="text" class="form-control" id="productCode" name="productCode"
+                                            <label for="deliveryMethod" class="form-label">Phương thức giao hàng</label>
+                                            <select class="form-select" id="deliveryMethod" name="deliveryMethod"
                                                 required>
+                                                <option value="" disabled selected>-- Chọn phương thức giao hàng --
+                                                </option>
+                                                <option value="GHN">GHN</option>
+                                                <option value="GHTK">GHTK</option>
+                                                <option value="ViettelPost">ViettelPost</option>
+                                                <option value="J&T">J&T</option>
+                                                <option value="FedEx">FedEx</option>
+                                            </select>
                                         </div>
+
+                                        <!-- Nút chọn đơn hàng -->
                                         <div class="col-6">
-                                            <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addOrderModal">
+                                            <button type="button" class="btn btn-success" data-bs-toggle="modal"
+                                                data-bs-target="#addOrderModal">
                                                 <i class="fas fa-plus"></i> Chọn đơn hàng
-                                            </a>
-
+                                            </button>
                                         </div>
 
-                                        <input type="hidden" name="_method" value="PUT">
-                                        <input type="hidden" name="order_status" value="Đã giao">
+                                        <!-- Input ẩn -->
                                         <input type="hidden" name="order_id" id="modalOrderId">
+                                        <input type="hidden" name="order_status" value="Đã giao">
 
-                                        <p><strong>Họ tên:</strong> <span id="modalOrderName"></span></p>
-                                        <p><strong>Email:</strong> <span id="modalOrderEmail"></span></p>
-                                        <p><strong>Số điện thoại:</strong> <span id="modalOrderPhone"></span></p>
-                                        <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
-                                        <p><strong>Phương thức thanh toán:</strong> <span id="modalOrderPayment"></span>
-                                        </p>
-                                        <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
-                                        <p><strong>Tổng tiền:</strong> <span id="modalOrderTotal"></span></p>
-                                        <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
+                                        <!-- Thông tin đơn hàng đã chọn -->
+                                        <div class="col-12">
+                                            <p><strong>Họ tên:</strong> <span id="shippingOrderName"></span></p>
+                                            <p><strong>Email:</strong> <span id="shippingOrderEmail"></span></p>
+                                            <p><strong>Số điện thoại:</strong> <span id="shippingOrderPhone"></span></p>
+                                            <p><strong>Ngày đặt:</strong> <span id="shippingOrderDate"></span></p>
+                                            <p><strong>Phương thức thanh toán:</strong> <span
+                                                    id="shippingOrderPayment"></span></p>
+                                            <p><strong>Địa chỉ:</strong> <span id="shippingOrderAddress"></span></p>
+                                            <p><strong>Tổng tiền:</strong> <span id="shippingOrderTotal"></span></p>
+                                            <p><strong>Ghi chú đơn hàng:</strong> <span id="shippingOrderNote"></span>
+                                            </p>
+                                        </div>
 
+                                        <!-- Danh sách sản phẩm -->
                                         <h6>Danh sách sản phẩm:</h6>
-                                        <ul id="modalOrderProducts" class="list-group mb-3">
+                                        <ul id="shippingOrderProductList" class="list-group mb-3">
                                             <li class="list-group-item text-muted">Đang tải...</li>
                                         </ul>
-
                                     </div>
                                 </form>
                             </div>
 
-
-
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản
-                                    phẩm</button>
+                                <button type="submit" form="addShippingForm" class="btn btn-primary">Xác nhận đơn
+                                    hàng</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal chọn đơn hàng -->
+                <div class="modal fade" id="addOrderModal" tabindex="-1" aria-labelledby="addOrderModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Chọn đơn hàng đang giao</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+                            <div class="modal-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Mã đơn</th>
+                                            <th>Họ tên</th>
+                                            <th>SĐT</th>
+                                            <th>Hành động</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody id="orderList">
+                                        <tr>
+                                            <td colspan="4">Đang tải...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
@@ -1133,6 +1179,194 @@
                     </table>
                 </div>
             </div>
+
+
+
+            <script>
+    function formatVND(value) {
+        return Number(value).toLocaleString('vi-VN') + ' VNĐ';
+    }
+
+    function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        return isNaN(d.getTime()) ? '(Không rõ)' : d.toLocaleDateString('vi-VN');
+    }
+
+    // ✅ Hàm lấy ngày giờ hiện tại dạng yyyy-MM-dd HH:mm:ss
+    function formatFullDateTime(date = new Date()) {
+        const pad = (n) => n.toString().padStart(2, '0');
+        return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    let formCancelled = false;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const orderList = document.getElementById('orderList');
+        const addBtn = document.querySelector('[data-bs-target="#addOrderModal"]');
+        const addForm = document.getElementById("addShippingForm");
+
+        if (!orderList || !addBtn || !addForm) return;
+
+        addBtn.addEventListener('click', () => {
+            fetch('/api/order/basic-on-delivering')
+                .then(res => res.json())
+                .then(data => {
+                    if (!Array.isArray(data) || data.length === 0) {
+                        orderList.innerHTML = `<tr><td colspan="4">Không có đơn hàng nào.</td></tr>`;
+                        return;
+                    }
+                    orderList.innerHTML = '';
+                    data.forEach(order => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${order.id}</td>
+                            <td>${order.fullname}</td>
+                            <td>${order.phone}</td>
+                            <td>
+                                <button class="btn btn-sm btn-primary select-order" data-id="${order.id}">
+                                    Chọn
+                                </button>
+                            </td>`;
+                        orderList.appendChild(row);
+                    });
+                })
+                .catch(err => {
+                    console.error("❌ Lỗi khi gọi API danh sách đơn:", err);
+                    orderList.innerHTML = `<tr><td colspan="4" class="text-danger">Không thể tải đơn hàng.</td></tr>`;
+                });
+        });
+
+        orderList.addEventListener('click', function (e) {
+            const button = e.target.closest('.select-order');
+            if (button) {
+                const orderId = button.dataset.id;
+                if (orderId) selectOrder(parseInt(orderId));
+            }
+        });
+
+        document.getElementById('addShippingModal').addEventListener('hidden.bs.modal', () => {
+            if (formCancelled) {
+                addForm.reset();
+                document.getElementById('modalOrderId').value = '';
+                [
+                    'shippingOrderName', 'shippingOrderEmail', 'shippingOrderPhone',
+                    'shippingOrderDate', 'shippingOrderPayment', 'shippingOrderAddress',
+                    'shippingOrderTotal', 'shippingOrderNote'
+                ].forEach(id => document.getElementById(id).innerText = '');
+                document.getElementById('shippingOrderProductList').innerHTML =
+                    `<li class="list-group-item text-muted">Đang tải...</li>`;
+            }
+            formCancelled = false;
+        });
+
+        // ✅ Xử lý gửi form tạo đơn giao hàng
+        addForm.addEventListener("submit", async function (e) {
+            e.preventDefault();
+
+            const id_order = document.getElementById("modalOrderId").value;
+            const delivery_method = document.getElementById("deliveryMethod").value;
+            const shipping_address = document.getElementById("shippingOrderAddress").innerText;
+            const shipping_status = "completed";
+            const shipping_date = formatFullDateTime(); // ✅ Lấy ngày giờ hiện tại
+
+            if (!id_order || !delivery_method || !shipping_address) {
+                alert("Vui lòng chọn đơn hàng và phương thức giao hàng.");
+                return;
+            }
+
+            let id_customer = null;
+            try {
+                const res = await fetch(`/api/order/details/${id_order}`);
+                const order = await res.json();
+                id_customer = order.id_customer || order.account_id;
+            } catch (err) {
+                alert("Không thể lấy thông tin khách hàng.");
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/shipping/create', {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({
+                        shipping_date,
+                        delivery_method,
+                        shipping_status,
+                        id_customer,
+                        id_order,
+                        shipping_address
+                    })
+                });
+
+                if (response.ok) {
+                    const modal = bootstrap.Modal.getInstance(document.getElementById("addShippingModal"));
+                    if (modal) modal.hide();
+                    alert("Tạo đơn giao hàng thành công.");
+                    saveScrollAndTabAndReload?.();
+                } else {
+                    const text = await response.text();
+                    alert("Lỗi khi tạo đơn giao hàng: " + text);
+                }
+            } catch (err) {
+                console.error("❌ Lỗi khi gửi đơn giao hàng:", err);
+                alert("Đã xảy ra lỗi khi gửi dữ liệu.");
+            }
+        });
+    });
+
+    function selectOrder(id) {
+        const orderDetailAPI = fetch(`/api/order/details/${id}`).then(res => res.json());
+        const productListAPI = fetch(`/api/order-detail/${id}`).then(res => res.json());
+
+        Promise.all([orderDetailAPI, productListAPI])
+            .then(([order, products]) => {
+                if (!order || !order.id) throw new Error("Dữ liệu đơn hàng không hợp lệ.");
+
+                document.getElementById('modalOrderId').value = id;
+                document.getElementById('shippingOrderName').innerText = order.fullname || '(Không có)';
+                document.getElementById('shippingOrderEmail').innerText = order.email || '(Không có)';
+                document.getElementById('shippingOrderPhone').innerText = order.phone || '(Không có)';
+                document.getElementById('shippingOrderDate').innerText = formatDate(order.created_at);
+                document.getElementById('shippingOrderPayment').innerText = order.payment_method || '(Không có)';
+                document.getElementById('shippingOrderAddress').innerText = order.address || '(Không có)';
+                document.getElementById('shippingOrderTotal').innerText = formatVND(order.total_payment || 0);
+                document.getElementById('shippingOrderNote').innerText = order.note || '(Không có)';
+
+                const addOrderModal = bootstrap.Modal.getInstance(document.getElementById('addOrderModal'));
+                if (addOrderModal) addOrderModal.hide();
+
+                setTimeout(() => {
+                    const shippingModalEl = document.getElementById('addShippingModal');
+                    let shippingModal = bootstrap.Modal.getInstance(shippingModalEl);
+                    if (!shippingModal) shippingModal = new bootstrap.Modal(shippingModalEl);
+                    shippingModal.show();
+
+                    setTimeout(() => {
+                        const productList = document.getElementById('shippingOrderProductList');
+                        productList.innerHTML = '';
+                        if (!products || products.length === 0) {
+                            productList.innerHTML = `<li class="list-group-item text-danger">Không có sản phẩm nào.</li>`;
+                        } else {
+                            products.forEach(item => {
+                                const li = document.createElement('li');
+                                li.className = 'list-group-item';
+                                li.innerText = `${item.quantity}x ${item.product_name} - ${formatVND(item.subtotalprice)}`;
+                                productList.appendChild(li);
+                            });
+                        }
+                    }, 300);
+                }, 300);
+            })
+            .catch(err => {
+                console.error("❌ Lỗi khi tải đơn hàng hoặc sản phẩm:", err);
+                alert("Không thể tải thông tin đơn hàng hoặc sản phẩm.");
+            });
+    }
+</script>
+
+
+
+
 
             <!-- Supplier Section -->
             <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="v-suppliers-tab">
@@ -1578,138 +1812,8 @@
 
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <!-- <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const yearSelect = document.getElementById('yearSelect');
-
-                fetch('/api/order/year')
-                    .then(response => response.json())
-                    .then(data => {
-                        const years = data.Year;
-
-                        if (!years || years.length === 0) {
-                            yearSelect.innerHTML = `<option disabled>Không có dữ liệu năm</option>`;
-                            return;
-                        }
-
-                        years.forEach(y => {
-                            const option = document.createElement('option');
-                            option.value = y.year;
-                            option.textContent = y.year;
-                            yearSelect.appendChild(option);
-                        });
-
-
-                        yearSelect.value = years[0].year;
-
-
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi lấy danh sách năm:', error);
-                    });
-            });
-
-            $(function () {
-                let chart;
-
-                function drawChart(data) {
-                    const ctx = document.getElementById('revenueChart').getContext('2d');
-
-                    data.sort((a, b) => a.month - b.month);
-
-                    const labels = data.map(d => `Tháng ${d.month}`);
-                    const values = data.map(d => d.total_payment_per_month);
-
-                    const colors = [
-                        "#3498db", "#e74c3c", "#f39c12", "#2ecc71", "#9b59b6", "#1abc9c",
-                        "#e67e22", "#16a085", "#27ae60", "#2980b9", "#d35400", "#c0392b"
-                    ];
-
-                    const hoverColors = colors.map(color => lightenColor(color, 20));
-
-                    if (chart) chart.destroy();
-
-                    chart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Doanh thu theo tháng (VNĐ)',
-                                data: values,
-                                backgroundColor: colors,
-                                hoverBackgroundColor: hoverColors
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: 'Doanh thu theo tháng',
-                                    font: {
-                                        size: 22
-                                    }
-                                },
-                                legend: {
-                                    display: false
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            const value = context.parsed.y || 0;
-                                            return 'Doanh thu: ' + value.toLocaleString('vi-VN') + ' VNĐ';
-                                        }
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Doanh thu (VNĐ)'
-                                    },
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                }
-
-                function lightenColor(hex, percent) {
-                    const num = parseInt(hex.replace("#", ""), 16);
-                    const amt = Math.round(2.55 * percent);
-                    const R = (num >> 16) + amt;
-                    const G = ((num >> 8) & 0x00FF) + amt;
-                    const B = (num & 0x0000FF) + amt;
-                    return (
-                        "#" +
-                        (
-                            0x1000000 +
-                            (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
-                            (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
-                            (B < 255 ? (B < 1 ? 0 : B) : 255)
-                        )
-                            .toString(16)
-                            .slice(1)
-                    );
-                }
-
-                let year = document.querySelector('#yearSelect').value;
-                $.getJSON(`/api/order/revenue/${year}`, function (response) {
-                    console.log("Dữ liệu từ API:", response);
-                    console.log("Kiểu:", typeof response.revenueByMonth);
-                    if (response && response.revenueByMonth && Array.isArray(response.revenueByMonth)) {
-                        drawChart(response.revenueByMonth);
-                    } else {
-                        console.warn("Không có dữ liệu hợp lệ để vẽ biểu đồ:", response);
-                    }
-                });
-            });
-        </script> -->
-
-
-
 
 </body>
+
 
 </html>

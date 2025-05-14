@@ -9,7 +9,7 @@ const {
 
 const router = express.Router();
 
-router.post('/', createShipping); // Thêm thông tin vận chuyển mới
+router.post('/create', createShipping); // Thêm thông tin vận chuyển mới
 router.get('/:id', getShippingById); // Lấy thông tin vận chuyển theo id
 router.get('/', getAllShipping); // Lấy tất cả vận chuyển
 router.put('/:id', updateShippingById); // Cập nhật thông tin vận chuyển theo id
