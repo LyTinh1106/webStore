@@ -41,18 +41,18 @@ Account.findByEmail = (email, result) => {
   sql.query("SELECT * FROM account WHERE email = ?", [email], (err, res) => {
     if (err) {
       console.log("error: ", err);
-      result(err, null);
-      return;
+      return result(err, null);
     }
 
-    if (res.length) {
-      result(null, res[0]);
-      return;
+    if (res.length > 0) {
+      return result(null, res[0]);
     }
 
-    result({ kind: "not_found" }, null);
+    // ✅ Trả đúng là null nếu không có
+    return result(null, null);
   });
 };
+
 
 
 Account.getAll = (email, result) => {

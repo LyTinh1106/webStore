@@ -25,7 +25,18 @@ Product.create = (newProduct, result) => {
 };
 
 Product.findById = (id, result) => {
-  sql.query("SELECT p.*, c.name as `category_name` FROM product p LEFT JOIN category c ON c.id = p.category_id  WHERE p.id = ?", [id], (err, res) => {
+  const query = 
+    `SELECT 
+      p.*, 
+      c.name AS category_name,
+      b.brand_name
+    FROM product p
+    LEFT JOIN category c ON c.id = p.category_id
+    LEFT JOIN brand b ON b.brand_id = p.brand_id
+    WHERE p.id = ?`
+  ;
+
+  sql.query(query, [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(err, null);
@@ -44,19 +55,22 @@ Product.findById = (id, result) => {
 
 Product.getAll = (nameOrCategoryId, result) => {
   let query = `
-    SELECT 
-      p.*, 
-      c.name AS category_name, 
-      pi.URL AS image
-    FROM product p
-    LEFT JOIN category c ON p.category_id = c.id
-    LEFT JOIN product_image pi ON pi.id = (
-      SELECT id FROM product_image 
-      WHERE product_id = p.id 
-      ORDER BY id ASC 
-      LIMIT 1
-    )
-  `;
+  SELECT 
+    p.*, 
+    c.name AS category_name, 
+    b.brand_name,
+    pi.URL AS image
+  FROM product p
+  LEFT JOIN category c ON p.category_id = c.id
+  LEFT JOIN brand b ON p.brand_id = b.brand_id
+  LEFT JOIN product_image pi ON pi.id = (
+    SELECT id FROM product_image 
+    WHERE product_id = p.id 
+    ORDER BY id ASC 
+    LIMIT 1
+  )
+`;
+
 
   let params = [];
 

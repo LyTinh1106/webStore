@@ -7,6 +7,8 @@ const configViewEngine = require('./config/ViewEngine');
 const webRouters = require('./routes/web');
 const apiRoutes = require('./routes/api')
 const bodyParser = require('body-parser');
+const path = require('path');
+const Account = require('./models/AccountModel')
 
 const app = express();
 const port = process.env.PORT || 9000;
@@ -31,11 +33,37 @@ passport.use(new googleStrategy({
   clientSecret: process.env.GOOGLE_SECRET,
   callbackURL: "http://localhost:9000/auth/google/callback",
 }, (accessToken, refreshToken, profile, done) => {
-  return done(null, profile);
+  const email = profile.emails[0].value;
+
+  Account.findByEmail(email, (err, existingUser) => {
+    if (err) return done(err);
+
+    if (!existingUser) {
+  const newUser = {
+  email: email,
+  password: '',
+  role: 'customer'
+};
+
+     Account.create(newUser, (err, createdUser) => {
+  if (err) return done(err);
+  done(null, createdUser); 
+});
+    } else {
+      done(null, existingUser);
+    }
+  });
 }));
 
-passport.serializeUser((user, done) => done(null, user));
-passport.deserializeUser((user, done) => done(null, user));
+passport.serializeUser((user, done) => {
+  done(null, user.id); 
+});
+passport.deserializeUser((id, done) => {
+  Account.findById(id, (err, user) => {
+    if (err) return done(err);
+    done(null, user); 
+  });
+});
 
 app.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 app.get("/auth/google/callback", passport.authenticate('google', { failureRedirect: "/login" }), (req, res) => {
@@ -51,6 +79,8 @@ app.get("/logout", (req, res, next) => {
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+
+app.use('/images', express.static(path.join(__dirname, 'src/public/images')));
 
 app.use('/', webRouters);
 app.use('/api',apiRoutes)
