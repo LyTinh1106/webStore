@@ -132,7 +132,7 @@ CREATE TABLE order_detail (
 -- Bảng shipping
 CREATE TABLE shipping (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    shipping_date DATE,
+    shipping_date DATETIME,
     delivery_method VARCHAR(255),
     shipping_status ENUM('completed', 'failed'),
     id_customer INT,
