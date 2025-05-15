@@ -671,7 +671,17 @@ function handleImageSelection(event, previewContainer) {
     const files = Array.from(event.target.files);
     let added = false;
 
+    const validExtensions = ['.png', '.jpg', '.jpeg'];
+
     files.forEach(file => {
+        const fileName = file.name.toLowerCase();
+        const isValid = validExtensions.some(ext => fileName.endsWith(ext));
+
+        if (!isValid) {
+            alert(`"${file.name}" không hợp lệ. Chỉ chấp nhận file PNG hoặc JPG.`);
+            return;
+        }
+
         if (imageFiles.some(f => f.name === file.name)) {
             alert(`Hình "${file.name}" đã được chọn.`);
             return;
@@ -793,15 +803,30 @@ fileMappings.forEach(({ inputId, tableBodyId, containerId, actionsId }) => {
 // Hàm render bảng
 function renderSpecTable(data, tableBody, container, actions) {
     tableBody.innerHTML = "";
+
     data.forEach(([key, value]) => {
-        const cleanedValues = value
-            .split(",")
-            .map(part => part.trim())
-            .filter(part => part !== "")
-            .join("<br>");
+        let cleanedValues = "";
+
+        if (Array.isArray(value)) {
+            // Nếu là mảng, xử lý từng phần tử rồi nối bằng <br>
+            cleanedValues = value
+                .map(item => String(item).replace(/[\[\]{}"]/g, "").trim())
+                .filter(item => item !== "")
+                .join("<br>");
+        } else {
+            // Nếu là chuỗi thường, xử lý như cũ
+            cleanedValues = String(value)
+                .replace(/[\[\]{}"]/g, "")
+                .split(",")
+                .map(part => part.trim())
+                .filter(part => part !== "")
+                .join("<br>");
+        }
+
+        const cleanedKey = key.replace(/[\[\]{}"]/g, "").trim();
 
         const row = document.createElement("tr");
-        row.innerHTML = `<td>${key}</td><td>${cleanedValues}</td>`;
+        row.innerHTML = `<td>${cleanedKey}</td><td>${cleanedValues}</td>`;
         tableBody.appendChild(row);
     });
 
@@ -813,8 +838,17 @@ function renderSpecTable(data, tableBody, container, actions) {
 document.getElementById("addProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    const form = document.getElementById("addProductForm");
+    // const form = document.getElementById("addProductForm");
+    const form = e.target;
     const formData = new FormData(form);
+
+    // Xoá file ảnh cũ trong input (vì không đầy đủ)
+    formData.delete("images");
+
+    // Gửi lại toàn bộ ảnh từ imageFiles
+    imageFiles.forEach(file => {
+        formData.append("images", file);
+    });
 
     try {
         const response = await fetch("/api/product/create", {
@@ -827,6 +861,8 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
         if (result.success) {
             alert(result.message || "Thêm sản phẩm thành công!");
             form.reset();
+            imageFiles = []; // Reset danh sách ảnh
+            renderImagePreviews(imagePreview);
 
             saveScrollAndTabAndReload()
         } else {
@@ -877,7 +913,7 @@ document.querySelectorAll(".delete-product-btn").forEach(button => {
             }
         } catch (err) {
             console.error("Lỗi khi xóa sản phẩm:", err);
-            alert("Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại.");
+            alert("Có lỗi xảy ra khi xóa sản phẩm. Vui lòng thử lại." + err);
         }
     });
 });
@@ -898,7 +934,7 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
     const brand = document.getElementById("editBrand").value.trim();
     const origin = document.getElementById("editOrigin").value.trim();
     const warranty = document.getElementById("editWarranty").value.trim();
-    const imageFile = document.getElementById("editImages").files[0];
+    // const imageFile = document.getElementById("editImages").files[0];
     const specFile = document.getElementById("editSpecFile").files[0]; // Thông số kỹ thuật (.xlsx, .csv)
 
     // Kiểm tra thông tin bắt buộc
@@ -920,9 +956,10 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
     formData.append("origin", origin);
     formData.append("warranty", warranty);
 
-    if (imageFile) {
-        formData.append("images", imageFile);
-    }
+    const newImageFiles = allPreviewImages.filter(img => img.type === 'new');
+    newImageFiles.forEach(fileObj => {
+        formData.append("editImages", fileObj.file); // file là kiểu File
+    });
 
     if (specFile) {
         formData.append("specFile", specFile); // File Excel hoặc CSV
@@ -946,43 +983,200 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
     }
 });
 
-// Đổ dữ liệu vào form khi bấm nút sửa
-document.querySelectorAll('.editProductBtn').forEach(button => {
-    button.addEventListener('click', function () {
-        // Lấy dữ liệu từ data-attributes
-        const productId = this.dataset.id;
-        const productCode = this.dataset.code;
-        const productName = this.dataset.name;
-        const description = this.dataset.description;
-        const importPrice = this.dataset.importprice;
-        const salePrice = this.dataset.saleprice;
-        const category = this.dataset.category;
-        const brand = this.dataset.brand;
-        const origin = this.dataset.origin;
-        const warranty = this.dataset.warranty;
-        const imageUrl = this.dataset.imageUrl;
 
-        // Gán vào form
-        document.getElementById("editProductId").value = productId;
-        document.getElementById("editProductCode").value = productCode;
-        document.getElementById("editProductName").value = productName;
-        document.getElementById("editDescription").value = description;
-        document.getElementById("editImportPrice").value = importPrice;
-        document.getElementById("editSalePrice").value = salePrice;
-        document.getElementById("editCategory").value = category;
-        document.getElementById("editBrand").value = brand;
-        document.getElementById("editOrigin").value = origin;
-        document.getElementById("editWarranty").value = warranty;
+// load data into product update form
+let oldImageFiles = []; // Lưu danh sách ảnh cũ từ DB
+let removedOldImages = []; // Lưu tên ảnh cũ bị xóa
+let allPreviewImages = [];
 
-        // Hiển thị ảnh
-        const imgEl = document.getElementById("productImage");
-        imgEl.src = imageUrl || "";
+const previewContainer = document.getElementById("editImagePreview");
+const imageInput = document.getElementById("editImages");
 
-        // Xóa dữ liệu file input và bảng thông số kỹ thuật cũ nếu có
-        document.getElementById("editSpecFile").value = "";
-        clearSpecData(); // Hàm do bạn tự định nghĩa để reset bảng thông số kỹ thuật
+document.querySelectorAll('.editProductBtn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+        const productId = btn.getAttribute('data-id');
 
-        // Nếu cần lấy lại spec từ server:
-        // fetch(`/api/products/${productId}/spec`).then(res => res.json()).then(renderSpecTable);
+        try {
+            const res = await fetch(`/api/product/${productId}`);
+            const json = await res.json();
+
+            if (!json.success) {
+                alert('Không tìm thấy sản phẩm.');
+                return;
+            }
+
+            const product = json.data;
+
+            // Gán dữ liệu
+            document.getElementById('editProductId').value = product.id || '';
+            document.getElementById('editProductCode').value = product.fancy_id || '';
+            document.getElementById('editProductName').value = product.name || '';
+            document.getElementById('editDescription').value = product.description || '';
+            document.getElementById('editImportPrice').value = product.import_price || '';
+            document.getElementById('editSalePrice').value = product.retail_price || '';
+            document.getElementById('editCategory').value = product.category_id || '';
+            document.getElementById('editBrand').value = product.brand_id || '';
+            document.getElementById('editOrigin').value = product.origin || '';
+            document.getElementById('editWarranty').value = product.warranty || '';
+
+            // Reset mảng
+            oldImageFiles = [];
+            removedOldImages = [];
+            allPreviewImages = [];
+
+            if (product.images && Array.isArray(product.images)) {
+                product.images.forEach((img) => {
+                    oldImageFiles.push(img.URL);
+                    allPreviewImages.push({
+                        type: 'old',
+                        name: img.URL,
+                        file: null,
+                        preview: `/images/${img.URL}`
+                    });
+                });
+            }
+
+            renderUnifiedImagePreview();
+
+            // Render specs
+            const specData = product.specs || {};
+            const specTableBody = document.getElementById('editSpecTableBody');
+            const specTableContainer = document.getElementById('editSpecTableContainer');
+            const specActions = document.getElementById('editSpecActions');
+
+            specTableBody.innerHTML = '';
+            if (Object.keys(specData).length > 0) {
+                for (const [key, value] of Object.entries(specData)) {
+                    let displayValue = value;
+
+                    // Nếu là object hoặc array, stringify để xử lý
+                    if (typeof displayValue === 'object') {
+                        displayValue = JSON.stringify(displayValue);
+                    }
+
+                    // Xử lý chuỗi:
+                    displayValue = displayValue
+                        .replace(/["{}\[\]]/g, '')   // Bỏ dấu ", { }, [ ]
+                        .split(',')                  // Tách theo dấu ,
+                        .map(item => item.trim())   // Xóa khoảng trắng thừa
+                        .map(item => {
+                            // Nếu là cặp key:value thì bỏ dấu " ở cả hai
+                            return item.replace(/:/, ': ');
+                        })
+                        .join('<br>');
+
+                    // Key cũng bỏ dấu ngoặc kép nếu có
+                    const cleanKey = key.replace(/["]/g, '');
+
+                    specTableBody.insertAdjacentHTML('beforeend',
+                        `<tr><td>${cleanKey}</td><td>${displayValue}</td></tr>`);
+                }
+
+                specTableContainer.style.display = 'block';
+                specActions.style.display = 'block';
+            } else {
+                specTableContainer.style.display = 'none';
+                specActions.style.display = 'none';
+            }
+
+        } catch (err) {
+            console.error('Lỗi khi tải dữ liệu sản phẩm:', err);
+            alert('Đã xảy ra lỗi khi lấy dữ liệu sản phẩm.' + err);
+        }
     });
 });
+
+imageInput.addEventListener("change", async (event) => {
+    const files = Array.from(event.target.files);
+    const validExtensions = ['.png', '.jpg', '.jpeg'];
+
+    for (const file of files) {
+        const fileName = file.name.toLowerCase();
+        const isValid = validExtensions.some(ext => fileName.endsWith(ext));
+
+        if (!isValid) {
+            alert(`"${file.name}" không hợp lệ. Chỉ chấp nhận file PNG hoặc JPG.`);
+            continue;
+        }
+
+        if (allPreviewImages.length >= 3) {
+            alert("Chỉ được tối đa 3 ảnh.");
+            break;
+        }
+
+        if (allPreviewImages.some(img => img.name === file.name)) {
+            alert(`Ảnh "${file.name}" đã tồn tại.`);
+            continue;
+        }
+
+        const preview = await fileToBase64(file);
+
+        allPreviewImages.push({
+            type: 'new',
+            name: file.name,
+            file: file,
+            preview: preview
+        });
+    }
+
+    renderUnifiedImagePreview();
+    imageInput.value = '';
+});
+
+function fileToBase64(file) {
+    return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.readAsDataURL(file);
+    });
+}
+
+function renderUnifiedImagePreview() {
+    previewContainer.innerHTML = "";
+
+    allPreviewImages.forEach((imgObj) => {
+        const wrapper = document.createElement("div");
+        wrapper.className = "position-relative me-2 mb-2";
+        wrapper.dataset.name = imgObj.name;
+
+        const img = document.createElement("img");
+        img.classList.add("img-thumbnail");
+        img.style.width = "100px";
+        img.style.height = "100px";
+        img.src = imgObj.preview;
+
+        const removeBtn = document.createElement("button");
+        removeBtn.innerText = "×";
+        removeBtn.type = "button";
+        removeBtn.className = "btn btn-sm btn-danger position-absolute";
+        removeBtn.style.top = "0";
+        removeBtn.style.right = "0";
+
+        removeBtn.onclick = () => {
+            const indexToRemove = allPreviewImages.findIndex(img => img.name === imgObj.name);
+            if (indexToRemove !== -1) {
+                const removed = allPreviewImages.splice(indexToRemove, 1)[0];
+
+                // Nếu là ảnh cũ, đánh dấu đã xóa
+                if (removed.type === 'old') {
+                    removedOldImages.push(removed.name);
+                    oldImageFiles = oldImageFiles.filter(name => name !== removed.name);
+                }
+
+                renderUnifiedImagePreview();
+            }
+
+            if (allPreviewImages.length === 0) {
+                imageInput.value = '';
+            }
+        };
+
+        wrapper.appendChild(img);
+        wrapper.appendChild(removeBtn);
+        previewContainer.appendChild(wrapper);
+    });
+
+    if (allPreviewImages.length === 0) {
+        imageInput.value = '';
+    }
+}

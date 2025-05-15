@@ -29,7 +29,7 @@ router.get('/store', searchProductRender);
 router.post(
   "/create",
   upload.fields([
-    { name: "images", maxCount: 6 }, // Tối đa 6 ảnh
+    { name: "images", maxCount: 3 }, // Tối đa 6 ảnh
     { name: "specFile", maxCount: 1 } // 1 file thông số kỹ thuật
   ]),
   createProduct
@@ -39,7 +39,7 @@ router.post(
 router.put(
   '/update/:id',
   upload.fields([
-    { name: 'images', maxCount: 6 },
+    { name: 'editImages', maxCount: 3 },
     { name: 'specFile', maxCount: 1 }
   ]),
   updateProduct

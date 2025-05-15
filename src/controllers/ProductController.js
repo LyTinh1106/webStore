@@ -170,12 +170,59 @@ const getStore = (req, res) => {
   });
 };
 
-
-
-
 // [POST] /products - Tạo sản phẩm mới
-const fs = require('fs').promises; // Thêm module fs để đọc file
+const fs = require('fs').promises;
 const path = require('path');
+const xlsx = require('xlsx');
+
+function parseSpecTextToJson(rawText) {
+  const lines = rawText.split(/\r?\n/);
+  const result = {};
+  let currentKey = null;
+
+  lines.forEach(line => {
+    const trimmed = line.trim();
+    if (trimmed === "") return;
+
+    // Nếu là dòng mới có định dạng key: value
+    const match = trimmed.match(/^(.+?):\s*(.*)$/);
+    if (match) {
+      currentKey = match[1].trim();
+      const value = match[2].trim();
+      result[currentKey] = value;
+    } else if (currentKey) {
+      // Dòng tiếp theo của key trước đó → nối vào value
+      result[currentKey] += `, ${trimmed}`;
+    }
+  });
+
+  return result;
+}
+
+function parseExcelBufferToJson(buffer) {
+  const workbook = xlsx.read(buffer, { type: "buffer" });
+  const sheet = workbook.Sheets[workbook.SheetNames[0]];
+  const rows = xlsx.utils.sheet_to_json(sheet, { header: ["type", "value"], range: 1 });
+
+  const result = {};
+  rows.forEach(row => {
+    if (row.type && row.value) {
+      const key = String(row.type).trim();
+      let val = String(row.value).trim();
+
+      // Gộp các dòng xuống dòng thành một chuỗi bằng dấu phẩy
+      val = val.replace(/\r?\n/g, ", ");
+
+      if (result[key]) {
+        result[key] += ", " + val;
+      } else {
+        result[key] = val;
+      }
+    }
+  });
+
+  return result;
+}
 
 const createProduct = async (req, res) => {
   try {
@@ -192,8 +239,9 @@ const createProduct = async (req, res) => {
     } = req.body;
 
     // Lấy danh sách ảnh và specFile từ req.files
-    const images = req.files["images"] ? req.files["images"].map(file => file.filename) : [];
-    const specFile = req.files["specFile"] ? req.files["specFile"][0] : null;
+    const files = req.files || {};
+    const images = files["images"] ? files["images"].map(file => file.filename) : [];
+    const specFile = files["specFile"] ? files["specFile"][0] : null;
 
     // Debug: Kiểm tra file nhận được
     console.log("Files received:", req.files);
@@ -204,16 +252,21 @@ const createProduct = async (req, res) => {
     let specJson = null;
     if (specFile) {
       try {
-        const filePath = path.join(__dirname, '../public/images/', specFile.filename); // Điều chỉnh đường dẫn theo cấu trúc thư mục của bạn
-        const fileContent = await fs.readFile(filePath, 'utf-8');
-        specJson = JSON.parse(fileContent);
-        console.log("Spec JSON:", specJson);
+        if (specFile.mimetype === "application/json") {
+          const fileContent = specFile.buffer.toString("utf8").trim();
+          specJson = JSON.parse(fileContent);
+        } else if (specFile.mimetype.includes("text")) {
+          const fileContent = specFile.buffer.toString("utf8").trim();
+          specJson = parseSpecTextToJson(fileContent);
+        } else if (specFile.mimetype === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+          specJson = parseExcelBufferToJson(specFile.buffer);
+        } else {
+          throw new Error("Định dạng file không được hỗ trợ.");
+        }
       } catch (err) {
-        console.error("Lỗi khi đọc hoặc parse specFile:", err);
-        return res.status(400).json({ success: false, message: "Lỗi khi đọc file thông số kỹ thuật." });
+        return res.status(400).json({ success: false, message: "Lỗi khi đọc file thông số kỹ thuật: " + err.message });
       }
     }
-
 
     const newProduct = {
       fancy_id: productCode,
@@ -227,7 +280,6 @@ const createProduct = async (req, res) => {
       warranty,
 
     };
-
 
     Product.create(newProduct, async (err, createdProduct) => {
       if (err) {
@@ -291,11 +343,51 @@ const createProduct = async (req, res) => {
   }
 };
 
-
-
-
 // [POST] /products/:id/update - Cập nhật sản phẩm
-const updateProduct = (req, res) => {
+// const updateProduct = (req, res) => {
+//   const {
+//     fancy_id,
+//     name,
+//     description,
+//     import_price,
+//     retail_price,
+//     brand_id,
+//     category_id,
+//     origin,
+//     warranty,
+//   } = req.body;
+
+//   if (!name) {
+//     return res.status(400).render("error", { message: "Tên sản phẩm là bắt buộc." });
+//   }
+
+//   const updatedProduct = new Product({
+//     fancy_id,
+//     name,
+//     description,
+//     import_price,
+//     retail_price,
+//     brand_id,
+//     category_id,
+//     origin,
+//     warranty,
+//   });
+
+//   Product.updateById(req.params.id, updatedProduct, (err, data) => {
+//     if (err) {
+//       if (err.kind === "not_found") {
+//         return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
+//       }
+//       return res.status(500).render("error", { message: "Lỗi khi cập nhật sản phẩm." });
+//     } else {
+//       return res.status(201).json({ success: true, message: "Cập nhật product thành công!", product: data });
+//     }
+
+//   });
+
+// };
+
+const updateProduct = async (req, res) => {
   const {
     fancy_id,
     name,
@@ -305,12 +397,14 @@ const updateProduct = (req, res) => {
     brand_id,
     category_id,
     origin,
-    warranty,
+    warranty
   } = req.body;
 
   if (!name) {
     return res.status(400).render("error", { message: "Tên sản phẩm là bắt buộc." });
   }
+
+  const productId = req.params.id;
 
   const updatedProduct = new Product({
     fancy_id,
@@ -324,70 +418,140 @@ const updateProduct = (req, res) => {
     warranty,
   });
 
-  Product.updateById(req.params.id, updatedProduct, (err, data) => {
+  Product.updateById(productId, updatedProduct, async (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
         return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
       }
       return res.status(500).render("error", { message: "Lỗi khi cập nhật sản phẩm." });
-    } else {
-      return res.status(201).json({ success: true, message: "Cập nhật product thành công!", product: data });
     }
-
-
+  
+    const files = req.files || {};
+    const newImages = files["editImages"] || [];
+    const specFile = files["specFile"] ? files["specFile"][0] : null;
+  
+    try {
+      // === Xử lý ảnh mới (nếu có) ===
+      if (newImages.length > 0) {
+        const oldImages = await new Promise((resolve, reject) => {
+          ProductImage.findByProductId(productId, (err, result) => {
+            if (err) return reject(err);
+            resolve(result);
+          });
+        });
+  
+        const deletePromises = oldImages.map(async (img) => {
+          const filePath = path.join(__dirname, "../public/images", img.URL);
+          try {
+            await fs.access(filePath);
+            await fs.unlink(filePath);
+          } catch {
+            console.warn("Ảnh không tồn tại:", filePath);
+          }
+        });
+        await Promise.all(deletePromises);
+  
+        await new Promise((resolve, reject) => {
+          ProductImage.deleteByProductId(productId, (err) => {
+            if (err) return reject(err);
+            resolve();
+          });
+        });
+  
+        const imageInserts = newImages.map(file => ({
+          product_id: productId,
+          URL: file.filename // multer đã lưu sẵn
+        }));
+  
+        await new Promise((resolve, reject) => {
+          ProductImage.bulkInsert(imageInserts, (err) => {
+            if (err) return reject(err);
+            resolve();
+          });
+        });
+      }
+  
+      // === Xử lý file thông số (nếu có) ===
+      if (specFile) {
+        let specJson = null;
+  
+        if (specFile.mimetype === "application/json") {
+          specJson = JSON.parse(specFile.buffer.toString("utf8").trim());
+        } else if (specFile.mimetype.includes("text")) {
+          specJson = parseSpecTextToJson(specFile.buffer.toString("utf8").trim());
+        } else if (specFile.mimetype === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") {
+          specJson = parseExcelBufferToJson(specFile.buffer);
+        } else {
+          return res.status(400).json({ success: false, message: "Định dạng file không được hỗ trợ." });
+        }
+  
+        const detail = { product_id: productId, specs: specJson };
+  
+        await new Promise((resolve, reject) => {
+          TechnicalSpecification.updateById(productId, detail, (err) => {
+            if (err) return reject(err);
+            resolve();
+          });
+        });
+      }
+  
+      // === Trả kết quả thành công duy nhất ===
+      return res.status(200).json({ success: true, message: "Cập nhật sản phẩm thành công!" });
+  
+    } catch (e) {
+      console.error("Lỗi cập nhật sản phẩm:", e);
+      return res.status(500).json({ success: false, message: "Đã xảy ra lỗi: " + e.message });
+    }
   });
 };
 
 // [POST] /products/:id/delete - Xóa sản phẩm
-const deleteProduct = (req, res) => {
+const deleteProduct = async (req, res) => {
   const productId = req.params.id;
 
-
-  ProductImage.findByProductId(productId, (err, images) => {
+  ProductImage.findByProductId(productId, async (err, images) => {
     if (err) {
       console.error("Lỗi khi tìm ảnh sản phẩm:", err);
-      return res.status(500).render("error", { message: "Lỗi khi tìm ảnh sản phẩm." });
+      return res.status(500).json({ message: "Lỗi khi tìm ảnh sản phẩm." });
     }
 
-    if (images && images.length > 0) {
-      images.forEach((image) => {
-        const filePath = path.join(__dirname, "../public/images", image.URL);
-
-
-        fs.access(filePath, fs.constants.F_OK, (err) => {
-          if (err) {
-            console.warn(`❌ File không tồn tại: ${filePath}`);
-            return;
+    try {
+      if (images && images.length > 0) {
+        const deletePromises = images.map(async (image) => {
+          const filePath = path.resolve(__dirname, "../public/images", image.URL);
+          console.log("Đường dẫn cần xóa:", filePath);
+          try {
+            await fs.access(filePath);
+            await fs.unlink(filePath);
+            console.log(`Đã xóa: ${filePath}`);
+          } catch (e) {
+            console.warn(`Không tồn tại hoặc không thể xóa: ${filePath}`);
           }
-
-          fs.unlink(filePath, (err) => {
-            if (err) {
-              console.warn(`Không thể xóa file ảnh ${filePath}:`, err.message);
-            } else {
-              console.log(`✅ Đã xóa file: ${filePath}`);
-            }
-          });
         });
-      });
-    }
 
-
-    Product.remove(productId, (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") {
-          return res.status(404).render("error", { message: "Không tìm thấy sản phẩm." });
-        }
-        return res.status(500).render("error", { message: "Lỗi khi xóa sản phẩm." });
+        await Promise.all(deletePromises);
       }
 
-      res.status(200).json({ success: true, message: "Xóa sản phẩm thành công!" });
-    });
+      Product.remove(productId, (err, data) => {
+        if (err) {
+          if (err.kind === "not_found") {
+            return res.status(404).json({ message: "Không tìm thấy sản phẩm." });
+          }
+          return res.status(500).json({ message: "Lỗi khi xóa sản phẩm." });
+        }
+
+        return res.status(200).json({ success: true, message: "Xóa sản phẩm thành công!" });
+      });
+    } catch (error) {
+      console.error("Lỗi trong quá trình xóa:", error);
+      return res.status(500).json({ message: "Lỗi xử lý khi xóa." });
+    }
   });
 };
 
 // lọc theo loại
 const filterByCategory = (req, res) => {
-    
+
   const categoryIds = (req.body.category_ids || []).map(Number);
 
   if (categoryIds.length === 0) {
@@ -418,7 +582,7 @@ const filterByCategory = (req, res) => {
 };
 // lọc theo nhãn hàng
 const filterByBrand = (req, res) => {
-  
+
   const brandIds = (req.body.brand_ids || []).map(Number);
 
   if (brandIds.length === 0) {
@@ -503,9 +667,9 @@ const searchProductRender = (req, res) => {
           SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
         )
       `;
-      return sql.query(query, [], (_, results) => loadData(results || []));
+    return sql.query(query, [], (_, results) => loadData(results || []));
 
-      
+
   }
 
   const exactQuery = `

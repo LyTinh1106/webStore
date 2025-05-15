@@ -79,8 +79,8 @@ TechnicalSpecification.findByProductId = (productId, result) => {
 // Cập nhật
 TechnicalSpecification.updateById = (id, detail, result) => {
   sql.query(
-    "UPDATE technical_specification SET specs = ?, product_id = ? WHERE id = ?",
-    [JSON.stringify(detail.specs), detail.product_id, id],
+    "UPDATE technical_specification SET specs = ? WHERE product_id = ?",
+    [JSON.stringify(detail.specs), detail.product_id],
     (err, res) => {
       if (err) {
         result(null, err);
