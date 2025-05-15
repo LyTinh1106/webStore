@@ -290,7 +290,96 @@
 			<script src="/js/cart.js"></script>
 
 
+<script>
+function filterByCategory() {
+  const checkedCategories = Array.from(
+    document.querySelectorAll('.category-filter input[type="checkbox"]:checked')
+  ).map(cb => parseInt(cb.value));
 
+  // Gửi danh sách ID danh mục lên server
+  fetch('/api/product/filter/categories', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ category_ids: checkedCategories })
+  })
+  .then(res => res.json())
+  .then(data => {
+    renderProducts(data);
+  })
+  .catch(err => {
+    console.error("Lỗi khi gọi API lọc danh mục:", err);
+  });
+}
+
+// Hàm hiển thị danh sách sản phẩm ra giao diện
+function renderProducts(products) {
+  const container = document.getElementById("all-products");
+
+  if (!container) {
+    console.warn("⚠️ Không tìm thấy vùng chứa sản phẩm (all-products)");
+    return;
+  }
+
+  // Ghi đè toàn bộ sản phẩm mới
+  container.innerHTML = products.map(product => `
+    <div class="col-md-4 col-xs-6">
+      <div class="product">
+        <a href="/product/${product.id}">
+          <div class="product-img">
+            <img src="/images/${product.image || 'default.png'}" alt="${product.name}">
+          </div>
+          <div class="product-body">
+            <p class="product-category">${product.category_name}</p>
+            <h3 class="product-name" title="${product.name}">
+              <a href="/product/${product.id}">${product.name}</a>
+            </h3>
+            <h4 class="product-price">${Number(product.retail_price).toLocaleString()} VNĐ</h4>
+            <div class="product-rating">
+              ${[...Array(5)].map(() => '<i class="fa fa-star"></i>').join('')}
+            </div>
+            <div class="product-btns">
+              <button class="add-to-compare" data-id="${product.id}" data-name="${product.name}" data-image="${product.image}" data-category="${product.category_id}">
+                <i class="fa fa-exchange"></i>
+                <span class="tooltipp">So sánh</span>
+              </button>
+            </div>
+          </div>
+          <div class="add-to-cart">
+            <button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng</button>
+          </div>
+        </a>
+      </div>
+    </div>
+  `).join('');
+
+  // Ẩn phân trang (tùy chọn)
+  const pagination = document.getElementById("store-nav");
+  if (pagination) pagination.classList.add("d-none");
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  const urlParams = new URLSearchParams(window.location.search);
+  const categoryId = urlParams.get('category');
+
+  if (categoryId) {
+    const checkboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
+    const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+
+    if (targetCheckbox) {
+      checkboxes.forEach(cb => cb.checked = false);
+      targetCheckbox.checked = true;
+
+      // Gọi hàm lọc sau khi checkbox được tick
+      if (typeof applyCombinedFilter === 'function') {
+        applyCombinedFilter();
+      }
+    }
+  }
+});
+
+</script>
 </body>
 
 </html>
