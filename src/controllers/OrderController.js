@@ -210,3 +210,29 @@ exports.getYear = (req, res) => {
   });
 };
 
+exports.getBasicOnDeliveringOrders = (req, res) => {
+  Order.getOnDeliveringBasicInfo((err, data) => {
+    if (err) {
+      return res.status(500).json({ message: "Lỗi khi lấy đơn hàng đang giao", error: err });
+    }
+    res.json(data); // ✅ trả về danh sách JSON
+  });
+};
+
+// Lấy thông tin chi tiết 1 đơn hàng (thông tin đơn)
+exports.getOrderDetailsById = (req, res) => {
+  const id = req.params.id;
+  Order.findById(id, (err, order) => {
+    if (err || !order) {
+      return res.status(500).json({ message: "Không thể lấy thông tin đơn hàng", error: err });
+    }
+    OrderDetail.findByOrderId(id, (err2, items) => {
+      if (err2) {
+        return res.status(500).json({ message: "Không thể lấy danh sách sản phẩm", error: err2 });
+      }
+      res.json({ ...order, products: items });
+    });
+  });
+};
+
+
