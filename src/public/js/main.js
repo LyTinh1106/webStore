@@ -204,7 +204,7 @@
 		priceSlider.noUiSlider.on('change', function (values) {
 	priceMin.value = Math.round(values[0]);
 	priceMax.value = Math.round(values[1]);
-	applyCombinedFilter(); // ✅ gọi đúng hàm gộp
+	applyCombinedFilter(); 
 });
 
 	}
@@ -373,51 +373,51 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
 //chuyển trang + lọc
 
 document.addEventListener("DOMContentLoaded", function () {
-	const navLinks = document.querySelectorAll('#nav-categories a');
-  
-	if (!navLinks.length) {
-	  console.warn("⚠️ Không tìm thấy nav menu.");
-	  return;
-	}
-  
-	navLinks.forEach(link => {
-	  link.addEventListener('click', function (e) {
-		const href = this.getAttribute('href');
-		const categoryId = this.getAttribute('data-id');
-  
-		if (!categoryId || href === '/' || href === '/store/all') return;
-  
-		const isStorePage = window.location.pathname.startsWith("/store");
-  
-		// 👉 Nếu không phải trang /store → chuyển hướng sang /store?category=ID
-		if (!isStorePage) {
-		  window.location.href = `/store?category=${categoryId}`;
-		  return;
-		}
-  
-		// 👉 Nếu đang ở /store → xử lý lọc JS
-		e.preventDefault();
-  
-		// Bỏ active cũ, thêm active mới
-		navLinks.forEach(l => l.parentElement.classList.remove('active'));
-		this.parentElement.classList.add('active');
-  
-		// Kiểm tra checkbox và filter UI
-		const checkboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
-		const target = document.querySelector(`.category-filter input[value="${categoryId}"]`);
-  
-		if (!checkboxes.length || !target || typeof filterByCategory !== 'function') {
-		  console.warn("⚠️ Không có UI filter hoặc hàm filterByCategory()");
-		  return;
-		}
-  
-		checkboxes.forEach(cb => cb.checked = false);
-		target.checked = true;
-  
-		filterByCategory();
-	  });
-	});
+  const navLinks = document.querySelectorAll('#nav-categories a');
+
+  navLinks.forEach(link => {
+    link.addEventListener('click', function (e) {
+      e.preventDefault(); // ✅ Ngăn chuyển hướng mặc định của thẻ <a href="#">
+      
+      const categoryId = this.getAttribute('data-id');
+      const href = this.getAttribute('href');
+
+      // Bỏ qua "Trang Chủ" và "Sản Phẩm"
+      if (href === '/' || href === '/store/all' || !categoryId || categoryId === '0') {
+        window.location.href = href;
+        return;
+      }
+
+      const isStorePage = window.location.pathname.startsWith("/store");
+
+      if (!isStorePage) {
+        // ✅ Nếu không phải /store → chuyển hướng
+        window.location.href = `/store?category=${categoryId}`;
+        return;
+      }
+
+      // ✅ Nếu đã ở /store → lọc trực tiếp
+      navLinks.forEach(l => l.parentElement.classList.remove('active'));
+      this.parentElement.classList.add('active');
+
+      const checkboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
+      const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+
+      if (!checkboxes.length || !targetCheckbox) {
+        console.warn("⚠️ Không tìm thấy checkbox danh mục.");
+        return;
+      }
+
+      checkboxes.forEach(cb => cb.checked = false);
+      targetCheckbox.checked = true;
+
+      if (typeof filterByCategory === 'function') {
+        filterByCategory();
+      }
+    });
   });
+});
+
   
   
 
