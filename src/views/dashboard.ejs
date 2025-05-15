@@ -506,7 +506,8 @@
                                             <div class="col-md-12">
                                                 <label for="images" class="form-label">Hình ảnh sản phẩm</label>
                                                 <input class="form-control" type="file" id="images" name="images"
-                                                    multiple accept="image/*">
+                                                    multiple accept=".png,.jpg,.jpeg">
+                                                    <small class="text-muted">Chỉ chấp nhận định dạng: PNG, JPG, JPEG</small>
                                                 <div id="imagePreview" class="mt-2 d-flex flex-wrap gap-2"></div>
                                             </div>
 
@@ -519,8 +520,8 @@
                                                 <small class="text-muted">Hỗ trợ định dạng: CSV, TXT, Excel</small>
 
                                                 <div id="specActions" class="mt-2" style="display: none;">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger"
-                                                        onclick="clearSpecData_specFile()"> Xóa dữ liệu</button>
+                                                    <!-- <button type="button" class="btn btn-sm btn-outline-danger"
+                                                        onclick="clearSpecData_specFile()"> Xóa dữ liệu</button> -->
                                                 </div>
 
                                                 <div id="specTableContainer" class="mt-3" style="display: none;">
@@ -631,7 +632,8 @@
                                             <div class="col-md-12">
                                                 <label for="editImages" class="form-label">Cập nhật hình ảnh</label>
                                                 <input class="form-control" type="file" id="editImages" name="images"
-                                                    multiple accept="image/*" />
+                                                    multiple accept=".png,.jpg,.jpeg" />
+                                                    <small class="text-muted">Chỉ chấp nhận định dạng: PNG, JPG, JPEG</small>
                                                 <div id="editImagePreview" class="mt-2 d-flex flex-wrap gap-2">
 
                                                 </div>
@@ -645,8 +647,8 @@
                                                 <small class="text-muted">Hỗ trợ định dạng: CSV, TXT, Excel</small>
 
                                                 <div id="editSpecActions" class="mt-2" style="display: none;">
-                                                    <button type="button" class="btn btn-sm btn-outline-danger"
-                                                        onclick="clearSpecData_editSpecFile()">Xóa dữ liệu</button>
+                                                    <!-- <button type="button" class="btn btn-sm btn-outline-danger"
+                                                        onclick="clearSpecData_editSpecFile()">Xóa dữ liệu</button> -->
                                                 </div>
 
                                                 <div id="editSpecTableContainer" class="mt-3" style="display: none;">
@@ -731,9 +733,6 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Thư viện SheetJS hỗ trợ đọc Excel -->
-                    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
                     <!-- JavaScript xử lý ảnh và submit form -->
 
 
@@ -787,16 +786,7 @@
                                             <!-- Button to trigger modal -->
                                             <a href="#" class="btn btn-sm btn-info editProductBtn"
                                                 data-bs-toggle="modal" data-bs-target="#updateProductModal"
-                                                data-id="<%= product.id %>" data-code="<%= product.fancy_id %>"
-                                                data-name="<%= product.name %>"
-                                                data-description="<%= product.description %>"
-                                                data-importprice="<%= product.import_price %>"
-                                                data-saleprice="<%= product.retail_price %>"
-                                                data-category="<%= product.category_id %>"
-                                                data-brand="<%= product.brand_id %>" data-origin="<%= product.origin %>"
-                                                data-warranty="<%= product.warranty %>"
-                                                data-images="<%= product.imageInserts %>"
-                                                data-specs="<%= product.newDetail %>">
+                                                data-id="<%= product.id %>">
                                                 <i class="fas fa-edit"></i>
                                             </a>
 
@@ -837,12 +827,11 @@
                                                         const imageContainer = document.getElementById("viewImages");
                                                         imageContainer.innerHTML = "";
                                                         if (Array.isArray(data.images) && data.images.length > 0) {
-                                                            data.images.forEach(img => {    
+                                                            data.images.forEach(img => {
                                                                 const imgEl = document.createElement("img");
                                                                 imgEl.src = `/images/${img.URL}`;
                                                                 imgEl.classList.add("img-thumbnail");
                                                                 imgEl.style.maxWidth = "120px";
-                                                                imgEl.style.maxHeight = "120px";
                                                                 imageContainer.appendChild(imgEl);
                                                             });
                                                         } else {
@@ -1683,140 +1672,15 @@
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Flatpickr JS -->
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+        <!-- SheetJS -->
+        <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
         <!-- JavaScript -->
         <script src="js/dashboardScript.js"></script>
         <script src="js/gragh.js"></script>
 
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <!-- <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const yearSelect = document.getElementById('yearSelect');
-
-                fetch('/api/order/year')
-                    .then(response => response.json())
-                    .then(data => {
-                        const years = data.Year;
-
-                        if (!years || years.length === 0) {
-                            yearSelect.innerHTML = `<option disabled>Không có dữ liệu năm</option>`;
-                            return;
-                        }
-
-                        years.forEach(y => {
-                            const option = document.createElement('option');
-                            option.value = y.year;
-                            option.textContent = y.year;
-                            yearSelect.appendChild(option);
-                        });
-
-
-                        yearSelect.value = years[0].year;
-
-
-                    })
-                    .catch(error => {
-                        console.error('Lỗi khi lấy danh sách năm:', error);
-                    });
-            });
-
-            $(function () {
-                let chart;
-
-                function drawChart(data) {
-                    const ctx = document.getElementById('revenueChart').getContext('2d');
-
-                    data.sort((a, b) => a.month - b.month);
-
-                    const labels = data.map(d => `Tháng ${d.month}`);
-                    const values = data.map(d => d.total_payment_per_month);
-
-                    const colors = [
-                        "#3498db", "#e74c3c", "#f39c12", "#2ecc71", "#9b59b6", "#1abc9c",
-                        "#e67e22", "#16a085", "#27ae60", "#2980b9", "#d35400", "#c0392b"
-                    ];
-
-                    const hoverColors = colors.map(color => lightenColor(color, 20));
-
-                    if (chart) chart.destroy();
-
-                    chart = new Chart(ctx, {
-                        type: 'bar',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Doanh thu theo tháng (VNĐ)',
-                                data: values,
-                                backgroundColor: colors,
-                                hoverBackgroundColor: hoverColors
-                            }]
-                        },
-                        options: {
-                            responsive: true,
-                            plugins: {
-                                title: {
-                                    display: true,
-                                    text: 'Doanh thu theo tháng',
-                                    font: {
-                                        size: 22
-                                    }
-                                },
-                                legend: {
-                                    display: false
-                                },
-                                tooltip: {
-                                    callbacks: {
-                                        label: function (context) {
-                                            const value = context.parsed.y || 0;
-                                            return 'Doanh thu: ' + value.toLocaleString('vi-VN') + ' VNĐ';
-                                        }
-                                    }
-                                }
-                            },
-                            scales: {
-                                y: {
-                                    title: {
-                                        display: true,
-                                        text: 'Doanh thu (VNĐ)'
-                                    },
-                                    beginAtZero: true
-                                }
-                            }
-                        }
-                    });
-                }
-
-                function lightenColor(hex, percent) {
-                    const num = parseInt(hex.replace("#", ""), 16);
-                    const amt = Math.round(2.55 * percent);
-                    const R = (num >> 16) + amt;
-                    const G = ((num >> 8) & 0x00FF) + amt;
-                    const B = (num & 0x0000FF) + amt;
-                    return (
-                        "#" +
-                        (
-                            0x1000000 +
-                            (R < 255 ? (R < 1 ? 0 : R) : 255) * 0x10000 +
-                            (G < 255 ? (G < 1 ? 0 : G) : 255) * 0x100 +
-                            (B < 255 ? (B < 1 ? 0 : B) : 255)
-                        )
-                            .toString(16)
-                            .slice(1)
-                    );
-                }
-
-                let year = document.querySelector('#yearSelect').value;
-                $.getJSON(`/api/order/revenue/${year}`, function (response) {
-                    console.log("Dữ liệu từ API:", response);
-                    console.log("Kiểu:", typeof response.revenueByMonth);
-                    if (response && response.revenueByMonth && Array.isArray(response.revenueByMonth)) {
-                        drawChart(response.revenueByMonth);
-                    } else {
-                        console.warn("Không có dữ liệu hợp lệ để vẽ biểu đồ:", response);
-                    }
-                });
-            });
-        </script> -->
+        
 
 
 
