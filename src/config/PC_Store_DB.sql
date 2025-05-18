@@ -108,13 +108,14 @@ CREATE TABLE order_table (
     id INT PRIMARY KEY AUTO_INCREMENT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     payment_method VARCHAR(50),
-    order_status ENUM('approving', 'on delivering', 'delivered', 'completed'),
+    order_status ENUM('Chờ duyệt', 'Đã duyệt', 'Hoàn Thành'),
     account_id INT,
     total_payment FLOAT,
     fullname VARCHAR(255),
     phone VARCHAR(50),
     address TEXT,
     note TEXT,
+    order_payment ENUM('Chưa thanh toán', 'Thanh toán') DEFAULT 'Chưa thanh toán',
     FOREIGN KEY (account_id) REFERENCES account(id)
 );
 
@@ -134,7 +135,7 @@ CREATE TABLE shipping (
     id INT PRIMARY KEY AUTO_INCREMENT,
     shipping_date DATETIME,
     delivery_method VARCHAR(255),
-    shipping_status ENUM('completed', 'failed'),
+    shipping_status ENUM('Thành công', 'Thất bại'),
     id_customer INT,
     id_order INT,
     shipping_address TEXT,
