@@ -17,6 +17,7 @@
 </head>
 
 <body>
+
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar text-white p-3">
@@ -74,6 +75,7 @@
             </ul>
         </div>
     </div>
+
 
     <!-- Main Content -->
     <div class="main-content">
@@ -164,7 +166,6 @@
                 </div>
             </div>
 
-
             <!-- Orders Section -->
             <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="v-orders-tab">
                 <h3 class="section-title">Quản lý đơn hàng</h3>
@@ -182,72 +183,78 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (orders.length> 0) { %>
-                                <% orders.forEach(order=> { %>
-                                    <tr>
-                                        <td>#ORD<%= order.id %>
-                                        </td>
-                                        <td>
-                                            <%= order.account_email || order.email || 'Không rõ' %>
-                                        </td>
-                                        <td>
-                                            <%= new Date(order.created_at).toLocaleDateString('vi-VN') %>
-                                        </td>
-                                        <td>
-                                            <%= order.payment_method %>
-                                        </td>
-                                        <td>
-                                            <%= order.total_payment.toLocaleString('vi-VN') %> VNĐ
-                                        </td>
-                                        <td>
-                                            <% if (order.order_status==='completed' ) { %>
-                                                <span class="badge bg-success">
-                                                    <%= order.order_status %>
-                                                </span>
-                                                <% } else if (order.order_status==='approving' ) { %>
-                                                    <span class="badge bg-warning">
+                            <% function generateCode(id) { const randomPart=('0000' + (id * 7919 % 10000)).slice(-4); //
+                                 return `${randomPart}${id}`; } %>
+
+                                <% if (orders.length> 0) { %>
+                                    <% orders.forEach(order=> { %>
+                                        <tr>
+                                            <td>#<%= generateCode(order.id) %>
+                                            </td>
+
+                                            </td>
+                                            <td>
+                                                <%= order.account_email || order.email || 'Không rõ' %>
+                                            </td>
+                                            <td>
+                                                <%= new Date(order.created_at).toLocaleDateString('vi-VN') %>
+                                            </td>
+                                            <td>
+                                                <%= order.payment_method %>
+                                            </td>
+                                            <td>
+                                                <%= order.total_payment.toLocaleString('vi-VN') %> VNĐ
+                                            </td>
+                                            <td>
+                                                <% if (order.order_status==='completed' ) { %>
+                                                    <span class="badge bg-success">
                                                         <%= order.order_status %>
                                                     </span>
-                                                    <% } else if (order.order_status==='Đã hủy' ) { %>
-                                                        <span class="badge bg-danger">
+                                                    <% } else if (order.order_status==='approving' ) { %>
+                                                        <span class="badge bg-warning">
                                                             <%= order.order_status %>
                                                         </span>
-                                                        <% } else { %>
-                                                            <span class="badge bg-secondary">
+                                                        <% } else if (order.order_status==='Đã hủy' ) { %>
+                                                            <span class="badge bg-danger">
                                                                 <%= order.order_status %>
                                                             </span>
-                                                            <% } %>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal"
-                                                data-bs-target="#orderDetailModal" data-id="<%= order.id %>"
-                                                data-email="<%= order.account_email || order.email %>"
-                                                data-name="<%= order.fullname || '' %>"
-                                                data-phone="<%= order.phone || '' %>"
-                                                data-date="<%= new Date(order.created_at).toLocaleDateString('vi-VN') %>"
-                                                data-payment="<%= order.payment_method %>"
-                                                data-total="<%= order.total_payment %>"
-                                                data-address="<%= order.address || '' %>"
-                                                data-note="<%= order.note || '' %>"
-                                                data-status="<%= order.order_status %>">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-
-                                            <form action="/order/<%= order.id %>" method="POST"
-                                                class="d-inline order-delete-form" data-id="<%= order.id %>">
-                                                <button type="submit" class="btn btn-sm btn-danger">
-                                                    <i class="fas fa-trash"></i>
+                                                            <% } else { %>
+                                                                <span class="badge bg-secondary">
+                                                                    <%= order.order_status %>
+                                                                </span>
+                                                                <% } %>
+                                            </td>
+                                            <td>
+                                                <button type="button" class="btn btn-sm btn-primary"
+                                                    data-bs-toggle="modal" data-bs-target="#orderDetailModal"
+                                                    data-id="<%= order.id %>"
+                                                    data-email="<%= order.account_email || order.email %>"
+                                                    data-name="<%= order.fullname || '' %>"
+                                                    data-phone="<%= order.phone || '' %>"
+                                                    data-date="<%= new Date(order.created_at).toLocaleDateString('vi-VN') %>"
+                                                    data-payment="<%= order.payment_method %>"
+                                                    data-total="<%= order.total_payment %>"
+                                                    data-address="<%= order.address || '' %>"
+                                                    data-note="<%= order.note || '' %>"
+                                                    data-status="<%= order.order_status %>">
+                                                    <i class="fas fa-eye"></i>
                                                 </button>
-                                            </form>
 
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="7" class="text-center">Không có đơn hàng nào.</td>
-                                            </tr>
-                                            <% } %>
+                                                <form action="/order/<%= order.id %>" method="POST"
+                                                    class="d-inline order-delete-form" data-id="<%= order.id %>">
+                                                    <button type="submit" class="btn btn-sm btn-danger">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="7" class="text-center">Không có đơn hàng nào.</td>
+                                                </tr>
+                                                <% } %>
                         </tbody>
                     </table>
                 </div>
@@ -768,120 +775,126 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (products.length> 0) { %>
-                                <% products.forEach((product)=> { %>
-                                    <tr id="product-<%= product.id %>">
-                                        <td>
-                                            <%= product.fancy_id %>
-                                        </td>
-                                        <td>
-                                            <%= product.name %>
-                                        </td>
-                                        <td>
-                                            <%= product.category_name || 'Không rõ' %>
-                                        </td>
-                                        <td>
-                                            <%= Number(product.import_price).toLocaleString('vi-VN') %> VNĐ
-                                        </td>
-                                        <td>
-                                            <%= Number(product.retail_price).toLocaleString('vi-VN') %> VNĐ
-                                        </td>
-                                        <td>
-                                            <%= product.origin %>
-                                        </td>
-                                        <td>
-                                            <%= product.warranty %>
-                                        </td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-primary viewProductBtn"
-                                                data-bs-toggle="modal" data-bs-target="#viewProductModal"
-                                                data-id="<%= product.id %>">
-                                                <i class="fas fa-eye"></i>
-                                            </a>
-                                            <!-- <a href="/products/<%= product.id %>/edit" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a> -->
-                                            <!-- Button to trigger modal -->
-                                            <a href="#" class="btn btn-sm btn-info editProductBtn"
-                                                data-bs-toggle="modal" data-bs-target="#updateProductModal"
-                                                data-id="<%= product.id %>">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                            <% function generateProductCode(id) { const randomPart=('0000' + (id * 1237 %
+                                10000)).slice(-4); return `${randomPart}${id}`; } %>
 
-                                            <!-- Nút xóa -->
-                                            <button class="btn btn-sm btn-danger delete-product-btn"
-                                                data-id="<%= product.id %>">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                            <script>
-                                                const viewModalEl = document.getElementById("viewProductModal");
 
-                                                viewModalEl.addEventListener("shown.bs.modal", async function (event) {
-                                                    const triggerBtn = event.relatedTarget;
-                                                    const productId = triggerBtn.dataset.id;
+                                <% if (products.length> 0) { %>
+                                    <% products.forEach((product)=> { %>
+                                        <tr id="product-<%= product.id %>">
 
-                                                    try {
-                                                        const response = await fetch(`/api/product/${productId}`);
-                                                        const json = await response.json();
-                                                        if (!json.success) {
-                                                            alert("Không tìm thấy sản phẩm");
-                                                            return;
+                                            <td>
+                                                #<%= generateProductCode(product.id) %>
+                                            </td>
+
+                                            <td>
+                                                <%= product.name %>
+                                            </td>
+                                            <td>
+                                                <%= product.category_name || 'Không rõ' %>
+                                            </td>
+                                            <td>
+                                                <%= Number(product.import_price).toLocaleString('vi-VN') %> VNĐ
+                                            </td>
+                                            <td>
+                                                <%= Number(product.retail_price).toLocaleString('vi-VN') %> VNĐ
+                                            </td>
+                                            <td>
+                                                <%= product.origin %>
+                                            </td>
+                                            <td>
+                                                <%= product.warranty %>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-primary viewProductBtn"
+                                                    data-bs-toggle="modal" data-bs-target="#viewProductModal"
+                                                    data-id="<%= product.id %>">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+                                                <!-- <a href="/products/<%= product.id %>/edit" class="btn btn-sm btn-info"><i class="fas fa-edit"></i></a> -->
+                                                <!-- Button to trigger modal -->
+                                                <a href="#" class="btn btn-sm btn-info editProductBtn"
+                                                    data-bs-toggle="modal" data-bs-target="#updateProductModal"
+                                                    data-id="<%= product.id %>">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+
+                                                <!-- Nút xóa -->
+                                                <button class="btn btn-sm btn-danger delete-product-btn"
+                                                    data-id="<%= product.id %>">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                                <script>
+                                                    const viewModalEl = document.getElementById("viewProductModal");
+
+                                                    viewModalEl.addEventListener("shown.bs.modal", async function (event) {
+                                                        const triggerBtn = event.relatedTarget;
+                                                        const productId = triggerBtn.dataset.id;
+
+                                                        try {
+                                                            const response = await fetch(`/api/product/${productId}`);
+                                                            const json = await response.json();
+                                                            if (!json.success) {
+                                                                alert("Không tìm thấy sản phẩm");
+                                                                return;
+                                                            }
+
+                                                            const data = json.data;
+
+                                                            // Gán dữ liệu
+                                                            document.getElementById("viewCode").textContent = data.fancy_id;
+                                                            document.getElementById("viewName").textContent = data.name;
+                                                            document.getElementById("viewDescription").textContent = data.description;
+                                                            document.getElementById("viewImportPrice").textContent = Number(data.import_price).toLocaleString('vi-VN') + " VNĐ";
+                                                            document.getElementById("viewSalePrice").textContent = Number(data.retail_price).toLocaleString('vi-VN') + " VNĐ";
+                                                            document.getElementById("viewCategory").textContent = data.category_name || data.category_id;
+                                                            document.getElementById("viewBrand").textContent = data.brand_name || data.brand_id;
+                                                            document.getElementById("viewOrigin").textContent = data.origin;
+                                                            document.getElementById("viewWarranty").textContent = data.warranty;
+
+                                                            // Hình ảnh
+                                                            const imageContainer = document.getElementById("viewImages");
+                                                            imageContainer.innerHTML = "";
+                                                            if (Array.isArray(data.images) && data.images.length > 0) {
+                                                                data.images.forEach(img => {
+                                                                    const imgEl = document.createElement("img");
+                                                                    imgEl.src = `/images/${img.URL}`;
+                                                                    imgEl.classList.add("img-thumbnail");
+                                                                    imgEl.style.maxWidth = "120px";
+                                                                    imageContainer.appendChild(imgEl);
+                                                                });
+                                                            } else {
+                                                                imageContainer.innerHTML = `<p class="text-muted">Không có hình ảnh</p>`;
+                                                            }
+
+                                                            // Thông số kỹ thuật
+                                                            const specContainer = document.getElementById("viewSpecs");
+                                                            specContainer.innerHTML = "";
+                                                            if (!data.specs || Object.keys(data.specs).length === 0) {
+                                                                specContainer.innerHTML = `<tr><td colspan="2" class="text-muted">Không có thông số kỹ thuật</td></tr>`;
+                                                            } else {
+                                                                Object.entries(data.specs).forEach(([key, val]) => {
+                                                                    const row = `<tr><td>${key.replace(/_/g, ' ')}</td><td>${Array.isArray(val) ? val.join('<br>') : val}</td></tr>`;
+                                                                    specContainer.insertAdjacentHTML("beforeend", row);
+                                                                });
+                                                            }
+
+                                                        } catch (err) {
+                                                            console.error("Lỗi khi tải sản phẩm:", err);
+                                                            alert("Lỗi khi tải thông tin sản phẩm.");
                                                         }
+                                                    });
+                                                </script>
+                                            </td>
 
-                                                        const data = json.data;
+                                        </tr>
 
-                                                        // Gán dữ liệu
-                                                        document.getElementById("viewCode").textContent = data.fancy_id;
-                                                        document.getElementById("viewName").textContent = data.name;
-                                                        document.getElementById("viewDescription").textContent = data.description;
-                                                        document.getElementById("viewImportPrice").textContent = Number(data.import_price).toLocaleString('vi-VN') + " VNĐ";
-                                                        document.getElementById("viewSalePrice").textContent = Number(data.retail_price).toLocaleString('vi-VN') + " VNĐ";
-                                                        document.getElementById("viewCategory").textContent = data.category_name || data.category_id;
-                                                        document.getElementById("viewBrand").textContent = data.brand_name || data.brand_id;
-                                                        document.getElementById("viewOrigin").textContent = data.origin;
-                                                        document.getElementById("viewWarranty").textContent = data.warranty;
-
-                                                        // Hình ảnh
-                                                        const imageContainer = document.getElementById("viewImages");
-                                                        imageContainer.innerHTML = "";
-                                                        if (Array.isArray(data.images) && data.images.length > 0) {
-                                                            data.images.forEach(img => {
-                                                                const imgEl = document.createElement("img");
-                                                                imgEl.src = `/images/${img.URL}`;
-                                                                imgEl.classList.add("img-thumbnail");
-                                                                imgEl.style.maxWidth = "120px";
-                                                                imageContainer.appendChild(imgEl);
-                                                            });
-                                                        } else {
-                                                            imageContainer.innerHTML = `<p class="text-muted">Không có hình ảnh</p>`;
-                                                        }
-
-                                                        // Thông số kỹ thuật
-                                                        const specContainer = document.getElementById("viewSpecs");
-                                                        specContainer.innerHTML = "";
-                                                        if (!data.specs || Object.keys(data.specs).length === 0) {
-                                                            specContainer.innerHTML = `<tr><td colspan="2" class="text-muted">Không có thông số kỹ thuật</td></tr>`;
-                                                        } else {
-                                                            Object.entries(data.specs).forEach(([key, val]) => {
-                                                                const row = `<tr><td>${key.replace(/_/g, ' ')}</td><td>${Array.isArray(val) ? val.join('<br>') : val}</td></tr>`;
-                                                                specContainer.insertAdjacentHTML("beforeend", row);
-                                                            });
-                                                        }
-
-                                                    } catch (err) {
-                                                        console.error("Lỗi khi tải sản phẩm:", err);
-                                                        alert("Lỗi khi tải thông tin sản phẩm.");
-                                                    }
-                                                });
-                                            </script>
-                                        </td>
-
-                                    </tr>
-
-                                    <% }) %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="8" class="text-center">Không có sản phẩm nào.</td>
-                                            </tr>
-                                            <% } %>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="8" class="text-center">Không có sản phẩm nào.</td>
+                                                </tr>
+                                                <% } %>
                         </tbody>
 
 
@@ -936,66 +949,69 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% categories.forEach((category)=> { %>
-                                <tr>
-                                    <td>
-                                        <%= category.id %>
-                                    </td>
-                                    <td>
-                                        <%= category.name %>
-                                    </td>
-                                    <td>
-                                        <!-- Nút chỉnh sửa -->
-                                        <a href="#" class="btn btn-sm btn-info editCategoryBtn" data-bs-toggle="modal"
-                                            data-bs-target="#updateCategoryModal" data-id="<%= category.id %>"
-                                            data-name="<%= category.name %>">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
+                            <% function generateCategoryCode(id) { const randomPart=('0000' + (id * 1423 %
+                                10000)).slice(-4); return `${randomPart}${id}`; } %>
+                                <% categories.forEach((category)=> { %>
+                                    <tr>
+                                        <td>
+                                            #<%= generateCategoryCode(category.id) %>
+                                        </td>
+                                        <td>
+                                            <%= category.name %>
+                                        </td>
+                                        <td>
+                                            <!-- Nút chỉnh sửa -->
+                                            <a href="#" class="btn btn-sm btn-info editCategoryBtn"
+                                                data-bs-toggle="modal" data-bs-target="#updateCategoryModal"
+                                                data-id="<%= category.id %>" data-name="<%= category.name %>">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
 
 
-                                        <!-- Modal chỉnh sửa danh mục -->
-                                        <div class="modal fade" id="updateCategoryModal" tabindex="-1"
-                                            aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="updateCategoryModalLabel">Cập
-                                                            nhật danh
-                                                            mục</h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Đóng"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <form id="updateCategoryForm">
-                                                            <input type="hidden" id="categoryId">
-                                                            <div class="mb-3">
-                                                                <label for="updateCategoryName" class="form-label">Tên
-                                                                    danh
-                                                                    mục</label>
-                                                                <input type="text" class="form-control"
-                                                                    id="updateCategoryName" name="name" required>
-                                                            </div>
-                                                        </form>
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-secondary"
-                                                            data-bs-dismiss="modal">Hủy</button>
-                                                        <button type="submit" form="updateCategoryForm"
-                                                            class="btn btn-primary">Cập nhật</button>
+                                            <!-- Modal chỉnh sửa danh mục -->
+                                            <div class="modal fade" id="updateCategoryModal" tabindex="-1"
+                                                aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
+                                                <div class="modal-dialog modal-dialog-centered">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h5 class="modal-title" id="updateCategoryModalLabel">Cập
+                                                                nhật danh
+                                                                mục</h5>
+                                                            <button type="button" class="btn-close"
+                                                                data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <form id="updateCategoryForm">
+                                                                <input type="hidden" id="categoryId">
+                                                                <div class="mb-3">
+                                                                    <label for="updateCategoryName"
+                                                                        class="form-label">Tên
+                                                                        danh
+                                                                        mục</label>
+                                                                    <input type="text" class="form-control"
+                                                                        id="updateCategoryName" name="name" required>
+                                                                </div>
+                                                            </form>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                data-bs-dismiss="modal">Hủy</button>
+                                                            <button type="submit" form="updateCategoryForm"
+                                                                class="btn btn-primary">Cập nhật</button>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
 
-                                        <!-- Nút xóa danh mục -->
-                                        <button class="btn btn-sm btn-danger delete-category-btn"
-                                            data-id="<%= category.id %>">
-                                            <i class="fas fa-trash"></i>
-                                        </button>
-                                    </td>
-                                </tr>
-                                <% }) %>
+                                            <!-- Nút xóa danh mục -->
+                                            <button class="btn btn-sm btn-danger delete-category-btn"
+                                                data-id="<%= category.id %>">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
                         </tbody>
                     </table>
                 </div>
@@ -1048,68 +1064,75 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (brands && brands.length> 0) { %>
-                                <% brands.forEach((brand)=> { %>
-                                    <tr>
-                                        <td>
-                                            <%= brand.brand_id %>
-                                        </td>
-                                        <td>
-                                            <%= brand.brand_name %>
-                                        </td>
-                                        <td>
-                                            <!-- Nút sửa -->
-                                            <a href="#" class="btn btn-sm btn-info editBrandBtn" data-bs-toggle="modal"
-                                                data-bs-target="#updateBrandModal" data-id="<%= brand.brand_id %>"
-                                                data-name="<%= brand.brand_name %>">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                            <% function generateBrandCode(id) { const randomPart=('0000' + (id * 1993 %
+                                10000)).slice(-4); return `${randomPart}${id}`; } %>
 
-                                            <!-- Modal Cập Nhật Nhãn Hàng -->
-                                            <div class="modal fade" id="updateBrandModal" tabindex="-1"
-                                                aria-labelledby="updateBrandModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="updateBrandModalLabel">Cập nhật
-                                                                nhãn hàng</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Đóng"></button>
-                                                        </div>
-                                                        <div class="modal-body">
-                                                            <form id="updateBrandForm">
-                                                                <input type="hidden" id="brandId">
-                                                                <div class="mb-3">
-                                                                    <label for="updateBrandName" class="form-label">Tên
-                                                                        nhãn
-                                                                        hàng</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="updateBrandName" name="brand_name" required>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Hủy</button>
-                                                            <button type="submit" form="updateBrandForm"
-                                                                class="btn btn-primary">Cập nhật</button>
+                                <% if (brands && brands.length> 0) { %>
+                                    <% brands.forEach((brand)=> { %>
+                                        <tr>
+                                            <td>
+                                                #<%= generateBrandCode(brand.brand_id) %>
+
+                                            </td>
+                                            <td>
+                                                <%= brand.brand_name %>
+                                            </td>
+                                            <td>
+                                                <!-- Nút sửa -->
+                                                <a href="#" class="btn btn-sm btn-info editBrandBtn"
+                                                    data-bs-toggle="modal" data-bs-target="#updateBrandModal"
+                                                    data-id="<%= brand.brand_id %>" data-name="<%= brand.brand_name %>">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
+
+                                                <!-- Modal Cập Nhật Nhãn Hàng -->
+                                                <div class="modal fade" id="updateBrandModal" tabindex="-1"
+                                                    aria-labelledby="updateBrandModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="updateBrandModalLabel">Cập
+                                                                    nhật
+                                                                    nhãn hàng</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <form id="updateBrandForm">
+                                                                    <input type="hidden" id="brandId">
+                                                                    <div class="mb-3">
+                                                                        <label for="updateBrandName"
+                                                                            class="form-label">Tên
+                                                                            nhãn
+                                                                            hàng</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="updateBrandName" name="brand_name"
+                                                                            required>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Hủy</button>
+                                                                <button type="submit" form="updateBrandForm"
+                                                                    class="btn btn-primary">Cập nhật</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <!-- Nút xóa -->
-                                            <button class="btn btn-sm btn-danger delete-brand-btn"
-                                                data-id="<%= brand.brand_id %>">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="3" class="text-center">Không có nhãn hàng nào.</td>
-                                            </tr>
-                                            <% } %>
+                                                <!-- Nút xóa -->
+                                                <button class="btn btn-sm btn-danger delete-brand-btn"
+                                                    data-id="<%= brand.brand_id %>">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="3" class="text-center">Không có nhãn hàng nào.</td>
+                                                </tr>
+                                                <% } %>
                         </tbody>
                     </table>
                 </div>
@@ -1261,52 +1284,54 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (shippings && shippings.length> 0) { %>
-                                <% shippings.forEach(function(shipping) { %>
-                                    <tr>
-                                        <td>
-                                            <%= shipping.id %>
-                                        </td>
-                                        <td>
-                                            <%= shipping.shipping_date %>
-                                        </td>
-                                        <td>
-                                            <%= shipping.delivery_method %>
-                                        </td>
-                                        <td>
-                                            <%= shipping.shipping_status %>
-                                        </td>
-                                        <td>
-                                            <%= shipping.customer_name || 'N/A' %>
-                                        </td> <!-- nếu cần hiển thị tên thay vì id -->
-                                        <td>
-                                            <%= shipping.id_order %>
-                                        </td>
-                                        <td>
-                                            <%= shipping.shipping_address %>
-                                        </td>
-                                        <td>
-                                            <a href="/shippings/<%= shipping.id_shipping %>"
-                                                class="btn btn-sm btn-info">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                            <% function generateShippingCode(id) { const randomPart=('0000' + (id * 2027 %
+                                10000)).slice(-4); return `${randomPart}${id}`; } %>
+                                <% if (shippings && shippings.length> 0) { %>
+                                    <% shippings.forEach(function(shipping) { %>
+                                        <tr>
+                                            <td>
+                                                #<%= generateShippingCode(shipping.id) %>
+                                            </td>
+                                            <td>
+                                                <%= shipping.shipping_date %>
+                                            </td>
+                                            <td>
+                                                <%= shipping.delivery_method %>
+                                            </td>
+                                            <td>
+                                                <%= shipping.shipping_status %>
+                                            </td>
+                                            <td>
+                                                <%= shipping.customer_name || 'N/A' %>
+                                            </td> <!-- nếu cần hiển thị tên thay vì id -->
+                                            <td>
+                                                <%= shipping.id_order %>
+                                            </td>
+                                            <td>
+                                                <%= shipping.shipping_address %>
+                                            </td>
+                                            <td>
+                                                <a href="/shippings/<%= shipping.id_shipping %>"
+                                                    class="btn btn-sm btn-info">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
 
-                                            <form action="/shippings/<%= shipping.id_shipping %>/delete" method="POST"
-                                                style="display:inline;">
-                                                <button class="btn btn-sm btn-danger"
-                                                    onclick="return confirm('Bạn có chắc muốn xoá?')">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="8" class="text-center">Không có dữ liệu vận chuyển.
-                                                </td>
-                                            </tr>
-                                            <% } %>
+                                                <form action="/shippings/<%= shipping.id_shipping %>/delete"
+                                                    method="POST" style="display:inline;">
+                                                    <button class="btn btn-sm btn-danger"
+                                                        onclick="return confirm('Bạn có chắc muốn xoá?')">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="8" class="text-center">Không có dữ liệu vận chuyển.
+                                                    </td>
+                                                </tr>
+                                                <% } %>
                         </tbody>
                     </table>
                 </div>
@@ -1494,8 +1519,7 @@
                         });
                 }
             </script>
-
-
+               
             <!-- Supplier Section -->
             <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="v-suppliers-tab">
                 <h3 class="section-title">Quản lý nhà cung cấp</h3>
@@ -1566,104 +1590,110 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <% if (suppliers && suppliers.length> 0) { %>
-                                <% suppliers.forEach((supplier)=> { %>
-                                    <tr>
-                                        <td>
-                                            <%= supplier.id %>
-                                        </td>
-                                        <td>
-                                            <%= supplier.name %>
-                                        </td>
-                                        <td>
-                                            <%= supplier.phonenumber %>
-                                        </td>
-                                        <td>
-                                            <%= supplier.email %>
-                                        </td>
-                                        <td>
-                                            <%= supplier.address %>
-                                        </td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-info editSupplierBtn"
-                                                data-bs-toggle="modal" data-bs-target="#updateSupplierModal"
-                                                data-id="<%= supplier.id %>" data-name="<%= supplier.name %>"
-                                                data-phonenumber="<%= supplier.phonenumber %>"
-                                                data-email="<%= supplier.email %>"
-                                                data-address="<%= supplier.address %>">
-                                                <i class="fas fa-edit"></i>
-                                            </a>
+                            <% function generateSupplierCode(id) { const randomPart=('0000' + (id * 3109 %
+                                10000)).slice(-4); return `${randomPart}${id}`; } %>
+                                <% if (suppliers && suppliers.length> 0) { %>
+                                    <% suppliers.forEach((supplier)=> { %>
+                                        <tr>
+                                            <td>
+                                                #<%= generateSupplierCode(supplier.id) %>
 
-                                            <!-- Modal Cập Nhật Nhà Cung Cấp -->
-                                            <div class="modal fade" id="updateSupplierModal" tabindex="-1"
-                                                aria-labelledby="updateSupplierModalLabel" aria-hidden="true">
-                                                <div class="modal-dialog modal-dialog-centered">
-                                                    <div class="modal-content">
+                                            </td>
+                                            <td>
+                                                <%= supplier.name %>
+                                            </td>
+                                            <td>
+                                                <%= supplier.phonenumber %>
+                                            </td>
+                                            <td>
+                                                <%= supplier.email %>
+                                            </td>
+                                            <td>
+                                                <%= supplier.address %>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-info editSupplierBtn"
+                                                    data-bs-toggle="modal" data-bs-target="#updateSupplierModal"
+                                                    data-id="<%= supplier.id %>" data-name="<%= supplier.name %>"
+                                                    data-phonenumber="<%= supplier.phonenumber %>"
+                                                    data-email="<%= supplier.email %>"
+                                                    data-address="<%= supplier.address %>">
+                                                    <i class="fas fa-edit"></i>
+                                                </a>
 
-                                                        <div class="modal-header">
-                                                            <h5 class="modal-title" id="updateSupplierModalLabel">
-                                                                Cập nhật
-                                                                nhà cung cấp</h5>
-                                                            <button type="button" class="btn-close"
-                                                                data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                <!-- Modal Cập Nhật Nhà Cung Cấp -->
+                                                <div class="modal fade" id="updateSupplierModal" tabindex="-1"
+                                                    aria-labelledby="updateSupplierModalLabel" aria-hidden="true">
+                                                    <div class="modal-dialog modal-dialog-centered">
+                                                        <div class="modal-content">
+
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title" id="updateSupplierModalLabel">
+                                                                    Cập nhật
+                                                                    nhà cung cấp</h5>
+                                                                <button type="button" class="btn-close"
+                                                                    data-bs-dismiss="modal" aria-label="Đóng"></button>
+                                                            </div>
+
+                                                            <div class="modal-body">
+                                                                <form id="updateSupplierForm">
+                                                                    <input type="hidden" id="updateSupplierId"
+                                                                        name="id">
+                                                                    <div class="mb-3">
+                                                                        <label for="updateSupplierName"
+                                                                            class="form-label">Tên
+                                                                            nhà cung cấp</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="updateSupplierName" name="name"
+                                                                            required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="updateSupplierPhonenumber"
+                                                                            class="form-label">Số điện thoại</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="updateSupplierPhonenumber"
+                                                                            name="phonenumber" required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="updateSupplierEmail"
+                                                                            class="form-label">Email</label>
+                                                                        <input type="email" class="form-control"
+                                                                            id="updateSupplierEmail" name="email"
+                                                                            required>
+                                                                    </div>
+                                                                    <div class="mb-3">
+                                                                        <label for="updateSupplierAddress"
+                                                                            class="form-label">Địa chỉ</label>
+                                                                        <input type="text" class="form-control"
+                                                                            id="updateSupplierAddress" name="address"
+                                                                            required>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+
+                                                            <div class="modal-footer">
+                                                                <button type="button" class="btn btn-secondary"
+                                                                    data-bs-dismiss="modal">Hủy</button>
+                                                                <button type="submit" form="updateSupplierForm"
+                                                                    class="btn btn-primary">Cập nhật</button>
+                                                            </div>
+
                                                         </div>
-
-                                                        <div class="modal-body">
-                                                            <form id="updateSupplierForm">
-                                                                <input type="hidden" id="updateSupplierId" name="id">
-                                                                <div class="mb-3">
-                                                                    <label for="updateSupplierName"
-                                                                        class="form-label">Tên
-                                                                        nhà cung cấp</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="updateSupplierName" name="name" required>
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label for="updateSupplierPhonenumber"
-                                                                        class="form-label">Số điện thoại</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="updateSupplierPhonenumber"
-                                                                        name="phonenumber" required>
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label for="updateSupplierEmail"
-                                                                        class="form-label">Email</label>
-                                                                    <input type="email" class="form-control"
-                                                                        id="updateSupplierEmail" name="email" required>
-                                                                </div>
-                                                                <div class="mb-3">
-                                                                    <label for="updateSupplierAddress"
-                                                                        class="form-label">Địa chỉ</label>
-                                                                    <input type="text" class="form-control"
-                                                                        id="updateSupplierAddress" name="address"
-                                                                        required>
-                                                                </div>
-                                                            </form>
-                                                        </div>
-
-                                                        <div class="modal-footer">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-bs-dismiss="modal">Hủy</button>
-                                                            <button type="submit" form="updateSupplierForm"
-                                                                class="btn btn-primary">Cập nhật</button>
-                                                        </div>
-
                                                     </div>
                                                 </div>
-                                            </div>
 
-                                            <button class="btn btn-sm btn-danger delete-supplier-btn"
-                                                data-id="<%= supplier.id %>">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <% }) %>
-                                        <% } else { %>
-                                            <tr>
-                                                <td colspan="6" class="text-center">Không có nhà cung cấp nào.</td>
-                                            </tr>
-                                            <% } %>
+                                                <button class="btn btn-sm btn-danger delete-supplier-btn"
+                                                    data-id="<%= supplier.id %>">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="6" class="text-center">Không có nhà cung cấp nào.</td>
+                                                </tr>
+                                                <% } %>
                         </tbody>
                     </table>
                 </div>
@@ -1819,45 +1849,48 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <% if (vouchers && vouchers.length> 0) { %>
-                                    <% vouchers.forEach((voucher, index)=> { %>
-                                        <tr>
-                                            <td>
-                                                <%= voucher.id %>
-                                            </td>
-                                            <td>
-                                                <%= voucher.voucher_code %>
-                                            </td>
-                                            <td>
-                                                <%= voucher.voucher_value %>
-                                            </td>
-                                            <td>
-                                                <%= voucher.date_start %>
-                                            </td>
-                                            <td>
-                                                <%= voucher.date_end %>
-                                            </td>
-                                            <td>
-                                                <button class="btn btn-sm btn-info edit-voucher-btn" title="Chỉnh sửa"
-                                                    data-id="<%= voucher.id %>">
-                                                    <i class="fas fa-edit"></i>
-                                                </button>
+                                <% function generateVoucherCode(id) { const randomPart=('0000' + (id * 3181 %
+                                    10000)).slice(-4); return `${randomPart}${id}`; } %>
+                                    <% if (vouchers && vouchers.length> 0) { %>
+                                        <% vouchers.forEach((voucher, index)=> { %>
+                                            <tr>
+                                                <td>
+                                                    #<%= generateVoucherCode(voucher.id) %>
 
-                                                <button class="btn btn-sm btn-danger delete-voucher-btn" title="Xóa"
-                                                    data-id="<%= voucher.id %>">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
-                                            </td>
+                                                </td>
+                                                <td>
+                                                    <%= voucher.voucher_code %>
+                                                </td>
+                                                <td>
+                                                    <%= voucher.voucher_value %>
+                                                </td>
+                                                <td>
+                                                    <%= voucher.date_start %>
+                                                </td>
+                                                <td>
+                                                    <%= voucher.date_end %>
+                                                </td>
+                                                <td>
+                                                    <button class="btn btn-sm btn-info edit-voucher-btn"
+                                                        title="Chỉnh sửa" data-id="<%= voucher.id %>">
+                                                        <i class="fas fa-edit"></i>
+                                                    </button>
 
-                                            </td>
+                                                    <button class="btn btn-sm btn-danger delete-voucher-btn" title="Xóa"
+                                                        data-id="<%= voucher.id %>">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </td>
 
-                                        </tr>
-                                        <% }) %>
-                                            <% } else { %>
-                                                <tr>
-                                                    <td colspan="6" class="text-center">Không có voucher nào.</td>
-                                                </tr>
-                                                <% } %>
+                                                </td>
+
+                                            </tr>
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="6" class="text-center">Không có voucher nào.</td>
+                                                    </tr>
+                                                    <% } %>
                             </tbody>
 
                         </table>
