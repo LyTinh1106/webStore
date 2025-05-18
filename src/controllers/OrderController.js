@@ -50,7 +50,7 @@ exports.createOrder = async (req, res) => {
       email,
       phone,
       address,
-      note
+      note,
     } = req.body;
 
     if (!account_id || !payment_method || !total_payment || !cartItems) {

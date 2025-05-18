@@ -12,14 +12,15 @@ const Order = function (order) {
   this.phone = order.phone;
   this.address = order.address;
   this.note = order.note;
+  this.payment = order.payment
 };
 
 
 Order.create = (newOrder, result) => {
   const query = `
     INSERT INTO order_table 
-(created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+(created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note,payment)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
   `;
 
@@ -32,7 +33,8 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     newOrder.fullname,
     newOrder.phone,
     newOrder.address,
-    newOrder.note
+    newOrder.note,
+    newOrder.payment
   ];
 
   sql.query(query, values, (err, res) => {
