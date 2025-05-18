@@ -288,8 +288,6 @@
                 });
             </script>
 
-
-
             <!-- Modal Chi tiết đơn hàng -->
             <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel"
                 aria-hidden="true">
@@ -316,9 +314,22 @@
                                 <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
 
                                 <h6>Danh sách sản phẩm:</h6>
-                                <ul id="modalOrderProducts" class="list-group mb-3">
-                                    <li class="list-group-item text-muted">Đang tải...</li>
-                                </ul>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered mb-3">
+                                        <thead>
+                                            <tr>
+                                                <th>Sản phẩm</th>
+                                                <th>Số lượng</th>
+                                                <th>Thành tiền</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="modalOrderProducts">
+                                            <tr>
+                                                <td colspan="3" class="text-muted text-center">Đang tải...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
 
                                 <div class="mb-3">
@@ -372,23 +383,26 @@
                     badge.innerText = status;
 
                     const productList = document.getElementById('modalOrderProducts');
-                    productList.innerHTML = `<li class="list-group-item text-muted">\u0110ang tải...</li>`;
+                    productList.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
                     try {
                         const res = await fetch(`/api/order-detail/${id}`);
                         const data = await res.json();
                         productList.innerHTML = '';
                         if (data.length === 0) {
-                            productList.innerHTML = `<li class="list-group-item text-danger">Không có sản phẩm nào.</li>`;
+                            productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm nào.</td></tr>`;
                         } else {
                             data.forEach(item => {
-                                const li = document.createElement('li');
-                                li.className = 'list-group-item';
-                                li.innerText = `${item.quantity}x ${item.product_name} - ${formatVND(item.subtotalprice)}`;
-                                productList.appendChild(li);
+                                const tr = document.createElement('tr');
+                                tr.innerHTML = `
+                                <td>${item.product_name}</td>
+                                <td>${item.quantity}</td>
+                                <td>${formatVND(item.subtotalprice)}</td>
+                                `;
+                                productList.appendChild(tr);
                             });
                         }
                     } catch (err) {
-                        productList.innerHTML = `<li class="list-group-item text-danger">Lỗi khi tải sản phẩm.</li>`;
+                        productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Lỗi khi tải sản phẩm.</td></tr>`;
                     }
                 });
 
@@ -1192,9 +1206,25 @@
 
                                         <!-- Danh sách sản phẩm -->
                                         <h6>Danh sách sản phẩm:</h6>
-                                        <ul id="shippingOrderProductList" class="list-group mb-3">
+                                        <!-- <ul id="shippingOrderProductList" class="list-group mb-3">
                                             <li class="list-group-item text-muted">Đang tải...</li>
-                                        </ul>
+                                        </ul> -->
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered mb-3">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Sản phẩm</th>
+                                                        <th>Số lượng</th>
+                                                        <th>Thành tiền</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="shippingOrderProductList">
+                                                    <tr>
+                                                        <td colspan="3" class="text-muted text-center">Đang tải...</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -1226,7 +1256,6 @@
                                             <th>Họ tên</th>
                                             <th>SĐT</th>
                                             <th>Hành động</th>
-
                                         </tr>
                                     </thead>
                                     <tbody id="orderList">
@@ -1239,6 +1268,7 @@
                         </div>
                     </div>
                 </div>
+
                 <div class="table-responsive">
                     <table class="table table-striped">
                         <thead>
@@ -1307,8 +1337,6 @@
                 </div>
             </div>
 
-
-
             <script>
                 function formatVND(value) {
                     return Number(value).toLocaleString('vi-VN') + ' VNĐ';
@@ -1346,19 +1374,17 @@
                                 data.forEach(order => {
                                     const row = document.createElement('tr');
                                     row.innerHTML = `
-                            <td>${order.id}</td>
-                            <td>${order.fullname}</td>
-                            <td>${order.phone}</td>
-                            <td>
-                                <button class="btn btn-sm btn-primary select-order" data-id="${order.id}">
-                                    Chọn
-                                </button>
-                            </td>`;
+                                    <td>${order.id}</td>
+                                    <td>${order.fullname}</td>
+                                    <td>${order.phone}</td>
+                                    <td class="text-center">
+                                            <button class="btn btn-sm btn-primary select-order" data-id="${order.id}">Chọn</button>  
+                                    </td>`;
                                     orderList.appendChild(row);
                                 });
                             })
                             .catch(err => {
-                                console.error("❌ Lỗi khi gọi API danh sách đơn:", err);
+                                console.error(" Lỗi khi gọi API danh sách đơn:", err);
                                 orderList.innerHTML = `<tr><td colspan="4" class="text-danger">Không thể tải đơn hàng.</td></tr>`;
                             });
                     });
@@ -1435,7 +1461,7 @@
                                 alert("Lỗi khi tạo đơn giao hàng: " + text);
                             }
                         } catch (err) {
-                            console.error("❌ Lỗi khi gửi đơn giao hàng:", err);
+                            console.error(" Lỗi khi gửi đơn giao hàng:", err);
                             alert("Đã xảy ra lỗi khi gửi dữ liệu.");
                         }
                     });
@@ -1472,29 +1498,28 @@
                                     const productList = document.getElementById('shippingOrderProductList');
                                     productList.innerHTML = '';
                                     if (!products || products.length === 0) {
-                                        productList.innerHTML = `<li class="list-group-item text-danger">Không có sản phẩm nào.</li>`;
+                                        productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm nào.</td></tr>`;
                                     } else {
                                         products.forEach(item => {
-                                            const li = document.createElement('li');
-                                            li.className = 'list-group-item';
-                                            li.innerText = `${item.quantity}x ${item.product_name} - ${formatVND(item.subtotalprice)}`;
-                                            productList.appendChild(li);
+                                            const tr = document.createElement('tr');
+                                            tr.innerHTML = `
+                                            <td>${item.product_name}</td>
+                                            <td>${item.quantity}</td>
+                                            <td>${formatVND(item.subtotalprice)}</td>
+                                            `;
+                                            productList.appendChild(tr);
                                         });
                                     }
                                 }, 300);
                             }, 300);
                         })
                         .catch(err => {
-                            console.error("❌ Lỗi khi tải đơn hàng hoặc sản phẩm:", err);
+                            console.error(" Lỗi khi tải đơn hàng hoặc sản phẩm:", err);
                             alert("Không thể tải thông tin đơn hàng hoặc sản phẩm.");
                         });
                 }
             </script>
-
-
-
-
-
+               
             <!-- Supplier Section -->
             <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="v-suppliers-tab">
                 <h3 class="section-title">Quản lý nhà cung cấp</h3>

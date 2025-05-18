@@ -1772,14 +1772,13 @@ textarea.input {
 \*----------------------------*/
 
 #product-tab {
-  margin-top: 60px;
+  margin-top: 5px;
 }
 
 #product-tab .tab-nav {
   position: relative;
   text-align: center;
-  padding: 15px 0px;
-  margin-bottom: 30px;
+  padding: 10px 0px;
 }
 
 #product-tab .tab-nav:after {
