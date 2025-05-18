@@ -101,10 +101,10 @@
 
 	// Product Main img Slick
 	$('#product-main-img').slick({
-		infinite: true,
+		infinite: false,
 		speed: 300,
-		dots: true,
-		arrows: true,
+		dots: false,
+		arrows: false,
 		fade: true,
 		asNavFor: '#product-imgs',
 	});
@@ -113,19 +113,19 @@
 	$('#product-imgs').slick({
 		slidesToShow: 4,
 		slidesToScroll: 1,
-		arrows: true,
-		centerMode: false,
+		arrows: false,
+		centerMode: true,
 		focusOnSelect: true,
 		centerPadding: 0,
 		vertical: true,
 		asNavFor: '#product-main-img',
-		infinite: true,
+		infinite: false,
 		responsive: [{
 			breakpoint: 991,
 			settings: {
 				vertical: false,
 				arrows: false,
-				dots: true,
+				dots: false,
 				infinite: true,
 			}
 		},
@@ -133,10 +133,10 @@
 	});
 
 	// Product img zoom
-	var zoomMainProduct = document.getElementById('product-main-img');
-	if (zoomMainProduct) {
-		$('#product-main-img .product-preview').zoom();
-	}
+	// var zoomMainProduct = document.getElementById('product-main-img');
+	// if (zoomMainProduct) {
+	// 	$('#product-main-img .product-preview').zoom();
+	// }
 
 	/////////////////////////////////////////
 
