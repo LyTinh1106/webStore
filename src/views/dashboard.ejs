@@ -1091,9 +1091,7 @@
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="updateBrandModalLabel">Cập
-                                                                    nhật
-                                                                    nhãn hàng</h5>
+                                                               <h5 class="modal-title" id="updateBrandModalLabel">Cập nhật nhãn hàng</h5>
                                                                 <button type="button" class="btn-close"
                                                                     data-bs-dismiss="modal" aria-label="Đóng"></button>
                                                             </div>
@@ -1192,12 +1190,12 @@
 
                                         <!-- Thông tin đơn hàng đã chọn -->
                                         <div class="col-12">
+                                            <p><strong>Mã đơn hàng:</strong> <span id="shippingOrderCode"></span></p>
                                             <p><strong>Họ tên:</strong> <span id="shippingOrderName"></span></p>
                                             <p><strong>Email:</strong> <span id="shippingOrderEmail"></span></p>
                                             <p><strong>Số điện thoại:</strong> <span id="shippingOrderPhone"></span></p>
                                             <p><strong>Ngày đặt:</strong> <span id="shippingOrderDate"></span></p>
-                                            <p><strong>Phương thức thanh toán:</strong> <span
-                                                    id="shippingOrderPayment"></span></p>
+                                            <p><strong>Phương thức thanh toán:</strong> <span id="shippingOrderPayment"></span></p>
                                             <p><strong>Địa chỉ:</strong> <span id="shippingOrderAddress"></span></p>
                                             <p><strong>Tổng tiền:</strong> <span id="shippingOrderTotal"></span></p>
                                             <p><strong>Ghi chú đơn hàng:</strong> <span id="shippingOrderNote"></span>
@@ -1305,7 +1303,7 @@
                                                 <%= shipping.customer_name || 'N/A' %>
                                             </td> <!-- nếu cần hiển thị tên thay vì id -->
                                             <td>
-                                                <%= shipping.id_order %>
+                                                <%= generateCode(shipping.id_order) %>
                                             </td>
                                             <td>
                                                 <%= shipping.shipping_address %>
@@ -1347,10 +1345,14 @@
                     return isNaN(d.getTime()) ? '(Không rõ)' : d.toLocaleDateString('vi-VN');
                 }
 
-                // ✅ Hàm lấy ngày giờ hiện tại dạng yyyy-MM-dd HH:mm:ss
                 function formatFullDateTime(date = new Date()) {
                     const pad = (n) => n.toString().padStart(2, '0');
                     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} ${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+                }
+
+                function generateOrderCode(id) {
+                    const randomPart = ('0000' + (id * 7919 % 10000)).slice(-4);
+                    return `${randomPart}${id}`;
                 }
 
                 let formCancelled = false;
@@ -1372,19 +1374,22 @@
                                 }
                                 orderList.innerHTML = '';
                                 data.forEach(order => {
+                                    const orderCode = generateOrderCode(order.id);
                                     const row = document.createElement('tr');
                                     row.innerHTML = `
-                                    <td>${order.id}</td>
+                                    <td>${orderCode}</td>
                                     <td>${order.fullname}</td>
                                     <td>${order.phone}</td>
                                     <td class="text-center">
-                                            <button class="btn btn-sm btn-primary select-order" data-id="${order.id}">Chọn</button>  
+                                        <button class="btn btn-sm btn-primary select-order" 
+                                            data-id="${order.id}" 
+                                            data-code="${orderCode}">Chọn</button>  
                                     </td>`;
                                     orderList.appendChild(row);
                                 });
                             })
                             .catch(err => {
-                                console.error(" Lỗi khi gọi API danh sách đơn:", err);
+                                console.error("Lỗi khi gọi API danh sách đơn:", err);
                                 orderList.innerHTML = `<tr><td colspan="4" class="text-danger">Không thể tải đơn hàng.</td></tr>`;
                             });
                     });
@@ -1393,7 +1398,8 @@
                         const button = e.target.closest('.select-order');
                         if (button) {
                             const orderId = button.dataset.id;
-                            if (orderId) selectOrder(parseInt(orderId));
+                            const orderCode = button.dataset.code;
+                            if (orderId) selectOrder(parseInt(orderId), orderCode);
                         }
                     });
 
@@ -1402,7 +1408,7 @@
                             addForm.reset();
                             document.getElementById('modalOrderId').value = '';
                             [
-                                'shippingOrderName', 'shippingOrderEmail', 'shippingOrderPhone',
+                                'shippingOrderCode', 'shippingOrderName', 'shippingOrderEmail', 'shippingOrderPhone',
                                 'shippingOrderDate', 'shippingOrderPayment', 'shippingOrderAddress',
                                 'shippingOrderTotal', 'shippingOrderNote'
                             ].forEach(id => document.getElementById(id).innerText = '');
@@ -1412,7 +1418,6 @@
                         formCancelled = false;
                     });
 
-                    // ✅ Xử lý gửi form tạo đơn giao hàng
                     addForm.addEventListener("submit", async function (e) {
                         e.preventDefault();
 
@@ -1420,7 +1425,7 @@
                         const delivery_method = document.getElementById("deliveryMethod").value;
                         const shipping_address = document.getElementById("shippingOrderAddress").innerText;
                         const shipping_status = "completed";
-                        const shipping_date = formatFullDateTime(); // ✅ Lấy ngày giờ hiện tại
+                        const shipping_date = formatFullDateTime();
 
                         if (!id_order || !delivery_method || !shipping_address) {
                             alert("Vui lòng chọn đơn hàng và phương thức giao hàng.");
@@ -1461,13 +1466,13 @@
                                 alert("Lỗi khi tạo đơn giao hàng: " + text);
                             }
                         } catch (err) {
-                            console.error(" Lỗi khi gửi đơn giao hàng:", err);
+                            console.error("Lỗi khi gửi đơn giao hàng:", err);
                             alert("Đã xảy ra lỗi khi gửi dữ liệu.");
                         }
                     });
                 });
 
-                function selectOrder(id) {
+                function selectOrder(id, orderCode) {
                     const orderDetailAPI = fetch(`/api/order/details/${id}`).then(res => res.json());
                     const productListAPI = fetch(`/api/order-detail/${id}`).then(res => res.json());
 
@@ -1476,6 +1481,7 @@
                             if (!order || !order.id) throw new Error("Dữ liệu đơn hàng không hợp lệ.");
 
                             document.getElementById('modalOrderId').value = id;
+                            document.getElementById('shippingOrderCode').innerText = '#' + orderCode;
                             document.getElementById('shippingOrderName').innerText = order.fullname || '(Không có)';
                             document.getElementById('shippingOrderEmail').innerText = order.email || '(Không có)';
                             document.getElementById('shippingOrderPhone').innerText = order.phone || '(Không có)';
@@ -1506,7 +1512,7 @@
                                             <td>${item.product_name}</td>
                                             <td>${item.quantity}</td>
                                             <td>${formatVND(item.subtotalprice)}</td>
-                                            `;
+                                        `;
                                             productList.appendChild(tr);
                                         });
                                     }
@@ -1514,11 +1520,12 @@
                             }, 300);
                         })
                         .catch(err => {
-                            console.error(" Lỗi khi tải đơn hàng hoặc sản phẩm:", err);
+                            console.error("Lỗi khi tải đơn hàng hoặc sản phẩm:", err);
                             alert("Không thể tải thông tin đơn hàng hoặc sản phẩm.");
                         });
                 }
             </script>
+
                
             <!-- Supplier Section -->
             <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="v-suppliers-tab">
