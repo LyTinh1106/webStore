@@ -76,7 +76,7 @@
 					<!-- Chi tiết sản phẩm -->
 					<div class="col-md-5">
 						<div class="product-details">
-							
+
 							<span id="detail-id" class="d-none product-id">
 								<%= product.id %>
 							</span>
@@ -433,9 +433,10 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name">
-															<%= product.name %>
-														</h3>
+														<h3 class="product-name" title="<%= product.name %>"><a
+																href="/product/<%=product.id%>">
+																<%= product.name %>
+															</a></h3>
 														<h4 class="product-price">
 															<%= product.retail_price.toLocaleString('vi-VN') %> VNĐ
 																<% if (product.old_price) { %>
