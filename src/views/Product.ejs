@@ -76,6 +76,10 @@
 					<!-- Chi tiết sản phẩm -->
 					<div class="col-md-5">
 						<div class="product-details">
+							
+							<span id="detail-id" class="d-none product-id">
+								<%= product.id %>
+							</span>
 							<!-- Tên sản phẩm -->
 							<h2 class="product-name" id="detail-name">
 								<%= product.name %>
@@ -102,8 +106,6 @@
 
 							<!-- Thêm vào giỏ hàng -->
 							<div class="add-to-cart">
-
-
 								<!-- Nút thêm -->
 								<button id="detail-add-to-cart" class="add-to-cart-btn">
 									<i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
@@ -405,6 +407,9 @@
 										<div class="products-slick" data-nav="#slick-nav-2">
 											<% relatedProducts.forEach(product=> { %>
 												<div class="product">
+													<span class="d-none product-id">
+														<%= product.id %>
+													</span>
 													<a href="/product/<%= product.id %>"
 														style="text-decoration: none; color: inherit;">
 														<div class="product-img">
@@ -422,6 +427,9 @@
 														</div>
 													</a>
 													<div class="product-body">
+														<span class="d-none product-id">
+															<%= product.id %>
+														</span>
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
@@ -455,8 +463,8 @@
 													</div>
 													<div class="add-to-cart">
 														<button class="add-to-cart-btn"><i
-																class="fa fa-shopping-cart"></i> Thêm vào
-															giỏ</button>
+																class="fa fa-shopping-cart"></i>
+															Thêm vào giỏ hàng</button>
 													</div>
 
 												</div>

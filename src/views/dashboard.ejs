@@ -669,7 +669,8 @@
 
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                    <button type="submit" form="updateProductForm" class="btn btn-primary">Cập nhật</button>
+                                    <button type="submit" form="updateProductForm" class="btn btn-primary">Cập
+                                        nhật</button>
                                 </div>
                             </div>
                         </div>
@@ -1260,7 +1261,6 @@
                                 <th>Người nhận</th>
                                 <th>Mã đơn hàng</th>
                                 <th>Địa chỉ</th>
-                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1285,24 +1285,10 @@
                                                 <%= shipping.customer_name || 'N/A' %>
                                             </td> <!-- nếu cần hiển thị tên thay vì id -->
                                             <td>
-                                                <%= generateCode(shipping.id_order) %>
+                                                #<%= generateCode(shipping.id_order) %>
                                             </td>
                                             <td>
                                                 <%= shipping.shipping_address %>
-                                            </td>
-                                            <td>
-                                                <a href="/shippings/<%= shipping.id_shipping %>"
-                                                    class="btn btn-sm btn-info">
-                                                    <i class="fas fa-edit"></i>
-                                                </a>
-
-                                                <form action="/shippings/<%= shipping.id_shipping %>/delete"
-                                                    method="POST" style="display:inline;">
-                                                    <button class="btn btn-sm btn-danger"
-                                                        onclick="return confirm('Bạn có chắc muốn xoá?')">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </form>
                                             </td>
                                         </tr>
                                         <% }) %>
@@ -1359,7 +1345,7 @@
                                     const orderCode = generateOrderCode(order.id);
                                     const row = document.createElement('tr');
                                     row.innerHTML = `
-                                    <td>${orderCode}</td>
+                                    <td>#${orderCode}</td>
                                     <td>${order.fullname}</td>
                                     <td>${order.phone}</td>
                                     <td class="text-center">
@@ -1406,7 +1392,7 @@
                         const id_order = document.getElementById("modalOrderId").value;
                         const delivery_method = document.getElementById("deliveryMethod").value;
                         const shipping_address = document.getElementById("shippingOrderAddress").innerText;
-                        const shipping_status = "completed";
+                        const shipping_status = "Thành công";
                         const shipping_date = formatFullDateTime();
 
                         if (!id_order || !delivery_method || !shipping_address) {
@@ -1898,7 +1884,6 @@
                                 <th>Email</th>
                                 <th>Mật khẩu</th>
                                 <th>Quyền</th>
-                                <th>Thao tác</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1922,24 +1907,6 @@
                                     </td>
                                     <td>
                                         <%= account.role %>
-                                    </td>
-                                    <td>
-                                        <a href="/accounts/<%= account.id %>" class="btn btn-sm btn-primary"
-                                            title="Xem chi tiết">
-                                            <i class="fas fa-eye"></i>
-                                        </a>
-                                        <a href="/accounts/<%= account.id %>/edit" class="btn btn-sm btn-info"
-                                            title="Chỉnh sửa">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
-                                        <form action="/accounts/<%= account.id %>/delete" method="POST"
-                                            class="d-inline">
-                                            <button type="submit" class="btn btn-sm btn-danger"
-                                                onclick="return confirm('Bạn có chắc muốn xoá tài khoản này?')"
-                                                title="Xoá">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
                                     </td>
                                 </tr>
                                 <% }); %>

@@ -439,7 +439,7 @@
 
                             <div class="form-group">
                                 <label><strong>Trạng thái hiện tại:</strong></label>
-                                <span id="modalOrderStatusDisplay"></span>
+                                <span id="modalOrderStatusDisplay">Đang xử lý</span>
                             </div>
                         </div>
                         <div class="modal-footer">
@@ -488,14 +488,15 @@
                         // document.getElementById('modalOrderStatusDisplay').textContent = status;
                         const badge = document.getElementById('modalOrderStatusDisplay');
                         document.getElementById("modalOrderStatusDisplay").dataset.status = status;
+                        badge.className = 'badge';
                         badge.classList.add(
                             status === 'Hoàn Thành' ? 'badge-success' :
                                 status === 'Chờ duyệt' ? 'badge-warning' :
                                     status === 'Đã duyệt' ? 'badge-info' :
-                                        status === 'Đã huỷ' ? 'badge-danger' :
-                                            'badge-default'
+                                        'badge-default'
                         );
-
+                        badge.innerText = status;
+                        
                         const productTable = document.getElementById('modalOrderProducts');
                         productTable.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
 

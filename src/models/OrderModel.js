@@ -263,7 +263,7 @@ Order.getOnDeliveringBasicInfo = (result) => {
   const query = `
     SELECT id, fullname, phone
     FROM order_table
-    WHERE order_status = 'on delivering'
+    WHERE order_status = 'Chờ duyệt'
   `;
   sql.query(query, (err, res) => {
     if (err) return result(err, null);

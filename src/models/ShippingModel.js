@@ -30,7 +30,7 @@ Shipping.create = (newShipping, result) => {
 
   sql.query("INSERT INTO shipping SET ?", formattedShipping, (err, res) => {
     if (err) {
-      console.log("❌ Lỗi khi thêm shipping:", err);
+      console.log(" Lỗi khi thêm shipping:", err);
       return result(err, null);
     }
 
@@ -39,16 +39,16 @@ Shipping.create = (newShipping, result) => {
     // ✅ Sau khi thêm thành công thì cập nhật đơn hàng
     Shipping.updateOrderStatusToCompleted(inserted.id_order, (updateErr, updateRes) => {
       if (updateErr) {
-        console.log("⚠️ Tạo shipping OK nhưng lỗi khi cập nhật order:", updateErr);
+        console.log(" Tạo shipping OK nhưng lỗi khi cập nhật order:", updateErr);
         return result(null, {
           ...inserted,
-          orderUpdate: "failed"
+          orderUpdate: "Thất bại"
         });
       }
 
       result(null, {
         ...inserted,
-        orderUpdate: "completed"
+        orderUpdate: "Hoàn thành"
       });
     });
   });
@@ -57,11 +57,11 @@ Shipping.create = (newShipping, result) => {
 // ✅ Cập nhật trạng thái đơn hàng thành 'completed'
 Shipping.updateOrderStatusToCompleted = (orderId, result) => {
   sql.query(
-    `UPDATE order_table SET order_status = 'completed' WHERE id = ?`,
+    `UPDATE order_table SET order_status = 'Hoàn thành' WHERE id = ?`,
     [orderId],
     (err, res) => {
       if (err) {
-        console.log("❌ Lỗi cập nhật trạng thái đơn hàng:", err);
+        console.log(" Lỗi cập nhật trạng thái đơn hàng:", err);
         return result(err, null);
       }
 
@@ -69,7 +69,7 @@ Shipping.updateOrderStatusToCompleted = (orderId, result) => {
         return result({ kind: "not_found" }, null);
       }
 
-      result(null, { orderId, status: "completed" });
+      result(null, { orderId, status: "Hoàn thành" });
     }
   );
 };
@@ -185,7 +185,7 @@ Shipping.remove = (id, result) => {
 
 Shipping.updateOrderStatusToCompleted = (orderId, result) => {
   sql.query(
-    `UPDATE order_table SET order_status = 'completed' WHERE id = ?`,
+    `UPDATE order_table SET order_status = 'Hoàn thành' WHERE id = ?`,
     [orderId],
     (err, res) => {
       if (err) {
@@ -199,7 +199,7 @@ Shipping.updateOrderStatusToCompleted = (orderId, result) => {
         return;
       }
 
-      result(null, { orderId, status: "completed" });
+      result(null, { orderId, status: "Hoàn thành" });
     }
   );
 };
