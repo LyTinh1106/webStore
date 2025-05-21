@@ -29,7 +29,7 @@ const createShipping = (req, res) => {
   const {
     shipping_date,
     delivery_method,
-    shipping_status = "completed",
+    shipping_status = "Thành công",
     id_customer,
     id_order,
     shipping_address
@@ -55,7 +55,7 @@ const createShipping = (req, res) => {
   // Thêm vào bảng shipping
   Shipping.create(newShipping, (err, shippingData) => {
     if (err) {
-      console.error("❌ Lỗi khi tạo đơn giao hàng:", err);
+      console.error(" Lỗi khi tạo đơn giao hàng:", err);
       return res.status(500).json({
         success: false,
         message: "Lỗi khi tạo đơn giao hàng.",
@@ -66,7 +66,7 @@ const createShipping = (req, res) => {
     // Cập nhật trạng thái đơn hàng
     Shipping.updateOrderStatusToCompleted(id_order, (updateErr, updateResult) => {
       if (updateErr) {
-        console.warn("⚠️ Tạo thành công shipping nhưng không cập nhật được đơn hàng:", updateErr);
+        console.warn(" Tạo thành công shipping nhưng không cập nhật được đơn hàng:", updateErr);
         return res.status(500).json({
           success: false,
           message: "Tạo đơn giao hàng thành công, nhưng cập nhật trạng thái đơn hàng thất bại.",
