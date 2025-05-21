@@ -126,12 +126,7 @@
 						<div class="section-title">
 							<h3 class="title">Sản Phẩm Mới</h3>
 							<div class="section-nav">
-								<!-- <ul class="section-tab-nav tab-nav">
-									<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
-									<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
-									<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
-									<li><a data-toggle="tab" href="#tab1">Phụ Kiện</a></li>
-								</ul> -->
+								
 							</div>
 						</div>
 					</div>
@@ -154,12 +149,7 @@
 														<img src="/images/<%= product.image || 'noImage.jpg' %>"
 															alt="ảnh sản phẩm">
 														<div class="product-label">
-															<!-- <% if (product.sale_percent) { %>
-																  <span class="sale">-<%= product.sale_percent %>%</span>
-																<% } %> -->
-															<!-- <% if (product.is_new) { %>
-																  <span class="new">NEW</span>
-																<% } %> -->
+															
 														</div>
 													</div>
 													<div class="product-body">
@@ -171,15 +161,12 @@
 															</a></h3>
 														<h4 class="product-price">
 															<%= product.retail_price.toLocaleString('vi-VN') %> VNĐ
-																<!-- <% if (product.old_price) { %>
-																  <del class="product-old-price"><%= product.old_price.toLocaleString('vi-VN') %> VNĐ</del>
-																<% } %> -->
 														</h4>
 
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>" style="margin-right: 1px;"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -230,12 +217,6 @@
 						<div class="section-title">
 							<h3 class="title">LapTop</h3>
 							<div class="section-nav">
-								<!-- <ul class="section-tab-nav tab-nav">
-									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
-									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
-									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
-									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
-								</ul> -->
 							</div>
 						</div>
 					</div>
@@ -281,7 +262,7 @@
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>" style="margin-right: 1px;"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -327,12 +308,6 @@
 						<div class="section-title">
 							<h3 class="title">Case</h3>
 							<div class="section-nav">
-								<!-- <ul class="section-tab-nav tab-nav">
-									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
-									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
-									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
-									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
-								</ul> -->
 							</div>
 						</div>
 					</div>
@@ -378,7 +353,7 @@
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>" style="margin-right: 1px;"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -425,12 +400,6 @@
 						<div class="section-title">
 							<h3 class="title">Màn Hình</h3>
 							<div class="section-nav">
-								<!-- <ul class="section-tab-nav tab-nav">
-									<li class="active"><a data-toggle="tab" href="#tab2">Laptops</a></li>
-									<li><a data-toggle="tab" href="#tab2">Smartphones</a></li>
-									<li><a data-toggle="tab" href="#tab2">Cameras</a></li>
-									<li><a data-toggle="tab" href="#tab2">Accessories</a></li>
-								</ul> -->
 							</div>
 						</div>
 					</div>
@@ -476,7 +445,7 @@
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
 																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
+																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>" style="margin-right: 1px;"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">

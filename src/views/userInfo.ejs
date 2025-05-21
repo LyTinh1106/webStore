@@ -25,16 +25,22 @@
         .account-container {
             background: #ffffff;
             border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
-            margin-top: 40px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
+            margin: 40px 0;
             overflow: hidden;
+            height: 100%;
+        }
+
+        .account-container .row {
+            display: flex;
+            min-height: 100%;
         }
 
         .left-panel {
             background: #e8f4fd;
             padding: 25px 20px;
-            border-right: 1px solid #ddd;
-            min-height: 100%;
+            max-height: 100%;
+            margin-top: 0;
         }
 
         .user-avatar {
@@ -144,6 +150,7 @@
     <%- include('./header.ejs') %>
 
         <div class="container">
+            <br>
             <h2 class="text-center">Thông Tin Tài Khoản</h2>
 
             <div class="account-container">
@@ -153,7 +160,10 @@
                             <div class="user-avatar">
                                 <i class="fa fa-user"></i>
                             </div>
-                            <h4><%= (customer && customer.last_name && customer.first_name) ? customer.last_name + " " + customer.first_name : "User" %></h4>
+                            <h4>
+                                <%= (customer && customer.last_name && customer.first_name) ? customer.last_name + " " +
+                                    customer.first_name : "User" %>
+                            </h4>
                             <% let displayEmail="Không có email" ; if (user) { if (user.emails && user.emails[0]) {
                                 displayEmail=user.emails[0].value; } else if (user.email) { displayEmail=user.email; } }
                                 %>
@@ -193,7 +203,7 @@
                                             <div class="form-group">
                                                 <label for="lastName">Họ</label>
                                                 <input type="text" class="form-control" id="firstName" placeholder="Tên"
-                                                    value="<%= customer ? customer.first_name : '' %>">
+                                                    value="<%= customer ? customer.last_name : '' %>">
                                             </div>
                                         </div>
 
@@ -201,7 +211,7 @@
                                             <div class="form-group">
                                                 <label for="firstName">Tên</label>
                                                 <input type="text" class="form-control" id="lastName" placeholder="Họ"
-                                                    value="<%= customer ? customer.last_name : '' %>">
+                                                    value="<%= customer ? customer.first_name : '' %>">
                                             </div>
                                         </div>
                                     </div>
@@ -210,14 +220,14 @@
                                     <div class="form-group">
                                         <label>Giới tính</label><br>
                                         <label class="radio-inline">
-                                            <input type="radio" name="gender" value="male"
-                                              <%= customer && customer.gender === 'male' ? 'checked' : '' %>> Nam
-                                          </label>
-                                        
-                                          <label class="radio-inline">
-                                            <input type="radio" name="gender" value="female"
-                                              <%= customer && customer.gender === 'female' ? 'checked' : '' %>> Nữ
-                                          </label>
+                                            <input type="radio" name="gender" value="male" <%=customer &&
+                                                customer.gender==='male' ? 'checked' : '' %>> Nam
+                                        </label>
+
+                                        <label class="radio-inline">
+                                            <input type="radio" name="gender" value="female" <%=customer &&
+                                                customer.gender==='female' ? 'checked' : '' %>> Nữ
+                                        </label>
                                     </div>
 
                                     <!-- Số điện thoại -->
@@ -309,42 +319,131 @@
 
                             <div role="tabpanel" class="tab-pane" id="order-history">
                                 <h3>Lịch Sử Đơn Hàng</h3>
-                                <% if (orders.length> 0) { %>
-                                    <% orders.forEach(order=> { %>
-                                        <div class="order-item-container">
-                                            <div class="order-item">
-                                                <div class="order-header">
-                                                    <div><strong>Mã đơn hàng:</strong> #ORD<%= order.id%>
+                                <% function generateCode(id) { const randomPart=('0000' + (id * 7919 %
+                                    10000)).slice(-4); return `${randomPart}${id}`; } %>
+                                    <% if (orders.length> 0) { %>
+                                        <% orders.forEach(order=> { %>
+                                            <div class="order-item-container">
+                                                <div class="order-item">
+                                                    <div class="order-header">
+                                                        <div><strong>Mã đơn hàng:</strong> #<%= generateCode(order.id)
+                                                                %>
+                                                        </div>
+                                                        <div>
+                                                            <!-- <span class="badge badge-success">
+                                                                <%= order.order_status%>
+                                                            </span> -->
+                                                            <% if (order.order_status==='Hoàn Thành' ) { %>
+                                                                <span class="badge badge-success">
+                                                                    <%= order.order_status %>
+                                                                </span>
+                                                                <% } else if (order.order_status==='Chờ duyệt' ) { %>
+                                                                    <span class="badge badge-warning">
+                                                                        <%= order.order_status %>
+                                                                    </span>
+                                                                    <% } else if (order.order_status==='Đã duyệt' ) { %>
+                                                                        <span class="badge badge-info">
+                                                                            <%= order.order_status %>
+                                                                        </span>
+                                                                        <% } else { %>
+                                                                            <span class="badge badge-secondary">
+                                                                                <%= order.order_status %>
+                                                                            </span>
+                                                                            <% } %>
+                                                        </div>
                                                     </div>
-                                                    <div><span class="badge badge-success">
-                                                            <%= order.order_status%>
-                                                        </span></div>
-                                                </div>
-                                                <div class="order-details">
-                                                    <p><strong>Ngày đặt:</strong>
-                                                        <%= new Date(order.created_at).toLocaleDateString('vi-VN') %>
-                                                    </p>
-                                                    <p><strong>Tổng tiền:</strong>
-                                                        <%= order.total_payment %>đ
-                                                    </p>
-                                                    <p><strong>Phương thức thanh toán:</strong>
-                                                        <%= order.payment_method %>
-                                                    </p>
-                                                    <button class="btn btn-primary btn-sm view-detail-btn">Xem chi
-                                                        tiết</button>
+                                                    <div class="order-details">
+                                                        <p><strong>Ngày đặt:</strong>
+                                                            <%= new Date(order.created_at).toLocaleDateString('vi-VN')
+                                                                %>
+                                                        </p>
+                                                        <p><strong>Tổng tiền:</strong>
+                                                            <%= Number(order.total_payment).toLocaleString('vi-VN')
+                                                                + ' VNĐ' %>
+                                                        </p>
+                                                        <p><strong>Phương thức thanh toán:</strong>
+                                                            <%= order.payment_method %>
+                                                        </p>
+                                                        <button class="btn btn-primary btn-sm view-detail-btn"
+                                                            data-toggle="modal" data-target="#orderDetailModalView"
+                                                            data-id="<%= order.id %>"
+                                                            data-email="<%= order.account_email || order.email %>"
+                                                            data-name="<%= order.fullname || '' %>"
+                                                            data-phone="<%= order.phone || '' %>"
+                                                            data-date="<%= new Date(order.created_at).toLocaleDateString('vi-VN') %>"
+                                                            data-payment="<%= order.payment_method %>"
+                                                            data-total="<%= order.total_payment %>"
+                                                            data-address="<%= order.address || '' %>"
+                                                            data-note="<%= order.note || '' %>"
+                                                            data-status="<%= order.order_status %>">Xem chi
+                                                            tiết</button>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        <% }) %>
-                                            <% } else { %>
-                                                <tr>
-                                                    <td colspan="7" class="text-center">Không có đơn hàng nào.</td>
-                                                </tr>
-                                                <% } %>
-
-
+                                            <% }) %>
+                                                <% } else { %>
+                                                    <tr>
+                                                        <td colspan="7" class="text-center">Không có đơn hàng nào.</td>
+                                                    </tr>
+                                                    <% } %>
                             </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal Chi tiết đơn hàng -->
+            <div class="modal fade" id="orderDetailModalView" tabindex="-1" role="dialog"
+                aria-labelledby="orderDetailModalViewLabel">
+                <div class="modal-dialog modal-lg" role="document">
+
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
+                                <i class="fa fa-times"></i>
+                            </button>
+                            <h4 class="modal-title" id="orderDetailModalViewLabel">Chi tiết đơn hàng</h4>
+                        </div>
+                        <div class="modal-body">
+                            <input type="hidden" name="_method" value="PUT">
+                            <input type="hidden" name="order_status" value="Đã giao">
+                            <input type="hidden" name="order_id" id="modalOrderId">
+
+                            <p><strong>Họ tên:</strong> <span id="modalOrderName"></span></p>
+                            <p><strong>Email:</strong> <span id="modalOrderEmail"></span></p>
+                            <p><strong>Số điện thoại:</strong> <span id="modalOrderPhone"></span></p>
+                            <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
+                            <p><strong>Phương thức thanh toán:</strong> <span id="modalOrderPayment"></span></p>
+                            <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
+                            <p><strong>Tổng tiền:</strong> <span id="modalOrderTotal"></span></p>
+                            <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
+
+                            <h5>Danh sách sản phẩm:</h5>
+                            <div class="table-responsive">
+                                <table class="table table-bordered mb-3">
+                                    <thead>
+                                        <tr>
+                                            <th>Sản phẩm</th>
+                                            <th>Số lượng</th>
+                                            <th>Thành tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="modalOrderProducts">
+                                        <tr>
+                                            <td colspan="3" class="text-muted text-center">Đang tải...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="form-group">
+                                <label><strong>Trạng thái hiện tại:</strong></label>
+                                <span id="modalOrderStatusDisplay"></span>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
                         </div>
                     </div>
                 </div>
@@ -357,15 +456,75 @@
             <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
 
             <script>
-                $(document).ready(function () {
 
-                    $('.view-detail-btn').click(function () {
-                        const orderID = $(this).closest('.order-item').find('.order-header div:first-child').text().split('#')[1].trim();
-                        alert('Chi tiết đơn hàng #' + orderID);
+                function formatVND(value) {
+                    return Number(value).toLocaleString('vi-VN') + ' VNĐ';
+                }
+
+                const detailButtons = document.querySelectorAll('.view-detail-btn');
+
+                detailButtons.forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        const id = this.getAttribute('data-id');
+                        const name = this.getAttribute('data-name');
+                        const email = this.getAttribute('data-email');
+                        const phone = this.getAttribute('data-phone');
+                        const date = this.getAttribute('data-date');
+                        const payment = this.getAttribute('data-payment');
+                        const address = this.getAttribute('data-address');
+                        const total = this.getAttribute('data-total');
+                        const note = this.getAttribute('data-note');
+                        const status = this.getAttribute('data-status');
+
+                        document.getElementById('modalOrderId').value = id;
+                        document.getElementById('modalOrderName').textContent = name || '(Không có)';
+                        document.getElementById('modalOrderEmail').textContent = email || '(Không có)';
+                        document.getElementById('modalOrderPhone').textContent = phone || '(Không có)';
+                        document.getElementById('modalOrderDate').textContent = date || '(Không có)';
+                        document.getElementById('modalOrderPayment').textContent = payment || '(Không có)';
+                        document.getElementById('modalOrderAddress').textContent = address || '(Không có)';
+                        document.getElementById('modalOrderTotal').textContent = formatVND(total);
+                        document.getElementById('modalOrderNote').textContent = note || '(Không có)';
+                        // document.getElementById('modalOrderStatusDisplay').textContent = status;
+                        const badge = document.getElementById('modalOrderStatusDisplay');
+                        document.getElementById("modalOrderStatusDisplay").dataset.status = status;
+                        badge.classList.add(
+                            status === 'Hoàn Thành' ? 'badge-success' :
+                                status === 'Chờ duyệt' ? 'badge-warning' :
+                                    status === 'Đã duyệt' ? 'badge-info' :
+                                        status === 'Đã huỷ' ? 'badge-danger' :
+                                            'badge-default'
+                        );
+
+                        const productTable = document.getElementById('modalOrderProducts');
+                        productTable.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
+
+                        // 🔁 Gọi đúng API mới: /api/order-detail/:orderId
+                        fetch(`/api/order-detail/${id}`)
+                            .then(response => response.json())
+                            .then(data => {
+                                if (!data || data.length === 0) {
+                                    productTable.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Không có sản phẩm.</td></tr>`;
+                                } else {
+                                    productTable.innerHTML = '';
+                                    data.forEach(item => {
+                                        const row = document.createElement('tr');
+                                        row.innerHTML = `
+                                        <td>${item.product_name}</td>
+                                        <td>${item.quantity}</td>
+                                        <td>${formatVND(item.subtotalprice)}</td>
+                                        `;
+                                        productTable.appendChild(row);
+                                    });
+                                }
+                            })
+                            .catch(err => {
+                                console.error("Lỗi khi fetch sản phẩm:", err);
+                                productTable.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Lỗi khi tải danh sách sản phẩm.</td></tr>`;
+                            });
                     });
-
-
                 });
+
 
                 $(document).ready(function () {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -375,12 +534,38 @@
                         $('.nav-pills a[href="#' + tabId + '"]').tab('show');
                     }
 
-                    $('.view-detail-btn').click(function () {
-                        const orderID = $(this).closest('.order-item').find('.order-header div:first-child').text().split('#')[1].trim();
-                        alert('Chi tiết đơn hàng #' + orderID);
-                    });
 
                 });
+
+                const hash = window.location.hash;
+                if (hash === "#order-history") {
+                    // Ngăn scroll mặc định bằng cách xóa hash rồi xử lý thủ công
+                    history.replaceState(null, null, location.pathname);
+
+                    // Kích hoạt tab
+                    const orderTabLink = document.querySelector('a[href="#order-history"]');
+                    if (orderTabLink) {
+                        // Remove 'active' from current
+                        document.querySelectorAll('.nav-pills li').forEach(li => li.classList.remove('active'));
+                        document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active', 'in'));
+
+                        // Activate the correct tab and pane
+                        orderTabLink.parentElement.classList.add('active');
+                        const tabPane = document.querySelector('#order-history');
+                        if (tabPane) {
+                            tabPane.classList.add('active', 'in');
+                        }
+
+                        // Sử dụng jQuery để kích hoạt tab nếu dùng Bootstrap Tabs
+                        if (typeof $ !== 'undefined' && typeof $.fn.tab === 'function') {
+                            $(orderTabLink).tab('show');
+                        }
+                    }
+
+                    // Scroll lên đầu trang sau khi tab đã được bật
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                }
+
             </script>
 </body>
 

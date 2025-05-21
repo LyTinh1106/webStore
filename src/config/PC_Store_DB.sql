@@ -16,7 +16,6 @@ CREATE TABLE category (
 -- Bảng product
 CREATE TABLE product (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    fancy_id VARCHAR(50),
     name VARCHAR(255) NOT NULL,
     description TEXT,
     import_price FLOAT,
@@ -156,7 +155,6 @@ CREATE TABLE cart (
 CREATE VIEW view_fullproduct AS
 SELECT 
     p.id,
-    p.fancy_id,
     p.name,
     c.name AS cat_name,
     b.brand_name,

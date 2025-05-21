@@ -60,7 +60,7 @@ exports.createOrder = async (req, res) => {
     const newOrder = {
       created_at: new Date(),
       payment_method,
-      order_status: 'approving',
+      order_status: 'Chờ duyệt',
       account_id,
       total_payment,
       fullname,
@@ -148,7 +148,7 @@ exports.deleteOrder = (req, res) => {
 
 exports.updateStatus = (req, res) => {
   const id = req.params.id;
-  if (req.body.status === "approving") {
+  if (req.body.status === "Chờ duyệt") {
     Order.UpdateStatusById(id, (err, data) => {
       if (err) {
         if (err.kind === "not_found") {

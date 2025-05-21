@@ -227,7 +227,6 @@ function parseExcelBufferToJson(buffer) {
 const createProduct = async (req, res) => {
   try {
     const {
-      productCode,
       productName,
       description,
       importPrice,
@@ -269,7 +268,6 @@ const createProduct = async (req, res) => {
     }
 
     const newProduct = {
-      fancy_id: productCode,
       name: productName,
       description,
       import_price: importPrice,
@@ -389,7 +387,6 @@ const createProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {
   const {
-    fancy_id,
     name,
     description,
     import_price,
@@ -407,7 +404,6 @@ const updateProduct = async (req, res) => {
   const productId = req.params.id;
 
   const updatedProduct = new Product({
-    fancy_id,
     name,
     description,
     import_price,
@@ -703,7 +699,6 @@ const searchProductRender = (req, res) => {
   });
 };
 
-
 const compareProducts = (req, res) => {
   const id1 = parseInt(req.params.id1);
   const id2 = parseInt(req.params.id2);
@@ -787,8 +782,6 @@ const filterCombined = (req, res) => {
     res.json(products);
   });
 };
-
-
 
 module.exports = {
   getProduct,

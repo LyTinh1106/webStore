@@ -965,7 +965,8 @@ textarea.input {
 .product .product-img {
   position: relative;
   width: 100%;
-  padding-top: 100%; /* Tạo tỉ lệ khung vuông (chiều cao = 100% chiều rộng) */
+  padding-top: 100%;
+  /* Tạo tỉ lệ khung vuông (chiều cao = 100% chiều rộng) */
   overflow: hidden;
 }
 
@@ -976,7 +977,8 @@ textarea.input {
   height: 100%;
   width: auto;
   transform: translate(-50%, -50%);
-  object-fit: cover; /* Cắt ảnh cho vừa khung */
+  object-fit: cover;
+  /* Cắt ảnh cho vừa khung */
 }
 
 .product .product-img .product-label {
@@ -1020,9 +1022,12 @@ textarea.input {
 .product .product-body .product-name {
   text-transform: uppercase;
   font-size: 14px;
-  white-space: nowrap;         /* Không cho xuống dòng */
-  overflow: hidden;            /* Ẩn phần vượt ra ngoài */
-  text-overflow: ellipsis;     /* Thêm dấu ... */
+  white-space: nowrap;
+  /* Không cho xuống dòng */
+  overflow: hidden;
+  /* Ẩn phần vượt ra ngoài */
+  text-overflow: ellipsis;
+  /* Thêm dấu ... */
 }
 
 .product .product-body .product-name>a {
@@ -1430,12 +1435,13 @@ textarea.input {
   margin-bottom: 15px;
   margin-top: 15px;
 }
-.show-full-toggle-btn{
+
+.show-full-toggle-btn {
   text-decoration: none !important;
   color: #0118D8;
 }
 
-.show-full-toggle-btn:hover{
+.show-full-toggle-btn:hover {
   color: #030a49
 }
 
@@ -2759,7 +2765,6 @@ hr {
   border-radius: 5px;
   border: 1px #ff0000;
   color: #ff0000;
-  background-color: rgba(255, 0, 0, 0.304);
 }
 
 .remove-compare-btn:hover {
@@ -2813,7 +2818,7 @@ hr {
   color: #c0392b;
 }
 
-.compareTitle{
+.compareTitle {
   margin-top: 10px;
 }
 
@@ -3050,7 +3055,8 @@ hr {
 }
 
 .col-md-1.cart,
-.col-md-4.cart, .col-md-2.cart {
+.col-md-4.cart,
+.col-md-2.cart {
   padding: 0;
   margin-top: 25px;
 }
@@ -3074,3 +3080,104 @@ hr {
   height: 0;
 }
 
+.greetings {
+  font-size: 1.5rem;
+  /* Cỡ chữ lớn hơn */
+  font-weight: bold;
+  /* In đậm */
+  margin-bottom: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  /* Căn giữa nếu bạn muốn */
+  border-bottom: 1px solid #e0e0e0;
+  /* Gạch chân nhẹ phân tách */
+  margin-left: 15px;
+}
+
+/* Container của dropdown account */
+.account-box-container {
+  position: relative;
+}
+
+/* Nút toggle */
+.account-box-toggle {
+  padding: 10px 15px;
+  /* background-color: #222; */
+  color: #fff;
+  border-radius: 25px;
+  /* box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3); */
+  text-decoration: none;
+}
+
+/* Tên người dùng */
+.account-box-username {
+  font-weight: bold;
+}
+
+/* Icon mũi tên */
+.account-box-caret {
+  margin-left: 8px;
+}
+
+/* Menu dropdown */
+.account-box-menu {
+  min-width: 220px;
+  padding: 15px;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Lời chào */
+.account-box-greeting {
+  margin-bottom: 10px;
+  font-size: 14px;
+}
+
+/* Đường phân cách */
+.account-box-divider {
+  margin: 8px 0;
+}
+
+/* Item trong menu */
+.account-box-item {
+  padding: 8px 10px;
+  display: flex;
+  align-items: center;
+  color: #333;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.account-box-item:hover {
+  background: #f2f2f2;
+  border-radius: 6px;
+}
+
+/* Icon bên trái */
+.account-box-icon {
+  margin-right: 8px;
+}
+
+.account-box-li {
+  transition: background-color 0.25s ease;
+  border-radius: 6px;
+  padding: 4px 2px;
+}
+
+/* Hiệu ứng hover */
+.account-box-li:hover {
+  background: linear-gradient(90deg, #f8f9fa, #e9ecef);
+}
+
+/* Hiệu ứng khi active (đang nhấn giữ) */
+.account-box-li:active {
+  background: linear-gradient(90deg, #e2e6ea, #d6d8db);
+  transform: scale(0.98);
+  /* ấn xuống nhẹ */
+}
+
+.product-description {
+  font-size: 20px; /* hoặc 16px tùy ý */
+  line-height: 1.6;
+  color: #333; /* đậm hơn chút cho dễ đọc */
+  margin-bottom: 15px;
+}

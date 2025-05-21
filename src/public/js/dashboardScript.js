@@ -1,30 +1,19 @@
 
-// $(document).ready(function () {
-//     $('.toggle-password').click(function () {
-//         const targetId = $(this).data('target');
-//         const passwordInput = $('#' + targetId);
+$(document).ready(function () {
+    $('.toggle-password').click(function () {
+        const targetId = $(this).data('target');
+        const passwordInput = $('#' + targetId);
 
-//         if (passwordInput.attr('type') === 'password') {
-//             passwordInput.attr('type', 'text');
-//             $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
-//         } else {
-//             passwordInput.attr('type', 'password');
-//             $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
-//         }
-//     });
+        if (passwordInput.attr('type') === 'password') {
+            passwordInput.attr('type', 'text');
+            $(this).find('i').removeClass('fa-eye').addClass('fa-eye-slash');
+        } else {
+            passwordInput.attr('type', 'password');
+            $(this).find('i').removeClass('fa-eye-slash').addClass('fa-eye');
+        }
+    });
 
-//     // Smooth scroll khi click vào các mục trong sidebar
-//     $('a[href^="#"]').on('click', function (e) {
-//         e.preventDefault();
-
-//         const target = this.hash;
-//         const $target = $(target);
-
-//         $('html, body').animate({
-//             'scrollTop': $target.offset().top - 20
-//         }, 800, 'swing');
-//     });
-// });
+});
 
 //Brand
 
@@ -925,7 +914,6 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
 
     // Lấy dữ liệu từ form
     const productId = document.getElementById("editProductId").value.trim();
-    const productCode = document.getElementById("editProductCode").value.trim();
     const productName = document.getElementById("editProductName").value.trim();
     const description = document.getElementById("editDescription").value.trim();
     const importPrice = document.getElementById("editImportPrice").value.trim();
@@ -938,7 +926,7 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
     const specFile = document.getElementById("editSpecFile").files[0]; // Thông số kỹ thuật (.xlsx, .csv)
 
     // Kiểm tra thông tin bắt buộc
-    if (!productId || !productCode || !productName || !importPrice || !salePrice) {
+    if (!productId || !productName || !importPrice || !salePrice) {
         alert("Vui lòng nhập đầy đủ thông tin bắt buộc.");
         return;
     }
@@ -946,7 +934,6 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
     // Tạo FormData
     const formData = new FormData();
     formData.append("id", productId);
-    formData.append("fancy_id", productCode);
     formData.append("description", description);
     formData.append("name", productName);
     formData.append("import_price", importPrice);
@@ -1009,7 +996,6 @@ document.querySelectorAll('.editProductBtn').forEach(btn => {
 
             // Gán dữ liệu
             document.getElementById('editProductId').value = product.id || '';
-            document.getElementById('editProductCode').value = product.fancy_id || '';
             document.getElementById('editProductName').value = product.name || '';
             document.getElementById('editDescription').value = product.description || '';
             document.getElementById('editImportPrice').value = product.import_price || '';
