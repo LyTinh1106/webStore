@@ -638,9 +638,13 @@ const filterByPrice = (req, res) => {
 //tìm kiếm
 const searchProductRender = (req, res) => {
   const keyword = (req.query.q || '').trim();
+  const currentPage = parseInt(req.query.page) || 1;
+  const pageSize = 12;
+  const offset = (currentPage - 1) * pageSize;
 
+  const loadData = (products, total) => {
+    const totalPages = Math.ceil(total / pageSize);
 
-  const loadData = (products) => {
     Category.getAll((_, categories) => {
       Brand.getAll((_, brands) => {
         res.render('Store', {
@@ -648,7 +652,9 @@ const searchProductRender = (req, res) => {
           products,
           keyword,
           categories: categories || [],
-          brands: brands || []
+          brands: brands || [],
+          currentPage,
+          totalPages
         });
       });
     });
@@ -656,48 +662,69 @@ const searchProductRender = (req, res) => {
 
   if (!keyword) {
     const query = `
-        SELECT p.*, c.name AS category_name, pi.URL AS image
-        FROM product p
-        LEFT JOIN category c ON p.category_id = c.id
-        LEFT JOIN product_image pi ON pi.id = (
-          SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
-        )
-      `;
-    return sql.query(query, [], (_, results) => loadData(results || []));
-
-
-  }
-
-  const exactQuery = `
-     SELECT p.*, c.name AS category_name, pi.URL AS image
+      SELECT p.*, c.name AS category_name, pi.URL AS image
       FROM product p
       LEFT JOIN category c ON p.category_id = c.id
       LEFT JOIN product_image pi ON pi.id = (
-      SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
+        SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
       )
-      WHERE p.name = ?
-      LIMIT 1
+      LIMIT ? OFFSET ?
     `;
+    const countQuery = `SELECT COUNT(*) AS total FROM product`;
+
+    sql.query(countQuery, [], (_, countResults) => {
+      const total = countResults?.[0]?.total || 0;
+
+      sql.query(query, [pageSize, offset], (_, results) => {
+        loadData(results || [], total);
+      });
+    });
+
+    return;
+  }
+
+  const exactQuery = `
+    SELECT p.*, c.name AS category_name, pi.URL AS image
+    FROM product p
+    LEFT JOIN category c ON p.category_id = c.id
+    LEFT JOIN product_image pi ON pi.id = (
+      SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
+    )
+    WHERE p.name = ?
+    LIMIT 1
+  `;
 
   sql.query(exactQuery, [keyword], (err, exactResults) => {
-    if (err) return loadData([]);
-    if (exactResults.length > 0) return loadData(exactResults);
+    if (err) return loadData([], 0);
+    if (exactResults.length > 0) return loadData(exactResults, 1);
 
     const likeQuery = `
-        SELECT p.*, c.name AS category_name, pi.URL AS image
-        FROM product p
-        LEFT JOIN category c ON p.category_id = c.id
-        LEFT JOIN product_image pi ON pi.id = (
-          SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
-        )
-        WHERE p.name LIKE ?
-      `;
+      SELECT p.*, c.name AS category_name, pi.URL AS image
+      FROM product p
+      LEFT JOIN category c ON p.category_id = c.id
+      LEFT JOIN product_image pi ON pi.id = (
+        SELECT id FROM product_image WHERE product_id = p.id LIMIT 1
+      )
+      WHERE p.name LIKE ?
+      LIMIT ? OFFSET ?
+    `;
 
-    sql.query(likeQuery, [`%${keyword}%`], (_, likeResults) => {
-      loadData(likeResults || []);
+    const countLikeQuery = `
+      SELECT COUNT(*) AS total
+      FROM product
+      WHERE name LIKE ?
+    `;
+
+    sql.query(countLikeQuery, [`%${keyword}%`], (_, countResults) => {
+      const total = countResults?.[0]?.total || 0;
+
+      sql.query(likeQuery, [`%${keyword}%`, pageSize, offset], (_, likeResults) => {
+        loadData(likeResults || [], total);
+      });
     });
   });
 };
+
 
 const compareProducts = (req, res) => {
   const id1 = parseInt(req.params.id1);
