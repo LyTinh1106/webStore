@@ -1,7 +1,6 @@
 const sql = require("../config/database");
 
 const Product = function (product) {
-  this.fancy_id = product.fancy_id;
   this.name = product.name;
   this.description = product.description;
   this.import_price = product.import_price;
@@ -104,10 +103,9 @@ Product.getAll = (nameOrCategoryId, result) => {
 
 Product.updateById = (id, product, result) => {
   sql.query(
-    `UPDATE product SET fancy_id = ?, name = ?, description = ?, import_price = ?, retail_price = ?, brand_id = ?, category_id = ?, origin = ?, warranty = ?
+    `UPDATE product SET name = ?, description = ?, import_price = ?, retail_price = ?, brand_id = ?, category_id = ?, origin = ?, warranty = ?
      WHERE id = ?`,
     [
-      product.fancy_id,
       product.name,
       product.description,
       product.import_price,
@@ -255,20 +253,5 @@ Product.getAllWithPagination = (filter, limit, offset, callback) => {
     });
   });
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = Product;

@@ -195,11 +195,11 @@
               const itemSubtotal = product.price * product.qty;
               subtotal += itemSubtotal;
               container.insertAdjacentHTML("beforeend", `
-      <div class="order-col">
-        <div>${product.qty}x ${product.name}</div>
-        <div>${formatVND(itemSubtotal)}</div>
-      </div>
-    `);
+              <div class="order-col">
+              <div>${product.qty}x ${product.name}</div>
+              <div>${formatVND(itemSubtotal)}</div>
+              </div>
+              `);
             });
 
             const discountAmount = Math.floor(subtotal * voucherDiscount / 100);
@@ -208,11 +208,11 @@
             // Hiển thị giảm giá (nếu có)
             if (voucherDiscount > 0) {
               container.insertAdjacentHTML("beforeend", `
-      <div class="order-col">
-        <div>Giảm giá (${voucherDiscount}%)</div>
-        <div>- ${formatVND(discountAmount)}</div>
-      </div>
-    `);
+              <div class="order-col">
+              <div>Giảm giá (${voucherDiscount}%)</div>
+              <div>- ${formatVND(discountAmount)}</div>
+              </div>
+              `);
             }
 
             // Hiển thị tổng cuối
@@ -329,7 +329,7 @@
 
             };
 
-            console.log("🚀 Dữ liệu gửi đi:", orderData);
+            console.log(" Dữ liệu gửi đi:", orderData);
 
             try {
               const response = await fetch("/api/order/create", {
@@ -342,6 +342,7 @@
 
               const result = await response.json();
               localStorage.removeItem("cart");
+              localStorage.removeItem("voucherDiscount")
 
               if (paymentMethod === "MoMo") {
                 window.location.href = result.payUrl;

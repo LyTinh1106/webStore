@@ -81,7 +81,7 @@ const getInfo = (req, res) => {
     }
 
     Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
-      // Nếu lỗi khác "not_found" mới chặn, còn lại vẫn render
+      
       if (errCustomer && errCustomer.kind !== "not_found") {
         return res.status(500).send("Đã xảy ra lỗi khi truy xuất thông tin khách hàng.");
       }
@@ -95,7 +95,6 @@ const getInfo = (req, res) => {
     });
   });
 };
-
 
 
 const getDashboard = (req, res) => {

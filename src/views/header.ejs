@@ -65,10 +65,11 @@
                         <!-- /Cart -->
 
                         <!--Account-->
-                        <div class="dropdown Account">
-                            <a a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
-                                <i class="fa fa-user-o me-1"></i>
-                                <span>
+                        <div class="dropdown Account account-box-container position-relative">
+                            <a a class="dropdown-toggle d-flex account-box-toggle" data-toggle="dropdown"
+                                aria-expanded="true">
+                                <i class="fa fa-user-o"></i>
+                                <span class="account-box-username" style="cursor:default">
                                     <% if (!user) { %>
                                         Guest
                                         <% } else if (customer && customer.last_name && customer.first_name) { %>
@@ -79,26 +80,63 @@
 
                                 </span>
                             </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <ul class="dropdown-menu pull-left account-box-menu" aria-labelledby="userDropdown">
                                 <% if (user) { %>
-                                    <li><a class="dropdown-item" href="/userInfo"><i class="fas fa-user me-2"></i> Hồ
-                                            sơ</a>
-                                    </li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-cog me-2"></i> Cài đặt</a>
-                                    </li>
                                     <li>
-                                        <hr class="dropdown-divider">
+                                        <p class="greetings account-box-greeting">
+                                            <strong>Xin chào, <%= (customer && customer.last_name &&
+                                                    customer.first_name) ? customer.last_name + " " +
+                                                    customer.first_name : "User" %>!</strong>
+                                        </p>
                                     </li>
-                                    <li><a class="dropdown-item" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>
-                                            Đăng xuất</a></li>
-                                    <% } else { %>
-                                        <li><a class="dropdown-item" href="/login"><i
-                                                    class="fas fa-sign-in-alt me-2"></i> Đăng nhập</a></li>
-                                        <li><a class="dropdown-item" href="/register"><i
-                                                    class="fas fa-user-plus me-2"></i> Đăng ký</a></li>
+                                    <li class="account-box-li">
+                                        <a class="dropdown-item account-box-item" href="/userInfo">
+                                            <i class="fas fa-user account-box-icon text-primary"></i> Hồ sơ
+                                        </a>
+                                    </li>
+                                    <li class="account-box-li">
+                                        <a class="dropdown-item account-box-item" href="/userInfo#order-history">
+                                            <i class="fas fa-list account-box-icon text-success"></i> Lịch sử đơn hàng
+                                        </a>
+                                    </li>
+
+                                    <% if (user.role==='admin' ) { %>
+                                        <li class="account-box-li">
+                                            <a class="dropdown-item account-box-item" href="/dashboard">
+                                                <i class="fas fa-tachometer-alt account-box-icon text-warning"></i> Bảng
+                                                điều khiển
+                                            </a>
+                                        </li>
                                         <% } %>
+
+                                            <li>
+                                                <!-- <hr class="dropdown-divider"> -->
+                                                <hr class="account-box-divider">
+                                            </li>
+                                            <li class="account-box-li">
+                                                <a class="dropdown-item account-box-item text-danger" href="/logout">
+                                                    <i class="fas fa-sign-out-alt account-box-icon"></i> Đăng xuất
+                                                </a>
+                                            </li>
+                                            <% } else { %>
+                                                <li class="account-box-li">
+                                                    <a class="dropdown-item account-box-item" href="/login">
+                                                        <i class="fas fa-sign-in-alt account-box-icon text-primary"></i>
+                                                        Đăng nhập
+                                                    </a>
+                                                </li>
+                                                <li class="account-box-li">
+                                                    <a class="dropdown-item account-box-item" href="/register">
+                                                        <i class="fas fa-user-plus account-box-icon text-success"></i>
+                                                        Đăng ký
+                                                    </a>
+                                                </li>
+                                                <% } %>
                             </ul>
                         </div>
+
+
+
                         <!--/Account-->
                         <!-- Menu Toogle -->
                         <div class="menu-toggle">
@@ -134,15 +172,11 @@
                     <li><a href="#" data-id="4">MainBoard</a></li>
                     <li><a href="#" data-id="5">RAM</a></li>
                     <li><a href="#" data-id="6">SSD</a></li>
-                    <li><a href="#" data-id="7">Power Supply</a></li>
-                    <li><a href="#" data-id="8">Mouse</a></li>
-                    <li><a href="#" data-id="9">KeyBoard</a></li>
-                    <li><a href="#" data-id="10">Monitor</a></li>
-                  </ul>
-                  
-                  
-                  
-
+                    <li><a href="#" data-id="7">Nguồn</a></li>
+                    <li><a href="#" data-id="8">Chuột</a></li>
+                    <li><a href="#" data-id="9">Bàn phím</a></li>
+                    <li><a href="#" data-id="10">Màn hình</a></li>
+                </ul>
 
                 <!-- /NAV -->
             </div>
@@ -152,7 +186,7 @@
     </nav>
     <!-- /NAVIGATION -->
     <script>
-        
+
         const searchForm = document.getElementById("search-form");
         if (searchForm) {
             searchForm.addEventListener("submit", function (e) {
@@ -164,7 +198,7 @@
             });
         }
     </script>
- 
+
 
 </body>
 

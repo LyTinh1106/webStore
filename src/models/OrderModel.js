@@ -19,7 +19,7 @@ const Order = function (order) {
 Order.create = (newOrder, result) => {
   const query = `
     INSERT INTO order_table 
-(created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note,payment)
+(created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment)
 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
   `;
@@ -34,7 +34,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     newOrder.phone,
     newOrder.address,
     newOrder.note,
-    newOrder.payment
+    newOrder.order_payment
   ];
 
   sql.query(query, values, (err, res) => {
@@ -141,7 +141,7 @@ Order.delete = (id, result) => {
   // Xóa sản phẩm trong đơn hàng trước
   sql.query("DELETE FROM order_detail WHERE order_id = ?", [id], (err1, res1) => {
     if (err1) {
-      console.error("❌ Lỗi khi xóa order_detail:", err1);
+      console.error(" Lỗi khi xóa order_detail:", err1);
       result(err1, null);
       return;
     }
@@ -149,7 +149,7 @@ Order.delete = (id, result) => {
     // Sau đó xóa chính đơn hàng
     sql.query("DELETE FROM order_table WHERE id = ?", [id], (err2, res2) => {
       if (err2) {
-        console.error("❌ Lỗi khi xóa order_table:", err2);
+        console.error("Lỗi khi xóa order_table:", err2);
         result(err2, null);
         return;
       }
@@ -167,7 +167,7 @@ Order.delete = (id, result) => {
 
 Order.UpdateStatusById = (id, result) => {
   sql.query(
-    `UPDATE order_table SET order_status = "on delivering" WHERE id = ?`,
+    `UPDATE order_table SET order_status = "Đã duyệt" WHERE id = ?`,
     [id],
     (err, res) => {
       if (err) {

@@ -130,7 +130,7 @@
 							<!-- thanh điều hướng tab -->
 							<ul class="tab-nav">
 								<li class="active"><a data-toggle="tab" href="#tab1">Mô Tả</a></li>
-								<li><a data-toggle="tab" href="#tab2">Chi Tiết</a></li>
+								<li><a data-toggle="tab" href="#tab2">Thông Số</a></li>
 								<li><a data-toggle="tab" href="#tab3">Đánh Giá (3)</a></li>
 							</ul>
 							<!-- /thanh điều hướng tab -->
@@ -141,7 +141,7 @@
 								<div id="tab1" class="tab-pane fade in active">
 									<div class="row">
 										<div class="col-md-12">
-											<p>
+											<p class="product-description">
 												<%= product.description %>
 											</p>
 										</div>
@@ -402,71 +402,76 @@
 							<div class="products-tabs">
 								<div class="tab-pane active">
 									<% if (relatedProducts && relatedProducts.length> 0) { %>
-							<div class="products-slick" data-nav="#slick-nav-2">
-								<% relatedProducts.forEach(product=> { %>
-									<div class="product">
-										<a href="/product/<%= product.id %>"
-											style="text-decoration: none; color: inherit;">
-											<div class="product-img">
-												<img src="/images/<%= product.image || 'noImage.jpg' %>"
-													alt="ảnh sản phẩm">
-												<div class="product-label">
-													<% if (product.sale_percent) { %>
-														<span class="sale">-<%= product.sale_percent %>%</span>
-														<% } %>
-															<% if (product.is_new) { %>
-																<span class="new">NEW</span>
-													<% } %>
-												</div>
-											</div>
-										</a>
-										<div class="product-body">
-											<p class="product-category">
-												<%= product.category_name %>
-											</p>
-											<h3 class="product-name">
-												<%= product.name %>
-											</h3>
-											<h4 class="product-price">
-												<%= product.retail_price.toLocaleString('vi-VN') %> VNĐ
-													<% if (product.old_price) { %>
-														<del class="product-old-price">
-															<%= product.old_price %> VNĐ
-														</del>
-														<% } %>
-											</h4>
-											<div class="product-rating">
-												<% for (let i=0; i < 5; i++) { %>
-													<i
-														class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
-													<% } %>
-											</div>
-											<div class="product-btns">
-												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-														class="tooltipp">Yêu thích</span></button>
-												<button class="add-to-compare" data-id="<%= product.id %>"><i
-														class="fa fa-exchange"></i><span class="tooltipp">So
-														sánh</span></button>
-												<button class="quick-view"><i class="fa fa-eye"></i><span
-														class="tooltipp">Xem nhanh</span></button>
-											</div>
-										</div>
-										<div class="add-to-cart">
-											<button class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> Thêm vào
-												giỏ</button>
-										</div>
+										<div class="products-slick" data-nav="#slick-nav-2">
+											<% relatedProducts.forEach(product=> { %>
+												<div class="product">
+													<a href="/product/<%= product.id %>"
+														style="text-decoration: none; color: inherit;">
+														<div class="product-img">
+															<img src="/images/<%= product.image || 'noImage.jpg' %>"
+																alt="ảnh sản phẩm">
+															<div class="product-label">
+																<% if (product.sale_percent) { %>
+																	<span class="sale">-<%= product.sale_percent %>
+																			%</span>
+																	<% } %>
+																		<% if (product.is_new) { %>
+																			<span class="new">NEW</span>
+																			<% } %>
+															</div>
+														</div>
+													</a>
+													<div class="product-body">
+														<p class="product-category">
+															<%= product.category_name %>
+														</p>
+														<h3 class="product-name">
+															<%= product.name %>
+														</h3>
+														<h4 class="product-price">
+															<%= product.retail_price.toLocaleString('vi-VN') %> VNĐ
+																<% if (product.old_price) { %>
+																	<del class="product-old-price">
+																		<%= product.old_price %> VNĐ
+																	</del>
+																	<% } %>
+														</h4>
+														<div class="product-rating">
+															<% for (let i=0; i < 5; i++) { %>
+																<i class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"
+																	style="margin-right: 1px;"></i>
+																<% } %>
+														</div>
+														<div class="product-btns">
+															<button class="add-to-compare" data-id="<%= product.id %>"
+																data-name="<%= product.name %>"
+																data-image="<%= product.image %>"
+																data-category="<%= product.category_id %>">
+																<i class="fa fa-exchange"></i>
+																<span class="tooltipp">So
+																	sánh</span>
+															</button>
+														</div>
+													</div>
+													<div class="add-to-cart">
+														<button class="add-to-cart-btn"><i
+																class="fa fa-shopping-cart"></i> Thêm vào
+															giỏ</button>
+													</div>
 
-									</div>
-									<% }); %>
-							</div>
-							<div id="slick-nav-2" class="spotlight-products-slick-nav"></div>
-							<% } else { %>
-								<p class="text-center">Không có sản phẩm liên quan.</p>
-								<% } %>
+												</div>
+												<% }); %>
+										</div>
+										<div id="slick-nav-2" class="spotlight-products-slick-nav"></div>
+										<% } else { %>
+											<h5><i>
+													<p class="text-center text-muted">Không có sản phẩm liên quan.</p>
+												</i></h5>
+											<% } %>
 								</div>
 							</div>
 						</div>
-						
+
 					</div>
 
 				</div>

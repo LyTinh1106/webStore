@@ -167,7 +167,8 @@
 		priceInputMin = document.getElementById('price-min');
 
 	priceInputMax.addEventListener('change', function () {
-		updatePriceSlider($(this).parent(), this.value)
+		var clean = Number(this.value.replace(/[^\d]/g, ''));
+		updatePriceSlider($(this).parent(), clean);
 	});
 
 	priceInputMin.addEventListener('change', function () {
@@ -175,15 +176,15 @@
 	});
 
 	function updatePriceSlider(elem, value) {
+		var val = parseInt(value);
+		if (isNaN(val)) return;
+
 		if (elem.hasClass('price-min')) {
-			console.log('min')
-			priceSlider.noUiSlider.set([value, null]);
+			priceSlider.noUiSlider.set([val, null]);
 		} else if (elem.hasClass('price-max')) {
-			console.log('max')
-			priceSlider.noUiSlider.set([null, value]);
+			priceSlider.noUiSlider.set([null, val]);
 		}
 	}
-
 	// Price Slider
 	var priceSlider = document.getElementById('price-slider');
 	if (priceSlider) {
@@ -194,19 +195,34 @@
 			range: {
 				'min': 1000,
 				'max': 200000000
+			},
+			format: {
+				to: function (value) {
+					return Math.round(value);
+				},
+				from: function (value) {
+					return Number(value.replace(/[^\d]/g, ''));
+				}
 			}
 		});
 
 		priceSlider.noUiSlider.on('update', function (values, handle) {
-			var value = values[handle];
-			handle ? priceInputMax.value = value : priceInputMin.value = value
-		});
-		priceSlider.noUiSlider.on('change', function (values) {
-	priceMin.value = Math.round(values[0]);
-	priceMax.value = Math.round(values[1]);
-	applyCombinedFilter(); 
-});
+			var value = Math.round(values[handle]);
 
+			if (handle === 0 && priceInputMin) {
+				priceInputMin.value = value; // giữ số
+			} else if (handle === 1 && priceInputMax) {
+				priceInputMax.value = value;
+			}
+		});
+
+		priceSlider.noUiSlider.on('change', function (values) {
+			if (priceMin && priceMax) {
+				priceMin.value = Math.round(values[0]);
+				priceMax.value = Math.round(values[1]);
+			}
+			applyCombinedFilter();
+		});
 	}
 	/////////////////////////////////////////
 
@@ -269,9 +285,9 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
 	const paginationBox = document.getElementById('store-nav');
 	function formatVND(value) {
 		return value.toLocaleString('vi-VN');
-	  }
+	}
 
-  filteredBox.innerHTML = '';
+	filteredBox.innerHTML = '';
 
 	const productsPerPage = 9;
 	const totalPages = Math.ceil(products.length / productsPerPage);
@@ -316,8 +332,11 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
 				<h3 class="product-name"><a href="/product/${p.id}">${p.name}</a></h3>
 				<h4 class="product-price">${formatVND(p.retail_price)} VNĐ</h4>
 				<div class="product-rating">
-				  <i class="fa fa-star"></i><i class="fa fa-star"></i><i class="fa fa-star"></i>
-				  <i class="fa fa-star"></i><i class="fa fa-star"></i>
+					<i class="fa fa-star" style="margin-right: 1px;"></i>
+					<i class="fa fa-star" style="margin-right: 1px;"></i>
+					<i class="fa fa-star" style="margin-right: 1px;"></i>
+					<i class="fa fa-star" style="margin-right: 1px;"></i>
+					<i class="fa fa-star" style="margin-right: 1px;"></i>
 				</div>
 				<div class="product-btns">
 				  <button class="add-to-compare"><i class="fa fa-exchange"></i>
@@ -373,53 +392,53 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
 //chuyển trang + lọc
 
 document.addEventListener("DOMContentLoaded", function () {
-  const navLinks = document.querySelectorAll('#nav-categories a');
+	const navLinks = document.querySelectorAll('#nav-categories a');
 
-  navLinks.forEach(link => {
-    link.addEventListener('click', function (e) {
-      e.preventDefault(); // ✅ Ngăn chuyển hướng mặc định của thẻ <a href="#">
-      
-      const categoryId = this.getAttribute('data-id');
-      const href = this.getAttribute('href');
+	navLinks.forEach(link => {
+		link.addEventListener('click', function (e) {
+			e.preventDefault(); // ✅ Ngăn chuyển hướng mặc định của thẻ <a href="#">
 
-      // Bỏ qua "Trang Chủ" và "Sản Phẩm"
-      if (href === '/' || href === '/store/all' || !categoryId || categoryId === '0') {
-        window.location.href = href;
-        return;
-      }
+			const categoryId = this.getAttribute('data-id');
+			const href = this.getAttribute('href');
 
-      const isStorePage = window.location.pathname.startsWith("/store");
+			// Bỏ qua "Trang Chủ" và "Sản Phẩm"
+			if (href === '/' || href === '/store/all' || !categoryId || categoryId === '0') {
+				window.location.href = href;
+				return;
+			}
 
-      if (!isStorePage) {
-        // ✅ Nếu không phải /store → chuyển hướng
-        window.location.href = `/store?category=${categoryId}`;
-        return;
-      }
+			const isStorePage = window.location.pathname.startsWith("/store");
 
-      // ✅ Nếu đã ở /store → lọc trực tiếp
-      navLinks.forEach(l => l.parentElement.classList.remove('active'));
-      this.parentElement.classList.add('active');
+			if (!isStorePage) {
+				// ✅ Nếu không phải /store → chuyển hướng
+				window.location.href = `/store?category=${categoryId}`;
+				return;
+			}
 
-      const checkboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
-      const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+			// ✅ Nếu đã ở /store → lọc trực tiếp
+			navLinks.forEach(l => l.parentElement.classList.remove('active'));
+			this.parentElement.classList.add('active');
 
-      if (!checkboxes.length || !targetCheckbox) {
-        console.warn("⚠️ Không tìm thấy checkbox danh mục.");
-        return;
-      }
+			const checkboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
+			const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
 
-      checkboxes.forEach(cb => cb.checked = false);
-      targetCheckbox.checked = true;
+			if (!checkboxes.length || !targetCheckbox) {
+				console.warn(" Không tìm thấy checkbox danh mục.");
+				return;
+			}
 
-      if (typeof filterByCategory === 'function') {
-        filterByCategory();
-      }
-    });
-  });
+			checkboxes.forEach(cb => cb.checked = false);
+			targetCheckbox.checked = true;
+
+			if (typeof filterByCategory === 'function') {
+				filterByCategory();
+			}
+		});
+	});
 });
 
-  
-  
+
+
 
 
 
