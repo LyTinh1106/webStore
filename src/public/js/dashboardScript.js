@@ -1036,8 +1036,12 @@ document.querySelectorAll('.editProductBtn').forEach(btn => {
                     let displayValue = value;
 
                     // Nếu là object hoặc array, stringify để xử lý
-                    if (typeof displayValue === 'object') {
+                    if (typeof displayValue === 'object' && displayValue !== null) {
                         displayValue = JSON.stringify(displayValue);
+                    } else if (displayValue === null || displayValue === undefined) {
+                        displayValue = '';
+                    } else {
+                        displayValue = String(displayValue); // ép về chuỗi nếu là number, boolean...
                     }
 
                     // Xử lý chuỗi:
