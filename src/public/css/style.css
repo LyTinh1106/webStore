@@ -841,37 +841,89 @@ textarea.input {
 }
 
 /*=========================================================
-	05 -> banner
+    05 -> banner (adjusted for Bootstrap grid)
 ===========================================================*/
+
 .banner-section {
   background-color: #F5F5F5;
+  width: 100%;
+  padding: 20px 0;
 }
 
-.banner-item {
-  text-align: center;
+.category-sidebar {
+  width: 14%;
+  padding: 15px;
+  background-color: #FFF;
+  border-radius: 8px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+  margin-left: 30px; /* tăng khoảng cách khỏi mép trái */
+  margin-right: 10px; /* thêm khoảng cách khỏi mép phải */
+}
+
+.category-sidebar ul {
+  padding-left: 0;
   margin: 0;
 }
 
-.banner-img {
+.category-sidebar ul li {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  padding: 6px 10px;
+  border-radius: 6px;
+  transition: background 0.3s;
+}
+
+.category-sidebar ul li i {
+  margin-right: 10px;
+  font-size: 18px;
+  color: #555;
+}
+
+.category-sidebar ul li a {
+  color: #333;
+  font-weight: 500;
+  flex-grow: 1;
+  text-decoration: none;
+}
+
+.category-sidebar ul li:hover {
+  background-color: #f0f0f0;
+}
+
+.category-sidebar ul li a:hover {
+  color: #000;
+  text-decoration: none;
+}
+
+
+.main-banner img{
   width: 100%;
   height: auto;
-  max-width: 100%;
-  max-height: 500px;
-  display: inline-block;
-  margin: 0 auto;
+}
+.side-banners img {
+  width: 85%;
+  margin-left: 20px;
+  height: auto;
 }
 
-.banner-container {
-  max-width: 800px;
-  margin: 0 auto;
+.side-banners img {
+  margin-bottom: 10px;
+  width: 75%;
+  height: 502px;
+  
 }
 
-/* Optional: responsive cho mobile */
+/* Responsive for small screens */
 @media (max-width: 768px) {
-  .banner-img {
-    height: 80%;
+  .category-sidebar {
+    margin-bottom: 20px;
+  }
+  .side-banners {
+    margin-top: 20px;
   }
 }
+
 
 /* Reset body */
 
