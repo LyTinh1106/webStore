@@ -87,8 +87,9 @@ CREATE TABLE account (
     id INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(191) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
-    role ENUM('admin','customer') DEFAULT 'customer'
+    role ENUM('admin','customer','superadmin') DEFAULT 'customer'
 );
+
 
 -- Bảng customer
 CREATE TABLE customer (

@@ -1170,3 +1170,108 @@ function renderUnifiedImagePreview() {
         imageInput.value = '';
     }
 }
+//Acount
+document.addEventListener('DOMContentLoaded', () => {
+    // Thêm tài khoản
+    document.getElementById('addAccountForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const email = document.getElementById('accEmail').value;
+        const password = document.getElementById('accPassword').value;
+        const role = document.getElementById('accRole').value;
+
+        try {
+            const res = await fetch('/api/account', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, password, role })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                alert('Tạo tài khoản thành công!');
+                location.reload();
+            } else {
+                alert(data.message || 'Lỗi khi tạo tài khoản.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Lỗi server.');
+        }
+    });
+
+    // Bấm nút sửa: đổ dữ liệu vào modal
+    document.querySelectorAll('.edit-account-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            const id = button.getAttribute('data-id');
+            const email = button.getAttribute('data-email');
+            const role = button.getAttribute('data-role');
+
+            document.getElementById('editAccountId').value = id;
+            document.getElementById('editAccEmail').value = email;
+            document.getElementById('editAccRole').value = role;
+
+            // Mở modal
+            const editModal = new bootstrap.Modal(document.getElementById('editAccountModal'));
+            editModal.show();
+        });
+    });
+
+    // Submit chỉnh sửa tài khoản
+    document.getElementById('editAccountForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const id = document.getElementById('editAccountId').value;
+        const email = document.getElementById('editAccEmail').value;
+        const role = document.getElementById('editAccRole').value;
+
+        
+        
+        try {
+            const res = await fetch(`/api/account/${id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email, role })
+            });
+
+            const data = await res.json();
+
+            if (res.ok) {
+                alert('Cập nhật tài khoản thành công!');
+                location.reload();
+            } else {
+                alert(data.message || 'Lỗi khi cập nhật tài khoản.');
+            }
+        } catch (error) {
+            console.error(error);
+            alert('Lỗi server.');
+        }
+    });
+
+    // Xóa tài khoản
+    document.querySelectorAll('.delete-account-btn').forEach(button => {
+        button.addEventListener('click', async (e) => {
+            const id = button.getAttribute('data-id');
+            if (!confirm('Bạn có chắc muốn xóa tài khoản này?')) return;
+
+            try {
+                const res = await fetch(`/api/account/${id}`, {
+                    method: 'DELETE'
+                });
+
+                const data = await res.json();
+
+                if (res.ok) {
+                    alert('Xóa tài khoản thành công!');
+                    location.reload();
+                } else {
+                    alert(data.message || 'Lỗi khi xóa tài khoản.');
+                }
+            } catch (error) {
+                console.error(error);
+                alert('Lỗi server.');
+            }
+        });
+    });
+});
