@@ -1649,4 +1649,5 @@ INSERT INTO account (email, password, role) VALUES
 ('user7@gmail.com', '$2y$10$hashpassword07', 'customer'),
 ('user8@gmail.com', '$2y$10$hashpassword08', 'customer'),
 ('user9@gmail.com', '$2y$10$hashpassword09', 'customer'),
-('user10@gmail.com', '$2y$10$hashpassword10', 'customer');
+('user10@gmail.com', '$2y$10$hashpassword10', 'customer'),
+('admin1@gmail.com', '$2y$10$hashpassword11', 'superadmin');

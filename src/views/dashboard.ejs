@@ -1874,47 +1874,135 @@
             </div>
 
             <!-- Accounts Section -->
-            <div class="tab-pane fade" id="accounts" role="tabpanel" aria-labelledby="v-vouchers-tab">
-                <h3 class="section-title">Quản lý tài khoản</h3>
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Email</th>
-                                <th>Mật khẩu</th>
-                                <th>Quyền</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% accounts.forEach((account, index)=> { %>
-                                <tr>
-                                    <td>
-                                        <%= account.id %>
-                                    </td>
-                                    <td>
-                                        <%= account.email %>
-                                    </td>
-                                    <td>
-                                        <div class="input-group">
-                                            <input type="password" class="form-control form-control-sm"
-                                                value="<%= account.password %>" id="password<%= index %>" readonly>
-                                            <button class="btn btn-sm btn-outline-secondary toggle-password"
-                                                type="button" data-target="password<%= index %>">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </div>
-                                    </td>
-                                    <td>
-                                        <%= account.role %>
-                                    </td>
-                                </tr>
-                                <% }); %>
-                        </tbody>
+           <div class="tab-pane fade" id="accounts" role="tabpanel" aria-labelledby="v-accounts-tab">
+    <h3 class="section-title">Quản lý tài khoản</h3>
 
-                    </table>
+    <!-- Nút mở modal thêm tài khoản -->
+    <div class="mb-3">
+        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAccountModal">
+            <i class="fas fa-plus"></i> Thêm tài khoản mới
+        </a>
+    </div>
+
+    <!-- Modal thêm tài khoản -->
+    <div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addAccountModalLabel">Thêm tài khoản</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="addAccountForm">
+                        <div class="mb-3">
+                            <label for="accEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="accEmail" name="email" placeholder="Nhập email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="accPassword" class="form-label">Mật khẩu</label>
+                            <input type="password" class="form-control" id="accPassword" name="password" placeholder="Nhập mật khẩu" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="accRole" class="form-label">Quyền</label>
+                            <select class="form-select" id="accRole" name="role" required>
+                                <option value="customer">Customer</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div id="accountMessage" class="mt-2 text-danger" style="display:none;"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" form="addAccountForm" class="btn btn-primary">Thêm</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Bảng danh sách tài khoản -->
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Email</th>
+                    <th>Quyền</th>
+                    <th>Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% if (accounts && accounts.length > 0) { %>
+                    <% accounts.forEach((account) => { %>
+                        <tr>
+                            <td>#<%= account.id %></td>
+                            <td><%= account.email %></td>
+                            <td><%= account.role %></td>
+                            <td>
+                                <button class="btn btn-sm btn-info edit-account-btn" data-id="<%= account.id %>" data-email="<%= account.email %>" data-role="<%= account.role %>" title="Chỉnh sửa">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+
+                                <button class="btn btn-sm btn-danger delete-account-btn" data-id="<%= account.id %>" title="Xóa">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    <% }); %>
+                <% } else { %>
+                    <tr>
+                        <td colspan="4" class="text-center">Không có tài khoản nào.</td>
+                    </tr>
+                <% } %>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Modal chỉnh sửa tài khoản -->
+    <div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editAccountModalLabel">Chỉnh sửa tài khoản</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                </div>
+
+                <div class="modal-body">
+                    <form id="editAccountForm">
+                        <input type="hidden" id="editAccountId" name="id">
+
+                        <div class="mb-3">
+                            <label for="editAccEmail" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="editAccEmail" name="email" required>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="editAccRole" class="form-label">Quyền</label>
+                            <select class="form-select" id="editAccRole" name="role" required>
+                                <option value="customer">Customer</option>
+                                <option value="admin">Admin</option>
+                            </select>
+                        </div>
+                    </form>
+                    <div id="editAccountMessage" class="mt-2 text-danger" style="display:none;"></div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" form="editAccountForm" class="btn btn-primary">Cập nhật</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
         </div>
 
 

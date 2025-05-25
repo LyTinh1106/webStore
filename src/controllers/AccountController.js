@@ -98,11 +98,11 @@ const getInfo = (req, res) => {
 
 
 const getDashboard = (req, res) => {
-  if (!req.session.user || req.session.user.role !== 'admin') {
+  if (!req.session.user || (req.session.user.role !== 'admin' && req.session.user.role !== 'superadmin')) {
     return res.redirect('/homepage?error=Truy+c%E1%BA%ADp+b%E1%BB%8B+t%E1%BB%AB+ch%E1%BB%91i');
   }
 
-  Account.getAll(null, (err, accounts) => {
+  Account.getAll(null, req.session.user.role, (err, accounts) => {
     if (err) return res.status(500).render('error', { message: 'Lỗi khi lấy danh sách tài khoản' });
 
     Category.getAll((err, categories) => {
@@ -292,6 +292,11 @@ const create = async (req, res) => {
     return res.status(400).send({ message: "Email, password và role là bắt buộc." });
   }
 
+  // Chỉ cho phép superadmin tạo tài khoản admin
+  if (!req.session.user || req.session.user.role !== 'superadmin') {
+  return res.status(403).send({ message: "Chỉ superadmin mới được tạo tài khoản." });
+}
+
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
@@ -309,6 +314,7 @@ const create = async (req, res) => {
     res.status(500).send({ message: "Lỗi mã hoá mật khẩu." });
   }
 };
+
 
 const findAll = (req, res) => {
   const email = req.query.email;
@@ -344,45 +350,70 @@ const findByEmail = (req, res) => {
 };
 
 const update = async (req, res) => {
-  const { email, password, role } = req.body;
+    // ➔ Chỉ superadmin được phép sửa
+    if (!req.session.user || req.session.user.role !== 'superadmin') {
+        return res.status(403).send({ message: 'Chỉ superadmin mới được phép sửa tài khoản.' });
+    }
 
-  if (!email || !password || !role) {
-    return res.status(400).send({ message: "Email, password và role là bắt buộc." });
-  }
+    const { email, password, role } = req.body;
 
-  try {
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+    if (!email || !role) {
+        return res.status(400).send({ message: "Email và role là bắt buộc." });
+    }
 
-    const updatedAccount = {
-      email,
-      password: hashedPassword,
-      role,
-    };
+    try {
+        const updatedAccount = { email, role };
 
-    Account.updateById(req.params.id, updatedAccount, (err, data) => {
-      if (err) {
-        if (err.kind === "not_found") return res.status(404).send({ message: `Không tìm thấy account với id ${req.params.id}` });
-        return res.status(500).send({ message: `Lỗi khi cập nhật account với id ${req.params.id}` });
-      }
-      res.send(data);
-    });
-  } catch (err) {
-    res.status(500).send({ message: "Lỗi mã hoá mật khẩu khi cập nhật." });
-  }
+        // Chỉ hash và thêm mật khẩu nếu có gửi lên
+        if (password && password.trim() !== '') {
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            updatedAccount.password = hashedPassword;
+        }
+
+        Account.updateById(req.params.id, updatedAccount, (err, data) => {
+            if (err) {
+                if (err.kind === "not_found") {
+                    return res.status(404).send({ message: `Không tìm thấy account với id ${req.params.id}` });
+                }
+                if (err.kind === "forbidden_superadmin_change") {
+                    return res.status(403).send({ message: "Không thể thay đổi role của superadmin." });
+                }
+                return res.status(500).send({ message: `Lỗi khi cập nhật account với id ${req.params.id}` });
+            }
+            res.send(data);
+        });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send({ message: "Lỗi server khi cập nhật." });
+    }
 };
 
+
+
 const remove = (req, res) => {
+  // ➔ Chỉ superadmin được phép xóa
+  if (!req.session.user || req.session.user.role !== 'superadmin') {
+    return res.status(403).send({ message: 'Chỉ superadmin mới được phép xóa tài khoản.' });
+  }
+
   const id = req.params.id;
 
   Account.remove(id, (err, data) => {
     if (err) {
-      if (err.kind === "not_found") return res.status(404).send({ message: `Không tìm thấy account với id ${id}` });
+      if (err.kind === "not_found") {
+        return res.status(404).send({ message: `Không tìm thấy account với id ${id}` });
+      }
+      if (err.kind === "forbidden_superadmin") {
+        return res.status(403).send({ message: "Không thể xoá superadmin." });
+      }
       return res.status(500).send({ message: `Không thể xoá account với id ${id}` });
     }
 
     res.send({ message: "Xoá account thành công." });
   });
 };
+
+
 
 const isAdmin = (req, res) => {
   const email = req.params.email;
@@ -557,7 +588,7 @@ const login = (req, res) => {
       role: account.role,
     };
 
-    if (account.role === "admin") {
+    if (account.role === "admin" || account.role === "superadmin") {
       return res.redirect("/dashboard");
     } else {
       return res.redirect("/homepage");
