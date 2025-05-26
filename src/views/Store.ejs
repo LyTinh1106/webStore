@@ -307,25 +307,32 @@
 				}
 
 
-				document.addEventListener("DOMContentLoaded", function () {
-					const urlParams = new URLSearchParams(window.location.search);
-					const categoryId = urlParams.get('category');
+				document.querySelectorAll('#nav-categories a').forEach(link => {
+    link.addEventListener('click', function (e) {
+        e.preventDefault();
+        const categoryId = this.getAttribute('data-id');
 
-					if (categoryId) {
-						const checkboxes = document.querySelectorAll('.category-filter input[type="checkbox"]');
-						const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+        if (categoryId && categoryId !== '0') {
+            // Bỏ chọn hết
+            document.querySelectorAll('.category-filter input[type=\"checkbox\"]').forEach(cb => cb.checked = false);
 
-						if (targetCheckbox) {
-							checkboxes.forEach(cb => cb.checked = false);
-							targetCheckbox.checked = true;
+            // Tích đúng checkbox
+            const targetCheckbox = document.querySelector(`.category-filter input[value=\"${categoryId}\"]`);
+            if (targetCheckbox) {
+                targetCheckbox.checked = true;
+            }
 
-							// Gọi hàm lọc sau khi checkbox được tick
-							if (typeof applyCombinedFilter === 'function') {
-								applyCombinedFilter();
-							}
-						}
-					}
-				});
+            // GỌI HÀM LỌC NGAY (phải chắc chắn hàm này có tồn tại)
+            if (typeof applyCombinedFilter === 'function') {
+                applyCombinedFilter();
+            } else if (typeof filterByCategory === 'function') {
+                filterByCategory();
+            }
+        } else if (categoryId === '0') {
+            window.location.href = '/';
+        }
+    });
+});
 
 			</script>
 </body>

@@ -38,79 +38,68 @@
 
 </head>
 
-<body>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('#nav-categories a').forEach(link => {
+            link.addEventListener('click', function (e) {
+                const categoryId = this.getAttribute('data-id');
+                const href = this.getAttribute('href');
+
+                // Nếu là link "Sản phẩm" (href="/store/all"), không can thiệp, để mặc định
+                if (href === '/store/all') {
+                    return;
+                }
+
+                // Nếu không, chặn mặc định để xử lý custom
+                e.preventDefault();
+
+                if (categoryId === '0') {
+                    window.location.href = '/';
+                } else {
+                    window.location.href = `/store?category=${categoryId}`;
+                }
+            });
+        });
+    });
+</script>
+
 
 	<%- include('./header.ejs') %>
 
 		<!-- GAMING FESTIVAL BANNER FULLSCREEN -->
-		<div class="banner-section">
-			<!-- container -->
-			<div class="banner-container">
-				<!-- row -->
-				<div class="row">
-					<!-- Banner slider -->
-					<div class="col-md-12">
-						<div class="row">
-							<div class="banner-tabs">
-								<!-- tab -->
-								<div id="banner-tab" class="tab-pane active">
+		<div class="container-fluid banner-section">
+    <div class="row">
+        <div class="col-md-2 category-sidebar">
+            <ul class="list-unstyled">
+                <li><a href="/store/laptop">Laptop</a></li>
+                <li><a href="/store/laptop-gaming">Laptop Gaming</a></li>
+                <li><a href="/store/pc-gvn">PC GVN</a></li>
+                <li><a href="/store/main-cpu-vga">Main, CPU, VGA</a></li>
+                <li><a href="/store/ram-ssd">Ổ cứng, RAM</a></li>
+                <li><a href="/store/monitor">Màn hình</a></li>
+                <li><a href="/store/keyboard">Bàn phím</a></li>
+                <li><a href="/store/mouse">Chuột</a></li>
+                <li><a href="/store/headphone">Tai nghe</a></li>
+            </ul>
+        </div>
 
-									<div class="banners-slick" data-nav="#banner-slick-nav">
-										<!-- banner -->
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner1.jpg" alt="Banner 1" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner2.jpg" alt="Banner 2" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner3.jpg" alt="Banner 3" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner4.jpg" alt="Banner 4" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner5.jpg" alt="Banner 5" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner6.jpg" alt="Banner 6" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner7.jpg" alt="Banner 7" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner8.jpg" alt="Banner 8-" class="banner-img">
-											</div>
-										</a>
+        <div class="col-md-8 main-banner banners-slick">
+            <div><img src="/images/banner1.jpg" alt="Banner 1" class="img-fluid"></div>
+            <div><img src="/images/banner2.jpg" alt="Banner 2" class="img-fluid"></div>
+            <div><img src="/images/banner3.jpg" alt="Banner 3" class="img-fluid"></div>
+			<div><img src="/images/banner4.jpg" alt="Banner 4" class="img-fluid"></div>
+			<div><img src="/images/banner5.jpg" alt="Banner 4" class="img-fluid"></div>
+			<div><img src="/images/banner6.jpg" alt="Banner 4" class="img-fluid"></div>
+			<div><img src="/images/banner7.jpg" alt="Banner 4" class="img-fluid"></div>
+			<div><img src="/images/banner8.jpg" alt="Banner 4" class="img-fluid"></div>
+        </div>
 
-									</div>
-									<div id="banner-slick-nav" class="banners-slick-nav"></div>
-								</div>
-								<!-- /tab -->
-							</div>
-						</div>
-					</div>
-					<!-- /Banner slider -->
-				</div>
-				<!-- /row -->
-			</div>
-			<!-- /container -->
-		</div>
+        <div class="col-md-2 side-banners">
+            <img src="/images/sale6.jpg" alt="Sale 1" class="img-fluid mb-2">
+
+        </div>
+    </div>
+</div>
 
 		<!-- /HOT DEAL SECTION -->
 
@@ -479,11 +468,6 @@
 			<!-- /container -->
 		</div>
 		<!-- /SECTION -->
-
-
-
-
-
 
 		<!-- SECTION -->
 		<div class="section">
