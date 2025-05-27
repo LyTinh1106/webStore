@@ -127,7 +127,7 @@ INSERT INTO product_image (product_id, URL) VALUES
 (4, 'Gigabyte_RTX_4070_Ti_3.png'),
 
 (5, 'ASUS_TUF_B660M_1.jpg'),
-(5, 'ASUS_TUF_B660M_2.png'),
+(5, 'ASUS_TUF_B660M_2.jpg'),
 (5, 'ASUS_TUF_B660M_3.jpg'),
 
 (6, 'Corsair_Vengeance_2x8GB_1.jpg'),
