@@ -20,7 +20,4 @@ function checkLogin(req, res, next) {
     
     return res.redirect('/login');
   }
-  
-  
-
 module.exports = { checkAdmin,checkLogin };

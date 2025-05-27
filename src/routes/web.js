@@ -5,8 +5,8 @@ require('dotenv').config();
 const { getRegister, getHomePage, getLogin, getDashboard, register, login, getForgotPassword, getResetPassword, forgotPassword, handleForgotPassword, handleResetPassword, resetPassword, verifyResetToken, verifyOtp, getInfo } = require('../controllers/AccountController')
 const { getCheckout, getCart } = require('../controllers/CheckoutController')
 const { getProduct, getStore } = require('../controllers/ProductController')
-const { checkAdmin,checkLogin } = require('../middleware/authMiddleware');
-const { sendResetPasswordEmail } = require('../controllers/AccountController');
+const { checkAdmin,checkLogin} = require('../middleware/authMiddleware');
+const { sendResetPasswordEmail,getSuccess } = require('../controllers/AccountController');
 const { searchProductRender, compareProducts } = require('../controllers/ProductController');
 const router = express.Router()
 
@@ -32,6 +32,8 @@ router.post('/register', register)
 router.post('/verify-otp', verifyOtp);
 router.post('/login', login)
 
+
+router.get('/success',getSuccess)
 
 router.post('/forgot-password', sendResetPasswordEmail);
 router.post('/reset-password', resetPassword);

@@ -1,6 +1,6 @@
 const express = require('express');
 const {
-  createOrder,
+  createOrderAndSendEmail,
   getOrderById,
   getAllOrders,
   updateOrder,
@@ -17,8 +17,7 @@ const router = express.Router();
 router.get('/basic-on-delivering', getBasicOnDeliveringOrders);
 router.get('/details/:id', getOrderDetailsById);
 
-
-router.post('/create', createOrder);          // Tạo đơn hàng
+router.post('/create', createOrderAndSendEmail);          // Tạo đơn hàng và có gửi thông báo đơn hàng
 router.get('/order/:id', getOrderById);      // Lấy theo ID
 router.get('/', getAllOrders);          // Lấy tất cả đơn hàng
 router.get('/revenue/:year',getRevenue);

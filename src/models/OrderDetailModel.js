@@ -111,5 +111,4 @@ OrderDetail.findByOrderId = (orderId, result) => {
   });
 };
 
-
 module.exports = OrderDetail;

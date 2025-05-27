@@ -1,5 +1,9 @@
 const Order = require("../models/OrderModel");
 const OrderDetail = require('../models/OrderDetailModel')
+const nodemailer = require("nodemailer");
+
+
+
 
 // [GET] /orders - Hiển thị danh sách đơn hàng
 exports.getAllOrders = (req, res) => {
@@ -37,9 +41,8 @@ exports.getOrderById = (req, res) => {
   });
 };
 
-
-// [POST] /orders - Tạo mới đơn hàng
-exports.createOrder = async (req, res) => {
+// [POST] /orders/create - Tạo đơn hàng và gửi email
+exports.createOrderAndSendEmail = async (req, res) => {
   try {
     const {
       account_id,
@@ -51,6 +54,8 @@ exports.createOrder = async (req, res) => {
       phone,
       address,
       note,
+      discount_amount = 0,   
+      discount_code = ''    
     } = req.body;
 
     if (!account_id || !payment_method || !total_payment || !cartItems) {
@@ -63,6 +68,9 @@ exports.createOrder = async (req, res) => {
       order_status: 'Chờ duyệt',
       account_id,
       total_payment,
+      shipping_fee: 0,
+      discount_amount,    
+      discount_code,
       fullname,
       email,
       phone,
@@ -74,6 +82,9 @@ exports.createOrder = async (req, res) => {
       if (err) return res.status(500).json({ error: "Lỗi tạo đơn hàng." });
 
       const orderId = createdOrder.id;
+      const randomPart = ('0000' + (orderId * 7919 % 10000)).slice(-4);
+      const order_code = `#${randomPart}${orderId}`;
+
       const items = JSON.parse(cartItems);
 
       for (let item of items) {
@@ -92,13 +103,96 @@ exports.createOrder = async (req, res) => {
         });
       }
 
+      const transporter = nodemailer.createTransport({
+        service: "gmail",
+        auth: {
+          user: process.env.EMAIL_USER,
+          pass: process.env.EMAIL_PASS
+        }
+      });
+
+      // Chuyển discount_amount sang số nguyên để hiển thị
+      const discountAmountInt = parseInt(discount_amount) || 0;
+
+      const html = `
+<div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; border: 1px solid #ddd; padding: 20px; border-radius: 8px;">
+  <h2 style="text-align: center; color: #333; font-size: 28px; margin-bottom: 24px;">VTVT Store</h2>
+  <h4 style="font-size: 18px; margin-bottom: 16px;">Xin chào <strong>${fullname}</strong>,</h4>
+  <p style="font-size: 16px; margin-bottom: 16px;">Bạn đã đặt hàng thành công tại <strong>VTVT Store</strong>.</p>
+
+  <p style="font-size: 16px; margin-bottom: 16px;"><strong>Mã đơn hàng:</strong> <span style="color: #007bff;">${order_code}</span></p>
+
+  <h5 style="font-size: 18px; margin-bottom: 12px;">Thông tin giao hàng:</h5>
+  <p style="font-size: 16px; margin-bottom: 8px;"><strong>Địa chỉ:</strong> ${address}</p>
+  <p style="font-size: 16px; margin-bottom: 8px;"><strong>SĐT:</strong> ${phone}</p>
+  <p style="font-size: 16px; margin-bottom: 8px;"><strong>Phương thức thanh toán:</strong> ${payment_method}</p>
+
+  <h5 style="font-size: 18px; margin-bottom: 12px;">Chi tiết đơn hàng:</h5>
+  <table style="width: 100%; border-collapse: collapse; margin-bottom: 8px; font-size: 16px;">
+    <thead>
+      <tr>
+        <th style="border-bottom: 1px solid #ddd; text-align: left; padding: 8px;">Sản phẩm</th>
+        <th style="border-bottom: 1px solid #ddd; text-align: right; padding: 8px;">Thành tiền</th>
+      </tr>
+    </thead>
+    <tbody>
+      ${items.map(item => `
+      <tr>
+        <td style="border-bottom: 1px solid #f1f1f1; padding: 8px;">${item.name} × ${item.qty}</td>
+        <td style="border-bottom: 1px solid #f1f1f1; padding: 8px; text-align: right;">${(item.price * item.qty).toLocaleString()} VND</td>
+      </tr>
+      `).join('')}
+      
+      ${discountAmountInt > 0 ? `
+      <tr>
+        <td style="padding: 8px; font-weight: bold;">Giảm giá ${discount_code ? `(${discount_code})` : ''}</td>
+        <td style="padding: 8px; text-align: right; color: red; font-weight: bold;">- ${discountAmountInt.toLocaleString()} VND</td>
+      </tr>
+      ` : ''}
+
+      <tr>
+        <td style="padding: 8px; font-weight: bold;">Phí vận chuyển</td>
+        <td style="padding: 8px; text-align: right; font-weight: bold;">0 VND</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p style="text-align: right; font-size: 28px; font-weight: bold; margin-top: 0; margin-bottom: 24px;">
+    Tổng tiền: ${parseInt(total_payment).toLocaleString()} VND
+  </p>
+
+  <p style="font-size: 16px; font-weight: bold; color: #777; text-align: center; margin-top: 20px;">
+    Cảm ơn bạn đã mua hàng tại VTVT Store!
+  </p>
+</div>
+`;
+
+      transporter.sendMail({
+        from: '"VTVT Store" <yourshopemail@gmail.com>',
+        to: email,
+        subject: "Thông báo đặt đơn hàng từ VTVT Store",
+        html
+      }, (emailErr, info) => {
+        if (emailErr) {
+          console.error("Lỗi gửi email:", emailErr);
+        } else {
+          console.log("Đã gửi email:", info.response);
+        }
+      });
+
       if (payment_method === "MoMo") {
         return res.json({
           message: "Tạo đơn hàng thành công",
-          payUrl: `/api/checkout/payment/momo?orderId=${orderId}&amount=${total_payment}`
+          payUrl: `/api/checkout/payment/momo?orderId=${orderId}&amount=${total_payment}`,
+          orderId: orderId,
+          orderCode: order_code
         });
       } else {
-        return res.json({ message: "Tạo đơn hàng thành công" });
+        return res.json({
+          message: "Tạo đơn hàng thành công",
+          orderId: orderId,
+          orderCode: order_code
+        });
       }
     });
   } catch (err) {
@@ -106,6 +200,9 @@ exports.createOrder = async (req, res) => {
     res.status(500).json({ error: "Đã xảy ra lỗi khi tạo đơn hàng." });
   }
 };
+
+
+
 
 // [POST] /orders/:id/update - Cập nhật đơn hàng
 exports.updateOrder = (req, res) => {
@@ -234,5 +331,6 @@ exports.getOrderDetailsById = (req, res) => {
     });
   });
 };
+
 
 
