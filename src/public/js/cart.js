@@ -221,12 +221,18 @@ document.addEventListener("DOMContentLoaded", function () {
 
   // 6. Checkout
   document.getElementById('checkoutButton')?.addEventListener('click', function () {
-    const isLoggedIn = document.getElementById('isLoggedIn')?.value === 'true';
-    if (!isLoggedIn) {
-      alert('Bạn cần đăng nhập để thanh toán.');
-      return window.location.href = '/login';
-    }
-    window.location.href = '/checkout';
+
+  const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+  if (cartData.length === 0) {
+    alert('Giỏ hàng đang trống, bạn không thể tiến hành thanh toán.');
+    return;
+  }
+  const isLoggedIn = document.getElementById('isLoggedIn')?.value === 'true';
+  if (!isLoggedIn) {
+    alert('Bạn cần đăng nhập để thanh toán.');
+    return window.location.href = '/login';
+  }
+  window.location.href = '/checkout';
   });
 
   // Khởi tạo hiển thị lần đầu
