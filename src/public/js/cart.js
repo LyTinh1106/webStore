@@ -1,6 +1,31 @@
+// cart.js
 document.addEventListener("DOMContentLoaded", function () {
-  let cartData = JSON.parse(localStorage.getItem('cart')) || [];
-  let globalVoucherDiscount = 0;
+  // 1. Delegation cho nút "Thêm vào giỏ hàng"
+  document.addEventListener('click', function(e) {
+    const btn = e.target.closest('.add-to-cart-btn');
+    if (!btn) return;
+    e.preventDefault();
+
+    const id    = btn.dataset.id;
+    const img   = btn.dataset.img;
+    const name  = btn.dataset.name;
+    const price = parseFloat(btn.dataset.price);
+    if (!id || !name || isNaN(price)) return;
+
+    let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    const existing = cartData.find(p => p.id === id);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cartData.push({ id, img, name, price, qty: 1 });
+    }
+    localStorage.setItem('cart', JSON.stringify(cartData));
+
+    updateCartUI();
+    if (typeof renderCart === 'function') renderCart();
+  });
+
+  let globalVoucherDiscount = parseInt(localStorage.getItem('voucherDiscount')) || 0;
   let shipping = 0;
 
   function formatVND(value) {
@@ -8,12 +33,15 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function saveCartData() {
+    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
     localStorage.setItem('cart', JSON.stringify(cartData));
   }
 
+  // 2. updateCartUI với <ul> / <li> hợp lệ
   function updateCartUI() {
-    const cartList = document.querySelector('.cart-list');
-    const cartQty = document.querySelector('.header-ctn .qty');
+    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    const cartList = document.querySelector('.header-ctn .cart-list');
+    const cartQty  = document.querySelector('.header-ctn .qty');
     const subtotal = document.querySelector('.cart-summary h5');
     const summaryText = document.querySelector('.cart-summary small');
     const emptyMsg = document.getElementById('empty-cart-message');
@@ -23,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalPrice = 0;
 
     if (cartData.length === 0) {
-      cartList.innerHTML = `<div class="cart-message-notify"><p>Không có sản phẩm trong giỏ hàng.</p></div>`;
+      cartList.innerHTML = `<li class="cart-message-notify"><p>Không có sản phẩm trong giỏ hàng.</p></li>`;
       if (emptyMsg) emptyMsg.style.display = 'block';
       cartQty.innerText = '0';
       summaryText.innerText = `Chưa có sản phẩm nào`;
@@ -33,23 +61,27 @@ document.addEventListener("DOMContentLoaded", function () {
       if (emptyMsg) emptyMsg.style.display = 'none';
 
       cartData.forEach((product, index) => {
-        const productHTML = `
-          <div class="product-widget">
-            <a href="/product/${product.id}">  
-              <div class="product-img">
-                <img src="${product.img}" alt="">
-              </div>
-              <div class="product-body">
-                <h3 class="product-name"><a href="/product/${product.id}">${product.name}</a></h3>
-                <h4 class="product-price"><span class="qty">${product.qty}x</span> ${formatVND(product.price)}</h4>
-              </div>
-              <button class="delete" data-index="${index}"><i class="fa fa-close"></i></button> 
-            </a>  
-          </div>
-        `;
-        cartList.insertAdjacentHTML('beforeend', productHTML);
-        totalQty += product.qty;
-        totalPrice += product.price * product.qty;
+        totalQty  += product.qty;
+        totalPrice+= product.price * product.qty;
+
+        const itemHTML = `
+<li class="product-widget clearfix">
+  <a href="/product/${product.id}">
+    <div class="product-img">
+      <img src="${product.img}" alt="${product.name}">
+    </div>
+    <div class="product-body">
+      <h3 class="product-name">${product.name}</h3>
+      <h4 class="product-price">
+        <span class="qty">${product.qty}x</span> ${formatVND(product.price)}
+      </h4>
+    </div>
+  </a>
+  <button class="delete" data-index="${index}">
+    <i class="fa fa-close"></i>
+  </button>
+</li>`;
+        cartList.insertAdjacentHTML('beforeend', itemHTML);
       });
 
       cartQty.innerText = totalQty;
@@ -57,221 +89,147 @@ document.addEventListener("DOMContentLoaded", function () {
       subtotal.innerText = `TỔNG CỘNG: ${formatVND(totalPrice)}`;
       document.querySelector('.cart-dropdown').style.display = 'block';
 
-      document.querySelectorAll('.delete').forEach(button => {
-        button.addEventListener('click', function () {
-          const index = parseInt(this.getAttribute('data-index'));
-          cartData.splice(index, 1);
-          updateStorage();
-        });
+      // Xử lý nút xóa
+      cartList.querySelectorAll('.delete').forEach(button => {
+        button.onclick = function (e) {
+          e.preventDefault();
+          const idx = parseInt(this.dataset.index);
+          let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+          cartData.splice(idx, 1);
+          localStorage.setItem('cart', JSON.stringify(cartData));
+          updateCartUI();
+          if (typeof renderCart === 'function') renderCart();
+        };
       });
     }
 
-    // Cập nhật khu vực chi tiết giỏ hàng
+    // Cập nhật section giỏ hàng chi tiết (full page)
     const mainSubtotal = document.querySelector('.summary-subtotal');
     const mainDiscount = document.querySelector('.summary-discount');
-    const mainTotal = document.querySelector('.summary-total');
-
+    const mainTotal    = document.querySelector('.summary-total');
     if (mainSubtotal && mainDiscount && mainTotal) {
       mainSubtotal.innerText = formatVND(totalPrice);
       mainDiscount.innerText = formatVND(Math.floor(totalPrice * globalVoucherDiscount / 100));
-      mainTotal.innerText = formatVND(totalPrice - Math.floor(totalPrice * globalVoucherDiscount / 100));
+      mainTotal.innerText    = formatVND(totalPrice - Math.floor(totalPrice * globalVoucherDiscount / 100) + shipping);
     }
 
     saveCartData();
   }
 
-  // Xử lý thêm sản phẩm từ danh sách
-  document.querySelectorAll('.add-to-cart-btn').forEach(button => {
-    button.addEventListener('click', function (e) {
-      e.preventDefault();
-      const productCard = button.closest('.product');
-      if (!productCard) return;
-      const id = productCard.querySelector('.product-id')?.innerText.trim();
-      const img = productCard.querySelector('.product-img img')?.getAttribute('src') || '/images/noImage.jpg';
-      const name = productCard.querySelector('.product-name')?.innerText.trim();
-      const priceText = productCard.querySelector('.product-price')?.innerText.trim().replace(/[^\d]/g, '') || '0';
-      const price = parseFloat(priceText);
-      if (!name || isNaN(price)) return;
-
-      const existingProduct = cartData.find(p => p.name === name);
-      if (existingProduct) {
-        existingProduct.qty += 1;
-      } else {
-        cartData.push({ id, img, name, price, qty: 1 });
-      }
-      updateStorage();
-    });
-  });
-
-  // Từ trang chi tiết
-  const detailBtn = document.getElementById('detail-add-to-cart');
-  if (detailBtn) {
-    detailBtn.addEventListener('click', function (e) {
-      e.preventDefault();
-      const id = document.getElementById('detail-id')?.innerText.trim() || document.getElementById('detail-id')?.value.trim();
-      const name = document.getElementById('detail-name')?.innerText.trim();
-      const priceText = document.getElementById('detail-price')?.innerText.trim();
-      const cleanedPrice = priceText.replaceAll('.', '').replace(/[^\d]/g, '');
-      const price = parseInt(cleanedPrice);
-      const qty = parseInt(document.getElementById('detail-qty')?.value) || 1;
-      const img = document.querySelector('#product-main-img img')?.getAttribute('src') || '/images/noImage.jpg';
-
-      if (!name || isNaN(price) || isNaN(qty) || qty < 1) return;
-
-      const existingProduct = cartData.find(p => p.name === name);
-      if (existingProduct) {
-        existingProduct.qty += qty;
-      } else {
-        cartData.push({ id, img, name, price, qty });
-      }
-      updateStorage();
-    });
-  }
-
-  // Xóa theo tên
-  window.removeFromCart = function (productName) {
-    cartData = cartData.filter(p => p.name !== productName);
-    updateStorage();
-  };
-
-  // Cập nhật localStorage và toàn bộ giao diện
-  function updateStorage() {
-    localStorage.setItem('cart', JSON.stringify(cartData));
-    renderCart();
-    updateCartUI();
-  }
-
-  // Render chi tiết giỏ hàng (dạng full page)
+  // 3. Hàm renderCart (full page) giữ nguyên
   function renderCart() {
-    const cartItemsContainer = $('.cart-items');
-    cartItemsContainer.empty();
+    let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    const container = document.querySelector('.cart-items');
+    if (!container) return;
 
+    container.innerHTML = '';
     if (cartData.length === 0) {
-      cartItemsContainer.html(`
-        <div class="text-center py-5 empty-cart-container">
+      container.innerHTML = `
+        <div class="empty-cart-container text-center py-5">
           <h5>Giỏ hàng của bạn đang trống</h5>
-          <p>Hãy thêm sản phẩm vào giỏ hàng</p>
-          <a href="/" class="btn btn-outline-primary mt-3 return-to-homepage">
-            <i class="fas fa-arrow-left me-2"></i>Tiếp tục mua sắm
+          <a href="/" class="btn btn-outline-primary mt-3">
+            <i class="fas fa-arrow-left"></i> Tiếp tục mua sắm
           </a>
-        </div>`);
-      $('#subtotal').text('0₫');
-      $('#totalPrice').text('0₫');
-      $('#couponSection').hide();
+        </div>`;
+      document.querySelector('#subtotal').innerText = '0₫';
+      document.querySelector('#totalPrice').innerText = '0₫';
+      document.querySelector('#couponSection').style.display = 'none';
       return;
-    } else {
-      $('#couponSection').show();
     }
+    document.querySelector('#couponSection').style.display = 'block';
 
     let subtotal = 0;
-
-    cartData.forEach(product => {
-      subtotal += product.price * product.qty;
-      const itemHTML = `
-      <div class="cart-item">
-        <div class="row align-items-center">
-          <div class="col-md-2">
-            <a href="/product/${product.id}">
-              <img src="${product.img}" alt="${product.name}" class="product-image">
-            </a>
-          </div>
-          <div class="col-md-4 cart">
-            <a href="/product/${product.id}">
-              <span class="cart-product-name">${product.name}</span>
-            </a>
-          </div>
-          <div class="col-md-2 cart">
-            <span class="cart-product-price">${formatVND(product.price)}</span>
-          </div>
-          <div class="col-md-3">
-            <div class="quantity-control">
-              <div class="quantity-btn minus" data-name="${product.name}"><i class="fa fa-minus"></i></div>
-              <input type="text" class="quantity-input" value="${product.qty}" readonly>
-              <div class="quantity-btn plus" data-name="${product.name}"><i class="fa fa-plus"></i></div>
-            </div>
-          </div>
-          <div class="col-md-1 cart">
-            <i class="fas fa-trash remove-item" data-name="${product.name}"></i>
-          </div>
+    cartData.forEach(prod => {
+      subtotal += prod.price * prod.qty;
+      const row = document.createElement('div');
+      row.className = 'cart-item row align-items-center';
+      row.innerHTML = `
+        <div class="col-md-2">
+          <a href="/product/${prod.id}">
+            <img src="${prod.img}" class="product-image" alt="${prod.name}">
+          </a>
         </div>
-      </div>`;
-      cartItemsContainer.append(itemHTML);
+        <div class="col-md-4">
+          <a href="/product/${prod.id}">${prod.name}</a>
+        </div>
+        <div class="col-md-2">${formatVND(prod.price)}</div>
+        <div class="col-md-3">
+          <button class="quantity-btn minus" data-name="${prod.name}"><i class="fa fa-minus"></i></button>
+          <input class="quantity-input" value="${prod.qty}" readonly>
+          <button class="quantity-btn plus" data-name="${prod.name}"><i class="fa fa-plus"></i></button>
+        </div>
+        <div class="col-md-1">
+          <i class="fas fa-trash remove-item" data-name="${prod.name}"></i>
+        </div>`;
+      container.appendChild(row);
     });
 
     const discount = Math.floor(subtotal * globalVoucherDiscount / 100);
-    const total = subtotal + shipping - discount;
-
-    $('#subtotal').text(formatVND(subtotal));
-    $('#totalPrice').text(formatVND(total));
-    $('#discountAmount').text(formatVND(discount));
+    const total    = subtotal + shipping - discount;
+    document.querySelector('#subtotal').innerText       = formatVND(subtotal);
+    document.querySelector('#discountAmount').innerText = formatVND(discount);
+    document.querySelector('#totalPrice').innerText    = formatVND(total);
   }
 
-  // Xử lý cộng/trừ/xóa
-  $(document).on('click', '.plus', function () {
-    const name = $(this).data('name');
-    const product = cartData.find(p => p.name === name);
-    if (product) {
-      product.qty += 1;
-      updateStorage();
-    }
-  });
+  // 4. Cộng / trừ / xóa trên full-page Cart
+  document.addEventListener('click', function(e) {
+    if (e.target.matches('.plus, .minus, .remove-item')) {
+      let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+      const name = e.target.dataset.name;
+      let product = cartData.find(p => p.name === name);
+      if (!product) return;
 
-  $(document).on('click', '.minus', function () {
-    const name = $(this).data('name');
-    const product = cartData.find(p => p.name === name);
-    if (product && product.qty > 1) {
-      product.qty -= 1;
-      updateStorage();
-    } else if (product && product.qty === 1) {
-      if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
+      if (e.target.matches('.plus')) {
+        product.qty++;
+      } else if (e.target.matches('.minus')) {
+        if (product.qty > 1) product.qty--;
+        else return; // nếu =1 thì phải bấm xóa
+      } else if (e.target.matches('.remove-item')) {
+        if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
         cartData = cartData.filter(p => p.name !== name);
-        updateStorage();
       }
+
+      localStorage.setItem('cart', JSON.stringify(cartData));
+      updateCartUI();
+      renderCart();
     }
   });
 
-  $(document).on('click', '.remove-item', function () {
-    const name = $(this).data('name');
-    if (confirm('Bạn có chắc muốn xóa sản phẩm này?')) {
-      cartData = cartData.filter(p => p.name !== name);
-      updateStorage();
-    }
-  });
-
-  $('#applyVoucherBtn').on('click', function () {
-    const code = $('#voucherCode').val().trim();
+  // 5. Áp dụng Voucher
+  document.getElementById('applyVoucherBtn')?.addEventListener('click', function () {
+    const code = document.getElementById('voucherCode')?.value.trim();
     if (!code) return alert('Vui lòng nhập mã giảm giá');
-
     fetch('/api/voucher/apply', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ code })
     })
-      .then(res => res.json())
-      .then(data => {
-        if (!data.success) {
-          globalVoucherDiscount = 0;
-          return alert(data.error || 'Mã không hợp lệ hoặc đã hết hạn');
-        }
-
+    .then(res => res.json())
+    .then(data => {
+      if (!data.success) {
+        globalVoucherDiscount = 0;
+        alert(data.error || 'Mã không hợp lệ hoặc đã hết hạn');
+      } else {
         globalVoucherDiscount = parseInt(data.voucher.voucher_value);
         localStorage.setItem('voucherDiscount', globalVoucherDiscount);
-        updateStorage();
-      })
-      .catch(() => alert('Đã xảy ra lỗi khi áp dụng mã'));
+      }
+      updateCartUI();
+      renderCart();
+    })
+    .catch(() => alert('Lỗi khi áp dụng mã'));
   });
 
-  $('#checkoutButton').on('click', function () {
-    const isLoggedIn = document.getElementById('isLoggedIn')?.value;
-    if (isLoggedIn !== 'true') {
-      alert('Bạn cần đăng nhập để tiến hành thanh toán.');
-      window.location.href = '/login';
-    } else {
-      window.location.href = '/checkout';
+  // 6. Checkout
+  document.getElementById('checkoutButton')?.addEventListener('click', function () {
+    const isLoggedIn = document.getElementById('isLoggedIn')?.value === 'true';
+    if (!isLoggedIn) {
+      alert('Bạn cần đăng nhập để thanh toán.');
+      return window.location.href = '/login';
     }
+    window.location.href = '/checkout';
   });
 
-  // Gọi khi trang tải
+  // Khởi tạo hiển thị lần đầu
   updateCartUI();
   renderCart();
 });

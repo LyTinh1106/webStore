@@ -215,10 +215,16 @@
 																			</div>
 																		</div>
 																		<div class="add-to-cart">
-																			<button class="add-to-cart-btn">
-																				<i class="fa fa-shopping-cart"></i> thêm
-																				vào giỏ hàng</button>
-																		</div>
+  <button 
+    class="add-to-cart-btn"
+    data-id="<%= product.id %>"
+    data-img="/images/<%= product.image || 'default.png' %>"
+    data-name="<%= product.name %>"
+    data-price="<%= product.retail_price %>"
+  >
+    <i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+  </button>
+</div>
 																	</a>
 
 																</div>
@@ -326,8 +332,11 @@
 						}
 					}
 				});
+			
+
 
 			</script>
+			
 </body>
 
 </html>

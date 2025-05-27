@@ -105,21 +105,25 @@
 							</div>
 
 							<!-- Thêm vào giỏ hàng -->
-							<div class="add-to-cart">
-								<!-- Nút thêm -->
-								<button id="detail-add-to-cart" class="add-to-cart-btn">
-									<i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
-								</button>
-							</div>
+							<%  const mainImage=images && images.length ? images[0].URL : (product.image || 'default.png' ); %>
+
+								<div class="add-to-cart">
+									<button class="add-to-cart-btn" data-id="<%= product.id %>"
+										data-img="/images/<%= mainImage %>" data-name="<%= product.name %>"
+										data-price="<%= product.retail_price %>">
+										<i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+									</button>
+								</div>
 
 
 
-							<ul class="product-links">
-								<li>Danh mục:</li>
-								<li><a href="#">
-										<%= product.category_name %>
-									</a></li>
-							</ul>
+
+								<ul class="product-links">
+									<li>Danh mục:</li>
+									<li><a href="#">
+											<%= product.category_name %>
+										</a></li>
+								</ul>
 						</div>
 					</div>
 					<!-- /Chi tiết sản phẩm -->
@@ -463,9 +467,12 @@
 														</div>
 													</div>
 													<div class="add-to-cart">
-														<button class="add-to-cart-btn"><i
-																class="fa fa-shopping-cart"></i>
-															Thêm vào giỏ hàng</button>
+														<button class="add-to-cart-btn" data-id="<%= product.id %>"
+															data-img="/images/<%= product.image || 'default.png' %>"
+															data-name="<%= product.name %>"
+															data-price="<%= product.retail_price %>">
+															<i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+														</button>
 													</div>
 
 												</div>
