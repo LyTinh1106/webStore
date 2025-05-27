@@ -12,6 +12,7 @@ const Voucher = require('../models/VoucherModel')
 
 const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
+const { get } = require("../routes/order");
 
 
 const saltRounds = 10;
@@ -62,7 +63,27 @@ const getResetPassword = (req, res) => {
   const token = req.query.token;
   res.render('resetPassword', { token, message: null });
 };
+ const getSuccess = (req, res) => {
+  const user = req.user || req.session.user || null;
 
+  if (!user || !user.email) {
+    return res.render('order-success', {
+      user: null,
+      customer: null
+    });
+  }
+  Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+    if (errCustomer && errCustomer.kind !== "not_found") {
+      return res.status(500).render("error", {
+        message: "Lỗi khi lấy thông tin khách hàng."
+      });
+    }
+    res.render('order-success', {
+      user,
+      customer: customerInfo || null
+    });
+  });
+};
 
 
 const getInfo = (req, res) => {
@@ -596,11 +617,6 @@ const login = (req, res) => {
   });
 };
 
-
-
-
-
-
 module.exports = {
   create,
   findAll,
@@ -622,5 +638,6 @@ module.exports = {
   resetPassword,
   verifyResetToken,
   verifyOtp,
+  getSuccess
 
 }
