@@ -43,74 +43,87 @@
 	<%- include('./header.ejs') %>
 
 		<!-- GAMING FESTIVAL BANNER FULLSCREEN -->
-		<div class="banner-section">
-			<!-- container -->
-			<div class="banner-container">
-				<!-- row -->
-				<div class="row">
-					<!-- Banner slider -->
-					<div class="col-md-12">
-						<div class="row">
-							<div class="banner-tabs">
-								<!-- tab -->
-								<div id="banner-tab" class="tab-pane active">
+		<div class="container-fluid banner-section">
+			<div class="row">
 
-									<div class="banners-slick" data-nav="#banner-slick-nav">
-										<!-- banner -->
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner1.jpg" alt="Banner 1" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner2.jpg" alt="Banner 2" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner3.jpg" alt="Banner 3" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner4.jpg" alt="Banner 4" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner5.jpg" alt="Banner 5" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner6.jpg" alt="Banner 6" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner7.jpg" alt="Banner 7" class="banner-img">
-											</div>
-										</a>
-										<a href="/store/all">
-											<div class="banner-item">
-												<img src="../images/banner8.jpg" alt="Banner 8-" class="banner-img">
-											</div>
-										</a>
+				<!-- Banner bên trái 1 ảnh dọc lớn -->
+				<div class="col-md-2 left-banner">
+					<a href="/store/all">
+					<img src="/images/sale6.jpg" alt="Left Banner" class="img-fluid">
+					</a>
+				</div>
 
-									</div>
-									<div id="banner-slick-nav" class="banners-slick-nav"></div>
+				<!-- Banner slider -->
+				<div class="col-md-12">
+					<div class="row">
+						<div class="banner-tabs">
+							<!-- tab -->
+							<div id="banner-tab" class="tab-pane active">
+
+								<div class="banners-slick" data-nav="#banner-slick-nav">
+									<!-- banner -->
+									<a href="/store/all">
+										<div class="banner-item">
+											<img src="../images/banner1.jpg" alt="Banner 1" class="banner-img">
+										</div>
+									</a>
+									<a href="/store/all">
+										<div class="banner-item">
+											<img src="../images/banner2.jpg" alt="Banner 2" class="banner-img">
+										</div>
+									</a>
+									<a href="/store/all">
+										<div class="banner-item">
+											<img src="../images/banner3.jpg" alt="Banner 3" class="banner-img">
+										</div>
+									</a>
+									<a href="/store/all">
+										<div class="banner-item">
+											<img src="../images/banner4.jpg" alt="Banner 4" class="banner-img">
+										</div>
+									</a>
+									<a href="/store/all">
+										<div class="banner-item">
+											<img src="../images/banner5.jpg" alt="Banner 5" class="banner-img">
+										</div>
+									</a>
+									<a href="/store/all">
+										<div class="banner-item">
+											<img src="../images/banner6.jpg" alt="Banner 6" class="banner-img">
+										</div>
+									</a>
+									<a href="/store/all">
+										<div class="banner-item">
+											<img src="../images/banner7.jpg" alt="Banner 7" class="banner-img">
+										</div>
+									</a>
+									<a href="/store/all">
+										<div class="banner-item">
+											<img src="../images/banner8.jpg" alt="Banner 8-" class="banner-img">
+										</div>
+									</a>
+
 								</div>
-								<!-- /tab -->
+								<!-- <div id="banner-slick-nav" class="banners-slick-nav"></div> -->
 							</div>
+							<!-- /tab -->
 						</div>
 					</div>
-					<!-- /Banner slider -->
 				</div>
-				<!-- /row -->
+
+				<!-- Banner bên phải nhiều ảnh nhỏ -->
+				<div class="col-md-2 side-banners">
+					<a href="/store/all">
+						<img src="/images/sale8.jpg" alt="Side Banner 1" class="img-fluid mb-3">
+						<img src="/images/sale2.jpg" alt="Side Banner 2" class="img-fluid mb-3">
+						<img src="/images/sale3.jpg" alt="Side Banner 3" class="img-fluid mb-3">
+						<img src="/images/sale4.jpg" alt="Side Banner 4" class="img-fluid mb-3">
+					</a>
+				</div>
+
 			</div>
-			<!-- /container -->
 		</div>
+
 
 		<!-- /HOT DEAL SECTION -->
 
@@ -126,7 +139,7 @@
 						<div class="section-title">
 							<h3 class="title">Sản Phẩm Mới</h3>
 							<div class="section-nav">
-								
+
 							</div>
 						</div>
 					</div>
@@ -149,14 +162,15 @@
 														<img src="/images/<%= product.image || 'noImage.jpg' %>"
 															alt="ảnh sản phẩm">
 														<div class="product-label">
-															
+
 														</div>
 													</div>
 													<div class="product-body">
 														<p class="product-category">
 															<%= product.category_name || 'Danh mục' %>
 														</p>
-														<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%=product.id%>">
+														<h3 class="product-name" title="<%= product.name %>"><a
+																href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -165,8 +179,8 @@
 
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
-																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>" style="margin-right: 1px;"></i>
+																<i class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"
+																	style="margin-right: 1px;"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -181,16 +195,13 @@
 														</div>
 													</div>
 													<div class="add-to-cart">
-  <button 
-    class="add-to-cart-btn"
-    data-id="<%= product.id %>"
-    data-img="/images/<%= product.image || 'default.png' %>"
-    data-name="<%= product.name %>"
-    data-price="<%= product.retail_price %>"
-  >
-    <i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
-  </button>
-</div>
+														<button class="add-to-cart-btn" data-id="<%= product.id %>"
+															data-img="/images/<%= product.image || 'default.png' %>"
+															data-name="<%= product.name %>"
+															data-price="<%= product.retail_price %>">
+															<i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+														</button>
+													</div>
 												</a>
 
 
@@ -251,14 +262,15 @@
 																<% } %>
 																	<% if (product.is_new) { %>
 																		<span class="new">NEW</span>
-															<% } %>
+																		<% } %>
 														</div>
 													</div>
 													<div class="product-body">
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%=product.id%>">
+														<h3 class="product-name" title="<%= product.name %>"><a
+																href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -267,8 +279,8 @@
 														</h4>
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
-																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>" style="margin-right: 1px;"></i>
+																<i class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"
+																	style="margin-right: 1px;"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -282,16 +294,13 @@
 														</div>
 													</div>
 													<div class="add-to-cart">
-  <button 
-    class="add-to-cart-btn"
-    data-id="<%= product.id %>"
-    data-img="/images/<%= product.image || 'default.png' %>"
-    data-name="<%= product.name %>"
-    data-price="<%= product.retail_price %>"
-  >
-    <i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
-  </button>
-</div>
+														<button class="add-to-cart-btn" data-id="<%= product.id %>"
+															data-img="/images/<%= product.image || 'default.png' %>"
+															data-name="<%= product.name %>"
+															data-price="<%= product.retail_price %>">
+															<i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+														</button>
+													</div>
 												</a>
 											</div>
 											<% }}); %>
@@ -356,7 +365,8 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%=product.id%>">
+														<h3 class="product-name" title="<%= product.name %>"><a
+																href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -365,8 +375,8 @@
 														</h4>
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
-																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>" style="margin-right: 1px;"></i>
+																<i class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"
+																	style="margin-right: 1px;"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -380,16 +390,13 @@
 														</div>
 													</div>
 													<div class="add-to-cart">
-  <button 
-    class="add-to-cart-btn"
-    data-id="<%= product.id %>"
-    data-img="/images/<%= product.image || 'default.png' %>"
-    data-name="<%= product.name %>"
-    data-price="<%= product.retail_price %>"
-  >
-    <i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
-  </button>
-</div>
+														<button class="add-to-cart-btn" data-id="<%= product.id %>"
+															data-img="/images/<%= product.image || 'default.png' %>"
+															data-name="<%= product.name %>"
+															data-price="<%= product.retail_price %>">
+															<i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+														</button>
+													</div>
 												</a>
 											</div>
 											<% }}); %>
@@ -455,7 +462,8 @@
 														<p class="product-category">
 															<%= product.category_name %>
 														</p>
-														<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%=product.id%>">
+														<h3 class="product-name" title="<%= product.name %>"><a
+																href="/product/<%=product.id%>">
 																<%= product.name %>
 															</a></h3>
 														<h4 class="product-price">
@@ -464,8 +472,8 @@
 														</h4>
 														<div class="product-rating">
 															<% for (let i=0; i < 5; i++) { %>
-																<i
-																	class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>" style="margin-right: 1px;"></i>
+																<i class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"
+																	style="margin-right: 1px;"></i>
 																<% } %>
 														</div>
 														<div class="product-btns">
@@ -479,16 +487,13 @@
 														</div>
 													</div>
 													<div class="add-to-cart">
-  <button 
-    class="add-to-cart-btn"
-    data-id="<%= product.id %>"
-    data-img="/images/<%= product.image || 'default.png' %>"
-    data-name="<%= product.name %>"
-    data-price="<%= product.retail_price %>"
-  >
-    <i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
-  </button>
-</div>
+														<button class="add-to-cart-btn" data-id="<%= product.id %>"
+															data-img="/images/<%= product.image || 'default.png' %>"
+															data-name="<%= product.name %>"
+															data-price="<%= product.retail_price %>">
+															<i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+														</button>
+													</div>
 												</a>
 											</div>
 											<% }}); %>
@@ -529,7 +534,7 @@
 						</div>
 
 						<div class="products-widget-slick" data-nav="#slick-nav-5">
-							<% const mouse = products.filter(p=> p.category_name === 'Chuột');
+							<% const mouse=products.filter(p=> p.category_name === 'Chuột');
 								for (let i = 0; i < mouse.length; i +=3) { const group=mouse.slice(i, i + 3); %>
 									<div>
 										<% group.forEach(product=> { %>
@@ -545,7 +550,8 @@
 													<p class="product-category">
 														<%= product.category_name %>
 													</p>
-													<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%= product.id %>">
+													<h3 class="product-name" title="<%= product.name %>"><a
+															href="/product/<%= product.id %>">
 															<%= product.name %>
 														</a></h3>
 													<h4 class="product-price">
@@ -575,7 +581,7 @@
 						</div>
 
 						<div class="products-widget-slick" data-nav="#slick-nav-6">
-							<% const keyboard = products.filter(p=> p.category_name === 'Bàn phím');
+							<% const keyboard=products.filter(p=> p.category_name === 'Bàn phím');
 								for (let i = 0; i < keyboard.length; i +=3) { const group=keyboard.slice(i, i + 3); %>
 									<div>
 										<% group.forEach(product=> { %>
@@ -591,7 +597,8 @@
 													<p class="product-category">
 														<%= product.category_name %>
 													</p>
-													<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%= product.id %>">
+													<h3 class="product-name" title="<%= product.name %>"><a
+															href="/product/<%= product.id %>">
 															<%= product.name %>
 														</a></h3>
 													<h4 class="product-price">
@@ -623,7 +630,7 @@
 						</div>
 
 						<div class="products-widget-slick" data-nav="#slick-nav-7">
-							<% const cpu = products.filter(p=> p.category_name === 'CPU');
+							<% const cpu=products.filter(p=> p.category_name === 'CPU');
 								for (let i = 0; i < cpu.length; i +=3) { const group=cpu.slice(i, i + 3); %>
 									<div>
 										<% group.forEach(product=> { %>
@@ -638,7 +645,8 @@
 													<p class="product-category">
 														<%= product.category_name %>
 													</p>
-													<h3 class="product-name" title="<%= product.name %>"><a href="/product/<%= product.id %>">
+													<h3 class="product-name" title="<%= product.name %>"><a
+															href="/product/<%= product.id %>">
 															<%= product.name %>
 														</a></h3>
 													<h4 class="product-price">
@@ -677,13 +685,13 @@
 			<script src="js/main.js"></script>
 			<script src="js/cart.js"></script>
 			<script>
-				
-			  </script>
-			  
 
-			
-			  
-			  
+			</script>
+
+
+
+
+
 </body>
 
 </html>
