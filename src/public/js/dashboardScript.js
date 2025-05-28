@@ -326,12 +326,14 @@ const config = {
 // Cấu hình cho startDate
 const startPicker = flatpickr("#startDate", {
     ...config,
+    clickOpens: false,
     positionElement: document.getElementById("startDateIcon") // Gắn popup vào icon
 });
 
 // Cấu hình cho endDate
 const endPicker = flatpickr("#endDate", {
     ...config,
+    clickOpens: false,
     positionElement: document.getElementById("endDateIcon") // Gắn popup vào icon
 });
 
@@ -438,9 +440,31 @@ document.querySelectorAll(".delete-voucher-btn").forEach(button => {
         }
     });
 });
+
+const editStartPicker = flatpickr("#editStartDate", {
+    ...config,
+    clickOpens: false,
+    positionElement: document.getElementById("editStartDateIcon") // Gắn popup vào icon
+});
+
+const editEndPicker = flatpickr("#editEndDate", {
+    ...config,
+    clickOpens: false,
+    positionElement: document.getElementById("editEndDateIcon") // Gắn popup vào icon
+});
+
+
+document.getElementById("editStartDateIcon").addEventListener("click", function () {
+    editStartPicker.open();
+});
+
+document.getElementById("editEndDateIcon").addEventListener("click", function () {
+    editEndPicker.open();
+});
+
 // Update Voucher
 document.getElementById("editVoucherForm").addEventListener("submit", async function (e) {
-    e.preventDefault(); // Ngăn reload
+    e.preventDefault();
 
     const id = document.getElementById("editVoucherId").value;
     const vouCode = document.getElementById("editVouCode").value.trim().toUpperCase();
@@ -488,26 +512,37 @@ document.getElementById("editVoucherForm").addEventListener("submit", async func
         });
 
         if (response.ok) {
-            saveScrollAndTabAndReload()
+            saveScrollAndTabAndReload();
         } else {
-            const result = await response.json();
-            messageBox.textContent = result.message || "Cập nhật thất bại!";
+            let msg = "Cập nhật thất bại!";
+            try {
+                if (response.headers.get("Content-Type")?.includes("application/json")) {
+                    const result = await response.json();
+                    msg = result.message || msg;
+                } else {
+                    msg = await response.text();
+                }
+            } catch (err) {
+                msg = "Có lỗi khi xử lý dữ liệu từ server!";
+            }
+            messageBox.textContent = msg;
             messageBox.style.display = "block";
         }
 
     } catch (error) {
-        alert("Đã xảy ra lỗi khi gửi yêu cầu.");
+        alert("Đã xảy ra lỗi khi gửi yêu cầu." + error);
         console.error(error);
     }
 });
 document.querySelectorAll(".edit-voucher-btn").forEach(btn => {
     btn.addEventListener("click", function () {
-        const row = btn.closest("tr");
-        document.getElementById("editVoucherId").value = row.children[0].innerText.trim();
-        document.getElementById("editVouCode").value = row.children[1].innerText.trim();
-        document.getElementById("editVouValue").value = row.children[2].innerText.trim();
-        document.getElementById("editStartDate").value = row.children[3].innerText.trim();
-        document.getElementById("editEndDate").value = row.children[4].innerText.trim();
+        // Lấy data từ thuộc tính data-*
+        document.getElementById("editVoucherId").value = btn.dataset.id;
+        document.getElementById("editVouCode").value = btn.dataset.code;
+        document.getElementById("editVouValue").value = btn.dataset.value;
+        document.getElementById("editStartDate").value = btn.dataset.datestart;
+        document.getElementById("editEndDate").value = btn.dataset.dateend;
+        // Mở modal
         const modal = new bootstrap.Modal(document.getElementById("editVoucherModal"));
         modal.show();
     });

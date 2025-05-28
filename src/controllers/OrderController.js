@@ -163,7 +163,7 @@ exports.updateStatus = (req, res) => {
   };
 };
 
-exports.getRevenue = (req, res) => {
+exports.getRevenueByYear = (req, res) => {
   const year = req.params.year;
 
   Order.GetRevenueByMonthOfYear(year, (err, data) => {
@@ -175,12 +175,64 @@ exports.getRevenue = (req, res) => {
     }
 
     res.json({
-      revenueByMonth: data
+      revenue: data
     });
   });
 };
 
-exports.getProductQuantity = (req, res) => {
+exports.getRevenueByMonth = (req, res) => {
+  const year = req.params.year;
+  const month = req.params.month;
+
+  Order.GetRevenueByDayOfMonth(year, month, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).json({ message: `Không tìm thấy dữ liệu cho tháng ${month}.` });
+      }
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu doanh thu.", error: err });
+    }
+
+    res.json({
+      revenue: data
+    });
+  });
+};
+
+exports.getRevenueByQuarters = (req, res) => {
+  const year = req.params.year;
+
+  Order.GetRevenueByQuatersOfYear(year, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).json({ message: `Không tìm thấy dữ liệu cho quý của năm ${year}.` });
+      }
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu doanh thu.", error: err });
+    }
+
+    res.json({
+      revenue: data
+    });
+  });
+};
+
+exports.getRevenueByDateRange = (req, res) => {
+  const dateStart = req.params.dateStart;
+  const dateEnd = req.params.dateEnd;
+  Order.GetRevenueByDateRange(dateStart, dateEnd, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).json({ message: `Không tìm thấy dữ liệu từ ngày ${dateStart} đến ngày ${dateEnd }.` });
+      }
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu doanh thu.", error: err });
+    }
+
+    res.json({
+      revenue: data
+    });
+  });
+};
+
+exports.getProductQuantityByYear = (req, res) => {
   const year = req.params.year;
   Order.GetProuctQuantityByYear(year, (err, data) =>{
     if(err) {
@@ -194,6 +246,53 @@ exports.getProductQuantity = (req, res) => {
     });
   });
 };
+
+exports.getProductQuantityByMonth =  (req, res) => {
+  const year = req.params.year;
+  const month = req.params.month;
+  Order.GetProductQuantityByMonth(year, month, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).json({ message: `Không tìm thấy dữ liệu cho tháng ${month} của năm ${year}.` });
+      }
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu sản phẩm.", error: err });
+    }
+    res.json({
+      productQuantity: data
+    });
+  });
+};
+
+exports.getProductQuantityByQuarters = (req, res) => {
+  const year = req.params.year;
+  Order.GetProductQuantityByQuaters(year, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).json({ message: `Không tìm thấy dữ liệu cho quý của năm ${year}.` });
+      }
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu sản phẩm.", error: err });
+    }
+    res.json({
+      productQuantity: data
+    });
+  });
+};
+
+exports.getProductQuantityByDateRange = (req, res) => {
+  const dateStart = req.params.dateStart;
+  const dateEnd = req.params.dateEnd;
+  Order.GetProductQuantityByDateRange(dateStart, dateEnd, (err, data) => {
+    if (err) {
+      if (err.kind === "not_found") {
+        return res.status(404).json({ message: `Không tìm thấy dữ liệu từ ngày ${dateStart} đến ngày ${dateEnd}.` });
+      }
+      return res.status(500).json({ message: "Lỗi khi lấy dữ liệu sản phẩm.", error: err });
+    }
+    res.json({
+      productQuantity: data
+    });
+  });
+}
 
 exports.getYear = (req, res) => {
   Order.GetExistingYear((err, data) => {

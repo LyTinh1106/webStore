@@ -12,7 +12,9 @@
     <!-- style -->
     <link rel="stylesheet" href="css/dashboardStyle.css">
     <!-- Flatpickr CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
+    <link rel="stylesheet" href="css/flatpickr.min.css">
+
 
 </head>
 
@@ -89,11 +91,11 @@
 
             <!-- Stats Panels -->
             <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="v-dashboard-tab">
-                <h2>Dashboard</h2>
+                <h2>Bảng điều khiển</h2>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="dashboard-card revenue">
-                            <div><i class="fas fa-dollar-sign"></i> Tổng doanh thu</div>
+                            <div><i class="fas fa-dollar-sign"></i> Doanh thu trong 7 ngày gần nhất</div>
                             <div class="value">
                                 <%= stats.total_revenue.toLocaleString('vi-VN') || 0%> VNĐ
                             </div>
@@ -101,7 +103,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="dashboard-card orders">
-                            <div><i class="fas fa-shopping-cart"></i> Đơn đặt hàng</div>
+                            <div><i class="fas fa-shopping-cart"></i> Đơn đặt hàng trong 7 ngày gần nhất</div>
                             <div class="value">
                                 <%= stats.total_orders || 0%>
                             </div>
@@ -126,19 +128,20 @@
                 </div>
 
                 <div class="graphDisplay">
-                    <div class="row">
-                        <div class="revenueGraph col-md-6" style="height:370px;">
-                            <canvas id="revenueChart" style="height: 100%; width: 100%;"></canvas>
-                        </div>
-                        <div class="productGraph col-md-6" style="height:370px;">
-                            <canvas id="productChart" style="height: 100%; width: 100%;"></canvas>
-                        </div>
-                    </div>
 
-                    <div class="yearCombobox mt-3">
-                        <div class="form-group">
-                            <label for="yearSelect" class="form-label">Thống kê theo năm:</label>
-                            <select id="yearSelect" class="form-control w-auto d-inline-block">
+                    <div class="toolBar mt-3">
+
+                        <label for="statTypeSelect">Thống kê theo:</label>
+                        <select id="statTypeSelect" title="Chọn loại thống kê">
+                            <option value="year">Theo năm</option>
+                            <option value="quarter">Theo quý</option>
+                            <option value="month">Theo tháng</option>
+                            <option value="dateRange">Theo ngày</option>
+                        </select>
+
+                        <div id="yearSelectGroup" style="display:inline;">
+                            <label for="yearSelect">Năm:</label>
+                            <select id="yearSelect" title="Chọn năm">
                                 <% if (years && years.length> 0) { %>
                                     <% years.forEach(y=> { %>
                                         <option value="<%= y.year %>">
@@ -150,17 +153,45 @@
                                                 <% } %>
                             </select>
                         </div>
+
+                        <div id="monthSelectGroup" style="display:none;">
+                            <label for="monthSelect">Chọn tháng:</label>
+                            <select id="monthSelect" title="Chọn tháng">
+                                <% for (let m=1; m <=12; m++) { %>
+                                    <option value="<%= m %>">Tháng <%= m %>
+                                    </option>
+                                    <% } %>
+                            </select>
+                        </div>
+
+                        <div id="dateRangeGroup" style="display:none; align-items:center;">
+                            <label for="statsStartDate">Từ ngày:</label>
+                            <input type="text" id="statsStartDate" placeholder="Chọn ngày bắt đầu" autocomplete="off" />
+                            <label for="statsEndDate" style="margin-left:10px;">Đến ngày:</label>
+                            <input type="text" id="statsEndDate" placeholder="Chọn ngày kết thúc" autocomplete="off" />
+                        </div>
                     </div>
+
+
+                    <div class="row">
+                        <div class="revenueGraph col-md-6" style="height:370px;">
+                            <canvas id="revenueChart" style="height: 100%; width: 100%; cursor: pointer;"></canvas>
+                        </div>
+                        <div class="productGraph col-md-6" style="height:370px;">
+                            <canvas id="productChart" style="height: 100%; width: 100%;"></canvas>
+                        </div>
+                    </div>
+
                 </div>
             </div>
 
             <!-- Orders Section -->
             <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="v-orders-tab">
                 <h3 class="section-title">Quản lý đơn hàng</h3>
-                <div class="table-responsive">
+                <div class="table-responsive scroll-table" >
                     <table class="table table-striped">
                         <thead>
-                            <tr>
+                            <tr class="sticky-header">
                                 <th>Mã ĐH</th>
                                 <th>Khách hàng</th>
                                 <th>Ngày đặt</th>
@@ -736,10 +767,10 @@
 
 
                 </div>
-                <div class="table-responsive">
+                <div class="table-responsive scroll-table">
                     <table class="table table-striped">
                         <thead>
-                            <tr>
+                            <tr class="sticky-header">
                                 <th>Mã SP</th>
                                 <th>Tên sản phẩm</th>
                                 <th>Loại</th>
@@ -920,10 +951,10 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive scroll-table">
                     <table class="table table-striped">
                         <thead>
-                            <tr>
+                            <tr class="sticky-header">
                                 <th>Mã loại</th>
                                 <th>Tên loại</th>
                                 <th>Thao tác</th>
@@ -1035,10 +1066,10 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive scroll-table">
                     <table class="table table-striped">
                         <thead>
-                            <tr>
+                            <tr class="sticky-header">
                                 <th>Mã nhãn hàng</th>
                                 <th>Tên nhãn hàng</th>
                                 <th>Thao tác</th>
@@ -1250,10 +1281,10 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive scroll-table">
                     <table class="table table-striped">
                         <thead>
-                            <tr>
+                            <tr class="sticky-header">
                                 <th>Mã giao hàng</th>
                                 <th>Ngày giao</th>
                                 <th>Phương thức giao</th>
@@ -1552,10 +1583,10 @@
                 </div>
 
                 <!-- Bảng nhà cung cấp -->
-                <div class="table-responsive">
+                <div class="table-responsive ">
                     <table class="table table-striped">
                         <thead>
-                            <tr>
+                            <tr class="sticky-header">
                                 <th>Mã nhà cung cấp</th>
                                 <th>Tên nhà cung cấp</th>
                                 <th>Điện thoại</th>
@@ -1758,7 +1789,6 @@
                                     <form id="editVoucherForm">
                                         <!-- Trường ẩn để chứa ID voucher -->
                                         <input type="hidden" id="editVoucherId" name="id">
-
                                         <div class="mb-3">
                                             <label for="editVouCode" class="form-label">Mã voucher</label>
                                             <input type="text" class="form-control" id="editVouCode" name="vou_code"
@@ -1794,6 +1824,7 @@
                                                 </span>
                                             </div>
                                         </div>
+
                                     </form>
                                     <div id="editVoucherMessage" class="mt-2 text-danger" style="display:none;">
                                     </div>
@@ -1809,12 +1840,10 @@
                         </div>
                     </div>
 
-
-
-                    <div class="table-responsive">
+                    <div class="table-responsive scroll-table">
                         <table class="table table-striped">
                             <thead>
-                                <tr>
+                                <tr class="sticky-header">
                                     <th>ID</th>
                                     <th>Mã voucher</th>
                                     <th>Trị giá</th>
@@ -1847,7 +1876,11 @@
                                                 </td>
                                                 <td>
                                                     <button class="btn btn-sm btn-info edit-voucher-btn"
-                                                        title="Chỉnh sửa" data-id="<%= voucher.id %>">
+                                                        title="Chỉnh sửa" data-id="<%= voucher.id %>"
+                                                        data-code="<%= voucher.voucher_code %>"
+                                                        data-value="<%= voucher.voucher_value %>"
+                                                        data-datestart="<%= voucher.date_start %>"
+                                                        data-dateend="<%= voucher.date_end %>">
                                                         <i class="fas fa-edit"></i>
                                                     </button>
 
@@ -1874,134 +1907,149 @@
             </div>
 
             <!-- Accounts Section -->
-           <div class="tab-pane fade" id="accounts" role="tabpanel" aria-labelledby="v-accounts-tab">
-    <h3 class="section-title">Quản lý tài khoản</h3>
+            <div class="tab-pane fade" id="accounts" role="tabpanel" aria-labelledby="v-accounts-tab">
+                <h3 class="section-title">Quản lý tài khoản</h3>
 
-    <!-- Nút mở modal thêm tài khoản -->
-    <div class="mb-3">
-        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAccountModal">
-            <i class="fas fa-plus"></i> Thêm tài khoản mới
-        </a>
-    </div>
-
-    <!-- Modal thêm tài khoản -->
-    <div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addAccountModalLabel">Thêm tài khoản</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
+                <!-- Nút mở modal thêm tài khoản -->
+                <div class="mb-3">
+                    <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAccountModal">
+                        <i class="fas fa-plus"></i> Thêm tài khoản mới
+                    </a>
                 </div>
 
-                <div class="modal-body">
-                    <form id="addAccountForm">
-                        <div class="mb-3">
-                            <label for="accEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="accEmail" name="email" placeholder="Nhập email" required>
-                        </div>
+                <!-- Modal thêm tài khoản -->
+                <div class="modal fade" id="addAccountModal" tabindex="-1" aria-labelledby="addAccountModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
 
-                        <div class="mb-3">
-                            <label for="accPassword" class="form-label">Mật khẩu</label>
-                            <input type="password" class="form-control" id="accPassword" name="password" placeholder="Nhập mật khẩu" required>
-                        </div>
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addAccountModalLabel">Thêm tài khoản</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
 
-                        <div class="mb-3">
-                            <label for="accRole" class="form-label">Quyền</label>
-                            <select class="form-select" id="accRole" name="role" required>
-                                <option value="customer">Customer</option>
-                                <option value="admin">Admin</option>
-                            </select>
+                            <div class="modal-body">
+                                <form id="addAccountForm">
+                                    <div class="mb-3">
+                                        <label for="accEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="accEmail" name="email"
+                                            placeholder="Nhập email" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="accPassword" class="form-label">Mật khẩu</label>
+                                        <input type="password" class="form-control" id="accPassword" name="password"
+                                            placeholder="Nhập mật khẩu" required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="accRole" class="form-label">Quyền</label>
+                                        <select class="form-select" id="accRole" name="role" required>
+                                            <option value="customer">Customer</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                </form>
+                                <div id="accountMessage" class="mt-2 text-danger" style="display:none;"></div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="addAccountForm" class="btn btn-primary">Thêm</button>
+                            </div>
                         </div>
-                    </form>
-                    <div id="accountMessage" class="mt-2 text-danger" style="display:none;"></div>
+                    </div>
                 </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" form="addAccountForm" class="btn btn-primary">Thêm</button>
+                <!-- Bảng danh sách tài khoản -->
+                <div class="table-responsive scroll-table">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="sticky-header">
+                                <th>ID</th>
+                                <th>Email</th>
+                                <th>Quyền</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (accounts && accounts.length> 0) { %>
+                                <% accounts.forEach((account)=> { %>
+                                    <tr>
+                                        <td>#<%= account.id %>
+                                        </td>
+                                        <td>
+                                            <%= account.email %>
+                                        </td>
+                                        <td>
+                                            <%= account.role %>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-sm btn-info edit-account-btn"
+                                                data-id="<%= account.id %>" data-email="<%= account.email %>"
+                                                data-role="<%= account.role %>" title="Chỉnh sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+
+                                            <button class="btn btn-sm btn-danger delete-account-btn"
+                                                data-id="<%= account.id %>" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    <% }); %>
+                                        <% } else { %>
+                                            <tr>
+                                                <td colspan="4" class="text-center">Không có tài khoản nào.</td>
+                                            </tr>
+                                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Modal chỉnh sửa tài khoản -->
+                <div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="editAccountModalLabel">Chỉnh sửa tài khoản</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Đóng"></button>
+                            </div>
+
+                            <div class="modal-body">
+                                <form id="editAccountForm">
+                                    <input type="hidden" id="editAccountId" name="id">
+
+                                    <div class="mb-3">
+                                        <label for="editAccEmail" class="form-label">Email</label>
+                                        <input type="email" class="form-control" id="editAccEmail" name="email"
+                                            required>
+                                    </div>
+
+                                    <div class="mb-3">
+                                        <label for="editAccRole" class="form-label">Quyền</label>
+                                        <select class="form-select" id="editAccRole" name="role" required>
+                                            <option value="customer">Customer</option>
+                                            <option value="admin">Admin</option>
+                                        </select>
+                                    </div>
+                                </form>
+                                <div id="editAccountMessage" class="mt-2 text-danger" style="display:none;"></div>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                <button type="submit" form="editAccountForm" class="btn btn-primary">Cập nhật</button>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Bảng danh sách tài khoản -->
-    <div class="table-responsive">
-        <table class="table table-striped">
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Email</th>
-                    <th>Quyền</th>
-                    <th>Thao tác</th>
-                </tr>
-            </thead>
-            <tbody>
-                <% if (accounts && accounts.length > 0) { %>
-                    <% accounts.forEach((account) => { %>
-                        <tr>
-                            <td>#<%= account.id %></td>
-                            <td><%= account.email %></td>
-                            <td><%= account.role %></td>
-                            <td>
-                                <button class="btn btn-sm btn-info edit-account-btn" data-id="<%= account.id %>" data-email="<%= account.email %>" data-role="<%= account.role %>" title="Chỉnh sửa">
-                                    <i class="fas fa-edit"></i>
-                                </button>
-
-                                <button class="btn btn-sm btn-danger delete-account-btn" data-id="<%= account.id %>" title="Xóa">
-                                    <i class="fas fa-trash"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    <% }); %>
-                <% } else { %>
-                    <tr>
-                        <td colspan="4" class="text-center">Không có tài khoản nào.</td>
-                    </tr>
-                <% } %>
-            </tbody>
-        </table>
-    </div>
-
-    <!-- Modal chỉnh sửa tài khoản -->
-    <div class="modal fade" id="editAccountModal" tabindex="-1" aria-labelledby="editAccountModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="editAccountModalLabel">Chỉnh sửa tài khoản</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Đóng"></button>
-                </div>
-
-                <div class="modal-body">
-                    <form id="editAccountForm">
-                        <input type="hidden" id="editAccountId" name="id">
-
-                        <div class="mb-3">
-                            <label for="editAccEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="editAccEmail" name="email" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="editAccRole" class="form-label">Quyền</label>
-                            <select class="form-select" id="editAccRole" name="role" required>
-                                <option value="customer">Customer</option>
-                                <option value="admin">Admin</option>
-                            </select>
-                        </div>
-                    </form>
-                    <div id="editAccountMessage" class="mt-2 text-danger" style="display:none;"></div>
-                </div>
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" form="editAccountForm" class="btn btn-primary">Cập nhật</button>
-                </div>
-
-            </div>
-        </div>
-    </div>
-</div>
 
         </div>
 
@@ -2013,12 +2061,14 @@
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <!-- SheetJS -->
         <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+        <!-- Chart.js -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
         <!-- JavaScript -->
         <script src="js/dashboardScript.js"></script>
         <script src="js/gragh.js"></script>
 
-        <!-- Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 </body>
 
 

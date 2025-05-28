@@ -172,10 +172,12 @@ JOIN
 
 CREATE VIEW view_dashboard_summary AS
 SELECT
-    (SELECT SUM(total_payment) FROM order_table) AS total_revenue,
-    (SELECT COUNT(*) FROM order_table) AS total_orders,
-    (SELECT COUNT(DISTINCT account_id) FROM order_table) AS total_customers,
-    (SELECT COUNT(*) FROM product) AS total_products;
+    -- (SELECT SUM(total_payment) FROM order_table ) AS total_revenue,
+    IFNULL((SELECT SUM(total_payment) FROM order_table WHERE DATE(created_at) >= CURDATE() - INTERVAL 6 DAY), 0) AS total_revenue, 
+    -- (SELECT COUNT(*) FROM order_table) AS total_orders,
+    IFNULL((SELECT COUNT(*) FROM order_table WHERE DATE(created_at) >= CURDATE() - INTERVAL 6 DAY), 0) AS total_orders,
+    IFNULL((SELECT COUNT(DISTINCT account_id) FROM order_table), 0) AS total_customers,
+    IFNULL((SELECT COUNT(*) FROM product), 0) AS total_products;
 
 DELIMITER //
 
@@ -195,7 +197,7 @@ CREATE PROCEDURE get_monthly_revenue(IN target_year INT)
 BEGIN
     -- Trả về 12 tháng và doanh thu mỗi tháng, kể cả khi không có đơn hàng
     SELECT 
-        m.month,
+        m.month AS period,
         IFNULL(SUM(o.total_payment), 0) - IFNULL(SUM(p.retail_price * od.quantity), 0) AS revenue
     FROM
         (
@@ -207,11 +209,123 @@ BEGIN
     LEFT JOIN order_table o ON MONTH(o.created_at) = m.month AND YEAR(o.created_at) = target_year
     LEFT JOIN order_detail od ON o.id = od.order_id
     LEFT JOIN product p ON od.product_id = p.id
-    GROUP BY m.month
-    ORDER BY m.month;
+    GROUP BY period
+    ORDER BY period;
 END //
 
 DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE get_daily_revenue(IN target_year INT, IN target_month INT)
+BEGIN
+    -- Trả về doanh thu hàng ngày cho tháng và năm chỉ định, kể cả khi không có đơn hàng
+    SELECT 
+        d.day AS period,
+        IFNULL(SUM(o.total_payment), 0) - IFNULL(SUM(p.retail_price * od.quantity), 0) AS revenue
+    FROM
+        (
+            -- Tạo danh sách các ngày trong tháng (1 đến 31)
+            SELECT 1 AS day UNION ALL SELECT 2 UNION ALL SELECT 3 UNION ALL SELECT 4 UNION ALL
+            SELECT 5 UNION ALL SELECT 6 UNION ALL SELECT 7 UNION ALL SELECT 8 UNION ALL
+            SELECT 9 UNION ALL SELECT 10 UNION ALL SELECT 11 UNION ALL SELECT 12 UNION ALL
+            SELECT 13 UNION ALL SELECT 14 UNION ALL SELECT 15 UNION ALL SELECT 16 UNION ALL
+            SELECT 17 UNION ALL SELECT 18 UNION ALL SELECT 19 UNION ALL SELECT 20 UNION ALL
+            SELECT 21 UNION ALL SELECT 22 UNION ALL SELECT 23 UNION ALL SELECT 24 UNION ALL
+            SELECT 25 UNION ALL SELECT 26 UNION ALL SELECT 27 UNION ALL SELECT 28 UNION ALL
+            SELECT 29 UNION ALL SELECT 30 UNION ALL SELECT 31
+        ) AS d
+    LEFT JOIN order_table o ON DAY(o.created_at) = d.day 
+        AND MONTH(o.created_at) = target_month 
+        AND YEAR(o.created_at) = target_year
+    LEFT JOIN order_detail od ON o.id = od.order_id
+    LEFT JOIN product p ON od.product_id = p.id
+    WHERE d.day <= DAY(LAST_DAY(STR_TO_DATE(CONCAT(target_year, '-', target_month, '-01'), '%Y-%m-%d')))
+    GROUP BY period
+    ORDER BY period;
+END //
+
+DELIMITER ;
+
+
+
+DELIMITER //
+
+CREATE PROCEDURE get_quarterly_revenue(IN target_year INT)
+BEGIN
+    -- Bảng quý cố định
+    WITH quarters AS (
+        SELECT 1 AS period UNION ALL
+        SELECT 2 UNION ALL
+        SELECT 3 UNION ALL
+        SELECT 4
+    ),
+    revenue_by_quarter AS (
+        SELECT 
+            CASE 
+                WHEN MONTH(o.created_at) IN (1, 2, 3) THEN 1
+                WHEN MONTH(o.created_at) IN (4, 5, 6) THEN 2
+                WHEN MONTH(o.created_at) IN (7, 8, 9) THEN 3
+                WHEN MONTH(o.created_at) IN (10, 11, 12) THEN 4
+            END AS period,
+            IFNULL(SUM(o.total_payment), 0) - IFNULL(SUM(p.retail_price * od.quantity), 0) AS revenue
+        FROM
+            order_table o
+        LEFT JOIN order_detail od ON o.id = od.order_id
+        LEFT JOIN product p ON od.product_id = p.id
+        WHERE YEAR(o.created_at) = target_year
+        GROUP BY period
+    )
+    SELECT 
+        q.period,
+        IFNULL(r.revenue, 0) AS revenue
+    FROM quarters q
+    LEFT JOIN revenue_by_quarter r ON q.period = r.period
+    ORDER BY q.period;
+END //
+
+
+DELIMITER ;
+
+
+DELIMITER //
+
+CREATE PROCEDURE get_revenue_between_dates(
+    IN start_ts BIGINT, 
+    IN end_ts BIGINT
+)
+BEGIN
+
+    DECLARE start_date DATE;
+    DECLARE end_date DATE;
+
+    SET start_date = FROM_UNIXTIME(start_ts / 1000, '%Y-%m-%d');
+    SET end_date   = FROM_UNIXTIME(end_ts / 1000, '%Y-%m-%d');
+
+
+    WITH RECURSIVE date_list AS (
+        SELECT start_date AS period
+        UNION ALL
+        SELECT period + INTERVAL 1 DAY
+        FROM date_list
+        WHERE period + INTERVAL 1 DAY <= end_date
+    )
+    SELECT 
+        DATE_FORMAT(dl.period, '%d-%m') AS period,  -- Đây là cột period
+        IFNULL(SUM(o.total_payment), 0) - IFNULL(SUM(p.retail_price * od.quantity), 0) AS revenue
+    FROM date_list dl
+    LEFT JOIN order_table o ON DATE(o.created_at) = dl.period
+    LEFT JOIN order_detail od ON o.id = od.order_id
+    LEFT JOIN product p ON od.product_id = p.id
+    GROUP BY dl.period
+    ORDER BY dl.period;
+END //
+
+DELIMITER ;
+
+
+
 
 DELIMITER //
 
@@ -233,6 +347,87 @@ BEGIN
 END //
 
 DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE get_sold_quantity_by_product_monthly(IN target_year INT, IN target_month INT)
+BEGIN
+    SELECT 
+        p.name AS product_name,
+        SUM(od.quantity) AS total_quantity
+    FROM 
+        order_table o
+    JOIN 
+        order_detail od ON o.id = od.order_id
+    JOIN 
+        product p ON od.product_id = p.id
+    WHERE 
+        YEAR(o.created_at) = target_year 
+        AND MONTH(o.created_at) = target_month
+    GROUP BY 
+        p.id, p.name;
+END //
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE get_sold_quantity_by_product_quarterly(IN target_year INT)
+BEGIN
+    SELECT 
+        CASE 
+            WHEN MONTH(o.created_at) IN (1, 2, 3) THEN 'Q1'
+            WHEN MONTH(o.created_at) IN (4, 5, 6) THEN 'Q2'
+            WHEN MONTH(o.created_at) IN (7, 8, 9) THEN 'Q3'
+            WHEN MONTH(o.created_at) IN (10, 11, 12) THEN 'Q4'
+        END AS quarter,
+        p.name AS product_name,
+        SUM(od.quantity) AS total_quantity
+    FROM 
+        order_table o
+    JOIN 
+        order_detail od ON o.id = od.order_id
+    JOIN 
+        product p ON od.product_id = p.id
+    WHERE 
+        YEAR(o.created_at) = target_year
+    GROUP BY 
+        quarter, p.id, p.name
+    ORDER BY 
+        quarter;
+END //
+
+DELIMITER ;
+
+DELIMITER //
+
+CREATE PROCEDURE get_sold_quantity_by_product_between_dates(
+    IN start_ts BIGINT, 
+    IN end_ts BIGINT
+)
+BEGIN
+
+    DECLARE start_time DATETIME;
+    DECLARE end_time DATETIME;
+    SET start_time = FROM_UNIXTIME(start_ts / 1000, '%Y-%m-%d %H:%i:%s');
+    SET end_time   = FROM_UNIXTIME(end_ts / 1000, '%Y-%m-%d %H:%i:%s');
+
+    SELECT 
+        p.name AS product_name,
+        SUM(od.quantity) AS total_quantity
+    FROM 
+        order_table o
+    JOIN 
+        order_detail od ON o.id = od.order_id
+    JOIN 
+        product p ON od.product_id = p.id
+    WHERE 
+        o.created_at BETWEEN start_time AND end_time
+    GROUP BY 
+        p.id, p.name;
+END //
+
+DELIMITER ;
+
 
 
 

@@ -196,7 +196,7 @@ Order.GetRevenueByMonthOfYear = (year, result) => {
         return;
       }
 
-      const data = res[0]; 
+      const data = res[0];
 
       if (!data || data.length === 0) {
         result({ kind: "not_found" }, null);
@@ -208,6 +208,70 @@ Order.GetRevenueByMonthOfYear = (year, result) => {
     }
   );
 };
+
+Order.GetRevenueByDayOfMonth = (year, month, result) => {
+  sql.query(`CALL get_daily_revenue(?, ?)`, [year, month],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+      const data = res[0];
+      if (!data || data.length === 0) {
+        result({ Kind: "not_found" }, null);
+        return;
+      }
+      console.log("Revenue of month: ", data);
+      result(null, data);
+    }
+  )
+}
+
+Order.GetRevenueByQuatersOfYear = (year, result) => {
+  sql.query(
+    `CALL get_quarterly_revenue(?);`,
+    [year],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      const data = res[0];
+
+      if (!data || data.length === 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("Revenue of quaters:", data);
+      result(null, data);
+    }
+  );
+};
+
+Order.GetRevenueByDateRange = (startDate, endDate, result) => {
+  sql.query(
+    `CALL get_revenue_between_dates(?, ?)`, [startDate, endDate],
+    (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+      const data = res[0];
+      if (!data || data.length === 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      console.log("Revenue of date range:", data);
+      result(null, data);
+    }
+  )
+}
 
 Order.GetProuctQuantityByYear = (year, result) => {
   sql.query(
@@ -222,7 +286,7 @@ Order.GetProuctQuantityByYear = (year, result) => {
 
       const data = res[0];
       if (!data || data.length === 0) {
-        result({ kind: "not_found"}, data);
+        result({ kind: "not_found" }, data);
         return;
       }
       console.log("Sold product in year:", data);
@@ -231,6 +295,60 @@ Order.GetProuctQuantityByYear = (year, result) => {
   );
 };
 
+Order.GetProductQuantityByMonth = (year, month, result) => {
+  sql.query(`CALL get_sold_quantity_by_product_monthly(?, ?);`, [year, month], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    const data = res[0];
+    if (!data || data.length === 0) {
+      result({ kind: "not_found" }, data);
+      return;
+    }
+    console.log("Sold product in month :", data);
+    result(null, data);
+  })
+}
+
+Order.GetProductQuantityByQuaters = (year, result) => {
+  sql.query(`CALL get_sold_quantity_by_product_quarterly(?);`, [year], (err, res) => {
+    if (err) {
+      console.log("Error calling stored procedure:", err);
+      result(null, err);
+      return;
+    }
+
+    const data = res[0];
+    if (!data || data.length === 0) {
+      console.log(`No data found for year: ${year}`);
+      result({ kind: "not_found" }, data);
+      return;
+    }
+
+    console.log(`Sold product in quarters for year ${year}:`, data);
+    result(null, data);
+  });
+};
+
+Order.GetProductQuantityByDateRange = (dateStart, dateEnd, result) => {
+  sql.query(`CALL get_sold_quantity_by_product_between_dates(?, ?);`, [dateStart, dateEnd], (err, res) => {
+    if (err) {
+      console.log("error: ", err);
+      result(null, err);
+      return;
+    }
+    const data = res[0];
+    if (!data || data.length === 0) {
+      result({ kind: "not_found" }, data);
+      return;
+    }
+    console.log("Sold product in date range:", data);  // Đã sửa lỗi ở đây
+    result(null, data);
+  });
+}
+
 Order.GetExistingYear = (result) => {
   sql.query(`
     SELECT DISTINCT YEAR(created_at) AS year
@@ -238,7 +356,7 @@ Order.GetExistingYear = (result) => {
     ORDER BY year DESC;
     `,
     (err, res) => {
-      if(err) {
+      if (err) {
         result(null, err);
         return;
       }
@@ -246,10 +364,11 @@ Order.GetExistingYear = (result) => {
     });
 };
 
-Order.GetStats = (result) =>{
+
+Order.GetStats = (result) => {
   sql.query(`SELECT * FROM view_dashboard_summary`,
     (err, res) => {
-      if(err) {
+      if (err) {
         result(null, err);
         return;
       }

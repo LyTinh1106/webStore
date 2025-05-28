@@ -6,8 +6,14 @@ const {
   updateOrder,
   updateStatus,
   deleteOrder,
-  getRevenue,
-  getProductQuantity,
+  getRevenueByYear,
+  getRevenueByMonth,  
+  getRevenueByQuarters,
+  getRevenueByDateRange,
+  getProductQuantityByYear,
+  getProductQuantityByQuarters,
+  getProductQuantityByMonth,
+  getProductQuantityByDateRange,
   getYear,
   getBasicOnDeliveringOrders,
   getOrderDetailsById
@@ -21,8 +27,14 @@ router.get('/details/:id', getOrderDetailsById);
 router.post('/create', createOrder);          // Tạo đơn hàng
 router.get('/order/:id', getOrderById);      // Lấy theo ID
 router.get('/', getAllOrders);          // Lấy tất cả đơn hàng
-router.get('/revenue/:year',getRevenue);
-router.get('/productQuantity/:year',getProductQuantity);
+router.get('/revenue/year/:year',getRevenueByYear);
+router.get('/revenue/month/:year/:month', getRevenueByMonth);
+router.get('/revenue/quarter/:year', getRevenueByQuarters);
+router.get('/revenue/dateRange/:dateStart/:dateEnd', getRevenueByDateRange);
+router.get('/productQuantity/year/:year',getProductQuantityByYear);
+router.get('/productQuantity/quarter/:year', getProductQuantityByQuarters);
+router.get('/productQuantity/month/:year/:month', getProductQuantityByMonth);
+router.get('/productQuantity/dateRange/:dateStart/:dateEnd', getProductQuantityByDateRange);
 router.get('/year',getYear);
 router.put('/:id', updateOrder);  
 router.put('/status/:id', updateStatus);     // Cập nhật đơn hàng
