@@ -6,7 +6,7 @@ exports.getAllVouchers = (req, res) => {
 
   Voucher.getAll(code, (err, data) => {
     if (err) {
-      res.status(500).render("error", { message: "Lỗi khi lấy danh sách voucher." });
+       return res.status(500).json({ message: `Lỗi khi lấy danh sách voucher.` });
     } else {
       res.render("voucherDashboard", { vouchers: data });
     }
@@ -19,9 +19,9 @@ exports.getVoucherById = (req, res) => {
 
   Voucher.findById(id, (err, data) => {
     if (err) {
-      res.status(500).render("error", { message: `Lỗi khi truy xuất voucher với ID ${id}.` });
+      return res.status(500).json({ message: `Lỗi khi truy xuất voucher với ID ${id}.` });
     } else if (!data) {
-      res.status(404).render("error", { message: `Không tìm thấy voucher với ID ${id}.` });
+        return res.status(404).json({ message: `Không tìm thấy voucher với ID ${id}.` });
     } else {
       res.render("voucherDashboard", { voucher: data, mode: "edit" });
     }
@@ -43,7 +43,7 @@ exports.createVoucher = (req, res) => {
 
   Voucher.create(newVoucher, (err, data) => {
     if (err) {
-      res.status(500).render("error", { message: "Lỗi khi tạo voucher." });
+      return res.status(500).json({ message: `Lỗi khi tạo voucher.` });
     } else {
       return res.status(201).json({ success: true, message: "Tạo voucher thành công!", voucher: data });
     }
@@ -59,16 +59,16 @@ exports.updateVoucher = (req, res) => {
   const date_end = req.body.date_end?.trim();
 
   if (!voucher_code || !voucher_value || !date_start || !date_end) {
-    return res.status(400).render("error", { message: "Thiếu thông tin cập nhật voucher." });
+    return res.status(400).json({ message: "Thiếu thông tin cập nhật voucher." });
   }
 
   const updatedVoucher = new Voucher({ voucher_code, voucher_value, date_start, date_end });
 
   Voucher.updateById(id, updatedVoucher, (err, data) => {
     if (err) {
-      res.status(500).render("error", { message: `Lỗi khi cập nhật voucher với ID ${id}.` });
+      res.status(500).json({ message: `Lỗi khi cập nhật voucher với ID ${id}.` });
     } else if (!data) {
-      res.status(404).render("error", { message: `Không tìm thấy voucher với ID ${id}.` });
+      res.status(404).json({ message: `Không tìm thấy voucher với ID ${id}.` });
     } else {
       return res.status(201).json({ success: true, message: "Cập nhật voucher thành công!", voucher: data });
     }
