@@ -27,7 +27,7 @@ function saveScrollAndTabAndReload() {
     }
     localStorage.setItem("scrollPosition", scrollY);
 
-    // ⚡ Không dùng location.reload(), dùng href nhẹ nhàng
+    
     window.location.href = window.location.pathname;
 }
 
@@ -862,14 +862,15 @@ function renderSpecTable(data, tableBody, container, actions) {
 document.getElementById("addProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
 
-    // const form = document.getElementById("addProductForm");
+    // 1. Gán value từ Quill vào input trước
+    document.getElementById('description').value = quill.root.innerHTML;
+
+    // 2. Tạo FormData sau khi đã gán value
     const form = e.target;
     const formData = new FormData(form);
 
     // Xoá file ảnh cũ trong input (vì không đầy đủ)
     formData.delete("images");
-
-    // Gửi lại toàn bộ ảnh từ imageFiles
     imageFiles.forEach(file => {
         formData.append("images", file);
     });
@@ -888,7 +889,7 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
             imageFiles = []; // Reset danh sách ảnh
             renderImagePreviews(imagePreview);
 
-            saveScrollAndTabAndReload()
+            saveScrollAndTabAndReload();
         } else {
             alert((result.message || "Thêm sản phẩm thất bại."));
         }
@@ -898,6 +899,7 @@ document.getElementById("addProductForm").addEventListener("submit", async funct
         console.error(err);
     }
 });
+
 // xóa product
 // Xử lý nút xóa sản phẩm
 function saveScrollAndTabAndReload() {
@@ -947,6 +949,9 @@ document.querySelectorAll(".delete-product-btn").forEach(button => {
 document.getElementById("updateProductForm").addEventListener("submit", async function (e) {
     e.preventDefault(); // Ngăn reload mặc định của form
 
+    // **GÁN GIÁ TRỊ MÔ TẢ TỪ QUILL VÀO INPUT ẨN TRƯỚC KHI LẤY VALUE**
+    document.getElementById('editDescription').value = editQuill.root.innerHTML;
+    
     // Lấy dữ liệu từ form
     const productId = document.getElementById("editProductId").value.trim();
     const productName = document.getElementById("editProductName").value.trim();
@@ -957,8 +962,7 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
     const brand = document.getElementById("editBrand").value.trim();
     const origin = document.getElementById("editOrigin").value.trim();
     const warranty = document.getElementById("editWarranty").value.trim();
-    // const imageFile = document.getElementById("editImages").files[0];
-    const specFile = document.getElementById("editSpecFile").files[0]; // Thông số kỹ thuật (.xlsx, .csv)
+    const specFile = document.getElementById("editSpecFile").files[0];
 
     // Kiểm tra thông tin bắt buộc
     if (!productId || !productName || !importPrice || !salePrice) {
@@ -969,7 +973,7 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
     // Tạo FormData
     const formData = new FormData();
     formData.append("id", productId);
-    formData.append("description", description);
+    formData.append("description", description); // giờ chắc chắn là HTML từ Quill
     formData.append("name", productName);
     formData.append("import_price", importPrice);
     formData.append("retail_price", salePrice);
@@ -1006,6 +1010,7 @@ document.getElementById("updateProductForm").addEventListener("submit", async fu
 });
 
 
+
 // load data into product update form
 let oldImageFiles = []; // Lưu danh sách ảnh cũ từ DB
 let removedOldImages = []; // Lưu tên ảnh cũ bị xóa
@@ -1016,6 +1021,7 @@ const imageInput = document.getElementById("editImages");
 
 document.querySelectorAll('.editProductBtn').forEach(btn => {
     btn.addEventListener('click', async () => {
+        
         const productId = btn.getAttribute('data-id');
 
         try {
@@ -1028,11 +1034,14 @@ document.querySelectorAll('.editProductBtn').forEach(btn => {
             }
 
             const product = json.data;
+            editQuill.root.innerHTML = product.description || '';
+            // Gán vào input ẩn để phòng trường hợp submit chưa sửa gì
+            document.getElementById('editDescription').value = product.description || '';
 
             // Gán dữ liệu
             document.getElementById('editProductId').value = product.id || '';
             document.getElementById('editProductName').value = product.name || '';
-            document.getElementById('editDescription').value = product.description || '';
+            document.getElementById('editDescription').value = editQuill.root.innerHTML;
             document.getElementById('editImportPrice').value = product.import_price || '';
             document.getElementById('editSalePrice').value = product.retail_price || '';
             document.getElementById('editCategory').value = product.category_id || '';
@@ -1307,6 +1316,92 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error(error);
                 alert('Lỗi server.');
             }
+        });
+    });
+});
+
+//quill
+let quill;      // Quill editor cho thêm sản phẩm
+let editQuill;  // Quill editor cho sửa sản phẩm
+
+document.addEventListener("DOMContentLoaded", function () {
+    
+    quill = new Quill('#quill-description', {
+        theme: 'snow',
+        placeholder: 'Nhập mô tả sản phẩm...',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline', 'strike'],
+                ['blockquote', 'code-block'],
+                [{ 'header': 1 }, { 'header': 2 }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
+                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }],
+                [{ 'size': ['small', false, 'large', 'huge'] }],
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'font': [] }],
+                [{ 'align': [] }],
+                ['clean'],
+                ['link', 'image', 'video']
+            ]
+        }
+    });
+
+    
+    editQuill = new Quill('#edit-quill-description', {
+        theme: 'snow',
+        placeholder: 'Nhập mô tả sản phẩm...',
+        modules: {
+            toolbar: [
+                ['bold', 'italic', 'underline', 'strike'],
+                ['blockquote', 'code-block'],
+                [{ 'header': 1 }, { 'header': 2 }],
+                [{ 'list': 'ordered' }, { 'list': 'bullet' }],
+                [{ 'script': 'sub' }, { 'script': 'super' }],
+                [{ 'indent': '-1' }, { 'indent': '+1' }],
+                [{ 'direction': 'rtl' }],
+                [{ 'size': ['small', false, 'large', 'huge'] }],
+                [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                [{ 'color': [] }, { 'background': [] }],
+                [{ 'font': [] }],
+                [{ 'align': [] }],
+                ['clean'],
+                ['link', 'image', 'video']
+            ]
+        }
+    });
+
+  
+    const addProductModal = document.getElementById('addProductModal');
+    if (addProductModal) {
+        addProductModal.addEventListener('hidden.bs.modal', function () {
+            quill.setContents([]);
+        });
+    }
+
+    
+    const editProductModal = document.getElementById('editProductModal');
+    if (editProductModal) {
+        editProductModal.addEventListener('hidden.bs.modal', function () {
+            editQuill.setContents([]);
+        });
+    }
+
+    
+    document.querySelectorAll('.editProductBtn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const productId = btn.getAttribute('data-id');
+            
+            const res = await fetch(`/api/product/${productId}`);
+            const json = await res.json();
+            if (!json.success) return;
+            const product = json.data;
+
+            editQuill.root.innerHTML = product.description || '';
+            document.getElementById('editDescription').value = product.description || '';
+            
         });
     });
 });
