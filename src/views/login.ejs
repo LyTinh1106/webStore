@@ -11,18 +11,18 @@
 <body>
     <div class="body-login">
         <div class="login-container">
-            <h1>Login</h1>
+            <h1>Đăng nhập</h1>
         
 
             <form action="/login" method="post">
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="text" id="email" placeholder="Type your email" name="email">
+                    <input type="text" id="email" placeholder="Vui lòng nhập Email" name="email">
                 </div>
 
                 <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Type your password" name="password">
+                    <label for="password">Mật khẩu</label>
+                    <input type="password" id="password" placeholder="Vui lòng nhập mật khẩu" name="password">
                 </div>
                 <% if (message) { %>
                     <div class="error-message" style="color: rgb(0, 0, 0); text-align: center; margin-bottom: 10px;">
@@ -36,22 +36,22 @@
                 </div>
                 
 
-                <button type="submit" class="login-btn">LOGIN</button>
+                <button type="submit" class="login-btn">Đăng nhập</button>
             </form>
 
-            <div class="or-divider">Or Sign Up Using</div>
+            <div class="or-divider">Hoặc đăng ký bằng</div>
 
             <div class="social-login">
                 <!-- <div class="social-btn facebook">f</div>
             <div class="social-btn twitter">t</div> -->
                 <a href="/auth/google" class="social-btn google">
                         <img src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg' alt="google-icon" class="google-logo">
-                    <span class="btn-text">Sign in with Google</span>
+                    <span class="btn-text">Đăng nhập bằng Google</span>
                 </a>
             </div>
 
-            <div class="sign-up-text">Have not account yet?</div>
-            <a href="/register" class="sign-up-link">SIGN UP</a>
+            <div class="sign-up-text">Bạn chưa có tài khoản?</div>
+            <a href="/register" class="sign-up-link">Đăng ký</a>
         </div>
     </div>
 </body>

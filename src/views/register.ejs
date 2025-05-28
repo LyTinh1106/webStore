@@ -11,28 +11,27 @@
 <body>
     <div class="body-register">
         <div class="register-container">
-            <h1>Sign Up</h1>
+            <h1>Đăng ký</h1>
             <form action="/register" method="post">
                 <div class="input-group">
                     <label for="email">Email</label>
-                    <input type="email" id="email" placeholder="Type your email" name="email">
+                    <input type="email" id="email" placeholder="Vui lòng nhập Email" name="email">
                 </div>
 
                 <div class="input-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" placeholder="Create a password" name="password">
+                    <label for="password">Nhập khẩu</label>
+                    <input type="password" id="password" placeholder="Vui lòng nhập mật khẩu" name="password">
                 </div>
 
                 <div class="input-group">
-                    <label for="confirm-password">Confirm Password</label>
-                    <input type="password" id="confirm-password" placeholder="Confirm your password"
+                    <label for="confirm-password">Xác nhận mật khẩu</label>
+                    <input type="password" id="confirm-password" placeholder="Vui lòng xác nhận mật khẩu"
                         name="confirmpassword">
                 </div>
 
                 <div class="terms">
                     <input type="checkbox" id="terms" name="agreeTerms">
-                    <label for="terms">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy
-                            Policy</a></label>
+                    <label for="terms">Tôi đồng ý với <a href="#">Điều khoản dịch vụ</a> và <a href="#">Chính sách bảo mật</a></label>
                 </div>
                 <% if (typeof message !== 'undefined' && message) { %>
                     <div class="alert-message error">
@@ -41,21 +40,21 @@
                   <% } %>
                   
 
-                <button type="submit" class="register-btn">SIGN UP</button>
+                <button type="submit" class="register-btn">Đăng Ký</button>
             </form>
 
-            <div class="or-divider">Or Sign Up Using</div>
+            <div class="or-divider">Hoặc đăng nhập bằng</div>
 
             <div class="social-register">
                 <a href="/auth/google" class="social-btn google">
                     <img src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg' alt="google-icon"
                         class="google-logo">
-                    <span class="btn-text">Sign in with Google</span>
+                    <span class="btn-text">Đăng nhập bằng Google</span>
                 </a>
             </div>
 
-            <div class="login-text">Already have an account?</div>
-            <a href="/login" class="login-link">LOGIN</a>
+            <div class="login-text">Bạn đã có tài khoản?</div>
+            <a href="/login" class="login-link">Đăng Nhập</a>
         </div>
     </div>
     </div>
