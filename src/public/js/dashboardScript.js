@@ -861,6 +861,14 @@ function renderSpecTable(data, tableBody, container, actions) {
 // Add product
 document.getElementById("addProductForm").addEventListener("submit", async function (e) {
     e.preventDefault();
+    const importPrice = parseFloat(document.getElementById("importPrice").value);
+    const salePrice = parseFloat(document.getElementById("salePrice").value);
+
+    if (!isNaN(importPrice) && !isNaN(salePrice) && importPrice > salePrice) {
+        alert("Giá nhập không được lớn hơn giá bán!");
+        document.getElementById("importPrice").focus();
+        return;
+    }
 
     // 1. Gán value từ Quill vào input trước
     document.getElementById('description').value = quill.root.innerHTML;

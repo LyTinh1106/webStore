@@ -49,9 +49,9 @@ router.put(
 
 
 router.delete('/delete/:id', deleteProduct);
-router.post('/filter/categories', filterByCategory);
-router.post('/filter/brands', filterByBrand);
-router.post('/filter-price', filterByPrice);
+// router.post('/filter/categories', filterByCategory);
+// router.post('/filter/brands', filterByBrand);
+// router.post('/filter-price', filterByPrice);
 router.post('/filter', filterCombined);
 
 
