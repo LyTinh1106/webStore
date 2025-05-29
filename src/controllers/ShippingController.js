@@ -1,35 +1,58 @@
-const Shipping = require("../models/ShippingModel");
-const nodemailer = require('nodemailer');
-const Customer    = require('../models/CustomerModel');
-const OrderDetail = require('../models/OrderDetailModel');
-const Order = require("../models/OrderModel");
+const Shipping     = require("../models/ShippingModel");
+const nodemailer   = require('nodemailer');
+const Customer     = require('../models/CustomerModel');
+const OrderDetail  = require('../models/OrderDetailModel');
+const Order        = require("../models/OrderModel");
 
 
+// 1) Lấy tất cả trong bảng shipping
 const getAllShipping = (req, res) => {
-  Shipping.getAll((err, data) => {
+  Shipping.getAll(async (err, data) => {
     if (err) {
-      res.status(500).render("error", { message: err.message || "Đã xảy ra lỗi khi lấy danh sách vận chuyển." });
-    } else {
+      return res.status(500).render("error", { message: err.message || "Đã xảy ra lỗi khi lấy danh sách vận chuyển." });
+    }
+    try {
+      
+      const enriched = await Promise.all(data.map(async sh => {
+        const order = await new Promise((r, j) =>
+          Order.findById(sh.id_order, (e, d) => e ? j(e) : r(d))
+        );
+        return {
+          ...sh,
+          customer_name: order.fullname 
+        };
+      }));
+      res.render("shippingDashboard", { shippings: enriched });
+    } catch(fetchErr) {
+      console.error("Không thể lấy fullname từ order:", fetchErr);
+    
       res.render("shippingDashboard", { shippings: data });
     }
   });
 };
 
+//Lấy thông tin vận chuyển theo ID
 const getShippingById = (req, res) => {
   const id = req.params.id;
-  Shipping.findById(id, (err, data) => {
+  Shipping.findById(id, async (err, shipping) => {
     if (err) {
       if (err.kind === "not_found") {
-        res.status(404).render("error", { message: `Không tìm thấy thông tin vận chuyển với ID ${id}.` });
-      } else {
-        res.status(500).render("error", { message: `Lỗi truy xuất thông tin vận chuyển với ID ${id}.` });
+        return res.status(404).render("error", { message: `Không tìm thấy vận chuyển ID ${id}.` });
       }
-    } else {
-      res.render("shippingDashboard", { shipping: data, mode: "edit" });
+      return res.status(500).render("error", { message: `Lỗi khi truy xuất vận chuyển ID ${id}.` });
+    }
+    try {
+      const order = await new Promise((r, j) =>
+        Order.findById(shipping.id_order, (e, d) => e ? j(e) : r(d))
+      );
+      shipping.customer_name = order.fullname;
+      res.render("shippingDashboard", { shipping, mode: "edit" });
+    } catch(fetchErr) {
+      console.error("Không thể lấy fullname từ order:", fetchErr);
+      res.render("shippingDashboard", { shipping, mode: "edit" });
     }
   });
 };
-
 
 
 const formatDateTime = date => {
@@ -44,6 +67,7 @@ const generateCode = (id, multiplier) => {
   return `#${rand}${id}`;
 };
 
+// tạo transporter gửi mail
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -58,44 +82,65 @@ const createShippingAndSendEmail = async (req, res) => {
       shipping_date,
       delivery_method,
       shipping_status = 'Thành công',
-      id_customer,
       id_order,
       shipping_address
     } = req.body;
 
-    if (!delivery_method || !id_customer || !id_order || !shipping_address) {
-      return res.status(400).json({ success:false, message:'Thiếu thông tin.' });
+    if (!delivery_method || !id_order || !shipping_address) {
+      return res.status(400).json({
+        success: false,
+        message: 'Thiếu thông tin bắt buộc.'
+      });
     }
 
-    // Tạo và cập nhật...
-    const newShipping = { shipping_date: shipping_date||new Date(), delivery_method, shipping_status, id_customer, id_order, shipping_address };
-    const shippingData = await new Promise((r,j) => Shipping.create(newShipping, (e,d)=> e?j(e):r(d)));
-    await new Promise((r,j)=> Shipping.updateOrderStatusToCompleted(id_order, e=> e? j(e):r()));
+    // 1) tạo shipping
+    const newShipping = {
+      shipping_date: shipping_date || new Date(),
+      delivery_method,
+      shipping_status,
+      id_order,
+      shipping_address
+    };
+    const shippingData = await new Promise((r,j) =>
+      Shipping.create(newShipping, (e,d)=> e? j(e): r(d))
+    );
 
-    // Lấy order + details
-    const orderInfo = await new Promise((r,j)=> Order.findById(id_order,(e,d)=> e?j(e):r(d)));
-    const items     = await new Promise((r,j)=> OrderDetail.findByOrderId(id_order,(e,rows)=> e?j(e):r(rows)));
+    // 2) cập nhật order sang Hoàn thành
+    await new Promise((r,j)=>
+      Shipping.updateOrderStatusToCompleted(id_order, e=> e? j(e): r())
+    );
 
-    // Build danh sách sản phẩm + tính tổng
+    // 3) lấy thông tin đơn và chi tiết sản phẩm
+    const orderInfo = await new Promise((r,j)=>
+      Order.findById(id_order, (e,d)=> e? j(e): r(d))
+    );
+    const items = await new Promise((r,j)=>
+      OrderDetail.findByOrderId(id_order, (e,rows)=> e? j(e): r(rows))
+    );
+
+    // 4) build HTML cho danh sách sản phẩm và tính tổng
     let totalAll = 0;
     const itemsHtml = items.map(i=>{
       const sub = Number(i.subtotalprice)||0;
       totalAll += sub;
       return `
         <tr>
-          <td style="padding:8px;border-bottom:1px solid #eee;">${i.product_name} × ${i.quantity}</td>
-          <td style="padding:8px;border-bottom:1px solid #eee;text-align:right;">${sub.toLocaleString('vi-VN')} VND</td>
+          <td style="padding:8px;border-bottom:1px solid #eee;">
+            ${i.product_name} × ${i.quantity}
+          </td>
+          <td style="padding:8px;border-bottom:1px solid #eee;text-align:right;">
+            ${sub.toLocaleString('vi-VN')} VND
+          </td>
         </tr>`;
     }).join('');
     const formattedTotal = totalAll.toLocaleString('vi-VN') + ' VND';
 
-    // Mã & ngày
-    const shippingCode = generateCode(shippingData.id,2027);
-    const orderCode    = generateCode(id_order,7919);
-    const dateStr      = formatDateTime(shippingData.shipping_date);
+    // 5) sinh mã + format ngày
+    const orderCode  = generateCode(id_order, 7919);
+    const dateStr    = formatDateTime(shippingData.shipping_date);
 
-    // HTML email
-  const html = `
+    // 6) template email đơn giản giống mẫu
+    const html = `
   <div style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;">
     <div style="max-width:600px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;">
       <div style="background:#007bff;color:#fff;text-align:center;padding:20px;font-size:28px;">
@@ -103,8 +148,7 @@ const createShippingAndSendEmail = async (req, res) => {
       </div>
       <div style="padding:20px;color:#333;line-height:1.5;font-size:16px;">
         <p style="font-size:18px;">Xin chào <strong>${orderInfo.fullname}</strong>,</p>
-        <p style="font-size:16px;">Bạn đã đặt hàng thành công tại <strong>VTVT Store</strong>.</p>
-
+        
         <p style="font-size:16px;"><strong>Mã đơn hàng:</strong>
           <a href="#" style="color:#007bff;text-decoration:none;font-size:16px;">${orderCode}</a>
         </p>
@@ -143,34 +187,30 @@ const createShippingAndSendEmail = async (req, res) => {
   </div>
 `;
 
-
-    // Gửi mail
-    transporter.sendMail({
+    // 7) gửi mail
+    await transporter.sendMail({
       from: `"VTVT Store" <${process.env.EMAIL_USER}>`,
       to: orderInfo.email,
       subject: `Đơn hàng ${orderCode} đang được giao`,
       html
-    },(err,info)=>{
-      if(err) console.error('Lỗi gửi mail:',err);
-      else console.log('Mail đã gửi:',info.response);
     });
 
-    // Kết quả
+    // 8) trả về client
     return res.status(201).json({
-      success:true,
-      message:'Tạo đơn giao hàng & gửi mail thành công.',
-      shipping:shippingData
+      success: true,
+      message: 'Email thông báo đơn hàng đã được gửi thành công.'
     });
 
   } catch(err) {
-    console.error(err);
+    console.error('createShippingAndSendEmail error:', err);
     return res.status(500).json({
-      success:false,
-      message:'Lỗi khi tạo đơn giao hàng.',
-      error:err.message
+      success: false,
+      message: 'Có lỗi khi gửi email thông báo.',
+      error: err.message
     });
   }
 };
+
 
 
 //Cập nhật thông tin vận chuyển
@@ -213,9 +253,6 @@ const deleteShippingById = (req, res) => {
   });
 };
 
-
-
-// 👉 Export toàn bộ
 module.exports = {
   createShippingAndSendEmail,
   getShippingById,
