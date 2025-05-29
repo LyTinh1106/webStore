@@ -65,22 +65,22 @@ document.addEventListener("DOMContentLoaded", function () {
         totalPrice+= product.price * product.qty;
 
         const itemHTML = `
-<li class="product-widget clearfix">
-  <a href="/product/${product.id}">
-    <div class="product-img">
-      <img src="${product.img}" alt="${product.name}">
-    </div>
-    <div class="product-body">
-      <h3 class="product-name">${product.name}</h3>
-      <h4 class="product-price">
-        <span class="qty">${product.qty}x</span> ${formatVND(product.price)}
-      </h4>
-    </div>
-  </a>
-  <button class="delete" data-index="${index}">
-    <i class="fa fa-close"></i>
-  </button>
-</li>`;
+        <li class="product-widget clearfix">
+          <a href="/product/${product.id}">
+            <div class="product-img">
+              <img src="${product.img}" alt="${product.name}">
+            </div>
+            <div class="product-body">
+              <h3 class="product-name">${product.name}</h3>
+              <h4 class="product-price">
+              <span class="qty">${product.qty}x</span> ${formatVND(product.price)}
+              </h4>
+            </div>
+          </a>
+          <button class="delete" data-index="${index}">
+            <i class="fa fa-close"></i>
+          </button>
+        </li>`;
         cartList.insertAdjacentHTML('beforeend', itemHTML);
       });
 
@@ -144,21 +144,23 @@ document.addEventListener("DOMContentLoaded", function () {
       const row = document.createElement('div');
       row.className = 'cart-item row align-items-center';
       row.innerHTML = `
-        <div class="col-md-2">
+        <div class="col-md-2 ">
           <a href="/product/${prod.id}">
             <img src="${prod.img}" class="product-image" alt="${prod.name}">
           </a>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 cart">
           <a href="/product/${prod.id}">${prod.name}</a>
         </div>
-        <div class="col-md-2">${formatVND(prod.price)}</div>
-        <div class="col-md-3">
-          <button class="quantity-btn minus" data-name="${prod.name}"><i class="fa fa-minus"></i></button>
-          <input class="quantity-input" value="${prod.qty}" readonly>
-          <button class="quantity-btn plus" data-name="${prod.name}"><i class="fa fa-plus"></i></button>
+        <div class="col-md-2 cart">${formatVND(prod.price)}</div>
+        <div class="col-md-3 cart">
+          <div class="quantity-group">
+            <button class="quantity-btn minus" data-name="${prod.name}"><i class="fa fa-minus"></i></button>
+            <input class="quantity-input" value="${prod.qty}" readonly>
+            <button class="quantity-btn plus" data-name="${prod.name}"><i class="fa fa-plus"></i></button>
+          </div>
         </div>
-        <div class="col-md-1">
+        <div class="col-md-1 cart">
           <i class="fas fa-trash remove-item" data-name="${prod.name}"></i>
         </div>`;
       container.appendChild(row);

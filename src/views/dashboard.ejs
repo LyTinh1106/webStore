@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard</title>
+    <title>Bảng điều khiển</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -23,11 +23,11 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <div class="sidebar text-white p-3">
-            <h4 class="text-center mb-4">Tech Admin</h4>
+            <h4 class="text-center mb-4">Bảng điều khiển</h4>
             <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
 
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="/"><i class="fas fa-home me-2"></i>Trang chủ</a>
+                    <a class="nav-link" href="/"><i class="fas fa-home me-2"></i>Trang chủ</a>
                 </li>
 
                 <li class="nav-item">
@@ -78,7 +78,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link text-white" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a>
+                    <a class="nav-link" href="/logout"><i class="fas fa-sign-out-alt me-2"></i>Đăng xuất</a>
                 </li>
             </ul>
         </div>
@@ -91,11 +91,11 @@
 
             <!-- Stats Panels -->
             <div class="tab-pane fade show active" id="dashboard" role="tabpanel" aria-labelledby="v-dashboard-tab">
-                <h2>Bảng điều khiển</h2>
+                <h2>Thống kê</h2>
                 <div class="row">
                     <div class="col-md-3">
                         <div class="dashboard-card revenue">
-                            <div><i class="fas fa-dollar-sign"></i> Doanh thu trong 7 ngày gần nhất</div>
+                            <div><i class="fas fa-dollar-sign"></i> Doanh thu trong 7 ngày</div>
                             <div class="value">
                                 <%= stats.total_revenue.toLocaleString('vi-VN') || 0%> VNĐ
                             </div>
@@ -103,7 +103,7 @@
                     </div>
                     <div class="col-md-3">
                         <div class="dashboard-card orders">
-                            <div><i class="fas fa-shopping-cart"></i> Đơn đặt hàng trong 7 ngày gần nhất</div>
+                            <div><i class="fas fa-shopping-cart"></i> Đơn đặt hàng trong 7 ngày</div>
                             <div class="value">
                                 <%= stats.total_orders || 0%>
                             </div>

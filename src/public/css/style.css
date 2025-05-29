@@ -2151,6 +2151,7 @@ textarea.input {
 .order-summary .order-col .order-total {
   font-size: 24px;
   color: #E52020;
+  white-space: nowrap;
 }
 
 .order-details .payment-method {
@@ -2209,6 +2210,13 @@ textarea.input {
   margin-top: 30px;
   display: block;
   font-size: 12px;
+  color: #B9BABC;
+}
+.copyright a {
+  color: dimgray;
+}
+.copyright a:hover {
+  color: #1B56FD;
 }
 
 .footer-payments li {
@@ -2797,9 +2805,16 @@ hr {
   border-top: 1px solid #ddd;
   display: flex;
   align-items: center;
+  justify-content: flex-start;
   padding: 10px;
   z-index: 1000;
-  display: none;
+  
+}
+
+.compare-slot-group {
+  display: flex;
+  flex: 1;
+  justify-content: center; 
 }
 
 .compare-product-slot {
@@ -2818,6 +2833,7 @@ hr {
   cursor: pointer;
 }
 
+
 .compare-product-slot img {
   width: 60px;
   height: 60px;
@@ -2826,7 +2842,7 @@ hr {
 }
 
 .compare-button {
-  margin-left: auto;
+  margin-left: 20px;
   padding: 10px 20px;
   border-radius: 5px;
   background: gray;
@@ -3138,11 +3154,17 @@ hr {
   margin-top: 25px;
 }
 
-.col-md-3 {
+.col-md-3.cart{
   margin-top: 20px;
   padding: 0;
 }
 
+.quantity-group {
+    display: flex;
+    flex-direction: row;       /* Quan trọng: ép về chiều ngang */
+    align-items: center;
+    justify-content: center;
+}
 .cart-product-name {
   font-weight: 700;
 }
