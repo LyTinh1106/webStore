@@ -136,6 +136,13 @@
             text-align: center;
         }
 
+        .empty-message {
+            color: gray;
+            margin-top : 50px;
+            font-style: italic;
+            text-align: center;
+        }
+
         @media (max-width: 768px) {
             .left-panel {
                 margin-bottom: 20px;
@@ -383,9 +390,8 @@
 
                                             <% }) %>
                                                 <% } else { %>
-                                                    <tr>
-                                                        <td colspan="7" class="text-center">Không có đơn hàng nào.</td>
-                                                    </tr>
+
+                                                    <p class="empty-message">Không có đơn hàng nào.</p>
                                                     <% } %>
                             </div>
 
@@ -496,7 +502,7 @@
                                         'badge-default'
                         );
                         badge.innerText = status;
-                        
+
                         const productTable = document.getElementById('modalOrderProducts');
                         productTable.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
 

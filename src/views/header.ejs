@@ -100,10 +100,10 @@
                                         </a>
                                     </li>
 
-                                    <% if (user.role==='admin' ) { %>
+                                    <% if (user.role ==='admin' || user.role === 'superadmin') { %>
                                         <li class="account-box-li">
                                             <a class="dropdown-item account-box-item" href="/dashboard">
-                                                <i class="fas fa-tachometer-alt account-box-icon text-warning"></i> Bảng
+                                                <i class="fas fa-tachometer-alt account-box-icon text-success"></i> Bảng
                                                 điều khiển
                                             </a>
                                         </li>
