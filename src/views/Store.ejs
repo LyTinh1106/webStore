@@ -155,7 +155,7 @@
 						<div id="filtered-products" class="row d-none"></div>
 
 						<div id="all-products" class="row">
-							<div id="filtered-products" class="row d-none"></div>
+							<div class="row d-none"></div>
 							<% if (typeof keyword !=='undefined' && keyword) { %>
 								<h3>Kết quả cho: "<%= keyword %>"</h3>
 								<% } %>
@@ -215,16 +215,15 @@
 																			</div>
 																		</div>
 																		<div class="add-to-cart">
-  <button 
-    class="add-to-cart-btn"
-    data-id="<%= product.id %>"
-    data-img="/images/<%= product.image || 'default.png' %>"
-    data-name="<%= product.name %>"
-    data-price="<%= product.retail_price %>"
-  >
-    <i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
-  </button>
-</div>
+																			<button class="add-to-cart-btn"
+																				data-id="<%= product.id %>"
+																				data-img="/images/<%= product.image || 'default.png' %>"
+																				data-name="<%= product.name %>"
+																				data-price="<%= product.retail_price %>">
+																				<i class="fa fa-shopping-cart"></i> thêm
+																				vào giỏ hàng
+																			</button>
+																		</div>
 																	</a>
 
 																</div>
@@ -289,28 +288,27 @@
 			<script src="/js/cart.js"></script>
 
 
-			<script>
-				function filterByCategory() {
-					const checkedCategories = Array.from(
-						document.querySelectorAll('.category-filter input[type="checkbox"]:checked')
-					).map(cb => parseInt(cb.value));
+			<!-- <script>
+				const checkedCategories = Array.from(
+					document.querySelectorAll('.category-filter input[type="checkbox"]:checked')
+				).map(cb => parseInt(cb.value));
 
-					// Gửi danh sách ID danh mục lên server
-					fetch('/api/product/filter/categories', {
-						method: 'POST',
-						headers: {
-							'Content-Type': 'application/json'
-						},
-						body: JSON.stringify({ category_ids: checkedCategories })
+				// Gửi danh sách ID danh mục lên server
+				fetch('/api/product/filter/categories', {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					body: JSON.stringify({ category_ids: checkedCategories })
+				})
+					.then(res => res.json())
+					.then(data => {
+						renderProducts(data);
 					})
-						.then(res => res.json())
-						.then(data => {
-							renderProducts(data);
-						})
-						.catch(err => {
-							console.error("Lỗi khi gọi API lọc danh mục:", err);
-						});
-				}
+					.catch(err => {
+						console.error("Lỗi khi gọi API lọc danh mục:", err);
+					});
+				
 
 
 				document.addEventListener("DOMContentLoaded", function () {
@@ -324,19 +322,36 @@
 						if (targetCheckbox) {
 							checkboxes.forEach(cb => cb.checked = false);
 							targetCheckbox.checked = true;
-
-							// Gọi hàm lọc sau khi checkbox được tick
 							if (typeof applyCombinedFilter === 'function') {
 								applyCombinedFilter();
 							}
 						}
 					}
+					document.querySelectorAll('#nav-categories a').forEach(link => {
+						link.addEventListener('click', function (e) {
+							e.preventDefault();
+							const categoryId = this.getAttribute('data-id');
+
+							if (categoryId && categoryId !== '0') {
+								document.querySelectorAll('.category-filter input[type="checkbox"]').forEach(cb => cb.checked = false);
+								const targetCheckbox = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+								if (targetCheckbox) {
+									targetCheckbox.checked = true;
+								}
+								if (typeof applyCombinedFilter === 'function') {
+									applyCombinedFilter();
+								}
+							} else if (categoryId === '0') {
+								window.location.href = '/';
+							}
+						});
+					});
 				});
-			
 
 
-			</script>
-			
+
+			</script> -->
+
 </body>
 
 </html>

@@ -250,86 +250,90 @@
     }
   );
 })(jQuery);
-const categoryCheckboxes = document.querySelectorAll(
-  '.category-filter input[type="checkbox"]'
-);
-const brandCheckboxes = document.querySelectorAll(
-  '.brand-filter input[type="checkbox"]'
-);
-const priceMin = document.getElementById("price-min");
-const priceMax = document.getElementById("price-max");
+document.addEventListener("DOMContentLoaded", () => {
+  const categoryCheckboxes = document.querySelectorAll(
+    '.category-filter input[type="checkbox"]'
+  );
+  const brandCheckboxes = document.querySelectorAll(
+    '.brand-filter  input[type="checkbox"]'
+  );
+  const priceMin = document.getElementById("price-min");
+  const priceMax = document.getElementById("price-max");
 
-// Add listeners
-[...categoryCheckboxes, ...brandCheckboxes].forEach((cb) =>
-  cb.addEventListener("change", applyCombinedFilter)
-);
-priceMin.addEventListener("change", applyCombinedFilter);
-priceMax.addEventListener("change", applyCombinedFilter);
+  async function applyCombinedFilter() {
+    const category_ids = Array.from(categoryCheckboxes)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    const brand_ids = Array.from(brandCheckboxes)
+      .filter((cb) => cb.checked)
+      .map((cb) => cb.value);
+    const min = parseInt(priceMin.value) || 0;
+    const max = parseInt(priceMax.value) || 999999;
 
-async function applyCombinedFilter() {
-  const category_ids = Array.from(categoryCheckboxes)
-    .filter((cb) => cb.checked)
-    .map((cb) => cb.value);
-  const brand_ids = Array.from(brandCheckboxes)
-    .filter((cb) => cb.checked)
-    .map((cb) => cb.value);
-  const min = parseInt(priceMin.value) || 0;
-  const max = parseInt(priceMax.value) || 999999;
-
-  const res = await fetch("/api/product/filter", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ category_ids, brand_ids, min, max }),
-  });
-
-  const products = await res.json();
-  const shouldShowFiltered =
-    category_ids.length > 0 || brand_ids.length > 0 || min > 0 || max < 999999;
-  renderFilteredProducts(products, shouldShowFiltered);
-}
-window.cartData = JSON.parse(localStorage.getItem('cart')) || [];
-// Hàm render sản phẩm lọc
-function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
-  const filteredBox = document.getElementById("filtered-products");
-  const allBox = document.getElementById("all-products");
-  const paginationBox = document.getElementById("store-nav");
-  function formatVND(value) {
-    return value.toLocaleString("vi-VN");
+    try {
+      const res = await fetch("/api/product/filter", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ category_ids, brand_ids, min, max }),
+      });
+      const products = await res.json();
+      renderFilteredProducts(
+        products,
+        category_ids.length > 0 ||
+          brand_ids.length > 0 ||
+          min > 0 ||
+          max < 999999
+      );
+    } catch (err) {
+      console.error("Lỗi khi filter:", err);
+    }
   }
 
-  filteredBox.innerHTML = "";
+  function renderFilteredProducts(
+    products,
+    shouldShowFiltered,
+    currentPage = 1
+  ) {
+    const filteredBox = document.getElementById("filtered-products");
+    const allBox = document.getElementById("all-products");
+    const paginationBox = document.getElementById("store-nav");
+    function formatVND(value) {
+      return value.toLocaleString("vi-VN");
+    }
 
-  const productsPerPage = 9;
-  const totalPages = Math.ceil(products.length / productsPerPage);
-  const start = (currentPage - 1) * productsPerPage;
-  const end = start + productsPerPage;
-  const currentProducts = products.slice(start, end);
+    filteredBox.innerHTML = "";
 
-  filteredBox.innerHTML = "";
-  if (!shouldShowFiltered) {
-    filteredBox.classList.add("d-none");
-    allBox.classList.remove("d-none");
-    paginationBox.style.display = "none";
-    return;
-  }
+    const productsPerPage = 9;
+    const totalPages = Math.ceil(products.length / productsPerPage);
+    const start = (currentPage - 1) * productsPerPage;
+    const end = start + productsPerPage;
+    const currentProducts = products.slice(start, end);
 
-  allBox.classList.add("d-none");
-  filteredBox.classList.remove("d-none");
+    filteredBox.innerHTML = "";
+    if (!shouldShowFiltered) {
+      filteredBox.classList.add("d-none");
+      allBox.classList.remove("d-none");
+      paginationBox.style.display = "none";
+      return;
+    }
 
-  if (!products || products.length === 0) {
-    filteredBox.innerHTML = `
+    allBox.classList.add("d-none");
+    filteredBox.classList.remove("d-none");
+
+    if (!products || products.length === 0) {
+      filteredBox.innerHTML = `
 			<div class="message-notify">
 				<p>Không có sản phẩm phù hợp.</p>
 			</div>
 		`;
-    paginationBox.style.display = "none";
-    return;
-  } else {
-    paginationBox.style.display = "block";
-  }
+      paginationBox.style.display = "none";
+      return;
+    } else {
+      paginationBox.style.display = "block";
+    }
 
-  currentProducts.forEach((p) => {
-    filteredBox.innerHTML += `
+    currentProducts.forEach((p) => {
+      filteredBox.innerHTML += `
       <div class="col-md-4 col-xs-6">
         <div class="product">
           <a href="/product/${p.id}">
@@ -340,8 +344,8 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
           <div class="product-body">
             <p class="product-category">${p.category_name || ""}</p>
             <h3 class="product-name"><a href="/product/${p.id}">${
-      p.name
-    }</a></h3>
+        p.name
+      }</a></h3>
             <h4 class="product-price">${formatVND(p.retail_price)} VNĐ</h4>
             <div class="product-rating">
                 <i class="fa fa-star" style="margin-right: 1px;"></i>
@@ -375,12 +379,12 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
         </div>
       </div>
     `;
-  });
+    });
 
-  // Phân trang (luôn hiện nút trái/phải)
-  let paginationHTML = '<ul class="store-pagination">';
+    
+    let paginationHTML = '<ul class="store-pagination">';
 
-  paginationHTML += `
+    paginationHTML += `
 	  <li class="${currentPage <= 1 ? "disabled" : ""}">
 		<a href="#" data-page="${Math.max(
       currentPage - 1,
@@ -389,15 +393,15 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
 	  </li>
 	`;
 
-  for (let i = 1; i <= totalPages; i++) {
-    paginationHTML += `
+    for (let i = 1; i <= totalPages; i++) {
+      paginationHTML += `
 		  <li class="${i === currentPage ? "active" : ""}">
 			<a href="#" data-page="${i}">${i}</a>
 		  </li>
 		`;
-  }
+    }
 
-  paginationHTML += `
+    paginationHTML += `
 	  <li class="${currentPage >= totalPages ? "disabled" : ""}">
 		<a href="#" data-page="${Math.min(
       currentPage + 1,
@@ -406,133 +410,82 @@ function renderFilteredProducts(products, shouldShowFiltered, currentPage = 1) {
 	  </li>
 	`;
 
-  paginationHTML += "</ul>";
-  paginationBox.innerHTML = paginationHTML;
+    paginationHTML += "</ul>";
+    paginationBox.innerHTML = paginationHTML;
 
-  // Xử lý click phân trang
-  paginationBox.querySelectorAll("a[data-page]").forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault();
-      const page = parseInt(this.getAttribute("data-page"));
-      renderFilteredProducts(products, shouldShowFiltered, page);
+    // Xử lý click phân trang
+    paginationBox.querySelectorAll("a[data-page]").forEach((link) => {
+      link.addEventListener("click", function (e) {
+        e.preventDefault();
+        const page = parseInt(this.getAttribute("data-page"));
+        renderFilteredProducts(products, shouldShowFiltered, page);
+      });
     });
-  });
-  // Xử lý click nút thêm vào giỏ hàng
-//   filteredBox.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-//   btn.addEventListener('click', function (e) {
-//     e.preventDefault();
-//     const id = btn.dataset.id;
-//     const img = btn.dataset.img;
-//     const name = btn.dataset.name;
-//     const price = parseFloat(btn.dataset.price);
-//     if (!id || !name || isNaN(price)) return;
 
-//     // Thêm vào cart
-//    let cartData = JSON.parse(localStorage.getItem('cart')) || [];
-//     const existingProduct = cartData.find(p => p.id === id);
-//     if (existingProduct) {
-//       existingProduct.qty += 1;
-//     } else {
-//       cartData.push({ id, img, name, price, qty: 1 });
-//     }
-//     localStorage.setItem('cart', JSON.stringify(cartData));
-    
-//     updateCartUI();
-	
-//   });
-// });
-
-
-
-  // Gán lại sự kiện cho nút "So sánh"
-  filteredBox.querySelectorAll('.add-to-compare').forEach((btn) => {
-    btn.addEventListener('click', function () {
-        const id = btn.getAttribute('data-id');
-        const name = btn.getAttribute('data-name');
-        const image = btn.getAttribute('data-image');
-        const category_id = btn.getAttribute('data-category');
+    // Gán lại sự kiện cho nút "So sánh"
+    filteredBox.querySelectorAll(".add-to-compare").forEach((btn) => {
+      btn.addEventListener("click", function () {
+        const id = btn.getAttribute("data-id");
+        const name = btn.getAttribute("data-name");
+        const image = btn.getAttribute("data-image");
+        const category_id = btn.getAttribute("data-category");
         addToCompare({ id, name, image, category_id });
+      });
     });
-});
+  }
 
-}
 
-//chuyển trang + lọc
+  [...categoryCheckboxes, ...brandCheckboxes].forEach((cb) =>
+    cb.addEventListener("change", applyCombinedFilter)
+  );
+  priceMin?.addEventListener("change", applyCombinedFilter);
+  priceMax?.addEventListener("change", applyCombinedFilter);
 
-document.addEventListener("DOMContentLoaded", function () {
-  const navLinks = document.querySelectorAll("#nav-categories a");
-
-  navLinks.forEach((link) => {
-    link.addEventListener("click", function (e) {
-      e.preventDefault(); // ✅ Ngăn chuyển hướng mặc định của thẻ <a href="#">
-
-      const categoryId = this.getAttribute("data-id");
-      const href = this.getAttribute("href");
-
-      // Bỏ qua "Trang Chủ" và "Sản Phẩm"
-      if (
-        href === "/" ||
-        href === "/store/all" ||
-        !categoryId ||
-        categoryId === "0"
-      ) {
-        window.location.href = href;
-        return;
+  if (window.location.pathname.startsWith("/store")) {
+    const cid = new URLSearchParams(window.location.search).get("category");
+    if (cid) {
+      categoryCheckboxes.forEach((cb) => (cb.checked = false));
+      const cb = document.querySelector(
+        `.category-filter input[value="${cid}"]`
+      );
+      if (cb) {
+        cb.checked = true;
+        applyCombinedFilter();
       }
+    }
+  }
 
-      const isStorePage = window.location.pathname.startsWith("/store");
 
-      if (!isStorePage) {
-        // ✅ Nếu không phải /store → chuyển hướng
+ document.querySelectorAll("#nav-categories a").forEach(link => {
+  link.addEventListener("click", function(e) {
+    e.preventDefault();
+    const href = this.getAttribute("href");
+    const categoryId = this.dataset.id;
+    const isStore = window.location.pathname.startsWith("/store");
+
+    // 1) Nếu là home hoặc sản phẩm → redirect theo href
+    if (href === "/" || href === "/store/all") {
+      window.location.href = href;
+      return;
+    }
+
+    // 2) Các category khác
+    if (categoryId && categoryId !== "0") {
+      if (!isStore) {
+        // Từ homepage → chuyển sang /store?category=ID
         window.location.href = `/store?category=${categoryId}`;
-        return;
+      } else {
+        // Đã ở /store → tick + lọc tại chỗ
+        document.querySelectorAll('.category-filter input[type="checkbox"]')
+          .forEach(cb => cb.checked = false);
+        const cb = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+        if (cb) {
+          cb.checked = true;
+          applyCombinedFilter();
+        }
       }
-
-      // ✅ Nếu đã ở /store → lọc trực tiếp
-      navLinks.forEach((l) => l.parentElement.classList.remove("active"));
-      this.parentElement.classList.add("active");
-
-      const checkboxes = document.querySelectorAll(
-        '.category-filter input[type="checkbox"]'
-      );
-      const targetCheckbox = document.querySelector(
-        `.category-filter input[value="${categoryId}"]`
-      );
-
-      if (!checkboxes.length || !targetCheckbox) {
-        console.warn(" Không tìm thấy checkbox danh mục.");
-        return;
-      }
-
-      checkboxes.forEach((cb) => (cb.checked = false));
-      targetCheckbox.checked = true;
-
-      if (typeof filterByCategory === "function") {
-        filterByCategory();
-      }
-    });
+    }
   });
 });
 
-// document.addEventListener('click', function(e) {
-//   const btn = e.target.closest('.add-to-cart-btn');
-//   if (!btn) return;
-//   e.preventDefault();
-//   // Lấy data-* từ chính nút vừa click
-//   const id    = btn.dataset.id;
-//   const img   = btn.dataset.img;
-//   const name  = btn.dataset.name;
-//   const price = parseFloat(btn.dataset.price);
-//   if (!id || !name || isNaN(price)) return;
-
-//   let cartData = JSON.parse(localStorage.getItem('cart')) || [];
-//   const existing = cartData.find(p => p.id === id);
-//   if (existing) {
-//     existing.qty += 1;
-//   } else {
-//     cartData.push({ id, img, name, price, qty: 1 });
-//   }
-//   localStorage.setItem('cart', JSON.stringify(cartData));
-//   updateCartUI();
-//   renderCart && renderCart();
-// });
+});

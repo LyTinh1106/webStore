@@ -105,7 +105,8 @@
 							</div>
 
 							<!-- Thêm vào giỏ hàng -->
-							<%  const mainImage=images && images.length ? images[0].URL : (product.image || 'default.png' ); %>
+							<% const mainImage=images && images.length ? images[0].URL : (product.image || 'default.png'
+								); %>
 
 								<div class="add-to-cart">
 									<button class="add-to-cart-btn" data-id="<%= product.id %>"
@@ -147,9 +148,9 @@
 								<div id="tab1" class="tab-pane fade in active">
 									<div class="row">
 										<div class="col-md-12">
-											<p class="product-description">
-												<%= product.description %>
-											</p>
+											<div class="product-description">
+												<%- product.description %>
+											</div>
 										</div>
 									</div>
 								</div>
