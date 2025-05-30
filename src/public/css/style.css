@@ -334,7 +334,7 @@ textarea.input {
 
 .section {
   padding-top: 30px;
-  padding-bottom: 60px;
+  padding-bottom: 11px;
 }
 
 .section-title {
@@ -976,8 +976,81 @@ textarea.input {
   }
 }
 
+/*=========================================================
+	 -> FEATURED CATEGORIES
+===========================================================*/
+.featured-categories-list {
+  display: grid;
+  grid-template-columns: repeat(9, 1fr); /* 9 cột */
+  grid-template-rows: repeat(2, 1fr);    /* 2 dòng */
+  gap: 22px;
+  width: 100%;
+  padding-bottom: 6px;
+  overflow: unset !important;  /* Không cho cuộn ngang nữa */
+}
 
+.featured-cat-item {
+  max-width: unset;
+  min-width: 0;
+  width: 100%;
+  height: 108px;
+  background: #fff;
+  border: 1.3px solid #ececec;
+  border-radius: 15px;
+  color: #232545;
+  text-decoration: none;
+  transition: all 0.13s;
+  box-shadow: 0 1px 7px rgba(30,20,60,0.03);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  min-width: 94px;
+  max-width: 130px;  /* Tăng lên nếu cần */
+  width: 100%;
+  text-align: center;
+  padding: 0 4px;     /* Thêm padding trái phải */
+  word-break: break-word; /* Cho phép xuống dòng nhưng không gãy */
+}
 
+.featured-cat-item span {
+  display: block;
+  font-size: clamp(13px, 1.1vw, 16px);  /* Tự động nhỏ lại nếu cần */
+  line-height: 1.16;
+  max-width: 100%;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Responsive cho mobile: chia 2 hàng 4 cột (hiển thị 8 danh mục mỗi hàng) */
+@media (max-width: 1200px) {
+  .featured-categories-list {
+    grid-template-columns: repeat(6, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 12px;
+  }
+}
+@media (max-width: 900px) {
+  .featured-categories-list {
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+    gap: 10px;
+  }
+}
+@media (max-width: 600px) {
+  .featured-categories-list {
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(9, 1fr);
+    gap: 7px;
+  }
+  .featured-cat-item {
+    font-size: 12px;
+    height: 48px;
+  }
+}
 
 
 /*=========================================================
