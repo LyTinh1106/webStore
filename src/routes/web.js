@@ -2,7 +2,7 @@ const express = require('express')
 require('dotenv').config();
 
 // const {getHomePage} = require('../Controllers/HomeController')
-const { getRegister, getHomePage, getLogin, getDashboard, register, login, getForgotPassword, getResetPassword, forgotPassword, handleForgotPassword, handleResetPassword, resetPassword, verifyResetToken, verifyOtp, getInfo } = require('../controllers/AccountController')
+const { getRegister, getHomePage, getLogin, getDashboard, register, login, getForgotPassword, getResetPassword, forgotPassword, handleForgotPassword, handleResetPassword, resetPassword, verifyResetToken, verifyOtp, getInfo, getLastViewProducts } = require('../controllers/AccountController')
 const { getCheckout, getCart } = require('../controllers/CheckoutController')
 const { getProduct, getStore } = require('../controllers/ProductController')
 const { checkAdmin,checkLogin} = require('../middleware/authMiddleware');
@@ -26,6 +26,7 @@ router.get('/reset-password', verifyResetToken);
 router.get('/verify-otp', (req, res) => res.render('verify-otp', { message: null }));
 router.get('/cart', getCart);
 router.get('/userInfo', getInfo);
+router.get('/lastViewProducts', getLastViewProducts);
 
 router.post('/verify-otp', verifyOtp);
 router.post('/register', register)

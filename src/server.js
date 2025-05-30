@@ -2,6 +2,8 @@ const express = require('express');
 const session = require('express-session');
 const passport = require('passport')
 const googleStrategy = require('passport-google-oauth20')
+const cookieParser = require('cookie-parser');
+
 require('dotenv').config();
 const configViewEngine = require('./config/ViewEngine');
 const webRouters = require('./routes/web');
@@ -16,6 +18,8 @@ const hostname = process.env.HOST_NAME || 'localhost'
 
 // Config view engine
 configViewEngine(app);
+//cookie
+app.use(cookieParser()); 
 //config req.body
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));

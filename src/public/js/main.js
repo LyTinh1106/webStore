@@ -280,9 +280,9 @@ document.addEventListener("DOMContentLoaded", () => {
       renderFilteredProducts(
         products,
         category_ids.length > 0 ||
-          brand_ids.length > 0 ||
-          min > 0 ||
-          max < 999999
+        brand_ids.length > 0 ||
+        min > 0 ||
+        max < 999999
       );
     } catch (err) {
       console.error("Lỗi khi filter:", err);
@@ -343,9 +343,8 @@ document.addEventListener("DOMContentLoaded", () => {
           </a> 
           <div class="product-body">
             <p class="product-category">${p.category_name || ""}</p>
-            <h3 class="product-name"><a href="/product/${p.id}">${
-        p.name
-      }</a></h3>
+            <h3 class="product-name"><a href="/product/${p.id}">${p.name
+        }</a></h3>
             <h4 class="product-price">${formatVND(p.retail_price)} VNĐ</h4>
             <div class="product-rating">
                 <i class="fa fa-star" style="margin-right: 1px;"></i>
@@ -381,7 +380,7 @@ document.addEventListener("DOMContentLoaded", () => {
     `;
     });
 
-    
+
     let paginationHTML = '<ul class="store-pagination">';
 
     paginationHTML += `
@@ -456,36 +455,36 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
 
- document.querySelectorAll("#nav-categories a").forEach(link => {
-  link.addEventListener("click", function(e) {
-    e.preventDefault();
-    const href = this.getAttribute("href");
-    const categoryId = this.dataset.id;
-    const isStore = window.location.pathname.startsWith("/store");
+  document.querySelectorAll("#nav-categories a").forEach(link => {
+    link.addEventListener("click", function (e) {
+      e.preventDefault();
+      const href = this.getAttribute("href");
+      const categoryId = this.dataset.id;
+      const isStore = window.location.pathname.startsWith("/store");
 
-    // 1) Nếu là home hoặc sản phẩm → redirect theo href
-    if (href === "/" || href === "/store/all") {
-      window.location.href = href;
-      return;
-    }
+      // 1) Nếu là home hoặc sản phẩm → redirect theo href
+      if (href === "/" || href === "/store/all") {
+        window.location.href = href;
+        return;
+      }
 
-    // 2) Các category khác
-    if (categoryId && categoryId !== "0") {
-      if (!isStore) {
-        // Từ homepage → chuyển sang /store?category=ID
-        window.location.href = `/store?category=${categoryId}`;
-      } else {
-        // Đã ở /store → tick + lọc tại chỗ
-        document.querySelectorAll('.category-filter input[type="checkbox"]')
-          .forEach(cb => cb.checked = false);
-        const cb = document.querySelector(`.category-filter input[value="${categoryId}"]`);
-        if (cb) {
-          cb.checked = true;
-          applyCombinedFilter();
+      // 2) Các category khác
+      if (categoryId && categoryId !== "0") {
+        if (!isStore) {
+          // Từ homepage → chuyển sang /store?category=ID
+          window.location.href = `/store?category=${categoryId}`;
+        } else {
+          // Đã ở /store → tick + lọc tại chỗ
+          document.querySelectorAll('.category-filter input[type="checkbox"]')
+            .forEach(cb => cb.checked = false);
+          const cb = document.querySelector(`.category-filter input[value="${categoryId}"]`);
+          if (cb) {
+            cb.checked = true;
+            applyCombinedFilter();
+          }
         }
       }
-    }
+    });
   });
-});
 
 });

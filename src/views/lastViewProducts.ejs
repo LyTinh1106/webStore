@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VTVT Store - Sản phẩm đã xem</title>
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
+    <!-- Font Awesome Icon -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
+
+    <!-- Custom stlylesheet -->
+    <link type="text/css" rel="stylesheet" href="/css/style.css" />
+</head>
+
+<body>
+    <%- include('./header.ejs') %>
+        <div class="container viewed-products-container">
+            <div class="viewed-page-header">
+                <h3>
+                    <i class="fa fa-history"></i> Sản phẩm đã xem
+                    <small>Lịch sử xem gần đây của bạn</small>
+                </h3>
+            </div>
+
+            <div class="row">
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3"></div>
+                <div class="col-md-3 text-right">
+                    <button class="btn viewed-clear-history " onclick="clearHistory()">
+                        <i class="fa fa-trash"></i> Xóa lịch sử
+                    </button>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+
+            <div id="products-container">
+                <% if (products && products.length> 0) { %>
+                    <% products.forEach(function(product) { %>
+                        <div class="viewed-product-item">
+                            <div class="row">
+                                <div class="col-md-2">
+                                    <a href="/product/<%= product.id %>">
+                                        <img src="/images/<%= product.image || 'default.png' %>"
+                                            alt="<%= product.name %>" class="viewed-product-image">
+                                    </a>
+                                </div>
+                                <div class="col-md-7 product-info">
+                                    <div class="viewed-date">
+                                        <i class="fa fa-clock-o"></i>
+                                        <% if (product.viewed_at) { %>
+                                            <%= product.viewed_at %>
+                                                <% } else { %>
+                                                    Đã xem gần đây
+                                                    <% } %>
+                                    </div>
+                                    <h4 class="viewed-product-title">
+                                        <a href="/product/<%= product.id %>">
+                                            <%= product.name %>
+                                        </a>
+                                    </h4>
+                                    <div class="viewed-product-rating">
+                                        <% for (let i=1; i <=5; i++) { %>
+                                            <i class="fa fa-star"></i>
+                                            <% } %>
+                                                <span class="text-muted">
+                                                    (<%= product.rating ? product.rating : 'Chưa có' %>/5
+                                                        - <%= product.rating_count || 0 %> đánh giá)
+                                                </span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 text-right">
+                                    <div class="viewed-product-price">
+                                        <%= product.retail_price ? product.retail_price.toLocaleString('vi-VN') : '...'
+                                            %>đ
+                                    </div>
+                                    <button class="btn viewed-btn-add-cart add-to-cart-btn" data-id="<%= product.id %>"
+                                        data-img="/images/<%= product.image || 'default.png' %>"
+                                        data-name="<%= product.name %>" data-price="<%= product.retail_price %>">
+                                        <i class="fa fa-shopping-cart"></i> Thêm vào giỏ hàng
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } %>
+            </div>
+
+            <% if (!products || products.length===0) { %>
+                <div id="empty-state" class="viewed-empty-state">
+                    <i class="fa fa-eye-slash viewed-empty-icon"></i>
+                    <h3>Chưa có sản phẩm nào được xem</h3>
+                    <p>Hãy khám phá các sản phẩm để chúng xuất hiện ở đây!</p>
+                    <a href="/store/all" class="btn btn-primary">
+                        <i class="fa fa-shopping-bag"></i> Khám phá sản phẩm
+                    </a>
+                </div>
+                <% } %>
+        </div>
+        <%- include('./footer.ejs') %>
+            <script src="/js/jquery.min.js"></script>
+            <script src="/js/bootstrap.min.js"></script>
+            <script src="/js/slick.min.js"></script>
+            <script src="/js/nouislider.min.js"></script>
+            <script src="/js/jquery.zoom.min.js"></script>
+            <script src="/js/main.js"></script>
+            <script src="/js/cart.js"></script>
+
+            <script>
+                function clearHistory() {
+                    if (confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử xem sản phẩm?')) {
+                        // Xóa cookie lịch sử đã xem
+                        document.cookie = "viewed_product_ids=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                        // Ẩn danh sách sản phẩm, hiện empty state
+                        $('#products-container').hide();
+                        $('#empty-state').show();
+                        // Nếu có phân trang, ẩn luôn
+                        $('.pagination').hide();
+                        location.reload();
+                    }
+                }
+                locaton.reload();
+            </script>
+</body>
+
+</html>

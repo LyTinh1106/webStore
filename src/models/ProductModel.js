@@ -52,6 +52,34 @@ Product.findById = (id, result) => {
   });
 };
 
+Product.findByIds = (ids, result) => {
+  if (!ids || !ids.length) return result(null, []);
+  const placeholders = ids.map(() => '?').join(',');
+
+  const query = `
+    SELECT 
+    p.*, 
+    c.name AS category_name,
+    b.brand_name,
+    pi.URL AS image
+  FROM product p
+  LEFT JOIN category c ON c.id = p.category_id
+  LEFT JOIN brand b ON b.brand_id = p.brand_id
+  LEFT JOIN product_image pi ON pi.id = (
+    SELECT id FROM product_image
+    WHERE product_id = p.id
+    ORDER BY id ASC
+    LIMIT 1
+  )
+  WHERE p.id IN (${placeholders})
+  `;
+
+  sql.query(query, ids, (err, res) => {
+    if (err) return result(err, null);
+    result(null, res || []);
+  });
+};
+
 Product.getAll = (nameOrCategoryId, result) => {
   let query = `
   SELECT 

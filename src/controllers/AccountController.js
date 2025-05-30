@@ -63,7 +63,7 @@ const getResetPassword = (req, res) => {
   const token = req.query.token;
   res.render('resetPassword', { token, message: null });
 };
- const getSuccess = (req, res) => {
+const getSuccess = (req, res) => {
   const user = req.user || req.session.user || null;
 
   if (!user || !user.email) {
@@ -102,7 +102,7 @@ const getInfo = (req, res) => {
     }
 
     Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
-      
+
       if (errCustomer && errCustomer.kind !== "not_found") {
         return res.status(500).send("Đã xảy ra lỗi khi truy xuất thông tin khách hàng.");
       }
@@ -116,6 +116,97 @@ const getInfo = (req, res) => {
     });
   });
 };
+
+// const getLastViewProducts = (req, res) => {
+//   const user = req.user || req.session.user || null;
+//   const productId = req.cookies.last_viewed_product_id;
+
+//   if (!productId) {
+//     return res.render('lastViewProducts', {
+//       user,
+//       products: [], // Truyền vào mảng rỗng
+//       message: "Chưa có sản phẩm nào được xem gần đây."
+//     });
+//   }
+
+//   Product.findById(productId, (err, product) => {
+//     if (err || !product) {
+//       return res.render('lastViewProducts', {
+//         user,
+//         products: [],
+//         message: "Không tìm thấy sản phẩm."
+//       });
+//     }
+//     // Truyền vào mảng products (dù chỉ có 1 phần tử)
+//     res.render('lastViewProducts', {
+//       user,
+//       products: [product], // Chuyển thành mảng
+//       message: null
+//     });
+//   });
+// };
+
+const getLastViewProducts = (req, res) => {
+  const user = req.user || req.session.user || null;
+  const email = user ? user.email : null;
+  let viewedIds = [];
+  try {
+    viewedIds = JSON.parse(req.cookies.viewed_product_ids || '[]');
+  } catch (e) {
+    viewedIds = [];
+  }
+
+  if (!email) {
+    return res.render('lastViewProducts', {
+      user,
+      customer: null,
+      products: [],
+      message: "Vui lòng đăng nhập để xem lịch sử sản phẩm đã xem."
+    });
+  }
+
+  Customer.getByEmail(email, (err, customer) => {
+    if (err || !customer) {
+      return res.render('lastViewProducts', {
+        user,
+        customer: null,
+        products: [],
+        message: "Không tìm thấy thông tin khách hàng."
+      });
+    }
+
+    if (!viewedIds.length) {
+      return res.render('lastViewProducts', {
+        user,
+        customer,
+        products: [],
+        message: "Chưa có sản phẩm nào được xem gần đây."
+      });
+    }
+
+    Product.findByIds(viewedIds, (err, products) => {
+      if (err || !products) {
+        return res.render('lastViewProducts', {
+          user,
+          customer,
+          products: [],
+          message: "Không tìm thấy sản phẩm."
+        });
+      }
+
+      // Đảm bảo đúng thứ tự lịch sử xem
+      const sortedProducts = viewedIds.map(id => products.find(p => String(p.id) === String(id))).filter(Boolean);
+
+      res.render('lastViewProducts', {
+        user,
+        customer,
+        products: sortedProducts,
+        message: null
+      });
+    });
+  });
+};
+
 
 
 const getDashboard = (req, res) => {
@@ -315,8 +406,8 @@ const create = async (req, res) => {
 
   // Chỉ cho phép superadmin tạo tài khoản admin
   if (!req.session.user || req.session.user.role !== 'superadmin') {
-  return res.status(403).send({ message: "Chỉ superadmin mới được tạo tài khoản." });
-}
+    return res.status(403).send({ message: "Chỉ superadmin mới được tạo tài khoản." });
+  }
 
   try {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -371,42 +462,42 @@ const findByEmail = (req, res) => {
 };
 
 const update = async (req, res) => {
-    // ➔ Chỉ superadmin được phép sửa
-    if (!req.session.user || req.session.user.role !== 'superadmin') {
-        return res.status(403).send({ message: 'Chỉ superadmin mới được phép sửa tài khoản.' });
+  // ➔ Chỉ superadmin được phép sửa
+  if (!req.session.user || req.session.user.role !== 'superadmin') {
+    return res.status(403).send({ message: 'Chỉ superadmin mới được phép sửa tài khoản.' });
+  }
+
+  const { email, password, role } = req.body;
+
+  if (!email || !role) {
+    return res.status(400).send({ message: "Email và role là bắt buộc." });
+  }
+
+  try {
+    const updatedAccount = { email, role };
+
+    // Chỉ hash và thêm mật khẩu nếu có gửi lên
+    if (password && password.trim() !== '') {
+      const hashedPassword = await bcrypt.hash(password, saltRounds);
+      updatedAccount.password = hashedPassword;
     }
 
-    const { email, password, role } = req.body;
-
-    if (!email || !role) {
-        return res.status(400).send({ message: "Email và role là bắt buộc." });
-    }
-
-    try {
-        const updatedAccount = { email, role };
-
-        // Chỉ hash và thêm mật khẩu nếu có gửi lên
-        if (password && password.trim() !== '') {
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
-            updatedAccount.password = hashedPassword;
+    Account.updateById(req.params.id, updatedAccount, (err, data) => {
+      if (err) {
+        if (err.kind === "not_found") {
+          return res.status(404).send({ message: `Không tìm thấy account với id ${req.params.id}` });
         }
-
-        Account.updateById(req.params.id, updatedAccount, (err, data) => {
-            if (err) {
-                if (err.kind === "not_found") {
-                    return res.status(404).send({ message: `Không tìm thấy account với id ${req.params.id}` });
-                }
-                if (err.kind === "forbidden_superadmin_change") {
-                    return res.status(403).send({ message: "Không thể thay đổi role của superadmin." });
-                }
-                return res.status(500).send({ message: `Lỗi khi cập nhật account với id ${req.params.id}` });
-            }
-            res.send(data);
-        });
-    } catch (err) {
-        console.error(err);
-        res.status(500).send({ message: "Lỗi server khi cập nhật." });
-    }
+        if (err.kind === "forbidden_superadmin_change") {
+          return res.status(403).send({ message: "Không thể thay đổi role của superadmin." });
+        }
+        return res.status(500).send({ message: `Lỗi khi cập nhật account với id ${req.params.id}` });
+      }
+      res.send(data);
+    });
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ message: "Lỗi server khi cập nhật." });
+  }
 };
 
 
@@ -640,6 +731,7 @@ module.exports = {
   getRegister,
   getLogin,
   getInfo,
+  getLastViewProducts,
   register,
   login,
   getForgotPassword,
