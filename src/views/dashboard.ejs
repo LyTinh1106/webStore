@@ -13,9 +13,9 @@
     <link rel="stylesheet" href="css/quill.snow.css">
     <link rel="stylesheet" href="css/dashboardStyle.css">
     <!-- Flatpickr CSS -->
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
-    <link rel="stylesheet" href="css/flatpickr.min.css">
-
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
 </head>
 
@@ -84,7 +84,6 @@
             </ul>
         </div>
     </div>
-
 
     <!-- Main Content -->
     <div class="main-content">
@@ -462,7 +461,6 @@
                 });
             </script>
 
-
             <!-- Products Section -->
             <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="v-products-tab">
                 <h3 class="section-title">Quản lý sản phẩm</h3>
@@ -585,7 +583,6 @@
                         </div>
                     </div>
 
-
                     <!-- Modal chỉnh sửa sản phẩm -->
                     <div class="modal fade" id="updateProductModal" tabindex="-1"
                         aria-labelledby="updateProductModalLabel" aria-hidden="true">
@@ -601,10 +598,10 @@
                                     <form id="updateProductForm" enctype="multipart/form-data">
                                         <input type="hidden" id="editProductId" name="id" />
                                         <div class="col-md-12">
-                                                <label for="editProductName" class="form-label">Tên sản phẩm</label>
-                                                <input type="text" class="form-control" id="editProductName"
-                                                    name="productName" required />
-                                            </div>
+                                            <label for="editProductName" class="form-label">Tên sản phẩm</label>
+                                            <input type="text" class="form-control" id="editProductName"
+                                                name="productName" required />
+                                        </div>
 
                                         <div class="row g-3">
                                             <div class="col-12">
@@ -1174,10 +1171,10 @@
                                     <div class="row g-3">
                                         <!-- Phương thức giao hàng -->
                                         <div class="col-md-12">
-                                            <label for="deliveryMethod" class="form-label">Phương thức giao hàng</label>
+                                            <label for="deliveryMethod" class="form-label">Đơn vị giao hàng</label>
                                             <select class="form-select" id="deliveryMethod" name="deliveryMethod"
                                                 required>
-                                                <option value="" disabled selected>-- Chọn phương thức giao hàng --
+                                                <option value="" disabled selected>-- Chọn đơn vị giao hàng --
                                                 </option>
                                                 <option value="GHN">GHN</option>
                                                 <option value="GHTK">GHTK</option>
@@ -2042,7 +2039,7 @@
             </div>
 
         </div>
-
+        <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
         <!-- Bootstrap JS và jQuery -->
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -2054,10 +2051,13 @@
         <!-- Chart.js -->
         <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <script src="js/quill.js"></script>
+        <!-- SweetAlert2 JS -->
+         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- JavaScript -->
         <script src="js/dashboardScript.js"></script>
         <script src="js/gragh.js"></script>
+        <script src="js/toastAlert.js"></script>
 
 
 </body>

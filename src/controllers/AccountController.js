@@ -495,22 +495,32 @@ const register = async (req, res) => {
         to: email,
         subject: "Mã OTP xác minh tài khoản",
         html: `
-        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width: 600px; margin: 0 auto; font-family: Arial, sans-serif; border-collapse: collapse; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); border: 1px solid #e0e0e0;">
+        <table cellpadding="0" cellspacing="0" border="0" width="100%" style="max-width:600px;margin:0 auto;font-family:Arial,sans-serif;border-collapse:collapse;border-radius:8px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.1);border:1px solid #e0e0e0;">
   <tr>
-    <td style="background-color: #4a90e2; height: 10px; line-height: 10px; font-size: 0;">&nbsp;</td>
+    <td style="background-color:#4a90e2;height:10px;line-height:10px;font-size:0;"></td>
   </tr>
   <tr>
-    <td style="background-color: #f8f9fa; padding: 30px 25px; text-align: center;">
-      <h2 style="color: #2c3e50; margin: 0 0 20px 0; font-size: 22px; font-weight: bold;">Xác thực bảo mật tài khoản</h2>
-      <p style="color: #505050; font-size: 16px; margin: 0 0 25px 0;">Vui lòng sử dụng mã OTP sau đây để hoàn tất quá trình xác thực:</p>
-      <div style="background-color: #ffffff; border-radius: 6px; padding: 15px 20px; display: inline-block; margin: 0 auto 25px auto; border: 1px solid #e0e0e0;">
-        <span style="font-size: 36px; letter-spacing: 5px; color: #4a90e2; font-weight: bold;">${otp}</span>
+    <td style="background-color:#f8f9fa;padding:30px 25px;text-align:center;">
+      <h2 style="color:#2c3e50;margin:0 0 20px 0;font-size:22px;font-weight:bold;">Xác thực bảo mật tài khoản</h2>
+      <p style="color:#505050;font-size:16px;margin:0 0 25px 0;">Vui lòng sử dụng mã OTP sau đây để hoàn tất quá trình xác thực:</p>
+      <div style="background-color:#fff;border-radius:6px;padding:15px 20px;display:inline-block;margin:0 auto 18px auto;border:1px solid #e0e0e0;">
+        <span style="font-size:36px;letter-spacing:5px;color:#4a90e2;font-weight:bold;">${otp}</span>
       </div>
-      <p style="color: #e74c3c; font-size: 15px; margin: 0 0 25px 0;">
-        <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-clock-outline-512.png" width="18" height="18" style="vertical-align: middle; margin-right: 5px;" alt="Clock">
+    </td>
+  </tr>
+  <tr>
+    <td style="background-color:#f8f9fa;text-align:center;">
+      <p style="color:#e74c3c;font-size:15px;margin:10px 0 10px 0;">
+        <img src="https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-ios7-clock-outline-512.png" width="18" height="18" style="vertical-align:middle;margin-right:5px;" alt="Clock">
         Mã có hiệu lực trong <strong>5 phút</strong>
       </p>
-      <p style="color: #7f8c8d; font-size: 14px; margin: 20px 0 0 0; padding-top: 20px; border-top: 1px solid #e0e0e0;">Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này hoặc liên hệ hỗ trợ.</p>
+    </td>
+  </tr>
+  <tr>
+    <td style="background-color:#f8f9fa;padding:0 25px 30px 25px;text-align:center;">
+      <p style="color:#7f8c8d;font-size:14px;margin:20px 0 0 0;padding-top:20px;border-top:1px solid #e0e0e0;">
+        Nếu bạn không yêu cầu mã này, vui lòng bỏ qua email này hoặc liên hệ hỗ trợ.
+      </p>
     </td>
   </tr>
 </table>`

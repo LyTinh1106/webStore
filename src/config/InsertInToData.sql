@@ -1640,6 +1640,7 @@ INSERT INTO cart (id_customer, id_product, quantity) VALUES
 (10, 1, 1);
 
 INSERT INTO account (email, password, role) VALUES
+('superadmin', '$2a$10$zIDRdeShuV.FF4xcZe1h7uqglk.oKUXeguT8tOd/1DlOAAHO8/8na', 'superadmin'),
 ('user1@gmail.com', '$2y$10$hashpassword01', 'customer'),
 ('user2@gmail.com', '$2y$10$hashpassword02', 'customer'),
 ('user3@gmail.com', '$2y$10$hashpassword03', 'customer'),

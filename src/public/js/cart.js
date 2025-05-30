@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalPrice = 0;
 
     if (cartData.length === 0) {
-      cartList.innerHTML = `<li class="cart-message-notify"><p>Không có sản phẩm trong giỏ hàng.</p></li>`;
+      cartList.innerHTML = `<p class="cart-message-notify">Không có sản phẩm trong giỏ hàng.</p>`;
       if (emptyMsg) emptyMsg.style.display = 'block';
       cartQty.innerText = '0';
       summaryText.innerText = `Chưa có sản phẩm nào`;
