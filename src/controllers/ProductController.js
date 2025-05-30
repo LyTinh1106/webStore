@@ -7,9 +7,6 @@ const ProductImage = require("../models/ProductImageModel");
 const Customer = require('../models/CustomerModel')
 const TechnicalSpecification = require('../models/ProductDetailModel');
 
-
-
-
 const getProduct = (req, res) => {
   const productId = req.params.id;
   const user = req.user || req.session.user || null;

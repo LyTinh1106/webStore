@@ -416,9 +416,9 @@ document.getElementById("addVoucherForm").addEventListener("submit", async funct
 
         if (response.ok) {
             localStorage.setItem('toastAfterReload', JSON.stringify({
-                    message: 'Thêm voucher thành công!',
-                    type: 'success'
-                }));
+                message: 'Thêm voucher thành công!',
+                type: 'success'
+            }));
             saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
@@ -551,9 +551,9 @@ document.getElementById("editVoucherForm").addEventListener("submit", async func
 
         if (response.ok) {
             localStorage.setItem('toastAfterReload', JSON.stringify({
-                    message: 'Cập nhật voucher thành công!',
-                    type: 'success'
-                }));
+                message: 'Cập nhật voucher thành công!',
+                type: 'success'
+            }));
             saveScrollAndTabAndReload();
         } else {
             let msg = "Cập nhật thất bại!";
@@ -621,9 +621,9 @@ document.getElementById("addSupplierForm").addEventListener("submit", async func
 
         if (response.ok) {
             localStorage.setItem('toastAfterReload', JSON.stringify({
-                    message: 'Thêm nhà cung cấp thành công!',
-                    type: 'success'
-                }));
+                message: 'Thêm nhà cung cấp thành công!',
+                type: 'success'
+            }));
             saveScrollAndTabAndReload()
         } else {
             const text = await response.text();
@@ -1193,7 +1193,7 @@ document.querySelectorAll('.editProductBtn').forEach(btn => {
         } catch (err) {
             console.error('Lỗi khi tải dữ liệu sản phẩm:', err);
             // showToast('Đã xảy ra lỗi khi lấy dữ liệu sản phẩm.' + err, 'error');
-            alert('Đã xảy ra lỗi khi lấy dữ liệu sản phẩm.'+ err.message);
+            alert('Đã xảy ra lỗi khi lấy dữ liệu sản phẩm.' + err.message);
         }
     });
 });
@@ -1379,7 +1379,18 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.delete-account-btn').forEach(button => {
         button.addEventListener('click', async (e) => {
             const id = button.getAttribute('data-id');
-            if (!confirm('Bạn có chắc muốn xóa tài khoản này?')) return;
+
+            const result = await Swal.fire({
+                title: 'Xác nhận xóa?',
+                text: "Bạn có chắc muốn xóa tài khoản này?",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d10024',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Xóa',
+                cancelButtonText: 'Hủy'
+            });
+            if (!result.isConfirmed) return;
 
             try {
                 const res = await fetch(`/api/account/${id}`, {
@@ -1491,3 +1502,140 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+//order
+document.querySelectorAll('.order-delete-form').forEach(form => {
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const result = await Swal.fire({
+            title: 'Xác nhận xóa?',
+            text: "Bạn có chắc muốn xóa đơn hàng này?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d10024',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy'
+        });
+        if (!result.isConfirmed) return;
+
+        const orderId = form.getAttribute('data-id');
+        try {
+            const res = await fetch(`/api/order/${orderId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            });
+
+            if (res.ok) {
+                localStorage.setItem('toastAfterReload', JSON.stringify({
+                    message: 'Xoá đơn hàng thành công!',
+                    type: 'success'
+                }));
+                form.closest('tr').remove(); // Xóa dòng khỏi giao diện
+            } else {
+                showToast('Không thể xóa đơn hàng. Vui lòng thử lại sau.', 'error');
+            }
+        } catch (err) {
+            alert('Đã xảy ra lỗi khi xóa đơn hàng.');
+            console.error(err);
+        }
+    });
+});
+
+function formatVND(value) {
+    return Number(value).toLocaleString('vi-VN') + ' VNĐ';
+}
+//show order detail modal
+document.addEventListener('show.bs.modal', async function (event) {
+    const modal = event.target;
+    if (modal.id !== 'orderDetailModal') return;
+
+    const button = event.relatedTarget;
+    const id = button.getAttribute('data-id');
+
+    document.getElementById('orderUpdateForm').action = `/api/order-detail/${id}`;
+    document.getElementById('modalOrderId').value = id;
+    document.getElementById('modalOrderEmail').innerText = button.getAttribute('data-email') || '(Không có)';
+    document.getElementById('modalOrderName').innerText = button.getAttribute('data-name') || '(Không có)';
+    document.getElementById('modalOrderPhone').innerText = button.getAttribute('data-phone') || '(Không có)';
+    document.getElementById('modalOrderDate').innerText = button.getAttribute('data-date');
+    document.getElementById('modalOrderPayment').innerText = button.getAttribute('data-payment');
+    document.getElementById('modalOrderAddress').innerText = button.getAttribute('data-address') || '(Không có)';
+    document.getElementById('modalOrderTotal').innerText = formatVND(button.getAttribute('data-total') || 0);
+    document.getElementById('modalOrderNote').innerText = button.getAttribute('data-note') || '(Không có)';
+
+    const status = button.getAttribute('data-status');
+    const badge = document.getElementById('modalOrderStatusDisplay');
+    document.getElementById("orderUpdateForm").dataset.status = status;
+    badge.className = 'badge';
+    badge.classList.add(
+        status === 'Hoàn Thành' ? 'bg-success' :
+            status === 'Chờ duyệt' ? 'bg-warning' :
+                status === 'Đã duyệt' ? 'bg-info' : 'bg-secondary'
+    );
+    badge.innerText = status;
+
+    const productList = document.getElementById('modalOrderProducts');
+    productList.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
+    try {
+        const res = await fetch(`/api/order-detail/${id}`);
+        const data = await res.json();
+        productList.innerHTML = '';
+        if (data.length === 0) {
+            productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm nào.</td></tr>`;
+        } else {
+            data.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                                <td>${item.product_name}</td>
+                                <td>${item.quantity}</td>
+                                <td>${formatVND(item.subtotalprice)}</td>
+                                `;
+                productList.appendChild(tr);
+            });
+        }
+    } catch (err) {
+        productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Lỗi khi tải sản phẩm.</td></tr>`;
+    }
+});
+
+// Cập nhật trạng thái đơn hàng
+document.getElementById("orderUpdateForm").addEventListener("submit", async function (e) {
+    e.preventDefault();
+
+    const orderId = document.getElementById("modalOrderId").value.trim();
+    const status = document.getElementById("orderUpdateForm").dataset.status; // Lấy từ dataset
+
+    if (!orderId || !status) {
+        alert("Thiếu thông tin đơn hàng.");
+        return;
+    }
+
+    if (status !== "Chờ duyệt") {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/api/order/status/${orderId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ status: "Chờ duyệt" })
+        });
+
+        if (response.ok) {
+            localStorage.setItem('toastAfterReload', JSON.stringify({
+                    message: 'Duyệt đơn hàng thành công!',
+                    type: 'success'
+                }));
+            saveScrollAndTabAndReload();
+        } else {
+            const text = await response.text();
+            showToast("Có lỗi xảy ra khi cập nhật đơn hàng: " + text, 'error');
+        }
+    } catch (error) {
+        showToast("Lỗi khi gửi yêu cầu cập nhật đơn hàng: " + error.message, 'error');
+        console.error(error);
+    }
+});
