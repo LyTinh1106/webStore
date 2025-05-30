@@ -102,7 +102,7 @@ Order.findByAccountId = (account_id, result) => {
 
 
 Order.getAll = (result) => {
-  sql.query("SELECT o.*, a.email FROM order_table o JOIN account a on o.account_id = a.id ", (err, res) => {
+  sql.query("SELECT o.*, a.email FROM order_table o JOIN account a on o.account_id = a.id ORDER BY o.id DESC", (err, res) => {
     if (err) {
       result(null, err);
       return;

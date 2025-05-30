@@ -199,7 +199,63 @@ body {
     background-color: #ffffff;
 }
 
-.scroll-table{
-    max-height: 600px; 
+.scroll-table {
+    max-height: 600px;
     overflow-y: auto;
+}
+
+
+#toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 9999;
+    pointer-events: none;
+}
+
+.custom-toast {
+    min-width: 240px;
+    margin-bottom: 12px;
+    border-radius: 12px;
+    padding: 12px 20px;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 6px 32px 0 rgba(0, 0, 0, 0.18);
+    color: #fff;
+    pointer-events: auto;
+    transform: translateX(120%);
+    animation: slideInRight 0.5s cubic-bezier(.4, 1.7, .6, .85) forwards;
+    transition: opacity 0.3s;
+    /* Glass effect */
+    backdrop-filter: blur(8px) saturate(150%);
+    -webkit-backdrop-filter: blur(8px) saturate(150%);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    opacity: 0.92;
+}
+
+.custom-toast.success {
+    background: rgba(22, 199, 132, 0.72);
+}
+
+.custom-toast.error {
+    background: rgba(209, 0, 36, 0.75);
+}
+
+.custom-toast.warning {
+    background: rgba(228, 161, 27, 0.80);
+}
+
+.custom-toast.info {
+    background: rgba(30, 136, 229, 0.70);
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(120%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
 }

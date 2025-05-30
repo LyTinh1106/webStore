@@ -15,142 +15,6 @@
     <link rel="stylesheet" href="/css/nouislider.min.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/style.css">
-
-    <style>
-        body {
-            font-family: 'Montserrat', sans-serif;
-            background-color: #f5f8fc;
-        }
-
-        .account-container {
-            background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.25);
-            margin: 40px 0;
-            overflow: hidden;
-            height: 100%;
-        }
-
-        .account-container .row {
-            display: flex;
-            min-height: 100%;
-        }
-
-        .left-panel {
-            background: #e8f4fd;
-            padding: 25px 20px;
-            max-height: 100%;
-            margin-top: 0;
-        }
-
-        .user-avatar {
-            width: 110px;
-            height: 110px;
-            background: #d0e9f8;
-            border-radius: 50%;
-            margin: 0 auto 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 42px;
-            color: #337ab7;
-        }
-
-        .user-info h4 {
-            margin-bottom: 5px;
-        }
-
-        .user-info p {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .nav-pills>li>a {
-            color: #333;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            padding: 10px;
-            transition: 0.3s;
-        }
-
-        .nav-pills>li.active>a,
-        .nav-pills>li>a:hover {
-            background-color: #00AEEF;
-            color: #fff;
-        }
-
-        .right-panel {
-            padding: 35px;
-        }
-
-        .tab-content h3 {
-            margin-bottom: 25px;
-        }
-
-        .form-group label {
-            font-weight: 500;
-        }
-
-        .btn-primary {
-            background-color: #00AEEF;
-            border: none;
-            border-radius: 8px;
-            padding: 10px 20px;
-        }
-
-        .btn-primary:hover {
-            background-color: #0096c7;
-        }
-
-        .order-item {
-            background: #f9f9f9;
-            border-radius: 8px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.05);
-        }
-
-        .order-header {
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .badge-success {
-            background-color: #28a745;
-            padding: 6px 10px;
-            border-radius: 5px;
-        }
-
-        .badge-warning {
-            background-color: #ffc107;
-            padding: 6px 10px;
-            border-radius: 5px;
-        }
-
-        .logout-btn {
-            margin-top: 20px;
-            display: block;
-            width: 100%;
-            text-align: center;
-        }
-
-        .empty-message {
-            color: gray;
-            margin-top : 50px;
-            font-style: italic;
-            text-align: center;
-        }
-
-        @media (max-width: 768px) {
-            .left-panel {
-                margin-bottom: 20px;
-                border-right: none;
-                border-bottom: 1px solid #ddd;
-            }
-        }
-    </style>
 </head>
 
 <body>
@@ -278,7 +142,7 @@
 
                                         // Kiểm tra dữ liệu bắt buộc
                                         if (!customer.first_name || !customer.last_name || !customer.email) {
-                                            alert("Vui lòng nhập đầy đủ Họ, Tên và Email.");
+                                            showToast("Vui lòng nhập đầy đủ Họ, Tên và Email.", "warning");
                                             return;
                                         }
 
@@ -295,10 +159,13 @@
 
                                                 const updateResult = await updateRes.json();
                                                 if (updateRes.ok) {
-                                                    alert("Cập nhật thành công!");
+                                                    localStorage.setItem('toastAfterReload', JSON.stringify({
+                                                        message: 'Cập nhật thành công!',
+                                                        type: 'success'
+                                                    }));
                                                     location.reload();
                                                 } else {
-                                                    alert(updateResult.message || "Lỗi cập nhật");
+                                                    showToast(updateResult.message || "Lỗi cập nhật", "error");
                                                 }
                                             } else {
                                                 // Không tồn tại -> tạo mới
@@ -310,15 +177,18 @@
 
                                                 const createResult = await createRes.json();
                                                 if (createRes.ok) {
-                                                    alert("Thêm thông tin thành công!");
+                                                    localStorage.setItem('toastAfterReload', JSON.stringify({
+                                                        message: 'Thêm thông tin thành công!',
+                                                        type: 'success'
+                                                    }));
                                                     location.reload();
                                                 } else {
-                                                    alert(createResult.message || "Lỗi tạo mới");
+                                                    showToast(createResult.message || "Lỗi tạo mới", "error");
                                                 }
                                             }
                                         } catch (error) {
                                             console.error("Lỗi:", error);
-                                            alert("Có lỗi xảy ra.");
+                                            showToast("Có lỗi xảy ra.", "error");
                                         }
                                     });
                                 </script>
@@ -455,125 +325,13 @@
                 </div>
             </div>
         </div>
-
+        <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
         <%- include('./footer.ejs') %>
 
             <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
             <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-            <script>
-
-                function formatVND(value) {
-                    return Number(value).toLocaleString('vi-VN') + ' VNĐ';
-                }
-
-                const detailButtons = document.querySelectorAll('.view-detail-btn');
-
-                detailButtons.forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const id = this.getAttribute('data-id');
-                        const name = this.getAttribute('data-name');
-                        const email = this.getAttribute('data-email');
-                        const phone = this.getAttribute('data-phone');
-                        const date = this.getAttribute('data-date');
-                        const payment = this.getAttribute('data-payment');
-                        const address = this.getAttribute('data-address');
-                        const total = this.getAttribute('data-total');
-                        const note = this.getAttribute('data-note');
-                        const status = this.getAttribute('data-status');
-
-                        document.getElementById('modalOrderId').value = id;
-                        document.getElementById('modalOrderName').textContent = name || '(Không có)';
-                        document.getElementById('modalOrderEmail').textContent = email || '(Không có)';
-                        document.getElementById('modalOrderPhone').textContent = phone || '(Không có)';
-                        document.getElementById('modalOrderDate').textContent = date || '(Không có)';
-                        document.getElementById('modalOrderPayment').textContent = payment || '(Không có)';
-                        document.getElementById('modalOrderAddress').textContent = address || '(Không có)';
-                        document.getElementById('modalOrderTotal').textContent = formatVND(total);
-                        document.getElementById('modalOrderNote').textContent = note || '(Không có)';
-                        // document.getElementById('modalOrderStatusDisplay').textContent = status;
-                        const badge = document.getElementById('modalOrderStatusDisplay');
-                        document.getElementById("modalOrderStatusDisplay").dataset.status = status;
-                        badge.className = 'badge';
-                        badge.classList.add(
-                            status === 'Hoàn Thành' ? 'badge-success' :
-                                status === 'Chờ duyệt' ? 'badge-warning' :
-                                    status === 'Đã duyệt' ? 'badge-info' :
-                                        'badge-default'
-                        );
-                        badge.innerText = status;
-
-                        const productTable = document.getElementById('modalOrderProducts');
-                        productTable.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
-
-                        // 🔁 Gọi đúng API mới: /api/order-detail/:orderId
-                        fetch(`/api/order-detail/${id}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (!data || data.length === 0) {
-                                    productTable.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Không có sản phẩm.</td></tr>`;
-                                } else {
-                                    productTable.innerHTML = '';
-                                    data.forEach(item => {
-                                        const row = document.createElement('tr');
-                                        row.innerHTML = `
-                                        <td>${item.product_name}</td>
-                                        <td>${item.quantity}</td>
-                                        <td>${formatVND(item.subtotalprice)}</td>
-                                        `;
-                                        productTable.appendChild(row);
-                                    });
-                                }
-                            })
-                            .catch(err => {
-                                console.error("Lỗi khi fetch sản phẩm:", err);
-                                productTable.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Lỗi khi tải danh sách sản phẩm.</td></tr>`;
-                            });
-                    });
-                });
-
-
-                $(document).ready(function () {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    const tabId = urlParams.get("tab");
-
-                    if (tabId) {
-                        $('.nav-pills a[href="#' + tabId + '"]').tab('show');
-                    }
-
-
-                });
-
-                const hash = window.location.hash;
-                if (hash === "#order-history") {
-                    // Ngăn scroll mặc định bằng cách xóa hash rồi xử lý thủ công
-                    history.replaceState(null, null, location.pathname);
-
-                    // Kích hoạt tab
-                    const orderTabLink = document.querySelector('a[href="#order-history"]');
-                    if (orderTabLink) {
-                        // Remove 'active' from current
-                        document.querySelectorAll('.nav-pills li').forEach(li => li.classList.remove('active'));
-                        document.querySelectorAll('.tab-pane').forEach(tab => tab.classList.remove('active', 'in'));
-
-                        // Activate the correct tab and pane
-                        orderTabLink.parentElement.classList.add('active');
-                        const tabPane = document.querySelector('#order-history');
-                        if (tabPane) {
-                            tabPane.classList.add('active', 'in');
-                        }
-
-                        // Sử dụng jQuery để kích hoạt tab nếu dùng Bootstrap Tabs
-                        if (typeof $ !== 'undefined' && typeof $.fn.tab === 'function') {
-                            $(orderTabLink).tab('show');
-                        }
-                    }
-
-                    // Scroll lên đầu trang sau khi tab đã được bật
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                }
-
-            </script>
+            <script src="js/toastAlert.js"></script>
+            <script src="js/infoScript.js"></script>
 </body>
 
 </html>
