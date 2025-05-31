@@ -17,33 +17,92 @@ const { get } = require("../routes/order");
 
 const saltRounds = 10;
 
+// const getHomePage = (req, res) => {
+//   const user = req.user || req.session.user || null;
+
+//   Product.getAll(null, (err, products) => {
+//     if (err) {
+//       return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm." });
+//     }
+
+//     if (!user || !user.email) {
+//       // Nếu chưa đăng nhập, không cần tìm customer
+//       return res.render('HomePage', {
+//         user: null,
+//         customer: null,
+//         products
+//       });
+//     }
+
+//     // Lấy thông tin họ tên nếu có
+//     Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+//       if (errCustomer && errCustomer.kind !== "not_found") {
+//         return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
+//       }
+
+//       res.render('HomePage', {
+//         user,
+//         customer: customerInfo || null,
+//         products
+//       });
+//     });
+//   });
+// };
+
 const getHomePage = (req, res) => {
   const user = req.user || req.session.user || null;
+
+  // Lấy mảng viewed_product_ids từ cookie
+  let viewedIds = [];
+  try {
+    viewedIds = JSON.parse(req.cookies.viewed_product_ids || '[]');
+  } catch (e) {
+    viewedIds = [];
+  }
 
   Product.getAll(null, (err, products) => {
     if (err) {
       return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm." });
     }
 
-    if (!user || !user.email) {
-      // Nếu chưa đăng nhập, không cần tìm customer
-      return res.render('HomePage', {
-        user: null,
-        customer: null,
-        products
+    // Hàm render trang chủ (render khi đủ dữ liệu)
+    const renderHome = (customerInfo, viewedProducts) => {
+      res.render('HomePage', {
+        user: user || null,
+        customer: customerInfo || null,
+        products,
+        viewedProducts: viewedProducts || [] // truyền vào template
       });
+    };
+
+    // Nếu chưa đăng nhập, không cần tìm customer
+    if (!user || !user.email) {
+      // Nếu không có id xem gần đây thì trả luôn mảng rỗng
+      if (!viewedIds.length) return renderHome(null, []);
+      // Có id thì lấy thông tin sản phẩm đã xem
+      Product.findByIds(viewedIds, (err, viewedProducts) => {
+        if (err) return renderHome(null, []);
+        // Đảm bảo đúng thứ tự cookie
+        const sortedViewedProducts = viewedIds.map(id =>
+          viewedProducts.find(p => String(p.id) === String(id))
+        ).filter(Boolean);
+        renderHome(null, sortedViewedProducts);
+      });
+      return;
     }
 
-    // Lấy thông tin họ tên nếu có
+    // Nếu có user, lấy thêm thông tin customer và sản phẩm đã xem
     Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
       if (errCustomer && errCustomer.kind !== "not_found") {
         return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
       }
-
-      res.render('HomePage', {
-        user,
-        customer: customerInfo || null,
-        products
+      if (!viewedIds.length) return renderHome(customerInfo, []);
+      Product.findByIds(viewedIds, (err, viewedProducts) => {
+        if (err) return renderHome(customerInfo, []);
+        const sortedViewedProducts = viewedIds.map(id =>
+          viewedProducts.find(p => String(p.id) === String(id))
+        ).filter(Boolean);
+        renderHome(customerInfo, sortedViewedProducts);
       });
     });
   });
@@ -116,35 +175,6 @@ const getInfo = (req, res) => {
     });
   });
 };
-
-// const getLastViewProducts = (req, res) => {
-//   const user = req.user || req.session.user || null;
-//   const productId = req.cookies.last_viewed_product_id;
-
-//   if (!productId) {
-//     return res.render('lastViewProducts', {
-//       user,
-//       products: [], // Truyền vào mảng rỗng
-//       message: "Chưa có sản phẩm nào được xem gần đây."
-//     });
-//   }
-
-//   Product.findById(productId, (err, product) => {
-//     if (err || !product) {
-//       return res.render('lastViewProducts', {
-//         user,
-//         products: [],
-//         message: "Không tìm thấy sản phẩm."
-//       });
-//     }
-//     // Truyền vào mảng products (dù chỉ có 1 phần tử)
-//     res.render('lastViewProducts', {
-//       user,
-//       products: [product], // Chuyển thành mảng
-//       message: null
-//     });
-//   });
-// };
 
 const getLastViewProducts = (req, res) => {
   const user = req.user || req.session.user || null;
