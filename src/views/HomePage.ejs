@@ -124,6 +124,7 @@
 			</div>
 		</div>
 
+		<!-- PRODUCT CATEGORIES -->
 		<div class="section">
 			<div class="container">
 				<h4 class="featured-categories-title" style="font-size: 24px;">DANH MỤC SẢN PHẨM</h4>
@@ -288,11 +289,95 @@
 			</div>
 		</div>
 
+		<!-- SECTION LAST VIEWED PRODUCT-->
+		<div class="section">
+			<div class="container">
+				<div class="row">
+					<!-- section title -->
+					<div class="col-md-12">
+						<div class="section-title">
+							<h3 class="title">Sản phẩm đã xem gần đây</h3>
+						</div>
+					</div>
+					<!-- /section title -->
+
+					<div class="col-md-12">
+						<div class="row">
+							<div class="products-tabs">
+								<!-- tab -->
+								<div id="tab-viewed" class="tab-pane active">
+									<div class="products-slick" data-nav="#slick-nav-viewed">
+										<% if (viewedProducts && viewedProducts.length> 0) { %>
+											<% viewedProducts.forEach(function(product) { %>
+												<div class="product">
+													<a href="/product/<%=product.id%>">
+														<span class="d-none product-id">
+															<%=product.id%>
+														</span>
+														<div class="product-img">
+															<img src="/images/<%= product.image || 'noImage.jpg' %>"
+																alt="ảnh sản phẩm">
+														</div>
+														<div class="product-body">
+															<p class="product-category">
+																<%= product.category_name || 'Danh mục' %>
+															</p>
+															<h3 class="product-name" title="<%= product.name %>"><a
+																	href="/product/<%=product.id%>">
+																	<%= product.name %>
+																</a></h3>
+															<h4 class="product-price">
+																<%= product.retail_price.toLocaleString('vi-VN') %> VNĐ
+															</h4>
+															<div class="product-rating">
+																<% for (let i=0; i < 5; i++) { %>
+																	<i
+																		class="fa <%= i < (product.rating || 0) ? 'fa-star' : 'fa-star' %>"></i>
+																	<% } %>
+															</div>
+															<div class="product-btns">
+																<button class="add-to-compare"
+																	data-id="<%= product.id %>">
+																	<i class="fa fa-exchange"></i>
+																	<span class="tooltipp">So sánh</span>
+																</button>
+															</div>
+														</div>
+														<div class="add-to-cart">
+															<button class="add-to-cart-btn" data-id="<%= product.id %>"
+																data-img="/images/<%= product.image || 'default.png' %>"
+																data-name="<%= product.name %>"
+																data-price="<%= product.retail_price %>">
+																<i class="fa fa-shopping-cart"></i> thêm vào giỏ hàng
+															</button>
+														</div>
+													</a>
+												</div>
+												<% }) %>
+													<% } else { %>
+														<div class="col-12 text-center" style="padding: 40px;">
+															<i class="fa fa-eye-slash fa-2x mb-3"
+																style="opacity: .65"></i>
+															<h4>Chưa có sản phẩm nào được xem gần đây!</h4>
+															<a href="/store/all" class="btn btn-primary mt-2">
+																<i class="fa fa-shopping-bag"></i> Khám phá sản phẩm
+															</a>
+														</div>
+														<% } %>
+									</div>
+									<div id="slick-nav-viewed" class="spotlight-products-slick-nav"></div>
+								</div>
+								<!-- /tab -->
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- /SECTION -->
 
 
-		<!-- /HOT DEAL SECTION -->
-
-		<!-- SECTION -->
+		<!-- SECTION NEW PRODUCT-->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
@@ -304,7 +389,6 @@
 						<div class="section-title">
 							<h3 class="title">Sản Phẩm Mới</h3>
 							<div class="section-nav">
-
 							</div>
 						</div>
 					</div>
@@ -388,7 +472,7 @@
 		</div>
 		<!-- /SECTION -->
 
-		<!-- SECTION -->
+		<!-- SECTION LAPTOP-->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
@@ -484,7 +568,7 @@
 		</div>
 		<!-- /SECTION -->
 
-		<!-- SECTION -->
+		<!-- SECTION CASE-->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
@@ -581,7 +665,7 @@
 		<!-- /SECTION -->
 		<!-- //Màn Hinh -->
 
-		<!-- SECTION -->
+		<!-- SECTION SCREEN-->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
@@ -682,7 +766,7 @@
 
 
 
-		<!-- SECTION -->
+		<!-- WIDGET -->
 		<div class="section">
 			<!-- container -->
 			<div class="container">
@@ -835,7 +919,7 @@
 			</div>
 			<!-- /container -->
 		</div>
-		<!-- /SECTION -->
+		<!-- /WIDGET -->
 
 
 
