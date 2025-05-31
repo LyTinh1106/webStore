@@ -176,16 +176,80 @@ const getInfo = (req, res) => {
   });
 };
 
+// const getLastViewProducts = (req, res) => {
+//   const user = req.user || req.session.user || null;
+//   const email = user ? user.email : null;
+//   let viewedIds = [];
+//   try {
+//     viewedIds = JSON.parse(req.cookies.viewed_product_ids || '[]');
+//   } catch (e) {
+//     viewedIds = [];
+//   }
+
+//   if (!email) {
+//     return res.render('lastViewProducts', {
+//       user,
+//       customer: null,
+//       products: [],
+//       message: "Vui lòng đăng nhập để xem lịch sử sản phẩm đã xem."
+//     });
+//   }
+
+//   Customer.getByEmail(email, (err, customer) => {
+//     if (err || !customer) {
+//       return res.render('lastViewProducts', {
+//         user,
+//         customer: null,
+//         products: [],
+//         message: "Không tìm thấy thông tin khách hàng."
+//       });
+//     }
+
+//     if (!viewedIds.length) {
+//       return res.render('lastViewProducts', {
+//         user,
+//         customer,
+//         products: [],
+//         message: "Chưa có sản phẩm nào được xem gần đây."
+//       });
+//     }
+
+//     Product.findByIds(viewedIds, (err, products) => {
+//       if (err || !products) {
+//         return res.render('lastViewProducts', {
+//           user,
+//           customer,
+//           products: [],
+//           message: "Không tìm thấy sản phẩm."
+//         });
+//       }
+
+//       // Đảm bảo đúng thứ tự lịch sử xem
+//       const sortedProducts = viewedIds.map(id => products.find(p => String(p.id) === String(id))).filter(Boolean);
+
+//       res.render('lastViewProducts', {
+//         user,
+//         customer,
+//         products: sortedProducts,
+//         message: null
+//       });
+//     });
+//   });
+// };
+
 const getLastViewProducts = (req, res) => {
   const user = req.user || req.session.user || null;
   const email = user ? user.email : null;
   let viewedIds = [];
   try {
     viewedIds = JSON.parse(req.cookies.viewed_product_ids || '[]');
+    viewedIds = viewedIds.map(id => Number(id)); // luôn ép kiểu cho an toàn
+    console.log('[lastview]', viewedIds);
   } catch (e) {
     viewedIds = [];
   }
 
+  // Nếu chưa đăng nhập
   if (!email) {
     return res.render('lastViewProducts', {
       user,
@@ -195,16 +259,8 @@ const getLastViewProducts = (req, res) => {
     });
   }
 
-  Customer.getByEmail(email, (err, customer) => {
-    if (err || !customer) {
-      return res.render('lastViewProducts', {
-        user,
-        customer: null,
-        products: [],
-        message: "Không tìm thấy thông tin khách hàng."
-      });
-    }
-
+  // Hàm render ra view, có thể truyền customer là null hoặc có
+  const renderWithProducts = (customer) => {
     if (!viewedIds.length) {
       return res.render('lastViewProducts', {
         user,
@@ -224,7 +280,7 @@ const getLastViewProducts = (req, res) => {
         });
       }
 
-      // Đảm bảo đúng thứ tự lịch sử xem
+      // Đảm bảo đúng thứ tự cookie
       const sortedProducts = viewedIds.map(id => products.find(p => String(p.id) === String(id))).filter(Boolean);
 
       res.render('lastViewProducts', {
@@ -234,10 +290,14 @@ const getLastViewProducts = (req, res) => {
         message: null
       });
     });
+  };
+
+  // Lấy thông tin customer (nếu có)
+  Customer.getByEmail(email, (err, customer) => {
+    // Kể cả không có customer vẫn render sản phẩm đã xem (theo yêu cầu)
+    renderWithProducts(customer || null);
   });
 };
-
-
 
 const getDashboard = (req, res) => {
   if (!req.session.user || (req.session.user.role !== 'admin' && req.session.user.role !== 'superadmin')) {
