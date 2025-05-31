@@ -211,7 +211,7 @@
                                             <td>#<%= generateCode(order.id) %>
                                             </td>
                                             <td>
-                                                <%= order.account_email || order.email || 'Không rõ' %>
+                                                <%= order.fullname%>
                                             </td>
                                             <td>
                                                 <%= new Date(order.created_at).toLocaleDateString('vi-VN') %>
@@ -293,12 +293,12 @@
 
                                     <p><strong>Họ tên:</strong> <span id="modalOrderName"></span></p>
                                     <p><strong>Email:</strong> <span id="modalOrderEmail"></span></p>
+                                    <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
                                     <p><strong>Số điện thoại:</strong> <span id="modalOrderPhone"></span></p>
                                     <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
                                     <p><strong>Phương thức thanh toán:</strong> <span id="modalOrderPayment"></span></p>
-                                    <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
-                                    <p><strong>Tổng tiền:</strong> <span id="modalOrderTotal"></span></p>
                                     <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
+
 
                                     <h6>Danh sách sản phẩm:</h6>
                                     <div class="table-responsive">
@@ -317,6 +317,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    <p><strong>Tổng tiền:</strong> <span id="modalOrderTotal"></span></p>
 
 
                                     <div class="mb-3">
@@ -334,7 +335,7 @@
                         </form>
                     </div>
                 </div>
-            
+
             </div>
 
             <!-- Products Section -->
