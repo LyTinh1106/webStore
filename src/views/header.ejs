@@ -105,7 +105,7 @@
                                         </a>
                                     </li>
 
-                                    <% if (user.role ==='admin' || user.role === 'superadmin') { %>
+                                    <% if (user.role==='admin' || user.role==='superadmin' ) { %>
                                         <li class="account-box-li">
                                             <a class="dropdown-item account-box-item" href="/dashboard">
                                                 <i class="fas fa-tachometer-alt account-box-icon text-success"></i> Bảng
@@ -182,7 +182,7 @@
                     <li><a href="/store?category=9" data-id="9">Bàn phím</a></li>
                     <li><a href="/store?category=10" data-id="10">Màn hình</a></li>
                     <li><a href="/store?category=11" data-id="11">Ghế</a></li>
-                    <li><a href="/store?category=12" data-id="12">Tai nghe</a></li>             
+                    <li><a href="/store?category=12" data-id="12">Tai nghe</a></li>
                 </ul>
 
                 <!-- /NAV -->
@@ -204,6 +204,31 @@
                 }
             });
         }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const logoutBtn = document.getElementById('logoutBtn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async function (e) {
+                    e.preventDefault(); // Ngăn điều hướng mặc định
+
+                    const result = await Swal.fire({
+                        title: 'Xác nhận đăng xuất?',
+                        text: "Bạn có chắc chắn muốn đăng xuất khỏi tài khoản?",
+                        icon: 'question',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d10024',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Đăng xuất',
+                        cancelButtonText: 'Hủy'
+                    });
+
+                    if (result.isConfirmed) {
+                        // Điều hướng tới đường dẫn logout
+                        window.location.href = logoutBtn.getAttribute('href');
+                    }
+                });
+            }
+        });
     </script>
 
 
