@@ -221,7 +221,6 @@ document.querySelectorAll(".delete-category-btn").forEach(button => {
         const categoryId = this.dataset.id;
 
         if (!categoryId) {
-            // alert("Không tìm thấy ID của danh mục.");
             showToast("Không tìm thấy ID của danh mục.", 'error');
             return;
         }
@@ -252,12 +251,10 @@ document.querySelectorAll(".delete-category-btn").forEach(button => {
                 saveScrollAndTabAndReload()
             } else {
                 const text = await response.text();
-                // alert("Không xóa được danh mục: " + text);
                 showToast("Không xóa được danh mục: " + text, 'error');
             }
 
         } catch (error) {
-            // alert("Đã xảy ra lỗi khi gửi yêu cầu xóa.");
             showToast("Đã xảy ra lỗi khi gửi yêu cầu xóa.", 'error');
             console.error(error);
         }
@@ -286,7 +283,6 @@ document.getElementById("updateCategoryForm").addEventListener("submit", async f
     const categoryName = document.getElementById("updateCategoryName").value.trim();
 
     if (!categoryId || !categoryName) {
-        // alert("Vui lòng nhập đầy đủ thông tin.");
         showToast('Vui lòng nhập đầy đủ thông tin.', 'warning');
         return;
     }
@@ -437,7 +433,6 @@ document.querySelectorAll(".delete-voucher-btn").forEach(button => {
         const voucherId = this.dataset.id;
 
         if (!voucherId) {
-            // alert("Không tìm thấy ID của voucher.");
             showToast("Không tìm thấy ID của voucher.", 'error');
             return;
         }
@@ -468,12 +463,10 @@ document.querySelectorAll(".delete-voucher-btn").forEach(button => {
                 saveScrollAndTabAndReload()
             } else {
                 const text = await response.text();
-                // alert("Không thể xóa voucher: " + text);
                 showToast("Không thể xóa voucher: " + text, 'error');
             }
 
         } catch (error) {
-            // alert("Đã xảy ra lỗi khi gửi yêu cầu xóa voucher.");
             showToast("Đã xảy ra lỗi khi gửi yêu cầu xóa voucher.", 'error');
             console.error(error);
         }
@@ -672,12 +665,10 @@ document.querySelectorAll(".delete-supplier-btn").forEach(button => {
                 saveScrollAndTabAndReload();
             } else {
                 const text = await response.text();
-                // alert("Không thể xóa nhà cung cấp: " + text);
                 showToast("Không thể xóa nhà cung cấp: " + text, 'error');
             }
 
         } catch (error) {
-            // alert("Đã xảy ra lỗi khi gửi yêu cầu xóa nhà cung cấp.");
             showToast("Đã xảy ra lỗi khi gửi yêu cầu xóa nhà cung cấp.", 'error');
             console.error(error);
         }
@@ -877,7 +868,6 @@ fileMappings.forEach(({ inputId, tableBodyId, containerId, actionsId }) => {
             };
             reader.readAsArrayBuffer(file);
         } else {
-            // alert("Định dạng không được hỗ trợ. Chỉ chấp nhận CSV, TXT hoặc Excel (.xlsx).");
             showToast("Định dạng không được hỗ trợ. Chỉ chấp nhận CSV, TXT hoặc Excel (.xlsx).", 'error');
             this.value = "";
         }
@@ -1192,8 +1182,7 @@ document.querySelectorAll('.editProductBtn').forEach(btn => {
 
         } catch (err) {
             console.error('Lỗi khi tải dữ liệu sản phẩm:', err);
-            // showToast('Đã xảy ra lỗi khi lấy dữ liệu sản phẩm.' + err, 'error');
-            alert('Đã xảy ra lỗi khi lấy dữ liệu sản phẩm.' + err.message);
+            showToast('Đã xảy ra lỗi khi lấy dữ liệu sản phẩm.' + err, 'error');
         }
     });
 });
@@ -1536,7 +1525,7 @@ document.querySelectorAll('.order-delete-form').forEach(form => {
                 showToast('Không thể xóa đơn hàng. Vui lòng thử lại sau.', 'error');
             }
         } catch (err) {
-            alert('Đã xảy ra lỗi khi xóa đơn hàng.');
+            showToast('Đã xảy ra lỗi khi xóa đơn hàng: ' + err.message, 'error');
             console.error(err);
         }
     });
@@ -1607,7 +1596,7 @@ document.getElementById("orderUpdateForm").addEventListener("submit", async func
     const status = document.getElementById("orderUpdateForm").dataset.status; // Lấy từ dataset
 
     if (!orderId || !status) {
-        alert("Thiếu thông tin đơn hàng.");
+        showToast("Thiếu thông tin đơn hàng.", 'warning');
         return;
     }
 

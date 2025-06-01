@@ -24,7 +24,7 @@ form.addEventListener('submit', async (e) => {
       messageDiv.classList.add('text-success');
 
       // 👉 Thêm alert
-      alert('Vui lòng kiểm tra email của bạn để đặt lại mật khẩu!');
+      showToast('Vui lòng kiểm tra email để đặt lại mật khẩu!', 'success');
     } else {
       messageDiv.textContent = result.message || 'Có lỗi xảy ra!';
       messageDiv.classList.remove('text-success');
