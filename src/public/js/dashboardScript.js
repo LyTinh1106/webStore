@@ -1639,3 +1639,56 @@ document.getElementById("orderUpdateForm").addEventListener("submit", async func
         console.error(error);
     }
 });
+
+//loc role
+ document.addEventListener('DOMContentLoaded', function () {
+    const roleFilter = document.getElementById('roleFilter');
+    // Lấy tất cả các <tr> trong phần <tbody> của bảng
+    const rows = document.querySelectorAll('#accounts tbody tr');
+
+    roleFilter.addEventListener('change', function () {
+      const selectedRole = this.value.trim().toLowerCase();
+
+      rows.forEach((row) => {
+        // Cột "Quyền" là cột thứ 3, nên ta chọn td:nth-child(3)
+        const roleCell = row.querySelector('td:nth-child(3)');
+        if (!roleCell) return;
+
+        const roleText = roleCell.textContent.trim().toLowerCase();
+
+        // Nếu chọn "Tất cả" (selectedRole == ""), hiển thị hết
+        // Ngược lại chỉ hiển thị nếu roleText === selectedRole
+        if (selectedRole === '' || roleText === selectedRole) {
+          row.style.display = '';
+        } else {
+          row.style.display = 'none';
+        }
+      });
+    });
+  });
+  // loc trang thai don hang
+  document.addEventListener('DOMContentLoaded', function () {
+    
+    const statusFilter = document.getElementById('statusFilter');
+    const rows = document.querySelectorAll('#orders tbody tr');
+
+    statusFilter.addEventListener('change', function () {
+      const selectedStatus = this.value.trim().toLowerCase();
+
+      rows.forEach((row) => {
+        // Cột "Trạng thái" nằm ở vị trí thứ 6 (nth-child(6))
+        const statusCell = row.querySelector('td:nth-child(6)');
+        if (!statusCell) return; 
+
+        const statusText = statusCell.textContent.trim().toLowerCase();
+        if (selectedStatus === '' || statusText === selectedStatus) {
+          row.style.display = ''; 
+        } else {
+          row.style.display = 'none'; 
+        }
+      });
+    });
+  });
+
+  //loc san pham
+
