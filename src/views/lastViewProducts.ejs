@@ -12,6 +12,9 @@
     <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
     <!-- Font Awesome Icon -->
     <link rel="stylesheet" href="/css/font-awesome.min.css">
+    <!-- SweetAlert2 CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
 
     <!-- Custom stlylesheet -->
     <link type="text/css" rel="stylesheet" href="/css/style.css" />
@@ -112,12 +115,25 @@
             <script src="/js/slick.min.js"></script>
             <script src="/js/nouislider.min.js"></script>
             <script src="/js/jquery.zoom.min.js"></script>
+            <!-- SweetAlert2 JS -->
+            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
             <script src="/js/main.js"></script>
             <script src="/js/cart.js"></script>
 
             <script>
-                function clearHistory() {
-                    if (confirm('Bạn có chắc chắn muốn xóa toàn bộ lịch sử xem sản phẩm?')) {
+                async function clearHistory() {
+                    const result = await Swal.fire({
+                        title: 'Xác nhận xóa?',
+                        text: "Bạn có chắc chắn muốn xóa toàn bộ lịch sử xem sản phẩm?",
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d10024',
+                        cancelButtonColor: '#6c757d',
+                        confirmButtonText: 'Xóa',
+                        cancelButtonText: 'Hủy'
+                    });
+
+                    if (result.isConfirmed) {
                         // Xóa cookie lịch sử đã xem
                         document.cookie = "viewed_product_ids=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                         // Ẩn danh sách sản phẩm, hiện empty state
@@ -127,8 +143,8 @@
                         $('.pagination').hide();
                         location.reload();
                     }
+
                 }
-                locaton.reload();
             </script>
 </body>
 

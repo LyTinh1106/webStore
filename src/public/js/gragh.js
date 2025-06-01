@@ -94,7 +94,7 @@ document.addEventListener("DOMContentLoaded", function () {
                     months > 2 ||
                     (months === 2 && end.getDate() > start.getDate())
                 ) {
-                    alert("Ngày kết thúc phải lớn hơn ngày bắt đầu và tối đa trong 3 tháng!");
+                    showToast("Ngày kết thúc phải lớn hơn ngày bắt đầu và tối đa trong 3 tháng!", "error");
                     fpEnd.clear();
                     return;
                 }
@@ -151,7 +151,7 @@ document.addEventListener("DOMContentLoaded", function () {
             startDate = fpStart.selectedDates[0];
             endDate = fpEnd.selectedDates[0];
             if (endDate <= startDate) {
-                alert("Ngày kết thúc phải lớn hơn ngày bắt đầu!");
+                showToast("Ngày kết thúc phải lớn hơn ngày bắt đầu!", "error");
                 drawLineChart([]);
                 drawBarChart([]);
                 return;
