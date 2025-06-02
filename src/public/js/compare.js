@@ -6,7 +6,7 @@ function addToCompare(product) {
 
   // Nếu đã có 1 sản phẩm → kiểm tra loại
   if (compareList.length === 1 && compareList[0].category_id !== product.category_id) {
-    alert("Chỉ có thể so sánh các sản phẩm cùng loại.");
+    showToast("Chỉ có thể so sánh các sản phẩm cùng loại.", "warning");
     return;
   }
 
@@ -61,7 +61,7 @@ document.getElementById("clear-btn").addEventListener("click", () => {
 });
 
 function openProductSelector(slotIndex) {
-  alert("Mở modal để chọn thêm sản phẩm (tuỳ triển khai thêm)");
+  showToast("Chức năng chọn sản phẩm chưa được triển khai.", "info");
 }
 
 document.addEventListener("DOMContentLoaded", () => {

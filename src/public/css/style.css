@@ -3405,6 +3405,8 @@ hr {
   right: 20px;
   z-index: 9999;
   pointer-events: none;
+  max-height: 190px; 
+  overflow: hidden;
 }
 
 .custom-toast {
@@ -3415,7 +3417,6 @@ hr {
   font-size: 16px;
   display: flex;
   align-items: center;
-  box-shadow: 0 6px 32px 0 rgba(0, 0, 0, 0.18);
   color: #fff;
   pointer-events: auto;
   transform: translateX(120%);

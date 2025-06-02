@@ -638,21 +638,35 @@ const searchProductRender = (req, res) => {
   const currentPage = parseInt(req.query.page) || 1;
   const pageSize = 12;
   const offset = (currentPage - 1) * pageSize;
+  const user = req.user || req.session.user || null;
 
   const loadData = (products, total) => {
     const totalPages = Math.ceil(total / pageSize);
 
     Category.getAll((_, categories) => {
       Brand.getAll((_, brands) => {
-        res.render('Store', {
-          user: req.user || null,
-          products,
-          keyword,
-          categories: categories || [],
-          brands: brands || [],
-          currentPage,
-          totalPages
+        const renderPage = (customerInfo = null) => {
+          res.render('Store', {
+            user,
+            customer: customerInfo,
+            products,
+            keyword,
+            categories: categories || [],
+            brands: brands || [],
+            currentPage,
+            totalPages
+          });
+        };
+        // === Thêm đoạn này ===
+        if (!user || !user.email) return renderPage();
+        // Nếu có user
+        Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
+          if (errCustomer && errCustomer.kind !== "not_found") {
+            return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
+          }
+          renderPage(customerInfo || null);
         });
+        // ====================
       });
     });
   };
@@ -722,7 +736,7 @@ const searchProductRender = (req, res) => {
   });
 };
 
-
+// So sánh 2 sản phẩm
 const compareProducts = (req, res) => {
   const id1 = parseInt(req.params.id1);
   const id2 = parseInt(req.params.id2);

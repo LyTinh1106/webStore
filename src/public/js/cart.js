@@ -1,14 +1,14 @@
 // cart.js
 document.addEventListener("DOMContentLoaded", function () {
   // 1. Delegation cho nút "Thêm vào giỏ hàng"
-  document.addEventListener('click', function(e) {
+  document.addEventListener('click', function (e) {
     const btn = e.target.closest('.add-to-cart-btn');
     if (!btn) return;
     e.preventDefault();
 
-    const id    = btn.dataset.id;
-    const img   = btn.dataset.img;
-    const name  = btn.dataset.name;
+    const id = btn.dataset.id;
+    const img = btn.dataset.img;
+    const name = btn.dataset.name;
     const price = parseFloat(btn.dataset.price);
     if (!id || !name || isNaN(price)) return;
 
@@ -41,7 +41,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function updateCartUI() {
     const cartData = JSON.parse(localStorage.getItem('cart')) || [];
     const cartList = document.querySelector('.header-ctn .cart-list');
-    const cartQty  = document.querySelector('.header-ctn .qty');
+    const cartQty = document.querySelector('.header-ctn .qty');
     const subtotal = document.querySelector('.cart-summary h5');
     const summaryText = document.querySelector('.cart-summary small');
     const emptyMsg = document.getElementById('empty-cart-message');
@@ -61,8 +61,8 @@ document.addEventListener("DOMContentLoaded", function () {
       if (emptyMsg) emptyMsg.style.display = 'none';
 
       cartData.forEach((product, index) => {
-        totalQty  += product.qty;
-        totalPrice+= product.price * product.qty;
+        totalQty += product.qty;
+        totalPrice += product.price * product.qty;
 
         const itemHTML = `
         <li class="product-widget clearfix">
@@ -106,11 +106,11 @@ document.addEventListener("DOMContentLoaded", function () {
     // Cập nhật section giỏ hàng chi tiết (full page)
     const mainSubtotal = document.querySelector('.summary-subtotal');
     const mainDiscount = document.querySelector('.summary-discount');
-    const mainTotal    = document.querySelector('.summary-total');
+    const mainTotal = document.querySelector('.summary-total');
     if (mainSubtotal && mainDiscount && mainTotal) {
       mainSubtotal.innerText = formatVND(totalPrice);
       mainDiscount.innerText = formatVND(Math.floor(totalPrice * globalVoucherDiscount / 100));
-      mainTotal.innerText    = formatVND(totalPrice - Math.floor(totalPrice * globalVoucherDiscount / 100) + shipping);
+      mainTotal.innerText = formatVND(totalPrice - Math.floor(totalPrice * globalVoucherDiscount / 100) + shipping);
     }
 
     saveCartData();
@@ -167,37 +167,60 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     const discount = Math.floor(subtotal * globalVoucherDiscount / 100);
-    const total    = subtotal + shipping - discount;
-    document.querySelector('#subtotal').innerText       = formatVND(subtotal);
+    const total = subtotal + shipping - discount;
+    document.querySelector('#subtotal').innerText = formatVND(subtotal);
     document.querySelector('#discountAmount').innerText = formatVND(discount);
-    document.querySelector('#totalPrice').innerText    = formatVND(total);
+    document.querySelector('#totalPrice').innerText = formatVND(total);
   }
 
   // 4. Cộng / trừ / xóa trên full-page Cart
-  document.addEventListener('click', function(e) {
-    if (e.target.matches('.plus, .minus, .remove-item')) {
-      let cartData = JSON.parse(localStorage.getItem('cart')) || [];
-      const name = e.target.dataset.name;
-      let product = cartData.find(p => p.name === name);
-      if (!product) return;
+  document.addEventListener('click', async function (e) {
+    const btn = e.target.closest('.plus, .minus, .remove-item');
+    if (!btn) return;
 
-      if (e.target.matches('.plus')) {
-        product.qty++;
-      } else if (e.target.matches('.minus')) {
-        if (product.qty > 1) product.qty--;
-        else return; // nếu =1 thì phải bấm xóa
-      } else if (e.target.matches('.remove-item')) {
-        if (!confirm('Bạn có chắc muốn xóa sản phẩm này?')) return;
-        cartData = cartData.filter(p => p.name !== name);
+    let cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    const name = btn.dataset.name;
+    let product = cartData.find(p => p.name === name);
+    if (!product) return;
+
+    // Xác định có cần xác nhận xóa không
+    let shouldDelete = false;
+
+    if (btn.classList.contains('plus')) {
+      product.qty++;
+    } else if (btn.classList.contains('minus')) {
+      if (product.qty > 1) {
+        product.qty--;
+      } else {
+        shouldDelete = true;
       }
-
-      localStorage.setItem('cart', JSON.stringify(cartData));
-      updateCartUI();
-      renderCart();
+    } else if (btn.classList.contains('remove-item')) {
+      shouldDelete = true;
     }
+
+    if (shouldDelete) {
+      const result = await Swal.fire({
+        title: 'Xác nhận xóa?',
+        text: "Bạn có chắc muốn xóa sản phẩm này khỏi giỏ hàng?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d10024',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Xóa',
+        cancelButtonText: 'Hủy'
+      });
+      if (!result.isConfirmed) return;
+      cartData = cartData.filter(p => p.name !== name);
+      showToast('Sản phẩm đã được xóa khỏi giỏ hàng', 'success');
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cartData));
+    updateCartUI();
+    renderCart();
   });
 
   // 5. Áp dụng Voucher
+
 document.getElementById('applyVoucherBtn')?.addEventListener('click', function () {
   const code = document.getElementById('voucherCode')?.value.trim();
   if (!code) {
@@ -235,6 +258,7 @@ document.getElementById('applyVoucherBtn')?.addEventListener('click', function (
   .catch(err => {
     console.error(' Lỗi khi áp dụng mã:', err);
     alert('Lỗi khi áp dụng mã');
+
   });
 });
 
@@ -248,8 +272,9 @@ document.getElementById('applyVoucherBtn')?.addEventListener('click', function (
       return;
     }
     if (!isLoggedIn) {
-      alert('Bạn cần đăng nhập để thanh toán.');
-      return window.location.href = '/login';
+      showToast('Bạn cần đăng nhập để thanh toán.', 'warning');
+      setTimeout(() => window.location.href = '/login', 1500);
+      return;
     }
     window.location.href = '/checkout';
   });

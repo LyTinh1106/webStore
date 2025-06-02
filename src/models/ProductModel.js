@@ -201,7 +201,10 @@ Product.remove = (id, result) => {
 };
 // lọc
 Product.filterCombined = (filterData, result) => {
-  const { category_ids = [], brand_ids = [], min = 0, max = 999999 } = filterData;
+  const category_ids = (filterData.category_ids || []).map(Number);
+  const brand_ids = (filterData.brand_ids || []).map(Number);
+  const min = Number(filterData.min) || 0;
+  const max = Number(filterData.max) || 200000000;
 
   let query = `
     SELECT 
@@ -217,7 +220,6 @@ Product.filterCombined = (filterData, result) => {
     )
     WHERE p.retail_price BETWEEN ? AND ?
   `;
-
   const params = [min, max];
 
   if (category_ids.length > 0) {
@@ -239,6 +241,7 @@ Product.filterCombined = (filterData, result) => {
     result(null, res);
   });
 };
+
 //phân trang
 Product.getAllWithPagination = (filter, limit, offset, callback) => {
   let query = `

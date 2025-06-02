@@ -21,7 +21,7 @@ form.addEventListener("submit", async (e) => {
     const otp = Array.from(inputs).map(i => i.value).join("");
 
     if (otp.length !== 6) {
-        alert("Vui lòng nhập đủ 6 số.");
+        showToast("Vui lòng nhập đủ 6 số.", "warning");
         return;
     }
 
@@ -37,11 +37,11 @@ form.addEventListener("submit", async (e) => {
         if (result.success) {
             window.location.href = "/login";
         } else {
-            alert(result.message || "Mã OTP không đúng.");
+            showToast(result.message || "Mã OTP không đúng.", "error");
         }
     } catch (error) {
         console.error("Lỗi xác minh:", error);
-        alert("Có lỗi xảy ra khi xác minh OTP.");
+        showToast("Có lỗi xảy ra khi xác minh OTP.", "error");
     }
 });
 

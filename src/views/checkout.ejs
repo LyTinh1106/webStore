@@ -175,6 +175,7 @@
       <script src="/js/nouislider.min.js"></script>
       <script src="/js/jquery.zoom.min.js"></script>
       <script src="/js/main.js"></script>
+      <script src="js/toastAlert.js"></script>
 
       <!-- Để sau này fetch API tỉnh thành động -->
    <script>
@@ -322,7 +323,7 @@ if (placeOrderBtn) {
 
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
     if (cart.length === 0) {
-      alert("Giỏ hàng trống.");
+      showToast("Giỏ hàng trống.", "info");
       return;
     }
 
@@ -362,7 +363,7 @@ if (placeOrderBtn) {
 
     // Kiểm tra bắt buộc
     if (!first_name || !last_name || !email || !phone || !street || !province || !district || !ward) {
-      alert("Vui lòng điền đầy đủ thông tin đặt hàng.");
+      showToast("Vui lòng điền đầy đủ thông tin đặt hàng.", "info");
       return;
     }
 
@@ -406,7 +407,11 @@ if (placeOrderBtn) {
         window.location.href = "/success";
       }
     } catch (err) {
-      alert("❌ Lỗi gửi đơn hàng: " + err.message);
+
+     
+
+      showToast("Lỗi gửi đơn hàng: " + err.message, "error");
+
     }
   });
 }

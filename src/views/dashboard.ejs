@@ -188,6 +188,20 @@
             <!-- Orders Section -->
             <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="v-orders-tab">
                 <h3 class="section-title">Quản lý đơn hàng</h3>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-end align-items-center">
+                            <!-- <label for="statusFilter" class="form-label me-2 mb-0">Lọc theo trạng thái:</label> -->
+                            <select id="statusFilter" class="form-select" style="width: 200px;">
+                                <option value="">Tất cả</option>
+                                <option value="Chờ duyệt">Chờ duyệt</option>
+                                <option value="Đã duyệt">Đã duyệt</option>
+                                <option value="Hoàn Thành">Hoàn Thành</option>
+
+                            </select>
+                        </div>
+                    </div>
+                </div>
                 <div class="table-responsive scroll-table">
                     <table class="table table-striped">
                         <thead>
@@ -317,6 +331,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+
                                     <p><strong>Tổng tiền:</strong> <span id="modalOrderTotal"></span></p>
 
 
@@ -339,7 +354,7 @@
             </div>
 
             <!-- Products Section -->
-            <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="v-products-tab">
+           <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="v-products-tab">
                 <h3 class="section-title">Quản lý sản phẩm</h3>
                 <div class="mb-3">
                     <!-- Nút mở popup -->
@@ -1811,10 +1826,26 @@
                 <h3 class="section-title">Quản lý tài khoản</h3>
 
                 <!-- Nút mở modal thêm tài khoản -->
-                <div class="mb-3">
-                    <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addAccountModal">
-                        <i class="fas fa-plus"></i> Thêm tài khoản mới
-                    </a>
+                <div class="row mb-3">
+                    <div class="col-12">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <!-- Bên trái: Nút Thêm tài khoản -->
+                            <a href="#" class="btn btn-success" data-bs-toggle="modal"
+                                data-bs-target="#addAccountModal">
+                                <i class="fas fa-plus"></i> Thêm tài khoản mới
+                            </a>
+
+                            <!-- Bên phải: Dropdown Lọc theo quyền -->
+                            <div class="d-flex align-items-center">
+                                <!-- <label for="roleFilter" class="form-label me-2 mb-0">Lọc theo quyền:</label> -->
+                                <select id="roleFilter" class="form-select">
+                                    <option value="">Tất cả</option>
+                                    <option value="customer">Customer</option>
+                                    <option value="admin">Admin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Modal thêm tài khoản -->
@@ -1952,6 +1983,7 @@
             </div>
 
         </div>
+
         <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
         <!-- Bootstrap JS và jQuery -->
