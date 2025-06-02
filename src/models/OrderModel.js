@@ -11,6 +11,7 @@ const Order = function (order) {
   this.email = order.email;
   this.phone = order.phone;
   this.address = order.address;
+  this.voucher_id = order.voucher_id;
   this.note = order.note;
   this.payment = order.payment
 };
@@ -19,8 +20,8 @@ const Order = function (order) {
 Order.create = (newOrder, result) => {
   const query = `
     INSERT INTO order_table 
-(created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment)
-VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+(created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, voucher_id, note, order_payment)
+VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
   `;
 
@@ -33,6 +34,7 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     newOrder.fullname,
     newOrder.phone,
     newOrder.address,
+    newOrder.voucher_id,
     newOrder.note,
     newOrder.order_payment
   ];
@@ -43,14 +45,16 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
       result(err, null);
       return;
     }
+   
+
     result(null, { id: res.insertId, ...newOrder });
   });
 };
 
 
 Order.findById = (id, result) => {
-  // Lấy thông tin đơn hàng
-  sql.query("SELECT * FROM order_table WHERE id = ?", [id], (err, orderRes) => {
+  // Lấy thông tin đơn hàng kèm voucher_code
+  sql.query("SELECT o.*, v.voucher_code FROM order_table o LEFT JOIN voucher v ON o.voucher_id = v.id WHERE o.id = ?", [id], (err, orderRes) => {
     if (err) {
       result(err, null);
       return;
@@ -86,7 +90,7 @@ Order.findById = (id, result) => {
 
 
 Order.findByAccountId = (account_id, result) => {
-  sql.query("SELECT o.*, a.email FROM order_table o JOIN account a ON o.account_id = a.id WHERE a.id = ?", [account_id], (err, res) => {
+  sql.query("SELECT o.*, a.email, v.voucher_code FROM order_table o JOIN account a ON o.account_id = a.id LEFT JOIN voucher v ON o.voucher_id = v.id WHERE a.id = ?", [account_id], (err, res) => {
     if (err) {
       result(null, err);
       return;
@@ -100,9 +104,8 @@ Order.findByAccountId = (account_id, result) => {
 
 }
 
-
 Order.getAll = (result) => {
-  sql.query("SELECT o.*, a.email FROM order_table o JOIN account a on o.account_id = a.id ORDER BY o.id DESC", (err, res) => {
+  sql.query("SELECT o.*, a.email, v.voucher_code FROM order_table o JOIN account a on o.account_id = a.id LEFT JOIN voucher v ON o.voucher_id = v.id ORDER BY o.id DESC", (err, res) => {
     if (err) {
       result(null, err);
       return;
@@ -380,9 +383,10 @@ Order.GetStats = (result) => {
 // OrderModel.js (hoặc tương đương)
 Order.getOnDeliveringBasicInfo = (result) => {
   const query = `
-    SELECT id, fullname, phone
-    FROM order_table
-    WHERE order_status = 'Chờ duyệt'
+    SELECT o.id, o.fullname, o.phone, v.voucher_code, v.voucher_value
+    FROM order_table o
+    LEFT JOIN voucher v ON o.voucher_id = v.id
+    WHERE o.order_status = 'Chờ duyệt'
   `;
   sql.query(query, (err, res) => {
     if (err) return result(err, null);
@@ -393,18 +397,26 @@ Order.getOnDeliveringBasicInfo = (result) => {
 
 
 Order.findById = (id, result) => {
-  sql.query(`
-    SELECT * 
+  const query = `
+    SELECT o.*, a.email, v.voucher_code, v.voucher_value
     FROM order_table o
     JOIN account a ON o.account_id = a.id
-    WHERE o.id = ?`,
-    [id],
-    (err, res) => {
-      if (err) return result(null, err);
-      if (res.length === 0) return result(null, null);
-      result(null, res[0]);
+    LEFT JOIN voucher v ON o.voucher_id = v.id
+    WHERE o.id = ?
+  `;
+  sql.query(query, [id], (err, res) => {
+    if (err) {
+      console.error("Lỗi truy vấn findById:", err);
+      return result(err, null);
     }
-  );
+    if (res.length === 0) {
+      console.warn("Không tìm thấy đơn hàng với id:", id);
+      return result(null, null);
+    }
+    result(null, res[0]);
+  });
 };
+
+
 
 module.exports = Order;
