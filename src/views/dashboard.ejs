@@ -1099,7 +1099,6 @@
                                             <p><strong>Phương thức thanh toán:</strong> <span
                                                     id="shippingOrderPayment"></span></p>
                                             <p><strong>Địa chỉ:</strong> <span id="shippingOrderAddress"></span></p>
-                                            <p><strong>Tổng tiền:</strong> <span id="shippingOrderTotal"></span></p>
                                             <p><strong>Ghi chú đơn hàng:</strong> <span id="shippingOrderNote"></span>
                                             </p>
                                         </div>
@@ -1107,7 +1106,7 @@
                                         <!-- Danh sách sản phẩm -->
                                         <h6>Danh sách sản phẩm:</h6>
                                         <!-- <ul id="shippingOrderProductList" class="list-group mb-3">
-                                            <li class="list-group-item text-muted">Đang tải...</li>
+                                           
                                         </ul> -->
                                         <div class="table-responsive">
                                             <table class="table table-bordered mb-3">
@@ -1124,6 +1123,18 @@
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                        </div>
+                                        <div class="text-end">
+                                            <p id="shippingOrderVoucher" style="display: none;">
+                                                <strong class="text-danger" style="font-size: 20px ;"> Giảm giá: <span
+                                                        id="shippingOrderVoucherCode"></span></strong>
+                                            </p>
+                                            <p>
+                                                <strong class="text-danger" style="font-size: 28px;">Tổng tiền: <span
+                                                        id="shippingOrderTotal"></span></strong>
+                                            </p>
+
+
                                         </div>
                                     </div>
                                 </form>
@@ -1226,41 +1237,41 @@
 
             <script>
                 function formatVND(value) {
-                    return Number(value).toLocaleString('vi-VN') + ' VNĐ';
+                    return Number(value).toLocaleString("vi-VN") + " VNĐ";
                 }
 
                 function formatDate(dateStr) {
                     const d = new Date(dateStr);
-                    return isNaN(d.getTime()) ? '(Không rõ)' : d.toLocaleDateString('vi-VN');
+                    return isNaN(d.getTime()) ? "(Không rõ)" : d.toLocaleDateString("vi-VN");
                 }
 
                 function formatFullDateTime(date = new Date()) {
-                    const pad = n => n.toString().padStart(2, '0');
+                    const pad = n => n.toString().padStart(2, "0");
                     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} `
                         + `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
                 }
 
                 function generateOrderCode(id) {
-                    const randomPart = ('0000' + (id * 7919 % 10000)).slice(-4);
+                    const randomPart = ("0000" + (id * 7919 % 10000)).slice(-4);
                     return `${randomPart}${id}`;
                 }
 
                 let formCancelled = false;
 
-                document.addEventListener('DOMContentLoaded', () => {
-                    const orderList = document.getElementById('orderList');
+                document.addEventListener("DOMContentLoaded", () => {
+                    const orderList = document.getElementById("orderList");
                     const addBtn = document.querySelector('[data-bs-target="#addOrderModal"]');
                     const addForm = document.getElementById("addShippingForm");
 
                     if (!orderList || !addBtn || !addForm) return;
 
                     // Khi bấm Hủy thì đánh dấu cần reset form
-                    document.querySelector('#addShippingModal .btn-secondary')
-                        ?.addEventListener('click', () => formCancelled = true);
+                    document.querySelector("#addShippingModal .btn-secondary")
+                        ?.addEventListener("click", () => formCancelled = true);
 
                     // Load danh sách đơn chờ giao
-                    addBtn.addEventListener('click', () => {
-                        fetch('/api/order/basic-on-delivering')
+                    addBtn.addEventListener("click", () => {
+                        fetch("/api/order/basic-on-delivering")
                             .then(r => r.json())
                             .then(data => {
                                 if (!Array.isArray(data) || data.length === 0) {
@@ -1270,18 +1281,18 @@
                                 orderList.innerHTML = data.map(o => {
                                     const code = generateOrderCode(o.id);
                                     return `<tr>
-              <td>#${code}</td>
-              <td>${o.fullname}</td>
-              <td>${o.phone}</td>
-              <td class="text-center">
-                <button class="btn btn-sm btn-primary select-order"
-                        data-id="${o.id}"
-                        data-code="${code}">
-                  Chọn
-                </button>
-              </td>
-            </tr>`;
-                                }).join('');
+                        <td>#${code}</td>
+                        <td>${o.fullname}</td>
+                        <td>${o.phone}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-primary select-order"
+                                    data-id="${o.id}"
+                                    data-code="${code}">
+                              Chọn
+                            </button>
+                        </td>
+                    </tr>`;
+                                }).join("");
                             })
                             .catch(() => {
                                 orderList.innerHTML = `<tr><td colspan="4" class="text-danger">Không thể tải đơn.</td></tr>`;
@@ -1289,24 +1300,28 @@
                     });
 
                     // Bắt sự kiện chọn đơn
-                    orderList.addEventListener('click', e => {
-                        const btn = e.target.closest('.select-order');
+                    orderList.addEventListener("click", e => {
+                        const btn = e.target.closest(".select-order");
                         if (!btn) return;
                         selectOrder(+btn.dataset.id, btn.dataset.code);
                     });
 
                     // Reset form khi đóng modal
-                    document.getElementById('addShippingModal')
-                        .addEventListener('hidden.bs.modal', () => {
+                    document.getElementById("addShippingModal")
+                        .addEventListener("hidden.bs.modal", () => {
                             if (formCancelled) {
                                 addForm.reset();
-                                document.getElementById('modalOrderId').value = '';
+                                document.getElementById("modalOrderId").value = "";
                                 [
-                                    'shippingOrderCode', 'shippingOrderName', 'shippingOrderEmail', 'shippingOrderPhone',
-                                    'shippingOrderDate', 'shippingOrderPayment', 'shippingOrderAddress',
-                                    'shippingOrderTotal', 'shippingOrderNote'
-                                ].forEach(id => document.getElementById(id).innerText = '');
-                                document.getElementById('shippingOrderProductList').innerHTML =
+                                    "shippingOrderCode", "shippingOrderName", "shippingOrderEmail", "shippingOrderPhone",
+                                    "shippingOrderDate", "shippingOrderPayment", "shippingOrderAddress",
+                                    "shippingOrderTotal", "shippingOrderNote", "shippingOrderVoucherCode"
+                                ].forEach(id => {
+                                    const el = document.getElementById(id);
+                                    if (el) el.innerText = "";
+                                });
+                                document.getElementById("shippingOrderVoucher").style.display = "none";
+                                document.getElementById("shippingOrderProductList").innerHTML =
                                     `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
                             }
                             formCancelled = false;
@@ -1328,7 +1343,7 @@
                         }
 
                         try {
-                            const resp = await fetch('/api/shipping/create', {
+                            const resp = await fetch("/api/shipping/create", {
                                 method: "POST",
                                 headers: { "Content-Type": "application/json" },
                                 body: JSON.stringify({
@@ -1364,40 +1379,59 @@
                         ]);
                         if (!order.id) throw new Error();
 
-                        document.getElementById('modalOrderId').value = id;
-                        document.getElementById('shippingOrderCode').innerText = '#' + orderCode;
-                        document.getElementById('shippingOrderName').innerText = order.fullname || '(Không có)';
-                        document.getElementById('shippingOrderEmail').innerText = order.email || '(Không có)';
-                        document.getElementById('shippingOrderPhone').innerText = order.phone || '(Không có)';
-                        document.getElementById('shippingOrderDate').innerText = formatDate(order.created_at);
-                        document.getElementById('shippingOrderPayment').innerText = order.payment_method || '(Không có)';
-                        document.getElementById('shippingOrderAddress').innerText = order.address || '(Không có)';
-                        document.getElementById('shippingOrderTotal').innerText = formatVND(order.total_payment || 0);
-                        document.getElementById('shippingOrderNote').innerText = order.note || '(Không có)';
+                        document.getElementById("modalOrderId").value = id;
+                        document.getElementById("shippingOrderCode").innerText = "#" + orderCode;
+                        document.getElementById("shippingOrderName").innerText = order.fullname || "(Không có)";
+                        document.getElementById("shippingOrderEmail").innerText = order.email || "(Không có)";
+                        document.getElementById("shippingOrderPhone").innerText = order.phone || "(Không có)";
+                        document.getElementById("shippingOrderDate").innerText = formatDate(order.created_at);
+                        document.getElementById("shippingOrderPayment").innerText = order.payment_method || "(Không có)";
+                        document.getElementById("shippingOrderAddress").innerText = order.address || "(Không có)";
+                        document.getElementById("shippingOrderNote").innerText = order.note || "(Không có)";
 
-                        bootstrap.Modal.getInstance(document.getElementById('addOrderModal'))?.hide();
+                        // Hiển thị danh sách sản phẩm
+                        const tb = document.getElementById("shippingOrderProductList");
+                        tb.innerHTML = "";
+                        if (!products.length) {
+                            tb.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm.</td></tr>`;
+                        } else {
+                            products.forEach(it => {
+                                const tr = document.createElement("tr");
+                                tr.innerHTML = `
+                    <td>${it.product_name}</td>
+                    <td>${it.quantity}</td>
+                    <td>${formatVND(it.subtotalprice)}</td>
+                `;
+                                tb.appendChild(tr);
+                            });
+                        }
+
+                        // Hiển thị Tổng tiền (sau giảm)
+                        document.getElementById("shippingOrderTotal").innerHTML =
+                            `<span class="text-danger">${formatVND(order.total_payment || 0)}</span>`;
+
+                        // Tính số tiền giảm từ voucher_value
+                        const voucherValue = parseInt(order.voucher_value) || 0;
+                        const totalAfter = parseInt(order.total_payment) || 0;
+                        let discountAmount = 0;
+                        if (voucherValue > 0 && totalAfter > 0) {
+                            discountAmount = Math.round((totalAfter * voucherValue) / (100 - voucherValue));
+                        }
+
+                        // Hiển thị "Mã giảm giá" nhưng thực ra show số tiền giảm
+                        if (discountAmount > 0) {
+                            document.getElementById("shippingOrderVoucher").style.display = "block";
+                            document.getElementById("shippingOrderVoucherCode").innerHTML =
+                                `<span class="text-danger">- ${formatVND(discountAmount)}</span>`;
+                        } else {
+                            document.getElementById("shippingOrderVoucher").style.display = "none";
+                        }
+
+                        bootstrap.Modal.getInstance(document.getElementById("addOrderModal"))?.hide();
                         setTimeout(() => {
-                            let m = bootstrap.Modal.getInstance(document.getElementById('addShippingModal'));
-                            if (!m) m = new bootstrap.Modal(document.getElementById('addShippingModal'));
+                            let m = bootstrap.Modal.getInstance(document.getElementById("addShippingModal"));
+                            if (!m) m = new bootstrap.Modal(document.getElementById("addShippingModal"));
                             m.show();
-
-                            setTimeout(() => {
-                                const tb = document.getElementById('shippingOrderProductList');
-                                tb.innerHTML = '';
-                                if (!products.length) {
-                                    tb.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm.</td></tr>`;
-                                } else {
-                                    products.forEach(it => {
-                                        const tr = document.createElement('tr');
-                                        tr.innerHTML = `
-                <td>${it.product_name}</td>
-                <td>${it.quantity}</td>
-                <td>${formatVND(it.subtotalprice)}</td>
-              `;
-                                        tb.appendChild(tr);
-                                    });
-                                }
-                            }, 300);
                         }, 300);
 
                     } catch {
@@ -1406,6 +1440,7 @@
                     }
                 }
             </script>
+
             <!-- Supplier Section -->
             <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="v-suppliers-tab">
                 <h3 class="section-title">Quản lý nhà cung cấp</h3>

@@ -220,32 +220,57 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // 5. Áp dụng Voucher
-  document.getElementById('applyVoucherBtn')?.addEventListener('click', function () {
-    const code = document.getElementById('voucherCode')?.value.trim();
-    if (!code) return showToast('Vui lòng nhập mã giảm giá', 'info');
-    fetch('/api/voucher/apply', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ code })
-    })
-      .then(res => res.json())
-      .then(data => {
-        if (!data.success) {
-          globalVoucherDiscount = 0;
-          showToast(data.error || 'Mã không hợp lệ hoặc đã hết hạn', 'error');
-        } else {
-          globalVoucherDiscount = parseInt(data.voucher.voucher_value);
-          localStorage.setItem('voucherDiscount', globalVoucherDiscount);
-        }
-        updateCartUI();
-        renderCart();
-      })
-      .catch(() => showToast('Lỗi khi áp dụng mã', 'error'));
+
+document.getElementById('applyVoucherBtn')?.addEventListener('click', function () {
+  const code = document.getElementById('voucherCode')?.value.trim();
+  if (!code) {
+    return alert('Vui lòng nhập mã giảm giá');
+  }
+
+  fetch('/api/voucher/apply', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ code })
+  })
+  .then(res => res.json())
+  .then(data => {
+    if (!data.success) {
+      // Nếu voucher không hợp lệ hoặc hết hạn, xóa hết khỏi localStorage
+      localStorage.removeItem('voucherCode');
+      localStorage.removeItem('voucherDiscount');
+      globalVoucherDiscount = 0;
+      alert(data.error || 'Mã không hợp lệ hoặc đã hết hạn');
+    } else {
+      // Nếu thành công, lưu thêm voucherCode vào localStorage
+      globalVoucherDiscount = parseInt(data.voucher.voucher_value);
+      localStorage.setItem('voucherDiscount', globalVoucherDiscount.toString());
+      localStorage.setItem('voucherCode', data.voucher.voucher_code);
+
+      console.log("Voucher lưu vào Local Storage:", {
+        voucherCode: data.voucher.voucher_code,
+        voucherDiscount: data.voucher.voucher_value
+      });
+    }
+
+    updateCartUI();
+    renderCart();
+  })
+  .catch(err => {
+    console.error(' Lỗi khi áp dụng mã:', err);
+    alert('Lỗi khi áp dụng mã');
+
   });
+});
+
 
   // 6. Checkout
   document.getElementById('checkoutButton')?.addEventListener('click', function () {
     const isLoggedIn = document.getElementById('isLoggedIn')?.value === 'true';
+    const cartData = JSON.parse(localStorage.getItem('cart')) || [];
+    if (cartData.length === 0) {
+      alert('Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
+      return;
+    }
     if (!isLoggedIn) {
       showToast('Bạn cần đăng nhập để thanh toán.', 'warning');
       setTimeout(() => window.location.href = '/login', 1500);

@@ -98,7 +98,7 @@ OrderDetail.remove = (orderId, productId, result) => {
 
 
 
-OrderDetail.findByOrderId = (orderId, result) => {
+OrderDetail.findBasicId = (orderId, result) => {
   const query = `
     SELECT od.quantity, od.subtotalprice, p.name as product_name
     FROM order_detail od

@@ -154,6 +154,8 @@
                 <span></span>
                 Tôi đã đọc và chấp nhận <a href="#">các điều khoản và điều kiện</a>
               </label>
+            
+
             </div>
             <button id="placeOrderBtn" class="primary-btn order-submit">Đặt hàng</button>
           </div>
@@ -176,7 +178,7 @@
       <script src="js/toastAlert.js"></script>
 
       <!-- Để sau này fetch API tỉnh thành động -->
-     <script>
+   <script>
 document.addEventListener("DOMContentLoaded", function () {
   function formatVND(value) {
     return value.toLocaleString("vi-VN") + " VNĐ";
@@ -187,7 +189,7 @@ document.addEventListener("DOMContentLoaded", function () {
     const container = document.querySelector(".order-products");
     const totalElement = document.querySelector(".order-total");
     const voucherDiscount = parseInt(localStorage.getItem("voucherDiscount")) || 0;
-    const voucherCode = localStorage.getItem("voucherCode") || ''; // nếu bạn lưu mã giảm giá
+    const voucherCode = localStorage.getItem("voucherCode") || "";
 
     container.innerHTML = "";
     let subtotal = 0;
@@ -209,7 +211,7 @@ document.addEventListener("DOMContentLoaded", function () {
     if (voucherDiscount > 0) {
       container.insertAdjacentHTML("beforeend", `
         <div class="order-col">
-          <div>Giảm giá ${voucherCode ? `(${voucherCode})` : `(${voucherDiscount}%)`}</div>
+          <div>Giảm giá ${voucherCode}</div>
           <div>- ${formatVND(discountAmount)}</div>
         </div>
       `);
@@ -270,8 +272,53 @@ document.addEventListener("DOMContentLoaded", function () {
       });
   });
 
-  // Submit đơn hàng
-  document.getElementById("placeOrderBtn").addEventListener("click", async function (e) {
+  const applyBtn = document.getElementById("applyVoucherBtn");
+if (applyBtn) {
+  applyBtn.addEventListener("click", async function (e) {
+    e.preventDefault();
+    const voucherInput = document.getElementById("voucherCode");
+    if (!voucherInput) return;
+    const voucherCode = voucherInput.value.trim();
+    if (!voucherCode) {
+      alert("Vui lòng nhập mã giảm giá.");
+      return;
+    }
+
+    try {
+      const res = await fetch("/api/voucher/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: voucherCode })
+      });
+      const data = await res.json();
+      if (res.ok && data.success && data.voucher) {
+        // Chỉ lưu voucherCode và voucherDiscount, không cần voucherId nữa
+        localStorage.setItem("voucherCode", data.voucher.voucher_code);
+        localStorage.setItem("voucherDiscount", data.voucher.voucher_value.toString());
+
+        console.log("✅ Voucher lưu vào localStorage:", {
+          voucherCode: data.voucher.voucher_code,
+          voucherDiscount: data.voucher.voucher_value
+        });
+
+        alert("Áp dụng voucher thành công: " + data.voucher.voucher_value + "%");
+        renderCheckout();
+      } else {
+        alert("Mã giảm giá không hợp lệ hoặc đã hết hạn.");
+        localStorage.removeItem("voucherCode");
+        localStorage.removeItem("voucherDiscount");
+        renderCheckout();
+      }
+    } catch (err) {
+      console.error("❌ Lỗi khi áp dụng voucher:", err);
+      alert("Không thể áp dụng voucher, vui lòng thử lại.");
+    }
+  });
+}
+
+const placeOrderBtn = document.getElementById("placeOrderBtn");
+if (placeOrderBtn) {
+  placeOrderBtn.addEventListener("click", async function (e) {
     e.preventDefault();
 
     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -280,17 +327,24 @@ document.addEventListener("DOMContentLoaded", function () {
       return;
     }
 
+    // Lấy thông tin từ form
     const first_name = document.querySelector('[name="first_name"]')?.value.trim() || '';
-    const last_name = document.querySelector('[name="last_name"]')?.value.trim() || '';
-    const street = document.querySelector('[name="street"]')?.value.trim() || '';
-    const phone = document.querySelector('[name="phone"]')?.value.trim() || '';
-    const email = document.querySelector('[name="email"]')?.value.trim() || '';
-    const note = document.querySelector('[name="note"]')?.value.trim() || '';
+    const last_name  = document.querySelector('[name="last_name"]')?.value.trim() || '';
+    const street     = document.querySelector('[name="street"]')?.value.trim() || '';
+    const phone      = document.querySelector('[name="phone"]')?.value.trim() || '';
+    const email      = document.querySelector('[name="email"]')?.value.trim() || '';
+    const note       = document.querySelector('[name="note"]')?.value.trim() || '';
+
+    // Lấy voucherCode & voucherDiscount từ localStorage
     const voucherDiscount = parseInt(localStorage.getItem("voucherDiscount")) || 0;
-    const voucherCode = localStorage.getItem("voucherCode") || '';
+    const voucherCode     = localStorage.getItem("voucherCode") || '';
+
+    // Tính toán thành tiền
     const subtotal = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
     const discountAmount = Math.floor(subtotal * voucherDiscount / 100);
     const totalAfterDiscount = subtotal - discountAmount;
+
+    // Lấy địa chỉ (provinceSelect, districtSelect, wardSelect cần được xác định từ trước)
     const province = provinceSelect.selectedIndex > 0
       ? provinceSelect.options[provinceSelect.selectedIndex].textContent.trim()
       : '';
@@ -304,13 +358,16 @@ document.addEventListener("DOMContentLoaded", function () {
     const fullname = `${first_name} ${last_name}`.trim();
     const address = `${street}, ${ward}, ${district}, ${province}`.trim();
     const paymentMethod = document.querySelector('input[name="payment"]:checked')?.value || "COD";
+    // accountId (nếu đã login trên server, ví dụ EJS render vào trang)
     const accountId = "<%= user?.id %>";
 
+    // Kiểm tra bắt buộc
     if (!first_name || !last_name || !email || !phone || !street || !province || !district || !ward) {
       showToast("Vui lòng điền đầy đủ thông tin đặt hàng.", "info");
       return;
     }
 
+    // Chỉ gửi discount_code (không còn voucher_id nữa)
     const orderData = {
       account_id: accountId,
       fullname,
@@ -321,11 +378,12 @@ document.addEventListener("DOMContentLoaded", function () {
       payment_method: paymentMethod,
       total_payment: totalAfterDiscount,
       cartItems: JSON.stringify(cart),
-      discount_amount: discountAmount, // gửi tiền giảm giá
-      discount_code: voucherCode // gửi mã giảm giá
+      discount_amount: discountAmount,
+      discount_code: voucherCode   // <-- gửi đúng biến đã lưu
+      // voucher_id đã bị loại bỏ
     };
 
-    console.log("Dữ liệu gửi đi:", orderData);
+    console.log("🚀 Dữ liệu gửi đi:", orderData);
 
     try {
       const response = await fetch("/api/order/create", {
@@ -335,8 +393,9 @@ document.addEventListener("DOMContentLoaded", function () {
       });
 
       if (!response.ok) throw new Error("Đặt hàng thất bại");
-
       const result = await response.json();
+
+      // Sau khi tạo xong đơn, xóa localStorage
       localStorage.removeItem("cart");
       localStorage.removeItem("voucherDiscount");
       localStorage.removeItem("voucherCode");
@@ -344,15 +403,23 @@ document.addEventListener("DOMContentLoaded", function () {
       if (paymentMethod === "MoMo") {
         window.location.href = result.payUrl;
       } else {
-        // Chuyển sang trang đặt hàng thành công
-      window.location.href = "/success"; // <-- Đường dẫn trang đặt hàng thành công của bạn
+        // Chuyển tới trang thành công nếu cần
+        window.location.href = "/success";
       }
     } catch (err) {
+
+     
+
       showToast("Lỗi gửi đơn hàng: " + err.message, "error");
+
     }
   });
+}
 });
 </script>
+
+
+
 
 
 

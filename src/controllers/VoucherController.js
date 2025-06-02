@@ -93,15 +93,27 @@ exports.deleteVoucher = (req, res) => {
 exports.applyVoucher = (req, res) => {
   const code = req.body.code?.trim();
   if (!code) {
-    return res.status(200).json({ success: false, message: "Không có mã được áp dụng." });
+    return res
+      .status(400)
+      .json({ success: false, message: "Vui lòng nhập mã giảm giá." });
   }
 
   const now = new Date().toISOString().slice(0, 19).replace("T", " ");
 
   Voucher.findByCodeAndValidDate(code, now, (err, data) => {
-    if (err) return res.status(500).json({ error: "Lỗi server" });
-    if (!data) return res.status(404).json({ error: "Mã không hợp lệ hoặc hết hạn" });
+    if (err) {
+      return res
+        .status(500)
+        .json({ success: false, message: "Lỗi server." });
+    }
+    if (!data) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Mã không hợp lệ hoặc đã hết hạn." });
+    }
 
+    // Trả về đầy đủ thông tin voucher (gồm id, voucher_value,…)
     return res.status(200).json({ success: true, voucher: data });
   });
 };
+
