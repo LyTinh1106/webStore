@@ -191,11 +191,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
     // Nhập input -> cập nhật slider (không gọi filter ở đây, filter sẽ được gọi khi slider set xong)
     priceMin.addEventListener("change", function () {
-      priceSlider.noUiSlider.set([this.value, null]);
-    });
-    priceMax.addEventListener("change", function () {
-      priceSlider.noUiSlider.set([null, this.value]);
-    });
+  priceSlider.noUiSlider.set([this.value, null]);
+  // Gọi lọc sau khi nhập giá xong
+  applyCombinedFilter();
+});
+priceMax.addEventListener("change", function () {
+  priceSlider.noUiSlider.set([null, this.value]);
+  // Gọi lọc sau khi nhập giá xong
+  applyCombinedFilter();
+});
   }
 
   // Checkbox filter change
