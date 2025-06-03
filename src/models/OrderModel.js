@@ -53,39 +53,43 @@ VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 
 
 Order.findById = (id, result) => {
-  // Lấy thông tin đơn hàng kèm voucher_code
-  sql.query("SELECT o.*, v.voucher_code FROM order_table o LEFT JOIN voucher v ON o.voucher_id = v.id WHERE o.id = ?", [id], (err, orderRes) => {
-    if (err) {
-      result(err, null);
-      return;
-    }
-
-    if (orderRes.length === 0) {
-      result({ kind: "not_found" }, null);
-      return;
-    }
-
-    const order = orderRes[0];
-
-    // Lấy danh sách sản phẩm trong đơn hàng
-    sql.query(
-      `SELECT od.*, p.name AS product_name
-       FROM order_detail od
-       JOIN product p ON od.product_id = p.id
-       WHERE od.order_id = ?`,
-      [id],
-      (err2, detailsRes) => {
-        if (err2) {
-          result(err2, null);
-          return;
-        }
-
-        // Gộp thông tin đơn hàng và danh sách sản phẩm
-        order.products = detailsRes;
-        result(null, order);
+  // Lấy thông tin đơn hàng kèm voucher_code và voucher_value
+  sql.query(
+    "SELECT o.*, v.voucher_code, v.voucher_value FROM order_table o LEFT JOIN voucher v ON o.voucher_id = v.id WHERE o.id = ?",
+    [id],
+    (err, orderRes) => {
+      if (err) {
+        result(err, null);
+        return;
       }
-    );
-  });
+
+      if (orderRes.length === 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      const order = orderRes[0];
+
+      // Lấy danh sách sản phẩm trong đơn hàng
+      sql.query(
+        `SELECT od.*, p.name AS product_name
+         FROM order_detail od
+         JOIN product p ON od.product_id = p.id
+         WHERE od.order_id = ?`,
+        [id],
+        (err2, detailsRes) => {
+          if (err2) {
+            result(err2, null);
+            return;
+          }
+
+          // Gộp thông tin đơn hàng và danh sách sản phẩm
+          order.products = detailsRes;
+          result(null, order);
+        }
+      );
+    }
+  );
 };
 
 
@@ -105,14 +109,28 @@ Order.findByAccountId = (account_id, result) => {
 }
 
 Order.getAll = (result) => {
-  sql.query("SELECT o.*, a.email, v.voucher_code FROM order_table o JOIN account a on o.account_id = a.id LEFT JOIN voucher v ON o.voucher_id = v.id ORDER BY o.id DESC", (err, res) => {
+  const query = `
+    SELECT 
+      o.*, 
+      a.email, 
+      v.voucher_code, 
+      v.voucher_value 
+    FROM order_table o
+    JOIN account a 
+      ON o.account_id = a.id
+    LEFT JOIN voucher v 
+      ON o.voucher_id = v.id
+    ORDER BY o.id DESC
+  `;
+  sql.query(query, (err, res) => {
     if (err) {
-      result(null, err);
+      result(err, null);
       return;
     }
     result(null, res);
   });
 };
+
 
 
 Order.updateById = (id, order, result) => {
