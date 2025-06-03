@@ -731,72 +731,6 @@
                                                     data-id="<%= product.id %>">
                                                     <i class="fas fa-trash"></i>
                                                 </button>
-                                                <script>
-                                                    const viewModalEl = document.getElementById("viewProductModal");
-                                                    //product random filler
-                                                    function generateProductCode(id) {
-                                                        const randomPart = ('0000' + (id * 1237 %
-                                                            10000)).slice(-4); return `${randomPart}${id}`;
-                                                    }
-
-                                                    viewModalEl.addEventListener("shown.bs.modal", async function (event) {
-                                                        const triggerBtn = event.relatedTarget;
-                                                        const productId = triggerBtn.dataset.id;
-
-                                                        try {
-                                                            const response = await fetch(`/api/product/${productId}`);
-                                                            const json = await response.json();
-                                                            if (!json.success) {
-                                                                alert("Không tìm thấy sản phẩm");
-                                                                return;
-                                                            }
-
-                                                            const data = json.data;
-
-                                                            // Gán dữ liệu
-                                                            document.getElementById("viewId").textContent = "#" + generateProductCode(data.id);
-                                                            document.getElementById("viewName").textContent = data.name;
-                                                            document.getElementById("viewDescription").innerHTML = data.description;
-                                                            document.getElementById("viewImportPrice").textContent = Number(data.import_price).toLocaleString('vi-VN') + " VNĐ";
-                                                            document.getElementById("viewSalePrice").textContent = Number(data.retail_price).toLocaleString('vi-VN') + " VNĐ";
-                                                            document.getElementById("viewCategory").textContent = data.category_name || data.category_id;
-                                                            document.getElementById("viewBrand").textContent = data.brand_name || data.brand_id;
-                                                            document.getElementById("viewOrigin").textContent = data.origin;
-                                                            document.getElementById("viewWarranty").textContent = data.warranty;
-
-                                                            // Hình ảnh
-                                                            const imageContainer = document.getElementById("viewImages");
-                                                            imageContainer.innerHTML = "";
-                                                            if (Array.isArray(data.images) && data.images.length > 0) {
-                                                                data.images.forEach(img => {
-                                                                    const imgEl = document.createElement("img");
-                                                                    imgEl.src = `/images/${img.URL}`;
-                                                                    imgEl.classList.add("img-thumbnail");
-                                                                    imgEl.style.maxWidth = "120px";
-                                                                    imageContainer.appendChild(imgEl);
-                                                                });
-                                                            } else {
-                                                                imageContainer.innerHTML = `<p class="text-muted">Không có hình ảnh</p>`;
-                                                            }
-
-                                                            // Thông số kỹ thuật
-                                                            const specContainer = document.getElementById("viewSpecs");
-                                                            specContainer.innerHTML = "";
-                                                            if (!data.specs || Object.keys(data.specs).length === 0) {
-                                                                specContainer.innerHTML = `<tr><td colspan="2" class="text-muted">Không có thông số kỹ thuật</td></tr>`;
-                                                            } else {
-                                                                Object.entries(data.specs).forEach(([key, val]) => {
-                                                                    const row = `<tr><td>${key.replace(/_/g, ' ')}</td><td>${Array.isArray(val) ? val.join('<br>') : val}</td></tr>`;
-                                                                    specContainer.insertAdjacentHTML("beforeend", row);
-                                                                });
-                                                            }
-
-                                                        } catch (err) {
-                                                            console.error("Lỗi khi tải sản phẩm:", err);
-                                                            alert("Lỗi khi tải thông tin sản phẩm.");
-                                                        }
-                                                    });
-                                                </script>
                                             </td>
 
                                         </tr>
@@ -1247,7 +1181,6 @@
                 </div>
             </div>
 
-            
 
             <!-- Supplier Section -->
             <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="v-suppliers-tab">
