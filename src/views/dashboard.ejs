@@ -202,6 +202,7 @@
                         </div>
                     </div>
                 </div>
+            
                 <div class="table-responsive scroll-table">
                     <table class="table table-striped">
                         <thead>
@@ -366,7 +367,7 @@
                 </div>
             </div>
 
-           <!-- Products Section -->
+            <!-- Products Section -->
             <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="v-products-tab">
                 <h3 class="section-title">Quản lý sản phẩm</h3>
                 <div class="mb-3">
@@ -386,6 +387,7 @@
                                     <% }) %>
                             </select>
                         </div>
+                    </div>
 
 
                         <!-- Modal Thêm Sản Phẩm -->
@@ -713,7 +715,8 @@
 
                                     <% if (products.length> 0) { %>
                                         <% products.forEach((product)=> { %>
-                                           <tr id="product-<%= product.id %>" data-category-id="<%= product.category_id %>">
+                                            <tr id="product-<%= product.id %>"
+                                                data-category-id="<%= product.category_id %>">
 
                                                 <td>
                                                     #<%= generateProductCode(product.id) %>
@@ -1786,7 +1789,7 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
         <!-- JavaScript -->
-        
+
         <script src="js/gragh.js"></script>
         <script src="js/toastAlert.js"></script>
         <script src="js/dashboardScript.js"></script>
