@@ -224,7 +224,7 @@ document.addEventListener("DOMContentLoaded", function () {
 document.getElementById('applyVoucherBtn')?.addEventListener('click', function () {
   const code = document.getElementById('voucherCode')?.value.trim();
   if (!code) {
-    return alert('Vui lòng nhập mã giảm giá');
+    return showToast('Vui lòng nhập mã giảm giá', 'warning');
   }
 
   fetch('/api/voucher/apply', {
@@ -239,7 +239,7 @@ document.getElementById('applyVoucherBtn')?.addEventListener('click', function (
       localStorage.removeItem('voucherCode');
       localStorage.removeItem('voucherDiscount');
       globalVoucherDiscount = 0;
-      alert(data.error || 'Mã không hợp lệ hoặc đã hết hạn');
+      showToast(data.error || 'Mã không hợp lệ hoặc đã hết hạn', 'error');
     } else {
       // Nếu thành công, lưu thêm voucherCode vào localStorage
       globalVoucherDiscount = parseInt(data.voucher.voucher_value);
@@ -257,7 +257,7 @@ document.getElementById('applyVoucherBtn')?.addEventListener('click', function (
   })
   .catch(err => {
     console.error(' Lỗi khi áp dụng mã:', err);
-    alert('Lỗi khi áp dụng mã');
+    showToast('Lỗi khi áp dụng mã', 'error');
 
   });
 });
@@ -268,7 +268,7 @@ document.getElementById('applyVoucherBtn')?.addEventListener('click', function (
     const isLoggedIn = document.getElementById('isLoggedIn')?.value === 'true';
     const cartData = JSON.parse(localStorage.getItem('cart')) || [];
     if (cartData.length === 0) {
-      alert('Giỏ hàng của bạn đang trống. Vui lòng thêm sản phẩm trước khi thanh toán.');
+      showToast('Giỏ hàng của bạn đang trống.', 'warning');
       return;
     }
     if (!isLoggedIn) {
