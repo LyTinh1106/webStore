@@ -1993,3 +1993,29 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
 
+//loc category
+
+// Mã lọc sản phẩm theo danh mục, chuyển vào jQuery ready:
+$(document).ready(function() {
+  // Chỉ chọn <tbody> của <table class="table table-striped">
+  const tableBody = document.querySelector('#products table.table-striped tbody');
+  const filterSelect = document.getElementById('filterCategory');
+
+  if (!filterSelect || !tableBody) {
+    console.error('Không tìm thấy filterCategory hoặc table.table-striped tbody');
+    return;
+  }
+
+  const allRows = Array.from(tableBody.querySelectorAll('tr'));
+  console.log('Tổng số dòng sản phẩm tìm được:', allRows.length);
+
+  filterSelect.addEventListener('change', function() {
+    const selectedCat = this.value.trim();
+    console.log('Đã chọn danh mục ID =', selectedCat);
+
+    allRows.forEach(row => {
+      const rowCatId = (row.getAttribute('data-category-id') || '').trim();
+      row.style.display = (!selectedCat || rowCatId === selectedCat) ? '' : 'none';
+    });
+  });
+});
