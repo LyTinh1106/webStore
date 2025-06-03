@@ -260,15 +260,15 @@
                                                     data-bs-toggle="modal" data-bs-target="#orderDetailModal"
                                                     data-id="<%= order.id %>"
                                                     data-email="<%= order.account_email || order.email %>"
-                                                    data-name="<%= order.fullname || '' %>" 
+                                                    data-name="<%= order.fullname || '' %>"
                                                     data-phone="<%= order.phone || '' %>"
                                                     data-date="<%= new Date(order.created_at).toLocaleDateString('vi-VN') %>"
                                                     data-payment="<%= order.payment_method %>"
                                                     data-total="<%= order.total_payment %>"
                                                     data-address="<%= order.address || '' %>"
                                                     data-note="<%= order.note || '' %>"
-                                                    data-status="<%= order.order_status %>">
-                                                    
+                                                    data-status="<%= order.order_status %>"
+                                                    data-discount="<%= order.discount_value || 0 %>">
                                                     <i class="fas fa-eye"></i>
                                                 </button>
 
@@ -290,83 +290,82 @@
                         </tbody>
                     </table>
                 </div>
-             <!-- Modal Chi tiết đơn hàng -->
-<div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <form id="orderUpdateForm">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Chi tiết đơn hàng</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                            aria-label="Đóng"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="_method" value="PUT">
-                    <input type="hidden" name="order_status" value="Đã giao">
-                    <input type="hidden" name="order_id" id="modalOrderId">
+                <!-- Modal Chi tiết đơn hàng -->
+                <div class="modal fade" id="orderDetailModal" tabindex="-1" aria-labelledby="orderDetailModalLabel"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <form id="orderUpdateForm">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chi tiết đơn hàng</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Đóng"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="_method" value="PUT">
+                                    <input type="hidden" name="order_status" value="Đã giao">
+                                    <input type="hidden" name="order_id" id="modalOrderId">
 
-                    <!-- Hidden fields để lưu voucher code và voucher value -->
-                    <input type="hidden" id="modalVoucherCode" value="">
-                    <input type="hidden" id="modalVoucherValue" value="">
+                                    <!-- Hidden fields để lưu voucher code và voucher value -->
+                                    <input type="hidden" id="modalVoucherCode" value="">
+                                    <input type="hidden" id="modalVoucherValue" value="">
 
-                    <div class="mb-3">
-                        <label><strong>Trạng thái hiện tại:</strong></label>
-                        <span id="modalOrderStatusDisplay">Đang xử lý</span>
+                                    <div class="mb-3">
+                                        <label><strong>Trạng thái hiện tại:</strong></label>
+                                        <span id="modalOrderStatusDisplay">Đang xử lý</span>
+                                    </div>
+                                    <p><strong>Họ tên:</strong> <span id="modalOrderName"></span></p>
+                                    <p><strong>Email:</strong> <span id="modalOrderEmail"></span></p>
+                                    <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
+                                    <p><strong>Số điện thoại:</strong> <span id="modalOrderPhone"></span></p>
+                                    <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
+                                    <p><strong>Phương thức thanh toán:</strong> <span id="modalOrderPayment"></span></p>
+                                    <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
+
+                                    <h6>Danh sách sản phẩm:</h6>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered mb-3">
+                                            <thead>
+                                                <tr>
+                                                    <th>Sản phẩm</th>
+                                                    <th>Số lượng</th>
+                                                    <th>Thành tiền</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="modalOrderProducts">
+                                                <tr>
+                                                    <td colspan="3" class="text-muted text-center">Đang tải...</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- Phần Giảm giá (ẩn mặc định) và Tổng tiền -->
+                                    <div style="text-align: right;">
+                                        <p id="modalOrderDiscountWrapper" style="display: none; color: #000000; font-size: 16px; margin: 0;">
+                                                Giảm giá: <span id="modalOrderDiscount"></span>
+                                        </p>
+                                        <p>
+                                            <strong style="color: red; font-size: 20px;">
+                                                Tổng tiền: <span id="modalOrderTotal"></span>
+                                            </strong>
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" form="orderUpdateForm" class="btn btn-success">Duyệt đơn
+                                        hàng</button>
+                                    <button type="button" class="btn btn-secondary"
+                                        data-bs-dismiss="modal">Đóng</button>
+                                </div>
+                            </div>
+                        </form>
                     </div>
-                    <p><strong>Họ tên:</strong> <span id="modalOrderName"></span></p>
-                    <p><strong>Email:</strong> <span id="modalOrderEmail"></span></p>
-                    <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
-                    <p><strong>Số điện thoại:</strong> <span id="modalOrderPhone"></span></p>
-                    <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
-                    <p><strong>Phương thức thanh toán:</strong> <span id="modalOrderPayment"></span></p>
-                    <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
-
-                    <h6>Danh sách sản phẩm:</h6>
-                    <div class="table-responsive">
-                        <table class="table table-bordered mb-3">
-                            <thead>
-                                <tr>
-                                    <th>Sản phẩm</th>
-                                    <th>Số lượng</th>
-                                    <th>Thành tiền</th>
-                                </tr>
-                            </thead>
-                            <tbody id="modalOrderProducts">
-                                <tr>
-                                    <td colspan="3" class="text-muted text-center">Đang tải...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <!-- Phần Giảm giá (ẩn mặc định) và Tổng tiền -->
-                    <div style="text-align: right; margin-top: 10px; margin-bottom: 10px;">
-                        <p id="modalOrderDiscountWrapper" style="display: none;">
-                            <strong style="color: red; font-size: 18px;">
-                                Giảm giá: <span id="modalOrderDiscount"></span>
-                            </strong>
-                        </p>
-                        <p>
-                            <strong style="color: red; font-size: 20px;">
-                                Tổng tiền: <span id="modalOrderTotal"></span>
-                            </strong>
-                        </p>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" form="orderUpdateForm" class="btn btn-success">Duyệt đơn hàng</button>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
-        </form>
-    </div>
-</div>
-
-
 
             <!-- Products Section -->
-           <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="v-products-tab">
+            <div class="tab-pane fade" id="products" role="tabpanel" aria-labelledby="v-products-tab">
                 <h3 class="section-title">Quản lý sản phẩm</h3>
                 <div class="mb-3">
                     <!-- Nút mở popup -->
@@ -631,7 +630,8 @@
                                         </div>
                                         <div class="col-md-6"><strong>Loại:</strong> <span id="viewCategory"></span>
                                         </div>
-                                        <div class="col-md-6"><strong>Hãng:</strong> <span id="viewBrand"></span></div>
+                                        <div class="col-md-6"><strong>Hãng:</strong> <span id="viewBrand"></span>
+                                        </div>
                                         <div class="col-md-6"><strong>Xuất xứ:</strong> <span id="viewOrigin"></span>
                                         </div>
                                         <div class="col-md-6"><strong>Bảo hành:</strong> <span id="viewWarranty"></span>
@@ -663,8 +663,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- JavaScript xử lý ảnh và submit form -->
-
 
                 </div>
                 <div class="table-responsive scroll-table">
@@ -743,7 +741,6 @@
                                                 <% } %>
                         </tbody>
 
-
                     </table>
                 </div>
             </div>
@@ -820,7 +817,8 @@
                                                 <div class="modal-dialog modal-dialog-centered">
                                                     <div class="modal-content">
                                                         <div class="modal-header">
-                                                            <h5 class="modal-title" id="updateCategoryModalLabel">Cập
+                                                            <h5 class="modal-title" id="updateCategoryModalLabel">
+                                                                Cập
                                                                 nhật danh
                                                                 mục</h5>
                                                             <button type="button" class="btn-close"
@@ -937,7 +935,8 @@
                                                     <div class="modal-dialog modal-dialog-centered">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                                <h5 class="modal-title" id="updateBrandModalLabel">Cập
+                                                                <h5 class="modal-title" id="updateBrandModalLabel">
+                                                                    Cập
                                                                     nhật nhãn hàng</h5>
                                                                 <button type="button" class="btn-close"
                                                                     data-bs-dismiss="modal" aria-label="Đóng"></button>
@@ -1037,10 +1036,12 @@
 
                                         <!-- Thông tin đơn hàng đã chọn -->
                                         <div class="col-12">
-                                            <p><strong>Mã đơn hàng:</strong> <span id="shippingOrderCode"></span></p>
+                                            <p><strong>Mã đơn hàng:</strong> <span id="shippingOrderCode"></span>
+                                            </p>
                                             <p><strong>Họ tên:</strong> <span id="shippingOrderName"></span></p>
                                             <p><strong>Email:</strong> <span id="shippingOrderEmail"></span></p>
-                                            <p><strong>Số điện thoại:</strong> <span id="shippingOrderPhone"></span></p>
+                                            <p><strong>Số điện thoại:</strong> <span id="shippingOrderPhone"></span>
+                                            </p>
                                             <p><strong>Ngày đặt:</strong> <span id="shippingOrderDate"></span></p>
                                             <p><strong>Phương thức thanh toán:</strong> <span
                                                     id="shippingOrderPayment"></span></p>
@@ -1065,21 +1066,21 @@
                                                 </thead>
                                                 <tbody id="shippingOrderProductList">
                                                     <tr>
-                                                        <td colspan="3" class="text-muted text-center">Đang tải...</td>
+                                                        <td colspan="3" class="text-muted text-center">Đang tải...
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
                                         <div class="text-end">
                                             <p id="shippingOrderVoucher" style="display: none;">
-                                                <strong class="text-danger" style="font-size: 20px ;"> Giảm giá: <span
-                                                        id="shippingOrderVoucherCode"></span></strong>
+                                                <strong class="text-danger" style="font-size: 20px ;"> Giảm giá:
+                                                    <span id="shippingOrderVoucherCode"></span></strong>
                                             </p>
                                             <p>
-                                                <strong class="text-danger" style="font-size: 28px;">Tổng tiền: <span
-                                                        id="shippingOrderTotal"></span></strong>
+                                                <strong class="text-danger" style="font-size: 28px;">Tổng tiền:
+                                                    <span id="shippingOrderTotal"></span></strong>
                                             </p>
-
 
                                         </div>
                                     </div>
@@ -1180,7 +1181,6 @@
                     </table>
                 </div>
             </div>
-
 
             <!-- Supplier Section -->
             <div class="tab-pane fade" id="suppliers" role="tabpanel" aria-labelledby="v-suppliers-tab">
@@ -1353,7 +1353,8 @@
                                         <% }) %>
                                             <% } else { %>
                                                 <tr>
-                                                    <td colspan="6" class="text-center">Không có nhà cung cấp nào.</td>
+                                                    <td colspan="6" class="text-center">Không có nhà cung cấp nào.
+                                                    </td>
                                                 </tr>
                                                 <% } %>
                         </tbody>
@@ -1370,7 +1371,7 @@
                         <i class="fas fa-plus"></i> Thêm voucher mới
                     </a>
 
-                    <!-- Modal Form -->
+                    <!-- Modal add voucher Form -->
                     <div class="modal fade" id="addVoucherModal" tabindex="-1" aria-labelledby="addVoucherModalLabel"
                         aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered">
@@ -1552,7 +1553,8 @@
                                             <% }) %>
                                                 <% } else { %>
                                                     <tr>
-                                                        <td colspan="6" class="text-center">Không có voucher nào.</td>
+                                                        <td colspan="6" class="text-center">Không có voucher nào.
+                                                        </td>
                                                     </tr>
                                                     <% } %>
                             </tbody>
@@ -1565,7 +1567,6 @@
             <!-- Accounts Section -->
             <div class="tab-pane fade" id="accounts" role="tabpanel" aria-labelledby="v-accounts-tab">
                 <h3 class="section-title">Quản lý tài khoản</h3>
-
                 <!-- Nút mở modal thêm tài khoản -->
                 <div class="row mb-3">
                     <div class="col-12">
@@ -1715,7 +1716,8 @@
 
                             <div class="modal-footer">
                                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-                                <button type="submit" form="editAccountForm" class="btn btn-primary">Cập nhật</button>
+                                <button type="submit" form="editAccountForm" class="btn btn-primary">Cập
+                                    nhật</button>
                             </div>
 
                         </div>
@@ -1724,26 +1726,27 @@
             </div>
 
         </div>
+    </div>
 
-        <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
+    <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
 
-        <!-- Bootstrap JS và jQuery -->
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-        <!-- Flatpickr JS -->
-        <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-        <!-- SheetJS -->
-        <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-        <!-- Chart.js -->
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        <script src="js/quill.js"></script>
-        <!-- SweetAlert2 JS -->
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Bootstrap JS và jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <!-- SheetJS -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="js/quill.js"></script>
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-        <!-- JavaScript -->
-        <script src="js/dashboardScript.js"></script>
-        <script src="js/gragh.js"></script>
-        <script src="js/toastAlert.js"></script>
+    <!-- JavaScript -->
+    <script src="js/dashboardScript.js"></script>
+    <script src="js/gragh.js"></script>
+    <script src="js/toastAlert.js"></script>
 
 
 </body>

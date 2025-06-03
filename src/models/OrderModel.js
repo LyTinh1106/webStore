@@ -114,7 +114,7 @@ Order.getAll = (result) => {
       o.*, 
       a.email, 
       v.voucher_code, 
-      v.voucher_value 
+      v.voucher_value AS discount_value
     FROM order_table o
     JOIN account a 
       ON o.account_id = a.id
