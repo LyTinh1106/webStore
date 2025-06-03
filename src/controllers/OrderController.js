@@ -31,12 +31,32 @@ exports.getOrderById = (req, res) => {
       return res.status(500).json({ message: `Lỗi truy xuất đơn hàng với ID ${id}.`, error: err });
     }
 
+    // Tính subtotal từ products
+    let subtotal = 0;
+    if (Array.isArray(data.products)) {
+      data.products.forEach(item => {
+        subtotal += Number(item.subtotalprice) || 0;
+      });
+    }
+
+    // Lấy voucher_value (phần trăm giảm) từ data.voucher_value
+    const voucherValue = parseInt(data.voucher_value) || 0;
+    // Tính tiền giảm
+    const discount_amount = voucherValue > 0
+      ? Math.floor(subtotal * voucherValue / 100)
+      : 0;
+
+    // Gán vào data để view có thể sử dụng
+    data.discount_amount = discount_amount;
+    data.total_after_discount = Number(data.total_payment) || 0; // tiền sau giảm đã lưu
+
     return res.render("orderDashboard", {
       order: data,
       mode: "edit"
     });
   });
 };
+
 
 
 // [POST] /orders/create - Tạo đơn hàng và gửi email
@@ -98,7 +118,7 @@ exports.createOrderAndSendEmail = async (req, res) => {
     const minutes = String(createdAt.getMinutes()).padStart(2, "0");
     const seconds = String(createdAt.getSeconds()).padStart(2, "0");
 
-    // Định dạng ngày giờ thành "DD/MM/YYYY HH:mm:ss" (chỉ để hiển thị email)
+    
     const formattedDateTime = `${day}/${month}/${year} ${hours}:${minutes}:${seconds}`;
 
     // 3. Tạo đối tượng order để lưu vào DB, có voucher_id

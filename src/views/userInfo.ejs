@@ -269,11 +269,11 @@
                     </div>
                 </div>
             </div>
+
             <!-- Modal Chi tiết đơn hàng -->
             <div class="modal fade" id="orderDetailModalView" tabindex="-1" role="dialog"
                 aria-labelledby="orderDetailModalViewLabel">
                 <div class="modal-dialog modal-lg" role="document">
-
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Đóng">
@@ -285,14 +285,16 @@
                             <input type="hidden" name="_method" value="PUT">
                             <input type="hidden" name="order_status" value="Đã giao">
                             <input type="hidden" name="order_id" id="modalOrderId">
-
+                            <div class="form-group">
+                                <label><strong>Trạng thái hiện tại:</strong></label>
+                                <span id="modalOrderStatusDisplay">Đang xử lý</span>
+                            </div>
                             <p><strong>Họ tên:</strong> <span id="modalOrderName"></span></p>
                             <p><strong>Email:</strong> <span id="modalOrderEmail"></span></p>
                             <p><strong>Số điện thoại:</strong> <span id="modalOrderPhone"></span></p>
                             <p><strong>Ngày đặt:</strong> <span id="modalOrderDate"></span></p>
                             <p><strong>Phương thức thanh toán:</strong> <span id="modalOrderPayment"></span></p>
                             <p><strong>Địa chỉ:</strong> <span id="modalOrderAddress"></span></p>
-                            <p><strong>Tổng tiền:</strong> <span id="modalOrderTotal"></span></p>
                             <p><strong>Ghi chú đơn hàng:</strong> <span id="modalOrderNote"></span></p>
 
                             <h5>Danh sách sản phẩm:</h5>
@@ -313,10 +315,19 @@
                                 </table>
                             </div>
 
-                            <div class="form-group">
-                                <label><strong>Trạng thái hiện tại:</strong></label>
-                                <span id="modalOrderStatusDisplay">Đang xử lý</span>
+
+                            <div id="modalOrderDiscountWrapper" style="display: none; text-align: right;">
+                                <p>
+                                    <strong style="color: red; font-size: 18px;">
+                                        Giảm giá: <span id="modalOrderDiscount"></span>
+                                    </strong>
+                                </p>
                             </div>
+                            <p style="text-align: right;">
+                                <strong style="color: red; font-size: 20px;">
+                                    Tổng tiền: <span id="modalOrderTotal"></span>
+                                </strong>
+                            </p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-default" data-dismiss="modal">Đóng</button>
@@ -325,6 +336,7 @@
                 </div>
             </div>
         </div>
+
         <div id="toast-container" style="position: fixed; top: 20px; right: 20px; z-index: 9999;"></div>
         <%- include('./footer.ejs') %>
 
