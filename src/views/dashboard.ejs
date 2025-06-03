@@ -342,8 +342,9 @@
 
                                     <!-- Phần Giảm giá (ẩn mặc định) và Tổng tiền -->
                                     <div style="text-align: right;">
-                                        <p id="modalOrderDiscountWrapper" style="display: none; color: #000000; font-size: 16px; margin: 0;">
-                                                Giảm giá: <span id="modalOrderDiscount"></span>
+                                        <p id="modalOrderDiscountWrapper"
+                                            style="display: none; color: #000000; font-size: 16px; margin: 0;">
+                                            Giảm giá: <span id="modalOrderDiscount"></span>
                                         </p>
                                         <p>
                                             <strong style="color: red; font-size: 20px;">
@@ -1011,8 +1012,7 @@
                                             <label for="deliveryMethod" class="form-label">Đơn vị giao hàng</label>
                                             <select class="form-select" id="deliveryMethod" name="deliveryMethod"
                                                 required>
-                                                <option value="" disabled selected>-- Chọn đơn vị giao hàng --
-                                                </option>
+                                                <option value="" disabled selected>Chọn đơn vị giao hàng </option>
                                                 <option value="GHN">GHN</option>
                                                 <option value="GHTK">GHTK</option>
                                                 <option value="ViettelPost">ViettelPost</option>
@@ -1023,7 +1023,6 @@
 
                                         <!-- Nút chọn đơn hàng -->
                                         <div class="col-6">
-
                                             <button type="button" class="btn btn-success" data-bs-toggle="modal"
                                                 data-bs-target="#addOrderModal">
                                                 <i class="fas fa-plus"></i> Chọn đơn hàng
@@ -1036,12 +1035,10 @@
 
                                         <!-- Thông tin đơn hàng đã chọn -->
                                         <div class="col-12">
-                                            <p><strong>Mã đơn hàng:</strong> <span id="shippingOrderCode"></span>
-                                            </p>
+                                            <p><strong>Mã đơn hàng:</strong> <span id="shippingOrderCode"></span></p>
                                             <p><strong>Họ tên:</strong> <span id="shippingOrderName"></span></p>
                                             <p><strong>Email:</strong> <span id="shippingOrderEmail"></span></p>
-                                            <p><strong>Số điện thoại:</strong> <span id="shippingOrderPhone"></span>
-                                            </p>
+                                            <p><strong>Số điện thoại:</strong> <span id="shippingOrderPhone"></span></p>
                                             <p><strong>Ngày đặt:</strong> <span id="shippingOrderDate"></span></p>
                                             <p><strong>Phương thức thanh toán:</strong> <span
                                                     id="shippingOrderPayment"></span></p>
@@ -1052,9 +1049,6 @@
 
                                         <!-- Danh sách sản phẩm -->
                                         <h6>Danh sách sản phẩm:</h6>
-                                        <!-- <ul id="shippingOrderProductList" class="list-group mb-3">
-                                           
-                                        </ul> -->
                                         <div class="table-responsive">
                                             <table class="table table-bordered mb-3">
                                                 <thead>
@@ -1066,22 +1060,25 @@
                                                 </thead>
                                                 <tbody id="shippingOrderProductList">
                                                     <tr>
-                                                        <td colspan="3" class="text-muted text-center">Đang tải...
-                                                        </td>
+                                                        <td colspan="3" class="text-muted text-center">Đang tải...</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
                                         </div>
+
+                                        <!-- Phần Giảm giá (ẩn mặc định) và Tổng tiền -->
                                         <div class="text-end">
-                                            <p id="shippingOrderVoucher" style="display: none;">
-                                                <strong class="text-danger" style="font-size: 20px ;"> Giảm giá:
-                                                    <span id="shippingOrderVoucherCode"></span></strong>
+                                            <p id="shippingOrderVoucher"
+                                                style="display: none; color: red; font-size: 16px; margin: 0;">
+                                                <p">
+                                                    Giảm giá: <span id="shippingOrderVoucherCode"></span>
+                                            </p>
                                             </p>
                                             <p>
-                                                <strong class="text-danger" style="font-size: 28px;">Tổng tiền:
-                                                    <span id="shippingOrderTotal"></span></strong>
+                                                <strong style="color: red; font-size: 20px;">
+                                                    Tổng tiền: <span id="shippingOrderTotal"></span>
+                                                </strong>
                                             </p>
-
                                         </div>
                                     </div>
                                 </form>
@@ -1095,6 +1092,7 @@
                         </div>
                     </div>
                 </div>
+
 
                 <!-- Modal chọn đơn hàng -->
                 <div class="modal fade" id="addOrderModal" tabindex="-1" aria-labelledby="addOrderModalLabel"

@@ -176,7 +176,7 @@ exports.createOrderAndSendEmail = async (req, res) => {
       });
 
       const discountAmountInt = parseInt(discount_amount) || 0;
-      const html = `
+     const html = `
 <div style="background-color: #f0f2f5; padding: 20px 0;">
   <div style="max-width: 600px; margin: auto; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
     <div style="background-color: #007bff; padding: 16px 0; text-align: center;">
@@ -225,8 +225,10 @@ exports.createOrderAndSendEmail = async (req, res) => {
 
           ${discountAmountInt > 0 ? `
           <tr>
-            <td style="padding: 8px; font-weight: bold;">Giảm giá ${discount_code ? `(${discount_code})` : ""}</td>
-            <td style="padding: 8px; text-align: right; color: red; font-weight: bold;">
+            <td style="padding: 8px; font-weight: bold; color: black;">
+              Giảm giá ${discount_code ? `(${discount_code})` : ""}
+            </td>
+            <td style="padding: 8px; text-align: right; color: black; font-weight: bold;">
               - ${discountAmountInt.toLocaleString()} VND
             </td>
           </tr>
@@ -249,7 +251,7 @@ exports.createOrderAndSendEmail = async (req, res) => {
     </div>
   </div>
 </div>
-`;
+`; 
 
       transporter.sendMail(
         {
