@@ -34,7 +34,8 @@ INSERT INTO brand (brand_name) VALUES
 ('NZXT'),
 ('Thermaltake'),
 ('Pulsar'),
-('Lian-li');
+('Lian-li'),
+('Thronmax');
 
 INSERT INTO category (name) VALUES
 ('Laptop'),
@@ -106,9 +107,21 @@ VALUES
 ( 'Gamesir Cyclone2', 'Tay cầm Gamesir Cyclone2, thiết kế hiện đại, phản hồi rung tốt, hỗ trợ nhiều nền tảng. Sản phẩm này phù hợp với cả người dùng phổ thông lẫn chuyên nghiệp, mang lại hiệu suất ổn định và độ bền cao. Với thiết kế hiện đại cùng các tính năng tối ưu, đây là một lựa chọn đáng tin cậy cho mọi nhu cầu sử dụng từ chơi game, làm việc đến giải trí và sáng tạo nội dung. Ngoài ra, sản phẩm còn được kiểm định chất lượng nghiêm ngặt, dễ dàng tương thích với nhiều thiết bị và phần mềm phổ biến hiện nay, giúp người dùng yên tâm sử dụng lâu dài.', 1000000, 1500000, 29, 17, 'USA', '24'),
 ( 'PS5 DualSense Edge', 'PS5 DualSense Edge, joystick thay được, nút sau tùy chỉnh, hỗ trợ cấu hình nhiều người. Sản phẩm này phù hợp với cả người dùng phổ thông lẫn chuyên nghiệp, mang lại hiệu suất ổn định và độ bền cao. Với thiết kế hiện đại cùng các tính năng tối ưu, đây là một lựa chọn đáng tin cậy cho mọi nhu cầu sử dụng từ chơi game, làm việc đến giải trí và sáng tạo nội dung. Ngoài ra, sản phẩm còn được kiểm định chất lượng nghiêm ngặt, dễ dàng tương thích với nhiều thiết bị và phần mềm phổ biến hiện nay, giúp người dùng yên tâm sử dụng lâu dài.', 1000000, 1500000, 31, 17, 'USA', '24'),
 ( 'Secretlab TITAN Evo 2024', 'Ghế Secretlab TITAN Evo 2024, foam đúc lạnh, hỗ trợ tư thế ergonomic, bọc da Hybrid Leatherette. Sản phẩm này phù hợp với cả người dùng phổ thông lẫn chuyên nghiệp, mang lại hiệu suất ổn định và độ bền cao. Với thiết kế hiện đại cùng các tính năng tối ưu, đây là một lựa chọn đáng tin cậy cho mọi nhu cầu sử dụng từ chơi game, làm việc đến giải trí và sáng tạo nội dung. Ngoài ra, sản phẩm còn được kiểm định chất lượng nghiêm ngặt, dễ dàng tương thích với nhiều thiết bị và phần mềm phổ biến hiện nay, giúp người dùng yên tâm sử dụng lâu dài.', 1000000, 22500000, 22, 11, 'USA', '24'),
-( 'Xbox Elite Series 2', 'Xbox Elite Series 2, tay cầm chỉnh trigger, joystick tùy biến, pin sạc, hỗ trợ cấu hình game. Sản phẩm này phù hợp với cả người dùng phổ thông lẫn chuyên nghiệp, mang lại hiệu suất ổn định và độ bền cao. Với thiết kế hiện đại cùng các tính năng tối ưu, đây là một lựa chọn đáng tin cậy cho mọi nhu cầu sử dụng từ chơi game, làm việc đến giải trí và sáng tạo nội dung. Ngoài ra, sản phẩm còn được kiểm định chất lượng nghiêm ngặt, dễ dàng tương thích với nhiều thiết bị và phần mềm phổ biến hiện nay, giúp người dùng yên tâm sử dụng lâu dài.', 1000000, 1500000, 30, 17, 'USA', '24');
-
-
+( 'Xbox Elite Series 2', 'Xbox Elite Series 2, tay cầm chỉnh trigger, joystick tùy biến, pin sạc, hỗ trợ cấu hình game. Sản phẩm này phù hợp với cả người dùng phổ thông lẫn chuyên nghiệp, mang lại hiệu suất ổn định và độ bền cao. Với thiết kế hiện đại cùng các tính năng tối ưu, đây là một lựa chọn đáng tin cậy cho mọi nhu cầu sử dụng từ chơi game, làm việc đến giải trí và sáng tạo nội dung. Ngoài ra, sản phẩm còn được kiểm định chất lượng nghiêm ngặt, dễ dàng tương thích với nhiều thiết bị và phần mềm phổ biến hiện nay, giúp người dùng yên tâm sử dụng lâu dài.', 1000000, 1500000, 30, 17, 'USA', '24'),
+('SteelSeries Arctis Nova Pro Wireless', 'Tai nghe gaming không dây cao cấp với âm thanh Hi-Res, hệ thống Dual Wireless (2.4GHz và Bluetooth), hỗ trợ chống ồn chủ động, micro khử nhiễu, và pin tháo rời có thể thay nóng. Phù hợp cho cả chơi game chuyên nghiệp và giải trí đa phương tiện.', 500000, 8000000, 18, 12, 'USA', '24'),
+('Logitech G ASTRO A50 X Wireless', 'Tai nghe chơi game không dây thế hệ mới với âm thanh Dolby Atmos, tích hợp HDMI switcher hỗ trợ cả PS5 và Xbox, micro siêu nhạy và pin sử dụng dài. Thiết kế phù hợp cho game thủ đa nền tảng với hiệu suất âm thanh vượt trội.', 5500000, 7500000, 7, 12, 'USA', '24'),
+('Logitech Pro X 2 Wireless Gaming Headset', 'Tai nghe gaming không dây sử dụng công nghệ driver Graphene mang lại âm thanh chính xác cao, micro tháo rời chất lượng thu âm chuyên nghiệp, thời lượng pin lên tới 50 giờ. Lý tưởng cho game thủ eSports và streamer.', 3500000, 6500000, 7, 12, 'USA', '24'),
+('Asus ROG Rapture GT-AX11000', 'Router WiFi 6 ba băng tần với tốc độ lên tới 11000Mbps, thiết kế tối ưu cho chơi game với công nghệ giảm độ trễ, bảo mật AiProtection Pro và tính năng VPN Fusion.', 8300000, 11500000, 1, 13, 'Taiwan', '36'),
+('NZXT Kraken Z73 RGB', 'Tản nhiệt nước AIO cao cấp với màn hình LCD 2.36 inch hiển thị thông số tùy chỉnh, hiệu năng làm mát vượt trội, tích hợp RGB tương thích CAM, phù hợp với hệ thống gaming cao cấp.', 6500000, 10000000, 33, 14, 'USA', '36'),
+('Logitech BRIO 4K', 'Webcam cao cấp hỗ trợ quay video 4K Ultra HD, tự động lấy nét và cân bằng sáng, tích hợp 2 micro giảm tiếng ồn, tương thích Windows Hello.', 3990000, 7990000, 7, 15, 'USA', '24'),
+('Razer Firefly V2 Pro', 'Lót chuột RGB cao cấp với bề mặt micro-textured cho độ chính xác cao, tích hợp đèn Chroma RGB 15 vùng, đế cao su chống trượt, thiết kế dành cho game thủ.', 2500000, 4500000, 8, 16, 'USA', '12'),
+('SteelSeries QcK Prism Cloth', 'Lót chuột gaming RGB với bề mặt vải cao cấp, hỗ trợ 2 vùng chiếu sáng RGB, thiết kế chống trượt, tối ưu cho độ chính xác cao khi di chuột.', 1500000, 4500000, 18, 16, 'USA', '12'),
+('Webcam Thronmax X1 Pro 1080p/30fps','Webcam Thronmax X1 Pro cho chất lượng hình ảnh Full HD 1080p với tốc độ 30fps, tự động lấy nét (auto focus), tích hợp micro chống ồn. Phù hợp cho học online, hội họp trực tuyến, livestream với hình ảnh sắc nét, âm thanh rõ ràng.',
+ 1050000, 2500000, 37, 15, 'China', '12'),
+('Tản nhiệt nước AIO Deepcool MYSTIQUE 360 WH ARGB','Tản nhiệt nước AIO Deepcool MYSTIQUE 360 WH ARGB trang bị màn hình LCD hiển thị thông số, bơm hiệu suất cao, led ARGB đồng bộ mainboard, hỗ trợ đa dạng socket Intel/AMD. Thiết kế màu trắng sang trọng, hiệu năng làm mát cực tốt cho PC Gaming/Workstation.',
+ 3000000, 6000000, 26, 14, 'China', '36'),
+('Router WiFi 6 Gigabit TP-Link Archer AX12','Router WiFi 6 TP-Link Archer AX12 hỗ trợ băng tần kép, tốc độ Gigabit, công nghệ OFDMA/MU-MIMO, quản lý qua app, bảo mật nâng cao. Lý tưởng cho gia đình/VP nhỏ cần mạng ổn định, tốc độ cao, kết nối đồng thời nhiều thiết bị.',
+ 1500000, 3500000, 14, 13, 'China', '36');
 INSERT INTO product_image (product_id, URL) VALUES
 (1, 'ASUS_ROG_Zephyrus_G14_1.jpg'),
 (1, 'ASUS_ROG_Zephyrus_G14_2.jpg'),
@@ -304,7 +317,51 @@ INSERT INTO product_image (product_id, URL) VALUES
 
 (49, 'Xbox_elite_series_2_1.jpg'),
 (49, 'Xbox_elite_series_2_2.jpg'),
-(49, 'Xbox_elite_series_2_3.jpg');
+(49, 'Xbox_elite_series_2_3.jpg'),
+
+(50, 'Steelseries_Arctis_NovaPro_Wireless_1.jpg'),
+(50, 'Steelseries_Arctis_NovaPro_Wireless_2.jpg'),
+(50, 'Steelseries_Arctis_NovaPro_Wireless_3.jpg'),
+
+(51, 'Logitech_G_Astro_A50_X_Wireless_1.jpg'),
+(51, 'Logitech_G_Astro_A50_X_Wireless_2.jpg'),
+(51, 'Logitech_G_Astro_A50_X_Wireless_3.jpg'),
+
+(52, 'Logitech_Pro_X_2_Wireless_Gaming_Headset_1.jpg'),
+(52, 'Logitech_Pro_X_2_Wireless_Gaming_Headset_2.jpg'),
+(52, 'Logitech_Pro_X_2_Wireless_Gaming_Headset_3.jpg'),
+
+(53, 'Asus_ROG_Rapture_GT_AX11000_1.jpg'),
+(53, 'Asus_ROG_Rapture_GT_AX11000_2.jpg'),
+(53, 'Asus_ROG_Rapture_GT_AX11000_3.jpg'),
+
+(54, 'NZXT_Kraken_Z73_RGB_1.jpg'),
+(54, 'NZXT_Kraken_Z73_RGB_2.jpg'),
+(54, 'NZXT_Kraken_Z73_RGB_3.jpg'),
+
+(55, 'Logitech_BRIO_4K_1.jpg'),
+(55, 'Logitech_BRIO_4K_2.jpg'),
+(55, 'Logitech_BRIO_4K_3.jpg'),
+
+(56, 'Razer_Firefly_V2_Pro_1.jpg'),
+(56, 'Razer_Firefly_V2_Pro_2.jpg'),
+(56, 'Razer_Firefly_V2_Pro_3.jpg'),
+
+(57, 'SteelSeries_QcK_Prism_Cloth_1.jpg'),
+(57, 'SteelSeries_QcK_Prism_Cloth_2.jpg'),
+(57, 'SteelSeries_QcK_Prism_Cloth_3.jpg'),
+
+(58, 'Webcam_Thronmax_X1_Pro_1080p30fps_1.jpg'),
+(58, 'Webcam_Thronmax_X1_Pro_1080p30fps_2.jpg'),
+(58, 'Webcam_Thronmax_X1_Pro_1080p30fps_3.jpg'),
+
+(59, 'Deepcool_MYSTIQUE_360_WH_ARGB_1.jpg'),
+(59, 'Deepcool_MYSTIQUE_360_WH_ARGB_2.jpg'),
+(59, 'Deepcool_MYSTIQUE_360_WH_ARGB_3.jpg'),
+
+(60, 'TP-Link_Archer_AX12_WiFi6_Router_1.jpg'),
+(60, 'TP-Link_Archer_AX12_WiFi6_Router_2.jpg'),
+(60, 'TP-Link_Archer_AX12_WiFi6_Router_3.jpg');
 
 
 INSERT INTO technical_specification (specs, product_id) VALUES
@@ -1152,7 +1209,162 @@ INSERT INTO technical_specification (specs, product_id) VALUES
   "Kích thước vật lý": "160 x 110 x 60 mm",
   "Trọng lượng": "345g (có gắn nút)",
   "Phụ kiện đi kèm": "Túi đựng, 6 analog, 2 D-Pad, 4 nút sau, dock sạc, cáp USB-C"
-}', 49);
+}', 49),
+
+-- id 50
+('{
+  "Thương hiệu": "SteelSeries",
+  "Model": "Arctis Nova Pro Wireless",
+  "Kết nối": "2.4GHz Wireless, Bluetooth",
+  "Driver": "Hi-Res 40mm Neodymium",
+  "Dải tần": "10Hz - 40kHz",
+  "Micro": "Có thể tháo rời, khử tiếng ồn AI",
+  "Chống ồn chủ động": true,
+  "Thời lượng pin": "22 giờ (1 pin), có thể thay nóng",
+  "Đệm tai": "Memory foam cao cấp",
+  "Trọng lượng": "339g"
+}', 50),
+
+-- id 51
+('{
+  "Thương hiệu": "Logitech",
+  "Model": "ASTRO A50 X Wireless",
+  "Kết nối": "2.4GHz Wireless, HDMI passthrough, USB-C",
+  "Driver": "40mm Neodymium",
+  "Âm thanh": "Dolby Atmos, DTS Headphone:X",
+  "Micro": "Có thể gập lên, khử nhiễu",
+  "Tương thích": "PC, Xbox, PS5",
+  "Thời lượng pin": "24 giờ",
+  "Dock sạc": true,
+  "Trọng lượng": "380g"
+}', 51),
+
+-- id 52
+('{
+  "Thương hiệu": "Logitech",
+  "Model": "Pro X 2 Wireless",
+  "Kết nối": "LIGHTSPEED Wireless, Bluetooth, 3.5mm",
+  "Driver": "50mm Graphene",
+  "Dải tần": "20Hz - 20kHz",
+  "Micro": "Có thể tháo rời, chuẩn Blue VO!CE",
+  "Thời lượng pin": "50 giờ",
+  "Chất liệu đệm tai": "Memory foam + Da PU",
+  "Trọng lượng": "345g"
+}', 52),
+
+-- id 53
+('{
+  "Thương hiệu": "ASUS",
+  "Model": "ROG Rapture GT-AX11000",
+  "Chuẩn WiFi": "WiFi 6 (802.11ax)",
+  "Băng tần": "3 băng tần (2.4GHz + 5GHz + 5GHz)",
+  "Tốc độ tối đa": "11000Mbps",
+  "Ăng-ten": 8,
+  "Cổng LAN": "2.5G LAN x1, Gigabit LAN x4",
+  "CPU": "1.8GHz Quad-Core",
+  "RAM": "1GB",
+  "Flash": "256MB",
+  "Tính năng gaming": "Game Accelerator, Game Radar, VPN Fusion"
+}', 53),
+
+-- id 54
+('{
+  "Thương hiệu": "NZXT",
+  "Model": "Kraken Z73 RGB",
+  "Loại tản nhiệt": "AIO Water Cooler",
+  "Kích thước Radiator": "360mm",
+  "Quạt": "3x 120mm RGB",
+  "Màn hình LCD": "2.36 inch, tuỳ chỉnh hình ảnh/thông số",
+  "Tốc độ quạt": "500-2000 RPM",
+  "Độ ồn": "21-36 dBA",
+  "Socket hỗ trợ": "Intel & AMD đa dạng",
+  "Chất liệu ống": "Bọc dù chống gập",
+  "RGB": true
+}', 54),
+
+-- id 55
+('{
+  "Thương hiệu": "Logitech",
+  "Model": "BRIO 4K",
+  "Độ phân giải tối đa": "4K/30fps, 1080p/60fps",
+  "Góc nhìn": "90°",
+  "Lấy nét tự động": true,
+  "Micro": "Stereo dual-mic tích hợp",
+  "Tương thích": "Windows Hello, MacOS, Linux",
+  "Cảm biến": "RightLight 3 + HDR",
+  "Kết nối": "USB 3.0",
+  "Chức năng che ống kính": true
+}', 55),
+
+-- id 56
+('{
+  "Thương hiệu": "Razer",
+  "Model": "Firefly V2 Pro",
+  "Kích thước": "360mm x 260mm",
+  "Độ dày": "4mm",
+  "Bề mặt": "Micro-textured",
+  "Chống trượt": true,
+  "Đèn RGB": "Chroma 22 vùng",
+  "Kết nối": "USB-A",
+  "Phù hợp": "Gaming/Esports"
+}', 56),
+
+-- id 57
+('{
+  "Thương hiệu": "SteelSeries",
+  "Model": "QcK Prism Cloth",
+  "Kích thước": "320mm x 270mm",
+  "Bề mặt": "Vải micro-woven",
+  "Đèn RGB": "2 vùng PrismSync",
+  "Độ dày": "4mm",
+  "Chống trượt": true,
+  "Phù hợp": "Game thủ chuyên nghiệp",
+  "Kết nối": "USB-A"
+}', 57),
+
+-- id 58
+('{
+  "Thương hiệu": "Thronmax",
+  "Model": "X1 Pro",
+  "Độ phân giải": "1080p/30fps",
+  "Lấy nét": "Tự động (auto focus)",
+  "Góc nhìn": "72°",
+  "Micro": "Tích hợp, giảm ồn",
+  "Cảm biến": "CMOS",
+  "Kết nối": "USB-A",
+  "Tương thích": "Windows, macOS, Linux",
+  "Dây dài": "1.8m"
+}', 58),
+
+-- id 59
+('{
+  "Thương hiệu": "Deepcool",
+  "Model": "MYSTIQUE 360 WH ARGB",
+  "Loại tản nhiệt": "AIO Water Cooler",
+  "Kích thước Radiator": "360mm",
+  "Quạt": "3x 120mm ARGB",
+  "Màn hình LCD": "2.8 inch, tuỳ chỉnh hiển thị",
+  "Tốc độ quạt": "500-2250 RPM",
+  "Độ ồn": "≤39.3 dBA",
+  "Socket hỗ trợ": "Intel LGA1700/1200/115x, AMD AM5/AM4",
+  "RGB": true
+}', 59),
+
+-- id 60
+('{
+  "Thương hiệu": "TP-Link",
+  "Model": "Archer AX12",
+  "Chuẩn WiFi": "WiFi 6 (802.11ax)",
+  "Băng tần": "2 băng tần (2.4GHz + 5GHz)",
+  "Tốc độ tối đa": "2402 Mbps (5GHz) + 574 Mbps (2.4GHz)",
+  "Ăng-ten": 8,
+  "Cổng LAN": "Gigabit LAN x4, WAN x1",
+  "Bảo mật": "WPA3, HomeShield",
+  "Tương thích Mesh": true,
+  "Quản lý": "App Tether",
+  "CPU": "1.5GHz Triple-Core"
+}', 60);
+
 
 INSERT INTO supplier (name, phonenumber, email, address) VALUES
 ('FPT Trading', '0901234567', 'contact@fpt.vn', 'Hà Nội'),
@@ -1214,146 +1426,147 @@ INSERT INTO customer (first_name, last_name, gender, email, phone, address) VALU
 ('Nguyen', 'K', 'male', 'user9@gmail.com', '0999999999', 'Hà Nội'),
 ('Tran', 'L', 'female', 'user10@gmail.com', '0900000000', 'TP.HCM');
 
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-01-05 00:00:00', 'momo', 'Hoàn Thành', 1, 11977009, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-01-14 00:00:00', 'momo', 'Hoàn Thành', 2, 21489140, 'Tran Binh', '0922222222', 'TP.HCM', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-01-23 00:00:00', 'momo', 'Hoàn Thành', 3, 24547754, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-02-01 00:00:00', 'momo', 'Hoàn Thành', 4, 12672054, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-02-10 00:00:00', 'COD', 'Chờ duyệt', 5, 36947555, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-02-19 00:00:00', 'momo', 'Chờ duyệt', 6, 36366301, 'Dang G', '0966666666', 'Huế', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-02-28 00:00:00', 'momo', 'Đã duyệt', 7, 14507554, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-03-08 00:00:00', 'COD', 'Hoàn Thành', 8, 20261743, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-03-17 00:00:00', 'momo', 'Đã duyệt', 9, 46519367, 'Nguyen K', '0999999999', 'Hà Nội', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-03-26 00:00:00', 'COD', 'Chờ duyệt', 10, 12876164, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-04-04 00:00:00', 'COD', 'Đã duyệt', 1, 32869210, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-04-13 00:00:00', 'momo', 'Hoàn Thành', 2, 43116001, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-04-22 00:00:00', 'momo', 'Chờ duyệt', 3, 22245330, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-05-01 00:00:00', 'momo', 'Hoàn Thành', 4, 35856517, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-05-10 00:00:00', 'momo', 'Hoàn Thành', 5, 46127461, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-05-19 00:00:00', 'momo', 'Hoàn Thành', 6, 32294349, 'Dang G', '0966666666', 'Huế', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-05-28 00:00:00', 'momo', 'Chờ duyệt', 7, 12834911, 'Do H', '0977777777', 'Bình Dương', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-06-06 00:00:00', 'momo', 'Hoàn Thành', 8, 49780785, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-06-15 00:00:00', 'momo', 'Chờ duyệt', 9, 44783682, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-06-24 00:00:00', 'momo', 'Hoàn Thành', 10, 48838084, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-07-03 00:00:00', 'momo', 'Đã duyệt', 1, 19653725, 'Nguyen An', '0911111111', 'Hà Nội', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-07-12 00:00:00', 'momo', 'Chờ duyệt', 2, 38346932, 'Tran Binh', '0922222222', 'TP.HCM', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-07-21 00:00:00', 'momo', 'Chờ duyệt', 3, 11464494, 'Le Chi', '0933333333', 'Đà Nẵng', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-07-30 00:00:00', 'momo', 'Chờ duyệt', 4, 48368288, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-08-08 00:00:00', 'COD', 'Hoàn Thành', 5, 26579777, 'Hoang E', '0955555555', 'Hải Phòng', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-08-17 00:00:00', 'COD', 'Đã duyệt', 6, 41540695, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-08-26 00:00:00', 'momo', 'Đã duyệt', 7, 27285129, 'Do H', '0977777777', 'Bình Dương', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-09-04 00:00:00', 'COD', 'Hoàn Thành', 8, 48468268, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-09-13 00:00:00', 'momo', 'Hoàn Thành', 9, 35666511, 'Nguyen K', '0999999999', 'Hà Nội', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-09-22 00:00:00', 'COD', 'Chờ duyệt', 10, 35680513, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-10-01 00:00:00', 'momo', 'Hoàn Thành', 1, 17962744, 'Nguyen An', '0911111111', 'Hà Nội', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-10-10 00:00:00', 'momo', 'Chờ duyệt', 2, 43354541, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-10-19 00:00:00', 'COD', 'Hoàn Thành', 3, 40860614, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-10-28 00:00:00', 'momo', 'Đã duyệt', 4, 24842800, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-11-06 00:00:00', 'momo', 'Chờ duyệt', 5, 27118152, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-11-15 00:00:00', 'momo', 'Hoàn Thành', 6, 17712750, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-11-24 00:00:00', 'COD', 'Đã duyệt', 7, 37717140, 'Do H', '0977777777', 'Bình Dương', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-12-03 00:00:00', 'momo', 'Đã duyệt', 8, 42708511, 'Vo I', '0988888888', 'Nha Trang', 'Giao tận tay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-12-12 00:00:00', 'COD', 'Đã duyệt', 9, 42101693, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2024-12-21 00:00:00', 'momo', 'Hoàn Thành', 10, 25010107, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-11-07 00:00:00', 'COD', 'Chờ duyệt', 10, 15034625, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-05-13 00:00:00', 'momo', 'Chờ duyệt', 10, 45152200, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-01-05 00:00:00', 'momo', 'Hoàn Thành', 10, 41826253, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-01-12 00:00:00', 'COD', 'Đã duyệt', 4, 46101890, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-08-23 00:00:00', 'momo', 'Chờ duyệt', 2, 42165749, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-07-15 00:00:00', 'momo', 'Chờ duyệt', 10, 31063881, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-10-29 00:00:00', 'COD', 'Hoàn Thành', 7, 32852570, 'Do H', '0977777777', 'Bình Dương', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-08-17 00:00:00', 'momo', 'Đã duyệt', 2, 34369072, 'Tran Binh', '0922222222', 'TP.HCM', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-09-17 00:00:00', 'momo', 'Đã duyệt', 4, 27544207, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-04-26 00:00:00', 'momo', 'Hoàn Thành', 8, 42054677, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-01-20 00:00:00', 'momo', 'Chờ duyệt', 9, 26728113, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-05-27 00:00:00', 'momo', 'Chờ duyệt', 10, 30880606, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-08-19 00:00:00', 'COD', 'Hoàn Thành', 8, 41038667, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-01-15 00:00:00', 'momo', 'Hoàn Thành', 5, 13359156, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-04-04 00:00:00', 'momo', 'Đã duyệt', 5, 40408649, 'Hoang E', '0955555555', 'Hải Phòng', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-05-12 00:00:00', 'COD', 'Chờ duyệt', 10, 35953676, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-05-05 00:00:00', 'momo', 'Đã duyệt', 1, 16926517, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-01-05 00:00:00', 'COD', 'Hoàn Thành', 4, 30131810, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-07-11 00:00:00', 'momo', 'Hoàn Thành', 1, 34784452, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-10-21 00:00:00', 'COD', 'Hoàn Thành', 10, 40604255, 'Tran L', '0900000000', 'TP.HCM', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-06-26 00:00:00', 'momo', 'Hoàn Thành', 5, 12064530, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-01-23 00:00:00', 'momo', 'Đã duyệt', 10, 27524895, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-05-16 00:00:00', 'momo', 'Chờ duyệt', 4, 25544855, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-01-29 00:00:00', 'momo', 'Hoàn Thành', 5, 11327069, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-10-15 00:00:00', 'COD', 'Hoàn Thành', 1, 10020440, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-09-18 00:00:00', 'momo', 'Đã duyệt', 1, 33614334, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-11-22 00:00:00', 'momo', 'Hoàn Thành', 2, 47596211, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-03-11 00:00:00', 'COD', 'Đã duyệt', 10, 12813368, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-03-18 00:00:00', 'momo', 'Đã duyệt', 4, 31516099, 'Pham Dung', '0944444444', 'Cần Thơ', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-07-12 00:00:00', 'momo', 'Hoàn Thành', 7, 10976144, 'Do H', '0977777777', 'Bình Dương', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-03-06 00:00:00', 'momo', 'Hoàn Thành', 7, 46503184, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-06-12 00:00:00', 'momo', 'Đã duyệt', 9, 39581818, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-04-02 00:00:00', 'momo', 'Đã duyệt', 5, 30398926, 'Hoang E', '0955555555', 'Hải Phòng', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-08-10 00:00:00', 'momo', 'Hoàn Thành', 2, 29866718, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2022-12-06 00:00:00', 'momo', 'Hoàn Thành', 4, 33434632, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-10-12 00:00:00', 'momo', 'Đã duyệt', 6, 47900838, 'Dang G', '0966666666', 'Huế', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-10-03 00:00:00', 'COD', 'Hoàn Thành', 4, 35025269, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-10-25 00:00:00', 'momo', 'Hoàn Thành', 10, 11188492, 'Tran L', '0900000000', 'TP.HCM', 'Giao tận tay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-03-01 00:00:00', 'momo', 'Hoàn Thành', 9, 44360874, 'Nguyen K', '0999999999', 'Hà Nội', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-04-21 00:00:00', 'COD', 'Chờ duyệt', 6, 11125638, 'Dang G', '0966666666', 'Huế', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-09-09 00:00:00', 'momo', 'Đã duyệt', 5, 47267092, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-02-01 00:00:00', 'COD', 'Chờ duyệt', 5, 23058738, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-03-01 00:00:00', 'momo', 'Chờ duyệt', 6, 20995235, 'Dang G', '0966666666', 'Huế', 'Giao tận tay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-07-03 00:00:00', 'momo', 'Đã duyệt', 9, 21186211, 'Nguyen K', '0999999999', 'Hà Nội', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-02-19 00:00:00', 'momo', 'Đã duyệt', 9, 13217326, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-09-30 00:00:00', 'momo', 'Đã duyệt', 5, 44272156, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-03-09 00:00:00', 'COD', 'Hoàn Thành', 1, 13982103, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-04-09 00:00:00', 'momo', 'Hoàn Thành', 4, 39482757, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-11-29 00:00:00', 'COD', 'Hoàn Thành', 3, 13488731, 'Le Chi', '0933333333', 'Đà Nẵng', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-05-31 00:00:00', 'momo', 'Hoàn Thành', 10, 14065325, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-12-06 00:00:00', 'momo', 'Đã duyệt', 5, 32165871, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao tận tay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-11-04 00:00:00', 'momo', 'Hoàn Thành', 2, 26793719, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-04-18 00:00:00', 'momo', 'Hoàn Thành', 10, 16150506, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-12-02 00:00:00', 'momo', 'Hoàn Thành', 3, 19379714, 'Le Chi', '0933333333', 'Đà Nẵng', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-05-30 00:00:00', 'COD', 'Đã duyệt', 9, 39620614, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-04-04 00:00:00', 'momo', 'Hoàn Thành', 10, 18100169, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-02-15 00:00:00', 'COD', 'Hoàn Thành', 8, 18134528, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-06-23 00:00:00', 'momo', 'Hoàn Thành', 4, 24939559, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-07-26 00:00:00', 'momo', 'Đã duyệt', 1, 27508141, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-07-14 00:00:00', 'momo', 'Hoàn Thành', 2, 12377237, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-03-27 00:00:00', 'momo', 'Chờ duyệt', 7, 46419204, 'Do H', '0977777777', 'Bình Dương', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-12-30 00:00:00', 'momo', 'Hoàn Thành', 7, 43151124, 'Do H', '0977777777', 'Bình Dương', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-10-12 00:00:00', 'momo', 'Đã duyệt', 8, 16122822, 'Vo I', '0988888888', 'Nha Trang', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-03-25 00:00:00', 'momo', 'Chờ duyệt', 8, 41794611, 'Vo I', '0988888888', 'Nha Trang', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2021-05-06 00:00:00', 'momo', 'Chờ duyệt', 8, 42290928, 'Vo I', '0988888888', 'Nha Trang', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-04-15 00:00:00', 'COD', 'Hoàn Thành', 5, 33810200, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-12-20 00:00:00', 'COD', 'Hoàn Thành', 1, 42541189, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-09-28 00:00:00', 'momo', 'Chờ duyệt', 3, 31510948, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-07-21 00:00:00', 'COD', 'Chờ duyệt', 1, 22484590, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-08-22 00:00:00', 'momo', 'Hoàn Thành', 3, 39351206, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-08-14 00:00:00', 'momo', 'Hoàn Thành', 10, 48675502, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-04-12 00:00:00', 'momo', 'Chờ duyệt', 1, 48723030, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-12-21 00:00:00', 'momo', 'Hoàn Thành', 5, 39823308, 'Hoang E', '0955555555', 'Hải Phòng', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-11-25 00:00:00', 'COD', 'Hoàn Thành', 5, 48296065, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-02-12 00:00:00', 'COD', 'Hoàn Thành', 3, 48377048, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-10-03 00:00:00', 'momo', 'Hoàn Thành', 9, 17658205, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-10-11 00:00:00', 'COD', 'Hoàn Thành', 6, 18520798, 'Dang G', '0966666666', 'Huế', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-02-20 00:00:00', 'COD', 'Hoàn Thành', 6, 31955379, 'Dang G', '0966666666', 'Huế', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-09-08 00:00:00', 'momo', 'Chờ duyệt', 7, 49414794, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-09-07 00:00:00', 'momo', 'Hoàn Thành', 7, 13312190, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-05-26 00:00:00', 'momo', 'Hoàn Thành', 8, 46628934, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-07-28 00:00:00', 'momo', 'Chờ duyệt', 9, 20004100, 'Nguyen K', '0999999999', 'Hà Nội', '', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-10-05 00:00:00', 'momo', 'Chờ duyệt', 10, 24554897, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-07-06 00:00:00', 'momo', 'Hoàn Thành', 10, 39596547, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-08-04 00:00:00', 'momo', 'Hoàn Thành', 6, 34621369, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-03-17 00:00:00', 'momo', 'Hoàn Thành', 7, 25747228, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-03-10 00:00:00', 'momo', 'Chờ duyệt', 1, 35733808, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-12-17 00:00:00', 'momo', 'Chờ duyệt', 7, 17549460, 'Do H', '0977777777', 'Bình Dương', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-11-10 00:00:00', 'momo', 'Chờ duyệt', 7, 20994746, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2020-09-05 00:00:00', 'COD', 'Hoàn Thành', 4, 23142771, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-28 00:00:00', 'momo', 'Hoàn Thành', 5, 18563378, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-22 00:00:00', 'momo', 'Hoàn Thành', 4, 39031421, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-12 00:00:00', 'COD', 'Chờ duyệt', 8, 34350334, 'Vo I', '0988888888', 'Nha Trang', 'Kiểm tra trước khi nhận', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-25 00:00:00', 'momo', 'Đã duyệt', 5, 23100622, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng', 'Chưa thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-09 00:00:00', 'COD', 'Chờ duyệt', 8, 42813601, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-10 00:00:00', 'momo', 'Hoàn Thành', 7, 38728055, 'Do H', '0977777777', 'Bình Dương', 'Giao buổi sáng', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-27 00:00:00', 'COD', 'Hoàn Thành', 10, 43217006, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-09 00:00:00', 'COD', 'Hoàn Thành', 4, 16999832, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao tận tay', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-03 00:00:00', 'momo', 'Đã duyệt', 7, 18793260, 'Do H', '0977777777', 'Bình Dương', 'Kiểm tra trước khi nhận', 'Thanh toán');
-INSERT INTO order_table     (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment) VALUES ('2023-12-24 00:00:00', 'momo', 'Hoàn Thành', 10, 25085740, 'Tran L', '0900000000', 'TP.HCM','0', 'Thanh toán');
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-01-05 00:00:00', 'momo', 'Hoàn Thành', 1, 11977009, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-01-14 00:00:00', 'momo', 'Hoàn Thành', 2, 21489140, 'Tran Binh', '0922222222', 'TP.HCM', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-01-23 00:00:00', 'momo', 'Hoàn Thành', 3, 24547754, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-02-01 00:00:00', 'momo', 'Hoàn Thành', 4, 12672054, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-02-10 00:00:00', 'COD', 'Chờ duyệt', 5, 36947555, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-02-19 00:00:00', 'momo', 'Chờ duyệt', 6, 36366301, 'Dang G', '0966666666', 'Huế', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-02-28 00:00:00', 'momo', 'Đã duyệt', 7, 14507554, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-03-08 00:00:00', 'COD', 'Hoàn Thành', 8, 20261743, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-03-17 00:00:00', 'momo', 'Đã duyệt', 9, 46519367, 'Nguyen K', '0999999999', 'Hà Nội', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-03-26 00:00:00', 'COD', 'Chờ duyệt', 10, 12876164, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-04-04 00:00:00', 'COD', 'Đã duyệt', 1, 32869210, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-04-13 00:00:00', 'momo', 'Hoàn Thành', 2, 43116001, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-04-22 00:00:00', 'momo', 'Chờ duyệt', 3, 22245330, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-05-01 00:00:00', 'momo', 'Hoàn Thành', 4, 35856517, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-05-10 00:00:00', 'momo', 'Hoàn Thành', 5, 46127461, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-05-19 00:00:00', 'momo', 'Hoàn Thành', 6, 32294349, 'Dang G', '0966666666', 'Huế', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-05-28 00:00:00', 'momo', 'Chờ duyệt', 7, 12834911, 'Do H', '0977777777', 'Bình Dương', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-06-06 00:00:00', 'momo', 'Hoàn Thành', 8, 49780785, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-06-15 00:00:00', 'momo', 'Chờ duyệt', 9, 44783682, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-06-24 00:00:00', 'momo', 'Hoàn Thành', 10, 48838084, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-07-03 00:00:00', 'momo', 'Đã duyệt', 1, 19653725, 'Nguyen An', '0911111111', 'Hà Nội', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-07-12 00:00:00', 'momo', 'Chờ duyệt', 2, 38346932, 'Tran Binh', '0922222222', 'TP.HCM', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-07-21 00:00:00', 'momo', 'Chờ duyệt', 3, 11464494, 'Le Chi', '0933333333', 'Đà Nẵng', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-07-30 00:00:00', 'momo', 'Chờ duyệt', 4, 48368288, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-08-08 00:00:00', 'COD', 'Hoàn Thành', 5, 26579777, 'Hoang E', '0955555555', 'Hải Phòng', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-08-17 00:00:00', 'COD', 'Đã duyệt', 6, 41540695, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-08-26 00:00:00', 'momo', 'Đã duyệt', 7, 27285129, 'Do H', '0977777777', 'Bình Dương', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-09-04 00:00:00', 'COD', 'Hoàn Thành', 8, 48468268, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-09-13 00:00:00', 'momo', 'Hoàn Thành', 9, 35666511, 'Nguyen K', '0999999999', 'Hà Nội', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-09-22 00:00:00', 'COD', 'Chờ duyệt', 10, 35680513, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-10-01 00:00:00', 'momo', 'Hoàn Thành', 1, 17962744, 'Nguyen An', '0911111111', 'Hà Nội', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-10-10 00:00:00', 'momo', 'Chờ duyệt', 2, 43354541, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-10-19 00:00:00', 'COD', 'Hoàn Thành', 3, 40860614, 'Le Chi', '0933333333', 'Đà Nẵng', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-10-28 00:00:00', 'momo', 'Đã duyệt', 4, 24842800, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-11-06 00:00:00', 'momo', 'Chờ duyệt', 5, 27118152, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-11-15 00:00:00', 'momo', 'Hoàn Thành', 6, 17712750, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-11-24 00:00:00', 'COD', 'Đã duyệt', 7, 37717140, 'Do H', '0977777777', 'Bình Dương', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-12-03 00:00:00', 'momo', 'Đã duyệt', 8, 42708511, 'Vo I', '0988888888', 'Nha Trang', 'Giao tận tay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-12-12 00:00:00', 'COD', 'Đã duyệt', 9, 42101693, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2024-12-21 00:00:00', 'momo', 'Hoàn Thành', 10, 25010107, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-11-07 00:00:00', 'COD', 'Chờ duyệt', 10, 15034625, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-05-13 00:00:00', 'momo', 'Chờ duyệt', 10, 45152200, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-01-05 00:00:00', 'momo', 'Hoàn Thành', 10, 41826253, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-01-12 00:00:00', 'COD', 'Đã duyệt', 4, 46101890, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-08-23 00:00:00', 'momo', 'Chờ duyệt', 2, 42165749, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-07-15 00:00:00', 'momo', 'Chờ duyệt', 10, 31063881, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-10-29 00:00:00', 'COD', 'Hoàn Thành', 7, 32852570, 'Do H', '0977777777', 'Bình Dương', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-08-17 00:00:00', 'momo', 'Đã duyệt', 2, 34369072, 'Tran Binh', '0922222222', 'TP.HCM', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-09-17 00:00:00', 'momo', 'Đã duyệt', 4, 27544207, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-04-26 00:00:00', 'momo', 'Hoàn Thành', 8, 42054677, 'Vo I', '0988888888', 'Nha Trang', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-01-20 00:00:00', 'momo', 'Chờ duyệt', 9, 26728113, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-05-27 00:00:00', 'momo', 'Chờ duyệt', 10, 30880606, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-08-19 00:00:00', 'COD', 'Hoàn Thành', 8, 41038667, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-01-15 00:00:00', 'momo', 'Hoàn Thành', 5, 13359156, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-04-04 00:00:00', 'momo', 'Đã duyệt', 5, 40408649, 'Hoang E', '0955555555', 'Hải Phòng', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-05-12 00:00:00', 'COD', 'Chờ duyệt', 10, 35953676, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-05-05 00:00:00', 'momo', 'Đã duyệt', 1, 16926517, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-01-05 00:00:00', 'COD', 'Hoàn Thành', 4, 30131810, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-07-11 00:00:00', 'momo', 'Hoàn Thành', 1, 34784452, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-10-21 00:00:00', 'COD', 'Hoàn Thành', 10, 40604255, 'Tran L', '0900000000', 'TP.HCM', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-06-26 00:00:00', 'momo', 'Hoàn Thành', 5, 12064530, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-01-23 00:00:00', 'momo', 'Đã duyệt', 10, 27524895, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-05-16 00:00:00', 'momo', 'Chờ duyệt', 4, 25544855, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-01-29 00:00:00', 'momo', 'Hoàn Thành', 5, 11327069, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-10-15 00:00:00', 'COD', 'Hoàn Thành', 1, 10020440, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-09-18 00:00:00', 'momo', 'Đã duyệt', 1, 33614334, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-11-22 00:00:00', 'momo', 'Hoàn Thành', 2, 47596211, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-03-11 00:00:00', 'COD', 'Đã duyệt', 10, 12813368, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-03-18 00:00:00', 'momo', 'Đã duyệt', 4, 31516099, 'Pham Dung', '0944444444', 'Cần Thơ', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-07-12 00:00:00', 'momo', 'Hoàn Thành', 7, 10976144, 'Do H', '0977777777', 'Bình Dương', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-03-06 00:00:00', 'momo', 'Hoàn Thành', 7, 46503184, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-06-12 00:00:00', 'momo', 'Đã duyệt', 9, 39581818, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-04-02 00:00:00', 'momo', 'Đã duyệt', 5, 30398926, 'Hoang E', '0955555555', 'Hải Phòng', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-08-10 00:00:00', 'momo', 'Hoàn Thành', 2, 29866718, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2022-12-06 00:00:00', 'momo', 'Hoàn Thành', 4, 33434632, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-10-12 00:00:00', 'momo', 'Đã duyệt', 6, 47900838, 'Dang G', '0966666666', 'Huế', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-10-03 00:00:00', 'COD', 'Hoàn Thành', 4, 35025269, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-10-25 00:00:00', 'momo', 'Hoàn Thành', 10, 11188492, 'Tran L', '0900000000', 'TP.HCM', 'Giao tận tay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-03-01 00:00:00', 'momo', 'Hoàn Thành', 9, 44360874, 'Nguyen K', '0999999999', 'Hà Nội', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-04-21 00:00:00', 'COD', 'Chờ duyệt', 6, 11125638, 'Dang G', '0966666666', 'Huế', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-09-09 00:00:00', 'momo', 'Đã duyệt', 5, 47267092, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-02-01 00:00:00', 'COD', 'Chờ duyệt', 5, 23058738, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-03-01 00:00:00', 'momo', 'Chờ duyệt', 6, 20995235, 'Dang G', '0966666666', 'Huế', 'Giao tận tay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-07-03 00:00:00', 'momo', 'Đã duyệt', 9, 21186211, 'Nguyen K', '0999999999', 'Hà Nội', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-02-19 00:00:00', 'momo', 'Đã duyệt', 9, 13217326, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-09-30 00:00:00', 'momo', 'Đã duyệt', 5, 44272156, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-03-09 00:00:00', 'COD', 'Hoàn Thành', 1, 13982103, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-04-09 00:00:00', 'momo', 'Hoàn Thành', 4, 39482757, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-11-29 00:00:00', 'COD', 'Hoàn Thành', 3, 13488731, 'Le Chi', '0933333333', 'Đà Nẵng', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-05-31 00:00:00', 'momo', 'Hoàn Thành', 10, 14065325, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-12-06 00:00:00', 'momo', 'Đã duyệt', 5, 32165871, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao tận tay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-11-04 00:00:00', 'momo', 'Hoàn Thành', 2, 26793719, 'Tran Binh', '0922222222', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-04-18 00:00:00', 'momo', 'Hoàn Thành', 10, 16150506, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-12-02 00:00:00', 'momo', 'Hoàn Thành', 3, 19379714, 'Le Chi', '0933333333', 'Đà Nẵng', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-05-30 00:00:00', 'COD', 'Đã duyệt', 9, 39620614, 'Nguyen K', '0999999999', 'Hà Nội', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-04-04 00:00:00', 'momo', 'Hoàn Thành', 10, 18100169, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-02-15 00:00:00', 'COD', 'Hoàn Thành', 8, 18134528, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-06-23 00:00:00', 'momo', 'Hoàn Thành', 4, 24939559, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-07-26 00:00:00', 'momo', 'Đã duyệt', 1, 27508141, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-07-14 00:00:00', 'momo', 'Hoàn Thành', 2, 12377237, 'Tran Binh', '0922222222', 'TP.HCM', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-03-27 00:00:00', 'momo', 'Chờ duyệt', 7, 46419204, 'Do H', '0977777777', 'Bình Dương', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-12-30 00:00:00', 'momo', 'Hoàn Thành', 7, 43151124, 'Do H', '0977777777', 'Bình Dương', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-10-12 00:00:00', 'momo', 'Đã duyệt', 8, 16122822, 'Vo I', '0988888888', 'Nha Trang', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-03-25 00:00:00', 'momo', 'Chờ duyệt', 8, 41794611, 'Vo I', '0988888888', 'Nha Trang', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2021-05-06 00:00:00', 'momo', 'Chờ duyệt', 8, 42290928, 'Vo I', '0988888888', 'Nha Trang', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-04-15 00:00:00', 'COD', 'Hoàn Thành', 5, 33810200, 'Hoang E', '0955555555', 'Hải Phòng', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-12-20 00:00:00', 'COD', 'Hoàn Thành', 1, 42541189, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-09-28 00:00:00', 'momo', 'Chờ duyệt', 3, 31510948, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-07-21 00:00:00', 'COD', 'Chờ duyệt', 1, 22484590, 'Nguyen An', '0911111111', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-08-22 00:00:00', 'momo', 'Hoàn Thành', 3, 39351206, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-08-14 00:00:00', 'momo', 'Hoàn Thành', 10, 48675502, 'Tran L', '0900000000', 'TP.HCM', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-04-12 00:00:00', 'momo', 'Chờ duyệt', 1, 48723030, 'Nguyen An', '0911111111', 'Hà Nội', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-12-21 00:00:00', 'momo', 'Hoàn Thành', 5, 39823308, 'Hoang E', '0955555555', 'Hải Phòng', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-11-25 00:00:00', 'COD', 'Hoàn Thành', 5, 48296065, 'Hoang E', '0955555555', 'Hải Phòng', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-02-12 00:00:00', 'COD', 'Hoàn Thành', 3, 48377048, 'Le Chi', '0933333333', 'Đà Nẵng', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-10-03 00:00:00', 'momo', 'Hoàn Thành', 9, 17658205, 'Nguyen K', '0999999999', 'Hà Nội', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-10-11 00:00:00', 'COD', 'Hoàn Thành', 6, 18520798, 'Dang G', '0966666666', 'Huế', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-02-20 00:00:00', 'COD', 'Hoàn Thành', 6, 31955379, 'Dang G', '0966666666', 'Huế', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-09-08 00:00:00', 'momo', 'Chờ duyệt', 7, 49414794, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-09-07 00:00:00', 'momo', 'Hoàn Thành', 7, 13312190, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-05-26 00:00:00', 'momo', 'Hoàn Thành', 8, 46628934, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-07-28 00:00:00', 'momo', 'Chờ duyệt', 9, 20004100, 'Nguyen K', '0999999999', 'Hà Nội', '', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-10-05 00:00:00', 'momo', 'Chờ duyệt', 10, 24554897, 'Tran L', '0900000000', 'TP.HCM', 'Có thể delay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-07-06 00:00:00', 'momo', 'Hoàn Thành', 10, 39596547, 'Tran L', '0900000000', 'TP.HCM', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-08-04 00:00:00', 'momo', 'Hoàn Thành', 6, 34621369, 'Dang G', '0966666666', 'Huế', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-03-17 00:00:00', 'momo', 'Hoàn Thành', 7, 25747228, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-03-10 00:00:00', 'momo', 'Chờ duyệt', 1, 35733808, 'Nguyen An', '0911111111', 'Hà Nội', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-12-17 00:00:00', 'momo', 'Chờ duyệt', 7, 17549460, 'Do H', '0977777777', 'Bình Dương', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-11-10 00:00:00', 'momo', 'Chờ duyệt', 7, 20994746, 'Do H', '0977777777', 'Bình Dương', 'Giao tận tay', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2020-09-05 00:00:00', 'COD', 'Hoàn Thành', 4, 23142771, 'Pham Dung', '0944444444', 'Cần Thơ', '', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-28 00:00:00', 'momo', 'Hoàn Thành', 5, 18563378, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-22 00:00:00', 'momo', 'Hoàn Thành', 4, 39031421, 'Pham Dung', '0944444444', 'Cần Thơ', 'Có thể delay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-12 00:00:00', 'COD', 'Chờ duyệt', 8, 34350334, 'Vo I', '0988888888', 'Nha Trang', 'Kiểm tra trước khi nhận', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-25 00:00:00', 'momo', 'Đã duyệt', 5, 23100622, 'Hoang E', '0955555555', 'Hải Phòng', 'Giao buổi sáng', 'Chưa thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-09 00:00:00', 'COD', 'Chờ duyệt', 8, 42813601, 'Vo I', '0988888888', 'Nha Trang', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-10 00:00:00', 'momo', 'Hoàn Thành', 7, 38728055, 'Do H', '0977777777', 'Bình Dương', 'Giao buổi sáng', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-27 00:00:00', 'COD', 'Hoàn Thành', 10, 43217006, 'Tran L', '0900000000', 'TP.HCM', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-09 00:00:00', 'COD', 'Hoàn Thành', 4, 16999832, 'Pham Dung', '0944444444', 'Cần Thơ', 'Giao tận tay', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-03 00:00:00', 'momo', 'Đã duyệt', 7, 18793260, 'Do H', '0977777777', 'Bình Dương', 'Kiểm tra trước khi nhận', 'Thanh toán', NULL);
+INSERT INTO order_table (created_at, payment_method, order_status, account_id, total_payment, fullname, phone, address, note, order_payment, voucher_id) VALUES ('2023-12-24 00:00:00', 'momo', 'Hoàn Thành', 10, 25085740, 'Tran L', '0900000000', 'TP.HCM', '0', 'Thanh toán', NULL);
+
 
 INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (1, 10, 1, 12119639);
 INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (2, 6, 2, 18343356);

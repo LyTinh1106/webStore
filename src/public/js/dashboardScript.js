@@ -1601,7 +1601,8 @@ document.querySelectorAll('.order-delete-form').forEach(form => {
 function formatVND(value) {
     return Number(value).toLocaleString('vi-VN') + ' VNĐ';
 }
-//show order detail modal
+
+// Show order detail modal
 document.addEventListener('show.bs.modal', async function (event) {
     const modal = event.target;
     if (modal.id !== 'orderDetailModal') return;
@@ -1609,6 +1610,7 @@ document.addEventListener('show.bs.modal', async function (event) {
     const button = event.relatedTarget;
     const id = button.getAttribute('data-id');
 
+    // Thiết lập action cho form
     document.getElementById('orderUpdateForm').action = `/api/order-detail/${id}`;
     document.getElementById('modalOrderId').value = id;
     document.getElementById('modalOrderEmail').innerText = button.getAttribute('data-email') || '(Không có)';
@@ -1617,36 +1619,74 @@ document.addEventListener('show.bs.modal', async function (event) {
     document.getElementById('modalOrderDate').innerText = button.getAttribute('data-date');
     document.getElementById('modalOrderPayment').innerText = button.getAttribute('data-payment');
     document.getElementById('modalOrderAddress').innerText = button.getAttribute('data-address') || '(Không có)';
-    document.getElementById('modalOrderTotal').innerText = formatVND(button.getAttribute('data-total') || 0);
     document.getElementById('modalOrderNote').innerText = button.getAttribute('data-note') || '(Không có)';
 
+    // Tổng tiền (sau giảm)
+    const totalAfter = parseInt(button.getAttribute('data-total')) || 0;
+    document.getElementById('modalOrderTotal').innerText = formatVND(totalAfter);
+
+    // Lấy thông tin voucher từ data-attributes
+    const voucherCode = button.getAttribute('data-vouchercode') || '';
+    const voucherValue = parseInt(button.getAttribute('data-vouchervalue')) || 0;
+    const dataDiscount = parseInt(button.getAttribute('data-discount'));
+
+    // Tính và hiển thị Giảm giá (nếu có)
+    let discountAmount = 0;
+    if (!isNaN(dataDiscount)) {
+        // Nếu đã có sẵn data-discount (số tiền giảm trực tiếp)
+        discountAmount = dataDiscount;
+    } else if (voucherValue > 0 && totalAfter > 0) {
+        // Nếu có data-vouchervalue (phần trăm), tính ngược
+        discountAmount = Math.round((totalAfter * voucherValue) / (100 - voucherValue));
+    }
+
+    const discountWrapper = document.getElementById('modalOrderDiscountWrapper');
+    const discountEl = document.getElementById('modalOrderDiscount');
+    if (discountAmount > 0) {
+        discountWrapper.style.display = 'block';
+
+        // Hiển thị cả mã voucher và số tiền giảm
+        if (voucherCode) {
+            discountEl.innerText = `${voucherCode} - ${formatVND(discountAmount)}`;
+        } else {
+            // Nếu không có mã, chỉ hiển thị số tiền giảm
+            discountEl.innerText = `- ${formatVND(discountAmount)}`;
+        }
+    } else {
+        discountWrapper.style.display = 'none';
+        discountEl.innerText = '';
+    }
+
+    // Xử lý trạng thái
     const status = button.getAttribute('data-status');
     const badge = document.getElementById('modalOrderStatusDisplay');
     document.getElementById("orderUpdateForm").dataset.status = status;
     badge.className = 'badge';
     badge.classList.add(
         status === 'Hoàn Thành' ? 'bg-success' :
-            status === 'Chờ duyệt' ? 'bg-warning' :
-                status === 'Đã duyệt' ? 'bg-info' : 'bg-secondary'
+        status === 'Chờ duyệt'   ? 'bg-warning' :
+        status === 'Đã duyệt'    ? 'bg-info' :
+        'bg-secondary'
     );
     badge.innerText = status;
 
+    // Load danh sách sản phẩm
     const productList = document.getElementById('modalOrderProducts');
     productList.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
     try {
         const res = await fetch(`/api/order-detail/${id}`);
         const data = await res.json();
         productList.innerHTML = '';
-        if (data.length === 0) {
+        if (!Array.isArray(data) || data.length === 0) {
             productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm nào.</td></tr>`;
         } else {
             data.forEach(item => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                                <td>${item.product_name}</td>
-                                <td>${item.quantity}</td>
-                                <td>${formatVND(item.subtotalprice)}</td>
-                                `;
+                    <td>${item.product_name}</td>
+                    <td>${item.quantity}</td>
+                    <td>${formatVND(item.subtotalprice)}</td>
+                `;
                 productList.appendChild(tr);
             });
         }
@@ -1746,5 +1786,210 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 });
 
-//loc san pham
+
+//Shipping 
+ function formatVND(value) {
+                    return Number(value).toLocaleString("vi-VN") + " VNĐ";
+                }
+
+                function formatDate(dateStr) {
+                    const d = new Date(dateStr);
+                    return isNaN(d.getTime()) ? "(Không rõ)" : d.toLocaleDateString("vi-VN");
+                }
+
+                function formatFullDateTime(date = new Date()) {
+                    const pad = n => n.toString().padStart(2, "0");
+                    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} `
+                        + `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+                }
+
+                function generateOrderCode(id) {
+                    const randomPart = ("0000" + (id * 7919 % 10000)).slice(-4);
+                    return `${randomPart}${id}`;
+                }
+
+                let formCancelled = false;
+
+                document.addEventListener("DOMContentLoaded", () => {
+                    const orderList = document.getElementById("orderList");
+                    const addBtn = document.querySelector('[data-bs-target="#addOrderModal"]');
+                    const addForm = document.getElementById("addShippingForm");
+
+                    if (!orderList || !addBtn || !addForm) return;
+
+                    // Khi bấm Hủy thì đánh dấu cần reset form
+                    document.querySelector("#addShippingModal .btn-secondary")
+                        ?.addEventListener("click", () => formCancelled = true);
+
+                    // Load danh sách đơn chờ giao
+                    addBtn.addEventListener("click", () => {
+                        fetch("/api/order/basic-on-delivering")
+                            .then(r => r.json())
+                            .then(data => {
+                                if (!Array.isArray(data) || data.length === 0) {
+                                    orderList.innerHTML = `<tr><td colspan="4">Không có đơn hàng nào.</td></tr>`;
+                                    return;
+                                }
+                                orderList.innerHTML = data.map(o => {
+                                    const code = generateOrderCode(o.id);
+                                    return `<tr>
+                        <td>#${code}</td>
+                        <td>${o.fullname}</td>
+                        <td>${o.phone}</td>
+                        <td class="text-center">
+                            <button class="btn btn-sm btn-primary select-order"
+                                    data-id="${o.id}"
+                                    data-code="${code}">
+                              Chọn
+                            </button>
+                        </td>
+                    </tr>`;
+                                }).join("");
+                            })
+                            .catch(() => {
+                                orderList.innerHTML = `<tr><td colspan="4" class="text-danger">Không thể tải đơn.</td></tr>`;
+                            });
+                    });
+
+                    // Bắt sự kiện chọn đơn
+                    orderList.addEventListener("click", e => {
+                        const btn = e.target.closest(".select-order");
+                        if (!btn) return;
+                        selectOrder(+btn.dataset.id, btn.dataset.code);
+                    });
+
+                    // Reset form khi đóng modal
+                    document.getElementById("addShippingModal")
+                        .addEventListener("hidden.bs.modal", () => {
+                            if (formCancelled) {
+                                addForm.reset();
+                                document.getElementById("modalOrderId").value = "";
+                                [
+                                    "shippingOrderCode", "shippingOrderName", "shippingOrderEmail", "shippingOrderPhone",
+                                    "shippingOrderDate", "shippingOrderPayment", "shippingOrderAddress",
+                                    "shippingOrderTotal", "shippingOrderNote", "shippingOrderVoucherCode"
+                                ].forEach(id => {
+                                    const el = document.getElementById(id);
+                                    if (el) el.innerText = "";
+                                });
+                                document.getElementById("shippingOrderVoucher").style.display = "none";
+                                document.getElementById("shippingOrderProductList").innerHTML =
+                                    `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
+                            }
+                            formCancelled = false;
+                        });
+
+                    // Submit form: tạo shipping & gửi email
+                    addForm.addEventListener("submit", async e => {
+                        e.preventDefault();
+
+                        const id_order = document.getElementById("modalOrderId").value;
+                        const delivery_method = document.getElementById("deliveryMethod").value;
+                        const shipping_address = document.getElementById("shippingOrderAddress").innerText;
+                        const shipping_status = "Thành công";
+                        const shipping_date = formatFullDateTime();
+
+                        if (!id_order || !delivery_method || !shipping_address) {
+                            alert("Vui lòng chọn đơn hàng và phương thức giao hàng.");
+                            return;
+                        }
+
+                        try {
+                            const resp = await fetch("/api/shipping/create", {
+                                method: "POST",
+                                headers: { "Content-Type": "application/json" },
+                                body: JSON.stringify({
+                                    shipping_date,
+                                    delivery_method,
+                                    shipping_status,
+                                    id_order,
+                                    shipping_address
+                                })
+                            });
+                            const result = await resp.json();
+                            if (!resp.ok || !result.success) {
+                                return alert("Tạo thất bại: " + (result.message || resp.statusText));
+                            }
+
+                            alert("Tạo đơn giao hàng thành công và email đã được gửi.");
+                            bootstrap.Modal.getInstance(document.getElementById("addShippingModal"))?.hide();
+                            window.location.reload();
+
+                        } catch (err) {
+                            console.error("Lỗi khi gửi dữ liệu:", err);
+                            alert("Đã xảy ra lỗi khi gửi dữ liệu.");
+                        }
+                    });
+                });
+
+                // Hiển thị chi tiết đơn & sản phẩm
+                async function selectOrder(id, orderCode) {
+                    try {
+                        const [order, products] = await Promise.all([
+                            fetch(`/api/order/details/${id}`).then(r => r.json()),
+                            fetch(`/api/order-detail/${id}`).then(r => r.json()),
+                        ]);
+                        if (!order.id) throw new Error();
+
+                        document.getElementById("modalOrderId").value = id;
+                        document.getElementById("shippingOrderCode").innerText = "#" + orderCode;
+                        document.getElementById("shippingOrderName").innerText = order.fullname || "(Không có)";
+                        document.getElementById("shippingOrderEmail").innerText = order.email || "(Không có)";
+                        document.getElementById("shippingOrderPhone").innerText = order.phone || "(Không có)";
+                        document.getElementById("shippingOrderDate").innerText = formatDate(order.created_at);
+                        document.getElementById("shippingOrderPayment").innerText = order.payment_method || "(Không có)";
+                        document.getElementById("shippingOrderAddress").innerText = order.address || "(Không có)";
+                        document.getElementById("shippingOrderNote").innerText = order.note || "(Không có)";
+
+                        // Hiển thị danh sách sản phẩm
+                        const tb = document.getElementById("shippingOrderProductList");
+                        tb.innerHTML = "";
+                        if (!products.length) {
+                            tb.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm.</td></tr>`;
+                        } else {
+                            products.forEach(it => {
+                                const tr = document.createElement("tr");
+                                tr.innerHTML = `
+                    <td>${it.product_name}</td>
+                    <td>${it.quantity}</td>
+                    <td>${formatVND(it.subtotalprice)}</td>
+                `;
+                                tb.appendChild(tr);
+                            });
+                        }
+
+                        // Hiển thị Tổng tiền (sau giảm)
+                        document.getElementById("shippingOrderTotal").innerHTML =
+                            `<span class="text-danger">${formatVND(order.total_payment || 0)}</span>`;
+
+                        // Tính số tiền giảm từ voucher_value
+                        const voucherValue = parseInt(order.voucher_value) || 0;
+                        const totalAfter = parseInt(order.total_payment) || 0;
+                        let discountAmount = 0;
+                        if (voucherValue > 0 && totalAfter > 0) {
+                            discountAmount = Math.round((totalAfter * voucherValue) / (100 - voucherValue));
+                        }
+
+                        // Hiển thị "Mã giảm giá" nhưng thực ra show số tiền giảm
+                        if (discountAmount > 0) {
+                            document.getElementById("shippingOrderVoucher").style.display = "block";
+                            document.getElementById("shippingOrderVoucherCode").innerHTML =
+                                `<span class="text-danger">- ${formatVND(discountAmount)}</span>`;
+                        } else {
+                            document.getElementById("shippingOrderVoucher").style.display = "none";
+                        }
+
+                        bootstrap.Modal.getInstance(document.getElementById("addOrderModal"))?.hide();
+                        setTimeout(() => {
+                            let m = bootstrap.Modal.getInstance(document.getElementById("addShippingModal"));
+                            if (!m) m = new bootstrap.Modal(document.getElementById("addShippingModal"));
+                            m.show();
+                        }, 300);
+
+                    } catch {
+                        console.error("Lỗi tải đơn hoặc sản phẩm");
+                        alert("Không thể tải thông tin đơn hàng hoặc sản phẩm.");
+                    }
+                }
+
 

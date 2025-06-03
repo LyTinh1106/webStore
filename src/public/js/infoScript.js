@@ -1,71 +1,116 @@
  function formatVND(value) {
-                    return Number(value).toLocaleString('vi-VN') + ' VNĐ';
-                }
+    return Number(value).toLocaleString("vi-VN") + " VNĐ";
+  }
 
-                const detailButtons = document.querySelectorAll('.view-detail-btn');
+  function formatDate(dateStr) {
+    const d = new Date(dateStr);
+    return isNaN(d.getTime()) ? "(Không rõ)" : d.toLocaleDateString("vi-VN");
+  }
 
-                detailButtons.forEach(btn => {
-                    btn.addEventListener('click', function () {
-                        const id = this.getAttribute('data-id');
-                        const name = this.getAttribute('data-name');
-                        const email = this.getAttribute('data-email');
-                        const phone = this.getAttribute('data-phone');
-                        const date = this.getAttribute('data-date');
-                        const payment = this.getAttribute('data-payment');
-                        const address = this.getAttribute('data-address');
-                        const total = this.getAttribute('data-total');
-                        const note = this.getAttribute('data-note');
-                        const status = this.getAttribute('data-status');
+  function formatFullDateTime(date = new Date()) {
+    const pad = n => n.toString().padStart(2, "0");
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} `
+      + `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+  }
 
-                        document.getElementById('modalOrderId').value = id;
-                        document.getElementById('modalOrderName').textContent = name || '(Không có)';
-                        document.getElementById('modalOrderEmail').textContent = email || '(Không có)';
-                        document.getElementById('modalOrderPhone').textContent = phone || '(Không có)';
-                        document.getElementById('modalOrderDate').textContent = date || '(Không có)';
-                        document.getElementById('modalOrderPayment').textContent = payment || '(Không có)';
-                        document.getElementById('modalOrderAddress').textContent = address || '(Không có)';
-                        document.getElementById('modalOrderTotal').textContent = formatVND(total);
-                        document.getElementById('modalOrderNote').textContent = note || '(Không có)';
+  function generateOrderCode(id) {
+    const randomPart = ("0000" + (id * 7919 % 10000)).slice(-4);
+    return `${randomPart}${id}`;
+  }
 
-                        const badge = document.getElementById('modalOrderStatusDisplay');
-                        document.getElementById("modalOrderStatusDisplay").dataset.status = status;
-                        badge.className = 'badge';
-                        badge.classList.add(
-                            status === 'Hoàn Thành' ? 'badge-success' :
-                                status === 'Chờ duyệt' ? 'badge-warning' :
-                                    status === 'Đã duyệt' ? 'badge-info' :
-                                        'badge-default'
-                        );
-                        badge.innerText = status;
+  document.addEventListener("DOMContentLoaded", () => {
+    const detailButtons = document.querySelectorAll(".view-detail-btn");
 
-                        const productTable = document.getElementById('modalOrderProducts');
-                        productTable.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
+    detailButtons.forEach(btn => {
+      btn.addEventListener("click", async function () {
+        const id = this.getAttribute("data-id");
+        // Trước hết, set các trường tĩnh (nếu muốn). Nhưng chúng ta sẽ fetch dữ liệu động:
+        document.getElementById("modalOrderId").value = id;
 
-                        // Gọi đúng API mới: /api/order-detail/:orderId
-                        fetch(`/api/order-detail/${id}`)
-                            .then(response => response.json())
-                            .then(data => {
-                                if (!data || data.length === 0) {
-                                    productTable.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Không có sản phẩm.</td></tr>`;
-                                } else {
-                                    productTable.innerHTML = '';
-                                    data.forEach(item => {
-                                        const row = document.createElement('tr');
-                                        row.innerHTML = `
-                                        <td>${item.product_name}</td>
-                                        <td>${item.quantity}</td>
-                                        <td>${formatVND(item.subtotalprice)}</td>
-                                        `;
-                                        productTable.appendChild(row);
-                                    });
-                                }
-                            })
-                            .catch(err => {
-                                console.error("Lỗi khi fetch sản phẩm:", err);
-                                productTable.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Lỗi khi tải danh sách sản phẩm.</td></tr>`;
-                            });
-                    });
-                });
+        
+        try {
+          const orderResp = await fetch(`/api/order/details/${id}`);
+          const order = await orderResp.json();
+          if (!order.id) throw new Error("Không tìm thấy order.");
+
+          // Điền thông tin chung
+          document.getElementById("modalOrderName").textContent = order.fullname || "(Không có)";
+          document.getElementById("modalOrderEmail").textContent = order.email || "(Không có)";
+          document.getElementById("modalOrderPhone").textContent = order.phone || "(Không có)";
+          document.getElementById("modalOrderDate").textContent = formatDate(order.created_at);
+          document.getElementById("modalOrderPayment").textContent = order.payment_method || "(Không có)";
+          document.getElementById("modalOrderAddress").textContent = order.address || "(Không có)";
+          document.getElementById("modalOrderNote").textContent = order.note || "(Không có)";
+
+          // Hiển thị trạng thái
+          const badge = document.getElementById("modalOrderStatusDisplay");
+          const status = order.order_status || "Đang xử lý";
+          badge.className = "badge";
+          badge.classList.add(
+            status === "Hoàn Thành" ? "badge-success" :
+            status === "Chờ duyệt"   ? "badge-warning" :
+            status === "Đã duyệt"    ? "badge-info" :
+            "badge-default"
+          );
+          badge.innerText = status;
+
+          // Hiển thị Tổng tiền và Giảm giá nếu có
+          const subtotal = order.subtotal || 0;              // Nếu backend trả subtotal
+          const voucherValue = parseInt(order.voucher_value) || 0;
+          let discountAmount = 0;
+          // Nếu backend trả sẵn order.discount_amount thì lấy luôn
+          if (order.discount_amount !== undefined) {
+            discountAmount = parseInt(order.discount_amount) || 0;
+          } else if (voucherValue > 0) {
+            // Tính ngược nếu không có discount_amount
+            const totalAfter = parseInt(order.total_payment) || 0;
+            discountAmount = Math.round((totalAfter * voucherValue) / (100 - voucherValue));
+          }
+
+          // Hiển thị Giảm giá
+          const discountWrapper = document.getElementById("modalOrderDiscountWrapper");
+          const discountEl = document.getElementById("modalOrderDiscount");
+          if (discountAmount > 0) {
+            discountWrapper.style.display = "block";
+            discountEl.textContent = "- " + formatVND(discountAmount);
+          } else {
+            discountWrapper.style.display = "none";
+            discountEl.textContent = "";
+          }
+
+          // Hiển thị Tổng tiền (sau giảm)
+          document.getElementById("modalOrderTotal").textContent = formatVND(order.total_payment || 0);
+
+          // Load danh sách sản phẩm
+          const productTable = document.getElementById("modalOrderProducts");
+          productTable.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
+          const prodResp = await fetch(`/api/order-detail/${id}`);
+          const products = await prodResp.json();
+          if (!Array.isArray(products) || products.length === 0) {
+            productTable.innerHTML = `<tr><td colspan="3" class="text-center text-muted">Không có sản phẩm.</td></tr>`;
+          } else {
+            productTable.innerHTML = "";
+            products.forEach(item => {
+              const row = document.createElement("tr");
+              row.innerHTML = `
+                <td>${item.product_name}</td>
+                <td>${item.quantity}</td>
+                <td>${formatVND(item.subtotalprice)}</td>
+              `;
+              productTable.appendChild(row);
+            });
+          }
+
+          // Hiển thị modal
+          $("#orderDetailModalView").modal("show");
+
+        } catch (err) {
+          console.error("Lỗi khi lấy chi tiết đơn hàng:", err);
+          alert("Không thể tải thông tin đơn hàng.");
+        }
+      });
+    });
+  });
 
 
                 $(document).ready(function () {
