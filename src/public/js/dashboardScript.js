@@ -1281,6 +1281,73 @@ function renderUnifiedImagePreview() {
         imageInput.value = '';
     }
 }
+
+//view product detail
+const viewModalEl = document.getElementById("viewProductModal");
+//product random filler
+function generateProductCode(id) {
+    const randomPart = ('0000' + (id * 1237 %
+        10000)).slice(-4); return `${randomPart}${id}`;
+}
+
+viewModalEl.addEventListener("shown.bs.modal", async function (event) {
+    const triggerBtn = event.relatedTarget;
+    const productId = triggerBtn.dataset.id;
+
+    try {
+        const response = await fetch(`/api/product/${productId}`);
+        const json = await response.json();
+        if (!json.success) {
+            showToast('Không tìm thấy sản phẩm.', 'error');
+            return;
+        }
+
+        const data = json.data;
+
+        // Gán dữ liệu
+        document.getElementById("viewId").textContent = "#" + generateProductCode(data.id);
+        document.getElementById("viewName").textContent = data.name;
+        document.getElementById("viewDescription").innerHTML = data.description;
+        document.getElementById("viewImportPrice").textContent = Number(data.import_price).toLocaleString('vi-VN') + " VNĐ";
+        document.getElementById("viewSalePrice").textContent = Number(data.retail_price).toLocaleString('vi-VN') + " VNĐ";
+        document.getElementById("viewCategory").textContent = data.category_name || data.category_id;
+        document.getElementById("viewBrand").textContent = data.brand_name || data.brand_id;
+        document.getElementById("viewOrigin").textContent = data.origin;
+        document.getElementById("viewWarranty").textContent = data.warranty;
+
+        // Hình ảnh
+        const imageContainer = document.getElementById("viewImages");
+        imageContainer.innerHTML = "";
+        if (Array.isArray(data.images) && data.images.length > 0) {
+            data.images.forEach(img => {
+                const imgEl = document.createElement("img");
+                imgEl.src = `/images/${img.URL}`;
+                imgEl.classList.add("img-thumbnail");
+                imgEl.style.maxWidth = "120px";
+                imageContainer.appendChild(imgEl);
+            });
+        } else {
+            imageContainer.innerHTML = `<p class="text-muted">Không có hình ảnh</p>`;
+        }
+
+        // Thông số kỹ thuật
+        const specContainer = document.getElementById("viewSpecs");
+        specContainer.innerHTML = "";
+        if (!data.specs || Object.keys(data.specs).length === 0) {
+            specContainer.innerHTML = `<tr><td colspan="2" class="text-muted">Không có thông số kỹ thuật</td></tr>`;
+        } else {
+            Object.entries(data.specs).forEach(([key, val]) => {
+                const row = `<tr><td>${key.replace(/_/g, ' ')}</td><td>${Array.isArray(val) ? val.join('<br>') : val}</td></tr>`;
+                specContainer.insertAdjacentHTML("beforeend", row);
+            });
+        }
+
+    } catch (err) {
+        console.error("Lỗi khi tải sản phẩm:", err);
+        showToast('Đã xảy ra lỗi khi lấy dữ liệu sản phẩm.' + err, 'error');
+    }
+});
+
 //Acount
 document.addEventListener('DOMContentLoaded', () => {
     // Thêm tài khoản
@@ -1615,9 +1682,9 @@ document.getElementById("orderUpdateForm").addEventListener("submit", async func
 
         if (response.ok) {
             localStorage.setItem('toastAfterReload', JSON.stringify({
-                    message: 'Duyệt đơn hàng thành công!',
-                    type: 'success'
-                }));
+                message: 'Duyệt đơn hàng thành công!',
+                type: 'success'
+            }));
             saveScrollAndTabAndReload();
         } else {
             const text = await response.text();
@@ -1630,54 +1697,54 @@ document.getElementById("orderUpdateForm").addEventListener("submit", async func
 });
 
 //loc role
- document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', function () {
     const roleFilter = document.getElementById('roleFilter');
     // Lấy tất cả các <tr> trong phần <tbody> của bảng
     const rows = document.querySelectorAll('#accounts tbody tr');
 
     roleFilter.addEventListener('change', function () {
-      const selectedRole = this.value.trim().toLowerCase();
+        const selectedRole = this.value.trim().toLowerCase();
 
-      rows.forEach((row) => {
-        // Cột "Quyền" là cột thứ 3, nên ta chọn td:nth-child(3)
-        const roleCell = row.querySelector('td:nth-child(3)');
-        if (!roleCell) return;
+        rows.forEach((row) => {
+            // Cột "Quyền" là cột thứ 3, nên ta chọn td:nth-child(3)
+            const roleCell = row.querySelector('td:nth-child(3)');
+            if (!roleCell) return;
 
-        const roleText = roleCell.textContent.trim().toLowerCase();
+            const roleText = roleCell.textContent.trim().toLowerCase();
 
-        // Nếu chọn "Tất cả" (selectedRole == ""), hiển thị hết
-        // Ngược lại chỉ hiển thị nếu roleText === selectedRole
-        if (selectedRole === '' || roleText === selectedRole) {
-          row.style.display = '';
-        } else {
-          row.style.display = 'none';
-        }
-      });
+            // Nếu chọn "Tất cả" (selectedRole == ""), hiển thị hết
+            // Ngược lại chỉ hiển thị nếu roleText === selectedRole
+            if (selectedRole === '' || roleText === selectedRole) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
     });
-  });
-  // loc trang thai don hang
-  document.addEventListener('DOMContentLoaded', function () {
-    
+});
+// loc trang thai don hang
+document.addEventListener('DOMContentLoaded', function () {
+
     const statusFilter = document.getElementById('statusFilter');
     const rows = document.querySelectorAll('#orders tbody tr');
 
     statusFilter.addEventListener('change', function () {
-      const selectedStatus = this.value.trim().toLowerCase();
+        const selectedStatus = this.value.trim().toLowerCase();
 
-      rows.forEach((row) => {
-        // Cột "Trạng thái" nằm ở vị trí thứ 6 (nth-child(6))
-        const statusCell = row.querySelector('td:nth-child(6)');
-        if (!statusCell) return; 
+        rows.forEach((row) => {
+            // Cột "Trạng thái" nằm ở vị trí thứ 6 (nth-child(6))
+            const statusCell = row.querySelector('td:nth-child(6)');
+            if (!statusCell) return;
 
-        const statusText = statusCell.textContent.trim().toLowerCase();
-        if (selectedStatus === '' || statusText === selectedStatus) {
-          row.style.display = ''; 
-        } else {
-          row.style.display = 'none'; 
-        }
-      });
+            const statusText = statusCell.textContent.trim().toLowerCase();
+            if (selectedStatus === '' || statusText === selectedStatus) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
     });
-  });
+});
 
-  //loc san pham
+//loc san pham
 

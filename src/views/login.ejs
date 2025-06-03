@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VTVT Store - Đăng nhập</title>
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="/css/font-awesome.min.css">
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
@@ -12,7 +14,7 @@
     <div class="body-login">
         <div class="login-container">
             <h1>Đăng nhập</h1>
-        
+
 
             <form action="/login" method="post">
                 <div class="input-group">
@@ -20,23 +22,24 @@
                     <input type="text" id="email" placeholder="Vui lòng nhập Email" name="email">
                 </div>
 
-                <div class="input-group">
+                <div class="input-group" style="position:relative;">
                     <label for="password">Mật khẩu</label>
                     <input type="password" id="password" placeholder="Vui lòng nhập mật khẩu" name="password">
+                    <i id="togglePassword" class="fa fa-eye toggle-password"></i>
                 </div>
                 <% if (message) { %>
                     <div class="error-message" style="color: rgb(0, 0, 0); text-align: center; margin-bottom: 10px;">
-                      <%= message %>
+                        <%= message %>
                     </div>
-                  <% } %>
+                    <% } %>
 
-                <div class="forgot-password">
-                    <p><a href="/forgot-password">Quên mật khẩu?</a></p>
+                        <div class="forgot-password">
+                            <p><a href="/forgot-password">Quên mật khẩu?</a></p>
 
-                </div>
-                
+                        </div>
 
-                <button type="submit" class="login-btn">Đăng nhập</button>
+
+                        <button type="submit" class="login-btn">Đăng nhập</button>
             </form>
 
             <div class="or-divider">Hoặc đăng nhập bằng</div>
@@ -45,7 +48,8 @@
                 <!-- <div class="social-btn facebook">f</div>
             <div class="social-btn twitter">t</div> -->
                 <a href="/auth/google" class="social-btn google">
-                        <img src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg' alt="google-icon" class="google-logo">
+                    <img src='https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg' alt="google-icon"
+                        class="google-logo">
                     <span class="btn-text">Đăng nhập bằng Google</span>
                 </a>
             </div>
@@ -54,6 +58,8 @@
             <a href="/register" class="sign-up-link">Đăng Ký</a>
         </div>
     </div>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/togglePassword.js"></script>
 </body>
 
 </html>

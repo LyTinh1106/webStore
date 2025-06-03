@@ -2553,7 +2553,7 @@ textarea.input {
 }
 
 .input-group input {
-  width: 100%;
+  width: 380px;
   padding: 10px;
   border: none;
   border-bottom: 1px solid #ddd;
@@ -2565,6 +2565,16 @@ textarea.input {
 
 .input-group input::placeholder {
   color: #626262;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 10px;
+  top: 38px;
+  cursor: pointer;
+  color: #777474;
+  font-size: 16px;
+  user-select: none;
 }
 
 .input-group .icon {
@@ -3405,7 +3415,7 @@ hr {
   right: 20px;
   z-index: 9999;
   pointer-events: none;
-  max-height: 190px; 
+  max-height: 190px;
   overflow: hidden;
 }
 
