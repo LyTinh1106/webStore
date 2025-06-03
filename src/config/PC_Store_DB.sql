@@ -116,8 +116,11 @@ CREATE TABLE order_table (
     address TEXT,
     note TEXT,
     order_payment ENUM('Chưa thanh toán', 'Thanh toán') DEFAULT 'Chưa thanh toán',
+    voucher_id INT NULL,
+    FOREIGN KEY (voucher_id) REFERENCES voucher(id),
     FOREIGN KEY (account_id) REFERENCES account(id)
 );
+
 
 -- Bảng order_detail
 CREATE TABLE order_detail (
@@ -427,7 +430,6 @@ BEGIN
 END //
 
 DELIMITER ;
-
 
 
 
