@@ -3595,6 +3595,23 @@ hr {
   }
 }
 
+.custom-status-labels {
+  font-size: 18px;
+}
+
+.sticky-header {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #ffffff;
+}
+
+.scroll-orders {
+  max-height: 450px;
+  overflow-y: auto;
+  padding-right: 15px; /* Thêm khoảng cách bên phải để tránh bị che bởi thanh cuộn */
+}
+
 /* popup product image */
 #imagePopupModal {
   display: none;
