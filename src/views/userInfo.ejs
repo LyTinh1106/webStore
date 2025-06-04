@@ -226,30 +226,36 @@
                                                         </div>
                                                     </div>
                                                     <div class="order-details">
-                                                        <p><strong>Ngày đặt:</strong>
-                                                            <%= new Date(order.created_at).toLocaleDateString('vi-VN')
-                                                                %>
-                                                        </p>
-                                                        <p><strong>Tổng tiền:</strong>
-                                                            <%= Number(order.total_payment).toLocaleString('vi-VN')
-                                                                + ' VNĐ' %>
-                                                        </p>
-                                                        <p><strong>Phương thức thanh toán:</strong>
-                                                            <%= order.payment_method %>
-                                                        </p>
-                                                        <button class="btn btn-primary btn-sm view-detail-btn"
-                                                            data-toggle="modal" data-target="#orderDetailModalView"
-                                                            data-id="<%= order.id %>"
-                                                            data-email="<%= order.account_email || order.email %>"
-                                                            data-name="<%= order.fullname || '' %>"
-                                                            data-phone="<%= order.phone || '' %>"
-                                                            data-date="<%= new Date(order.created_at).toLocaleDateString('vi-VN') %>"
-                                                            data-payment="<%= order.payment_method %>"
-                                                            data-total="<%= order.total_payment %>"
-                                                            data-address="<%= order.address || '' %>"
-                                                            data-note="<%= order.note || '' %>"
-                                                            data-status="<%= order.order_status %>">Xem chi
-                                                            tiết</button>
+                                                        <% function formatFullDateTime(dateStr) { const date=new
+                                                            Date(dateStr); const pad=n=> n.toString().padStart(2, "0");
+                                                            return `${date.getFullYear()}-${pad(date.getMonth() +
+                                                            1)}-${pad(date.getDate())} `
+                                                            +
+                                                            `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+                                                            } %>
+                                                            <p><strong>Ngày đặt:</strong>
+                                                                <%= formatFullDateTime(order.created_at) %>
+                                                            </p>
+                                                            <p><strong>Tổng tiền:</strong>
+                                                                <%= Number(order.total_payment).toLocaleString('vi-VN')
+                                                                    + ' VNĐ' %>
+                                                            </p>
+                                                            <p><strong>Phương thức thanh toán:</strong>
+                                                                <%= order.payment_method %>
+                                                            </p>
+                                                            <button class="btn btn-primary btn-sm view-detail-btn"
+                                                                data-toggle="modal" data-target="#orderDetailModalView"
+                                                                data-id="<%= order.id %>"
+                                                                data-email="<%= order.account_email || order.email %>"
+                                                                data-name="<%= order.fullname || '' %>"
+                                                                data-phone="<%= order.phone || '' %>"
+                                                                data-date="<%= new Date(order.created_at).toLocaleDateString('vi-VN') %>"
+                                                                data-payment="<%= order.payment_method %>"
+                                                                data-total="<%= order.total_payment %>"
+                                                                data-address="<%= order.address || '' %>"
+                                                                data-note="<%= order.note || '' %>"
+                                                                data-status="<%= order.order_status %>">Xem chi
+                                                                tiết</button>
                                                     </div>
                                                 </div>
                                             </div>
@@ -312,11 +318,10 @@
                             </div>
 
 
-                            <div id="modalOrderDiscountWrapper" style="display: none; text-align: right;color: rgb(0, 0, 0); font-size: 18px;">
+                            <div id="modalOrderDiscountWrapper"
+                                style="display: none; text-align: right;color: rgb(0, 0, 0); font-size: 16px;">
                                 <p>
-                                    <p >
-                                        Giảm giá: <span id="modalOrderDiscount"></span>
-                                    </p>
+                                    Giảm giá: <span id="modalOrderDiscount"></span>
                                 </p>
                             </div>
                             <p style="text-align: right;">

@@ -176,67 +176,6 @@ const getInfo = (req, res) => {
   });
 };
 
-// const getLastViewProducts = (req, res) => {
-//   const user = req.user || req.session.user || null;
-//   const email = user ? user.email : null;
-//   let viewedIds = [];
-//   try {
-//     viewedIds = JSON.parse(req.cookies.viewed_product_ids || '[]');
-//   } catch (e) {
-//     viewedIds = [];
-//   }
-
-//   if (!email) {
-//     return res.render('lastViewProducts', {
-//       user,
-//       customer: null,
-//       products: [],
-//       message: "Vui lòng đăng nhập để xem lịch sử sản phẩm đã xem."
-//     });
-//   }
-
-//   Customer.getByEmail(email, (err, customer) => {
-//     if (err || !customer) {
-//       return res.render('lastViewProducts', {
-//         user,
-//         customer: null,
-//         products: [],
-//         message: "Không tìm thấy thông tin khách hàng."
-//       });
-//     }
-
-//     if (!viewedIds.length) {
-//       return res.render('lastViewProducts', {
-//         user,
-//         customer,
-//         products: [],
-//         message: "Chưa có sản phẩm nào được xem gần đây."
-//       });
-//     }
-
-//     Product.findByIds(viewedIds, (err, products) => {
-//       if (err || !products) {
-//         return res.render('lastViewProducts', {
-//           user,
-//           customer,
-//           products: [],
-//           message: "Không tìm thấy sản phẩm."
-//         });
-//       }
-
-//       // Đảm bảo đúng thứ tự lịch sử xem
-//       const sortedProducts = viewedIds.map(id => products.find(p => String(p.id) === String(id))).filter(Boolean);
-
-//       res.render('lastViewProducts', {
-//         user,
-//         customer,
-//         products: sortedProducts,
-//         message: null
-//       });
-//     });
-//   });
-// };
-
 const getLastViewProducts = (req, res) => {
   const user = req.user || req.session.user || null;
   const email = user ? user.email : null;

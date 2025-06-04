@@ -94,7 +94,7 @@ Order.findById = (id, result) => {
 
 
 Order.findByAccountId = (account_id, result) => {
-  sql.query("SELECT o.*, a.email, v.voucher_code FROM order_table o JOIN account a ON o.account_id = a.id LEFT JOIN voucher v ON o.voucher_id = v.id WHERE a.id = ?", [account_id], (err, res) => {
+  sql.query("SELECT o.*, a.email, v.voucher_code FROM order_table o JOIN account a ON o.account_id = a.id LEFT JOIN voucher v ON o.voucher_id = v.id WHERE a.id = ? ORDER BY o.id DESC", [account_id], (err, res) => {
     if (err) {
       result(null, err);
       return;
@@ -401,6 +401,7 @@ Order.getOnDeliveringBasicInfo = (result) => {
     FROM order_table o
     LEFT JOIN voucher v ON o.voucher_id = v.id
     WHERE o.order_status = 'Chờ duyệt'
+    ORDER BY o.id DESC
   `;
   sql.query(query, (err, res) => {
     if (err) return result(err, null);
