@@ -1956,3 +1956,11 @@ INSERT INTO account (email, password, role) VALUES
 UPDATE order_detail od
 JOIN product p ON od.product_id = p.id
 SET od.subtotalprice = od.quantity * p.retail_price;
+
+UPDATE order_table o
+JOIN (
+  SELECT order_id, SUM(subtotalprice) AS total
+  FROM order_detail
+  GROUP BY order_id
+) od ON o.id = od.order_id
+SET o.total_payment = od.total;

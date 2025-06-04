@@ -295,7 +295,7 @@ const sendResetPasswordEmail = async (req, res) => {
       });
 
       const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: `"VTVT Store" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: 'Đặt lại mật khẩu',
         html: `
@@ -578,7 +578,7 @@ const register = async (req, res) => {
       });
 
       const mailOptions = {
-        from: process.env.EMAIL_USER,
+        from: `"VTVT Store" <${process.env.EMAIL_USER}>`,
         to: email,
         subject: "Mã OTP xác minh tài khoản",
         html: `
