@@ -109,29 +109,25 @@ Order.findByAccountId = (account_id, result) => {
 }
 
 Order.getAll = (result) => {
-  const query = `
-    SELECT 
-      o.*, 
-      a.email, 
-      v.voucher_code, 
-      v.voucher_value 
-    FROM order_table o
-    JOIN account a 
-      ON o.account_id = a.id
-    LEFT JOIN voucher v 
-      ON o.voucher_id = v.id
-    ORDER BY o.id DESC
-  `;
-  sql.query(query, (err, res) => {
-    if (err) {
-      result(err, null);
-      return;
+  sql.query(
+    "SELECT o.*, a.email, v.voucher_code, v.voucher_value AS discount_value " +
+    "FROM order_table o " +
+    "JOIN account a ON o.account_id = a.id " +
+    "LEFT JOIN voucher v ON o.voucher_id = v.id " +
+    "ORDER BY o.id DESC",
+    (err, res) => {
+      if (err) {
+        result(null, err);
+        return;
+      }
+      if (res.length) {
+        result(null, res);
+      } else {
+        result({ kind: "not_found" }, null);
+      }
     }
-    result(null, res);
-  });
+  );
 };
-
-
 
 Order.updateById = (id, order, result) => {
   sql.query(
