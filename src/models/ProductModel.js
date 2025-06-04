@@ -96,6 +96,7 @@ Product.getAll = (nameOrCategoryId, result) => {
     ORDER BY id ASC 
     LIMIT 1
   )
+  ORDER BY p.id DESC
 `;
 
 
