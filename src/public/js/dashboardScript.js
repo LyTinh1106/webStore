@@ -2157,7 +2157,7 @@ async function selectOrder(id, orderCode) {
     if (discountAmount > 0) {
       document.getElementById("shippingOrderVoucher").style.display = "block";
       document.getElementById("shippingOrderVoucherCode").innerHTML = 
-        `<span class="text-danger">- ${formatVND(discountAmount)}</span>`;
+        `<span>- ${formatVND(discountAmount)}</span>`;
     } else {
       document.getElementById("shippingOrderVoucher").style.display = "none";
     }

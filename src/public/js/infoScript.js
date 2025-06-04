@@ -2,11 +2,6 @@ function formatVND(value) {
   return Number(value).toLocaleString("vi-VN") + " VNĐ";
 }
 
-function formatDate(dateStr) {
-  const d = new Date(dateStr);
-  return isNaN(d.getTime()) ? "(Không rõ)" : d.toLocaleDateString("vi-VN");
-}
-
 function formatFullDateTime(date = new Date()) {
   const pad = n => n.toString().padStart(2, "0");
   return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())} `
@@ -37,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
         document.getElementById("modalOrderName").textContent = order.fullname || "(Không có)";
         document.getElementById("modalOrderEmail").textContent = order.email || "(Không có)";
         document.getElementById("modalOrderPhone").textContent = order.phone || "(Không có)";
-        document.getElementById("modalOrderDate").textContent = formatDate(order.created_at);
+        document.getElementById("modalOrderDate").textContent = formatFullDateTime(new Date(order.created_at));
         document.getElementById("modalOrderPayment").textContent = order.payment_method || "(Không có)";
         document.getElementById("modalOrderAddress").textContent = order.address || "(Không có)";
         document.getElementById("modalOrderNote").textContent = order.note || "(Không có)";
@@ -105,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       } catch (err) {
         console.error("Lỗi khi lấy chi tiết đơn hàng:", err);
-        alert("Không thể tải thông tin đơn hàng.");
+        showToast("Không thể tải thông tin đơn hàng.", "error");
       }
     });
   });
