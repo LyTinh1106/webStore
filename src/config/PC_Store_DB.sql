@@ -377,12 +377,6 @@ DELIMITER //
 CREATE PROCEDURE get_sold_quantity_by_product_quarterly(IN target_year INT)
 BEGIN
     SELECT 
-        CASE 
-            WHEN MONTH(o.created_at) IN (1, 2, 3) THEN 'Q1'
-            WHEN MONTH(o.created_at) IN (4, 5, 6) THEN 'Q2'
-            WHEN MONTH(o.created_at) IN (7, 8, 9) THEN 'Q3'
-            WHEN MONTH(o.created_at) IN (10, 11, 12) THEN 'Q4'
-        END AS quarter,
         p.name AS product_name,
         SUM(od.quantity) AS total_quantity
     FROM 
@@ -394,9 +388,9 @@ BEGIN
     WHERE 
         YEAR(o.created_at) = target_year
     GROUP BY 
-        quarter, p.id, p.name
+        p.id, p.name
     ORDER BY 
-        quarter;
+        total_quantity DESC;
 END //
 
 DELIMITER ;

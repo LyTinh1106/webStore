@@ -77,7 +77,6 @@ document
           })
         );
         saveScrollAndTabAndReload();
-        saveScrollAndTabAndReload();
       } else {
         const text = await response.text();
         document.body.innerHTML = text;
@@ -652,7 +651,7 @@ document
     const suppEmail = document.getElementById("supplierEmail").value.trim();
     const suppAddress = document.getElementById("supplierAddress").value.trim();
 
-    if (!brandName) {
+    if (!suppName) {
       showToast("Vui lòng nhập tên nhà cung cấp.", "warning");
       return;
     }
@@ -1478,9 +1477,8 @@ viewModalEl.addEventListener("shown.bs.modal", async function (event) {
       specContainer.innerHTML = `<tr><td colspan="2" class="text-muted">Không có thông số kỹ thuật</td></tr>`;
     } else {
       Object.entries(data.specs).forEach(([key, val]) => {
-        const row = `<tr><td>${key.replace(/_/g, " ")}</td><td>${
-          Array.isArray(val) ? val.join("<br>") : val
-        }</td></tr>`;
+        const row = `<tr><td>${key.replace(/_/g, " ")}</td><td>${Array.isArray(val) ? val.join("<br>") : val
+          }</td></tr>`;
         specContainer.insertAdjacentHTML("beforeend", row);
       });
     }
@@ -1760,85 +1758,85 @@ function formatVND(value) {
 
 // Show order detail modal
 document.addEventListener('show.bs.modal', async function (event) {
-    const modal = event.target;
-    if (modal.id !== 'orderDetailModal') return;
+  const modal = event.target;
+  if (modal.id !== 'orderDetailModal') return;
 
-    const button = event.relatedTarget;
-    const id = button.getAttribute('data-id');
+  const button = event.relatedTarget;
+  const id = button.getAttribute('data-id');
 
-    // Thiết lập action cho form và các field cơ bản
-    document.getElementById('orderUpdateForm').action = `/api/order-detail/${id}`;
-    document.getElementById('modalOrderId').value = id;
-    document.getElementById('modalOrderEmail').innerText = button.getAttribute('data-email') || '(Không có)';
-    document.getElementById('modalOrderName').innerText = button.getAttribute('data-name') || '(Không có)';
-    document.getElementById('modalOrderPhone').innerText = button.getAttribute('data-phone') || '(Không có)';
-    document.getElementById('modalOrderDate').innerText = button.getAttribute('data-date');
-    document.getElementById('modalOrderPayment').innerText = button.getAttribute('data-payment');
-    document.getElementById('modalOrderAddress').innerText = button.getAttribute('data-address') || '(Không có)';
-    document.getElementById('modalOrderNote').innerText = button.getAttribute('data-note') || '(Không có)';
+  // Thiết lập action cho form và các field cơ bản
+  document.getElementById('orderUpdateForm').action = `/api/order-detail/${id}`;
+  document.getElementById('modalOrderId').value = id;
+  document.getElementById('modalOrderEmail').innerText = button.getAttribute('data-email') || '(Không có)';
+  document.getElementById('modalOrderName').innerText = button.getAttribute('data-name') || '(Không có)';
+  document.getElementById('modalOrderPhone').innerText = button.getAttribute('data-phone') || '(Không có)';
+  document.getElementById('modalOrderDate').innerText = formatFullDateTime(button.getAttribute('data-date'));
+  document.getElementById('modalOrderPayment').innerText = button.getAttribute('data-payment');
+  document.getElementById('modalOrderAddress').innerText = button.getAttribute('data-address') || '(Không có)';
+  document.getElementById('modalOrderNote').innerText = button.getAttribute('data-note') || '(Không có)';
 
-    // Lấy phần trăm giảm giá từ data-discount
-    const discountValue = parseInt(button.getAttribute('data-discount')) || 0;
+  // Lấy phần trăm giảm giá từ data-discount
+  const discountValue = parseInt(button.getAttribute('data-discount')) || 0;
 
-    // Hiển thị trạng thái đơn hàng
-    const status = button.getAttribute('data-status');
-    const badge = document.getElementById('modalOrderStatusDisplay');
-    document.getElementById("orderUpdateForm").dataset.status = status;
-    badge.className = 'badge';
-    badge.classList.add(
-        status === 'Hoàn Thành' ? 'bg-success' :
-        status === 'Chờ duyệt' ? 'bg-warning' :
+  // Hiển thị trạng thái đơn hàng
+  const status = button.getAttribute('data-status');
+  const badge = document.getElementById('modalOrderStatusDisplay');
+  document.getElementById("orderUpdateForm").dataset.status = status;
+  badge.className = 'badge';
+  badge.classList.add(
+    status === 'Hoàn Thành' ? 'bg-success' :
+      status === 'Chờ duyệt' ? 'bg-warning' :
         status === 'Đã duyệt' ? 'bg-info' :
-        'bg-secondary'
-    );
-    badge.innerText = status;
+          'bg-secondary'
+  );
+  badge.innerText = status;
 
-    // Hiển thị danh sách sản phẩm
-    const productList = document.getElementById('modalOrderProducts');
-    productList.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
+  // Hiển thị danh sách sản phẩm
+  const productList = document.getElementById('modalOrderProducts');
+  productList.innerHTML = `<tr><td colspan="3" class="text-muted text-center">Đang tải...</td></tr>`;
 
-    let totalBeforeDiscount = 0;
-    let discountAmount = 0;
+  let totalBeforeDiscount = 0;
+  let discountAmount = 0;
 
-    try {
-        const res = await fetch(`/api/order-detail/${id}`);
-        const data = await res.json();
-        productList.innerHTML = '';
-        if (!Array.isArray(data) || data.length === 0) {
-            productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm nào.</td></tr>`;
-        } else {
-            data.forEach(item => {
-                totalBeforeDiscount += Number(item.subtotalprice) || 0;
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
+  try {
+    const res = await fetch(`/api/order-detail/${id}`);
+    const data = await res.json();
+    productList.innerHTML = '';
+    if (!Array.isArray(data) || data.length === 0) {
+      productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Không có sản phẩm nào.</td></tr>`;
+    } else {
+      data.forEach(item => {
+        totalBeforeDiscount += Number(item.subtotalprice) || 0;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
                     <td>${item.product_name}</td>
                     <td>${item.quantity}</td>
                     <td>${formatVND(item.subtotalprice)}</td>
                 `;
-                productList.appendChild(tr);
-            });
-            // Tính số tiền đã giảm nếu có discount
-            if (discountValue > 0) {
-                discountAmount = Math.round(totalBeforeDiscount * discountValue / 100);
-            }
-        }
-    } catch (err) {
-        productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Lỗi khi tải sản phẩm.</td></tr>`;
+        productList.appendChild(tr);
+      });
+      // Tính số tiền đã giảm nếu có discount
+      if (discountValue > 0) {
+        discountAmount = Math.round(totalBeforeDiscount * discountValue / 100);
+      }
     }
+  } catch (err) {
+    productList.innerHTML = `<tr><td colspan="3" class="text-danger text-center">Lỗi khi tải sản phẩm.</td></tr>`;
+  }
 
-    // Hiển thị giảm giá (nếu có)
-    const discountWrapper = document.getElementById('modalOrderDiscountWrapper');
-    const discountEl = document.getElementById('modalOrderDiscount');
-    if (discountAmount > 0) {
-        discountWrapper.style.display = 'block';
-        discountEl.innerText = `- ${formatVND(discountAmount)}`;
-    } else {
-        discountWrapper.style.display = 'none';
-        discountEl.innerText = '';
-    }
+  // Hiển thị giảm giá (nếu có)
+  const discountWrapper = document.getElementById('modalOrderDiscountWrapper');
+  const discountEl = document.getElementById('modalOrderDiscount');
+  if (discountAmount > 0) {
+    discountWrapper.style.display = 'block';
+    discountEl.innerText = `- ${formatVND(discountAmount)}`;
+  } else {
+    discountWrapper.style.display = 'none';
+    discountEl.innerText = '';
+  }
 
-    // Hiển thị tổng tiền sau giảm
-    document.getElementById('modalOrderTotal').innerText = formatVND(totalBeforeDiscount - discountAmount);
+  // Hiển thị tổng tiền sau giảm
+  document.getElementById('modalOrderTotal').innerText = formatVND(totalBeforeDiscount - discountAmount);
 });
 
 // Cập nhật trạng thái đơn hàng
@@ -1940,25 +1938,14 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 //Shipping
-function formatVND(value) {
-  return Number(value).toLocaleString("vi-VN") + " VNĐ";
-}
 
-function formatDate(dateStr) {
-  const d = new Date(dateStr);
-  return isNaN(d.getTime()) ? "(Không rõ)" : d.toLocaleDateString("vi-VN");
-}
-
-function formatFullDateTime(date = new Date()) {
-  const pad = (n) => n.toString().padStart(2, "0");
-  return (
-    `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
-      date.getDate()
-    )} ` +
-    `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(
-      date.getSeconds()
-    )}`
-  );
+function formatFullDateTime(dateStr) {
+  const date = new Date(dateStr); const pad = n =>
+    n.toString().padStart(2, "0");
+  return `${date.getFullYear()}-${pad(date.getMonth() +
+    1)}-${pad(date.getDate())} `
+    +
+    `${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
 }
 
 function generateOrderCode(id) {
@@ -2063,7 +2050,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const shipping_date = formatFullDateTime();
 
     if (!id_order || !delivery_method || !shipping_address) {
-      alert("Vui lòng chọn đơn hàng và phương thức giao hàng.");
+      showToast("Vui lòng chọn đơn hàng và phương thức giao hàng.", "warning");
       return;
     }
 
@@ -2081,17 +2068,20 @@ document.addEventListener("DOMContentLoaded", () => {
       });
       const result = await resp.json();
       if (!resp.ok || !result.success) {
-        return alert("Tạo thất bại: " + (result.message || resp.statusText));
+        return showToast("Tạo đơn giao hàng thất bại: " + (result.message || resp.statusText), "error");
       }
 
-      alert("Tạo đơn giao hàng thành công và email đã được gửi.");
-      bootstrap.Modal.getInstance(
-        document.getElementById("addShippingModal")
-      )?.hide();
-      window.location.reload();
+      localStorage.setItem(
+        "toastAfterReload",
+        JSON.stringify({
+          message: "Thêm đơn giao hàng thành công!",
+          type: "success",
+        })
+      );
+      saveScrollAndTabAndReload();
     } catch (err) {
       console.error("Lỗi khi gửi dữ liệu:", err);
-      alert("Đã xảy ra lỗi khi gửi dữ liệu.");
+      showToast("Đã xảy ra lỗi khi gửi dữ liệu: " + err.message, "error");
     }
   });
 });
@@ -2113,9 +2103,7 @@ async function selectOrder(id, orderCode) {
       order.email || "(Không có)";
     document.getElementById("shippingOrderPhone").innerText =
       order.phone || "(Không có)";
-    document.getElementById("shippingOrderDate").innerText = formatDate(
-      order.created_at
-    );
+    document.getElementById("shippingOrderDate").innerText = formatFullDateTime(order.created_at);
     document.getElementById("shippingOrderPayment").innerText =
       order.payment_method || "(Không có)";
     document.getElementById("shippingOrderAddress").innerText =
@@ -2156,7 +2144,7 @@ async function selectOrder(id, orderCode) {
     // Hiển thị "Mã giảm giá" nhưng thực ra show số tiền giảm
     if (discountAmount > 0) {
       document.getElementById("shippingOrderVoucher").style.display = "block";
-      document.getElementById("shippingOrderVoucherCode").innerHTML = 
+      document.getElementById("shippingOrderVoucherCode").innerHTML =
         `<span>- ${formatVND(discountAmount)}</span>`;
     } else {
       document.getElementById("shippingOrderVoucher").style.display = "none";
@@ -2173,7 +2161,7 @@ async function selectOrder(id, orderCode) {
     }, 300);
   } catch {
     console.error("Lỗi tải đơn hoặc sản phẩm");
-    alert("Không thể tải thông tin đơn hàng hoặc sản phẩm.");
+    showToast("Không thể tải thông tin đơn hàng hoặc sản phẩm.", "error");
   }
 }
 

@@ -14,40 +14,7 @@ const nodemailer = require('nodemailer');
 const jwt = require('jsonwebtoken');
 const { get } = require("../routes/order");
 
-
 const saltRounds = 10;
-
-// const getHomePage = (req, res) => {
-//   const user = req.user || req.session.user || null;
-
-//   Product.getAll(null, (err, products) => {
-//     if (err) {
-//       return res.status(500).render("error", { message: "Lỗi khi lấy danh sách sản phẩm." });
-//     }
-
-//     if (!user || !user.email) {
-//       // Nếu chưa đăng nhập, không cần tìm customer
-//       return res.render('HomePage', {
-//         user: null,
-//         customer: null,
-//         products
-//       });
-//     }
-
-//     // Lấy thông tin họ tên nếu có
-//     Customer.getByEmail(user.email, (errCustomer, customerInfo) => {
-//       if (errCustomer && errCustomer.kind !== "not_found") {
-//         return res.status(500).render("error", { message: "Lỗi khi lấy thông tin khách hàng." });
-//       }
-
-//       res.render('HomePage', {
-//         user,
-//         customer: customerInfo || null,
-//         products
-//       });
-//     });
-//   });
-// };
 
 const getHomePage = (req, res) => {
   const user = req.user || req.session.user || null;
