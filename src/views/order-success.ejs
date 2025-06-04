@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
 
-	<!-- Bootstrap -->
-	<link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
+  <!-- Bootstrap -->
+  <link type="text/css" rel="stylesheet" href="/css/bootstrap.min.css" />
 
-	<!-- Slick -->
-	<link type="text/css" rel="stylesheet" href="/css/slick.css" />
-	<link type="text/css" rel="stylesheet" href="/css/slick-theme.css" />
+  <!-- Slick -->
+  <link type="text/css" rel="stylesheet" href="/css/slick.css" />
+  <link type="text/css" rel="stylesheet" href="/css/slick-theme.css" />
 
-	<!-- nouislider -->
-	<link type="text/css" rel="stylesheet" href="/css/nouislider.min.css" />
+  <!-- nouislider -->
+  <link type="text/css" rel="stylesheet" href="/css/nouislider.min.css" />
 
-	<!-- Font Awesome Icon -->
-	<link rel="stylesheet" href="/css/font-awesome.min.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- Font Awesome Icon -->
+  <link rel="stylesheet" href="/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <!-- SweetAlert2 CSS -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 
-	<!-- Custom stlylesheet -->
-	<link type="text/css" rel="stylesheet" href="/css/style.css" />
+  <!-- Custom stlylesheet -->
+  <link type="text/css" rel="stylesheet" href="/css/style.css" />
 
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -28,16 +31,19 @@
       font-family: Arial, sans-serif;
       background-color: #fff;
       text-align: center;
-      
+
     }
+
     .success-icon {
       font-size: 64px;
       color: #2ecc71;
     }
+
     .box-icon {
       font-size: 80px;
       color: #333;
     }
+
     .btn {
       padding: 10px 20px;
       margin: 10px;
@@ -48,13 +54,16 @@
       color: #333;
       font-weight: bold;
     }
+
     .btn:hover {
       background: #ddd;
     }
+
     .footer {
       margin-top: 60px;
       color: #777;
     }
+
     .socials a {
       margin: 0 10px;
       color: #333;
@@ -65,47 +74,55 @@
 
 <body>
   <%- include('./header.ejs') %>
-  <div class ="container" style="margin: 50px 0 50px 160px;"width= "200"; height= "100";>
-    
-  <img src="images/storeLogo2.png" alt="Webitrang logo" height="60" />
+    <div class="container" style="margin: 50px 0 50px 160px;" width="200" ; height="100" ;>
 
-  <div class="box-icon">📦</div>
-  <h1>Đặt hàng thành công!</h1>
-  <p style="color:#eb0000; font-weight: bold;">
-    Cảm ơn bạn đã đặt hàng, hãy chú ý Email thông báo đơn hàng của bạn!
-  </p>
+      <img src="images/storeLogo2.png" alt="Webitrang logo" height="60" />
 
-  <a href="/" class="btn">Quay về trang chủ</a>
-  <a href="/userInfo#order-history" class="btn">Xem đơn hàng</a>
-</div>
+      <div class="box-icon">📦</div>
+      <h1>Đặt hàng thành công!</h1>
+      <p style="color:#eb0000; font-weight: bold;">
+        Cảm ơn bạn đã đặt hàng, hãy chú ý Email thông báo đơn hàng của bạn!
+      </p>
 
-  <%- include('./footer.ejs') %>
+      <a href="/" class="btn">Quay về trang chủ</a>
+      <a href="/userInfo#order-history" class="btn">Xem đơn hàng</a>
+    </div>
 
-<script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-<script>
-  window.onload = function() {
-    var duration = 5 * 1000;
-    var animationEnd = Date.now() + duration;
-    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
+    <%- include('./footer.ejs') %>
 
-    function randomInRange(min, max) {
-      return Math.random() * (max - min) + min;
-    }
+      <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+      <!-- SweetAlert2 JS -->
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+      <script src="js/toastAlert.js"></script>
+      <script src="js/infoScript.js"></script>
+      <script src="/js/main.js"></script>
+      <script src="/js/cart.js"></script>
+      <script>
+        window.onload = function () {
+          var duration = 5 * 1000;
+          var animationEnd = Date.now() + duration;
+          var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 1000 };
 
-    var interval = setInterval(function() {
-      var timeLeft = animationEnd - Date.now();
+          function randomInRange(min, max) {
+            return Math.random() * (max - min) + min;
+          }
 
-      if (timeLeft <= 0) {
-        return clearInterval(interval);
-      }
+          var interval = setInterval(function () {
+            var timeLeft = animationEnd - Date.now();
 
-      var particleCount = 50 * (timeLeft / duration);
-      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
-      confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
-    }, 250);
-  };
-  
-</script>
+            if (timeLeft <= 0) {
+              return clearInterval(interval);
+            }
+
+            var particleCount = 50 * (timeLeft / duration);
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } }));
+            confetti(Object.assign({}, defaults, { particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } }));
+          }, 250);
+        };
+
+      </script>
 
 </body>
 
