@@ -136,7 +136,7 @@ CREATE TABLE order_detail (
 -- Bảng shipping
 CREATE TABLE shipping (
     id INT PRIMARY KEY AUTO_INCREMENT,
-    shipping_date DATETIME,
+    shipping_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     delivery_method VARCHAR(255),
     shipping_status ENUM('Thành công', 'Thất bại'),
     id_customer INT,
