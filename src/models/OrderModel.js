@@ -400,7 +400,7 @@ Order.getOnDeliveringBasicInfo = (result) => {
     SELECT o.id, o.fullname, o.phone, v.voucher_code, v.voucher_value
     FROM order_table o
     LEFT JOIN voucher v ON o.voucher_id = v.id
-    WHERE o.order_status = 'Chờ duyệt'
+    WHERE o.order_status = 'Đã duyệt'
     ORDER BY o.id DESC
   `;
   sql.query(query, (err, res) => {

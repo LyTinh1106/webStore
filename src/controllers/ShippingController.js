@@ -76,6 +76,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+//Cập nhật thông tin vận chuyển
 const createShippingAndSendEmail = async (req, res) => {
   try {
     const {
@@ -93,7 +94,7 @@ const createShippingAndSendEmail = async (req, res) => {
       });
     }
 
-    // 1) tạo shipping
+    // 1. Tạo shipping
     const newShipping = {
       shipping_date: shipping_date || new Date(),
       delivery_method,
@@ -105,12 +106,12 @@ const createShippingAndSendEmail = async (req, res) => {
       Shipping.create(newShipping, (e, d) => e ? j(e) : r(d))
     );
 
-    // 2) cập nhật order sang Hoàn thành
+    // 2. Cập nhật trạng thái đơn hàng
     await new Promise((r, j) =>
       Shipping.updateOrderStatusToCompleted(id_order, e => e ? j(e) : r())
     );
 
-    // 3) lấy thông tin đơn và chi tiết sản phẩm
+    // 3. Lấy order info và chi tiết sản phẩm
     const orderInfo = await new Promise((r, j) =>
       Order.findById(id_order, (e, d) => e ? j(e) : r(d))
     );
@@ -118,7 +119,32 @@ const createShippingAndSendEmail = async (req, res) => {
       OrderDetail.findByOrderId(id_order, (e, rows) => e ? j(e) : r(rows))
     );
 
-    // 4) build HTML cho danh sách sản phẩm và tính subtotal
+    // 4. Gọi hàm gửi mail, KHÔNG await
+    sendShippingEmail(orderInfo, items, shippingData, shipping_address, id_order);
+
+    // 5. Trả response ngay
+    return res.status(201).json({
+      success: true,
+      message: 'Đã tạo đơn giao hàng. Email xác nhận sẽ được gửi cho khách.'
+    });
+
+  } catch (err) {
+    console.error('createShippingAndSendEmail error:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'Có lỗi khi tạo đơn giao hàng.',
+      error: err.message
+    });
+  }
+};
+
+async function sendShippingEmail(orderInfo, items, shippingData, shipping_address, id_order) {
+  try {
+    // 1. Build mã đơn hàng và ngày giao
+    const orderCode = generateCode(id_order, 7919);
+    const dateStr = formatDateTime(shippingData.shipping_date);
+
+    // 2. Tính tổng phụ và HTML sản phẩm
     let subtotal = 0;
     const itemsHtml = items.map(i => {
       const sub = Number(i.subtotalprice) || 0;
@@ -134,22 +160,17 @@ const createShippingAndSendEmail = async (req, res) => {
         </tr>`;
     }).join('');
 
-    // 5) Tính giảm giá dựa vào voucher_value (phần trăm)
+    // 3. Tính giảm giá (nếu có)
     const voucherValue = parseInt(orderInfo.voucher_value) || 0;
     let discountAmount = 0;
     if (voucherValue > 0 && subtotal > 0) {
       discountAmount = Math.floor(subtotal * voucherValue / 100);
     }
-
-    // 6) Tổng tiền sau khi trừ giảm
+    // 4. Tổng tiền sau giảm giá
     const totalAfter = subtotal - discountAmount;
     const formattedTotal = totalAfter.toLocaleString('vi-VN') + ' VND';
 
-    // 7) sinh mã + format ngày giao hàng
-    const orderCode  = generateCode(id_order, 7919);
-    const dateStr    = formatDateTime(shippingData.shipping_date);
-
-    // 8) template email với phần hiển thị “Giảm giá” và tô đỏ "Tổng tiền"
+    // 5. Build HTML
     const html = `
   <div style="font-family:Arial,sans-serif;background:#f4f4f4;padding:20px;">
     <div style="max-width:600px;margin:auto;background:#fff;border-radius:8px;overflow:hidden;">
@@ -158,19 +179,14 @@ const createShippingAndSendEmail = async (req, res) => {
       </div>
       <div style="padding:20px;color:#333;line-height:1.5;font-size:16px;">
         <p style="font-size:18px;">Xin chào <strong>${orderInfo.fullname}</strong>,</p>
-        
         <p style="font-size:16px;"><strong>Mã đơn hàng:</strong>
           <a href="#" style="color:#007bff;text-decoration:none;font-size:16px;">${orderCode}</a>
         </p>
-
-        <!-- Hiển thị ngày giao hàng -->
         <p style="font-size:16px;margin-bottom:16px;"><strong>Ngày giao hàng:</strong> ${dateStr}</p>
-
         <h4 style="font-size:20px;margin-top:24px;margin-bottom:8px;color:#555;">Thông tin giao hàng:</h4>
         <p style="margin:4px 0;font-size:16px;"><strong>Địa chỉ:</strong> ${shipping_address}</p>
         <p style="margin:4px 0;font-size:16px;"><strong>SĐT:</strong> ${orderInfo.phone}</p>
         <p style="margin:4px 0;font-size:16px;"><strong>Phương thức thanh toán:</strong> ${orderInfo.payment_method}</p>
-
         <h4 style="font-size:20px;margin-top:24px;margin-bottom:8px;color:#555;">Chi tiết đơn hàng:</h4>
         <table style="width:100%;border-collapse:collapse;font-size:16px;">
           <thead>
@@ -181,7 +197,6 @@ const createShippingAndSendEmail = async (req, res) => {
           </thead>
           <tbody>
             ${itemsHtml}
-            <!-- Dòng giảm giá nếu có -->
             ${discountAmount > 0 ? `
             <tr>
               <td style="padding:8px;border-bottom:1px solid #eee;font-size:16px;">
@@ -198,20 +213,18 @@ const createShippingAndSendEmail = async (req, res) => {
             </tr>
           </tbody>
         </table>
-
         <p style="text-align:right;font-size:28px;font-weight:bold;color:red;margin-top:12px;">
           Tổng tiền: ${formattedTotal}
         </p>
-
         <p style="text-align:center;color:#777;font-size:16px;margin-top:24px;">
           Cảm ơn bạn đã mua hàng tại VTVT Store!
         </p>
       </div>
     </div>
   </div>
-`;
+    `;
 
-    // 9) gửi mail
+    // 6. Gửi mail
     await transporter.sendMail({
       from: `"VTVT Store" <${process.env.EMAIL_USER}>`,
       to: orderInfo.email,
@@ -219,23 +232,15 @@ const createShippingAndSendEmail = async (req, res) => {
       html
     });
 
-    // 10) trả về client
-    return res.status(201).json({
-      success: true,
-      message: 'Email thông báo đơn hàng đã được gửi thành công.'
-    });
+    console.log('Đã gửi mail xác nhận đơn giao hàng cho:', orderInfo.email);
 
-  } catch(err) {
-    console.error('createShippingAndSendEmail error:', err);
-    return res.status(500).json({
-      success: false,
-      message: 'Có lỗi khi gửi email thông báo.',
-      error: err.message
-    });
+  } catch (err) {
+    console.error('Gửi mail thất bại:', err);
+    // (Tuỳ chọn) lưu log gửi mail lỗi vào DB
   }
-};
+}
 
-//Cập nhật thông tin vận chuyển
+
 const updateShippingById = (req, res) => {
   const id = req.params.id;
   const { shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address } = req.body;
