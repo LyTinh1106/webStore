@@ -202,7 +202,7 @@
                         </div>
                     </div>
                 </div>
-            
+
                 <div class="table-responsive scroll-table">
                     <table class="table table-striped">
                         <thead>
@@ -390,462 +390,450 @@
                     </div>
 
 
-                        <!-- Modal Thêm Sản Phẩm -->
-                        <div class="modal fade" id="addProductModal" tabindex="-1"
-                            aria-labelledby="addProductModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Thêm Sản Phẩm Mới</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Đóng"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="addProductForm" enctype="multipart/form-data">
-                                            <div class="row g-3">
-                                                <div class="col-md-12">
-                                                    <label for="productName" class="form-label">Tên sản phẩm</label>
-                                                    <input type="text" class="form-control" id="productName"
-                                                        name="productName" required>
-                                                </div>
-                                                <div class="col-12">
-                                                    <label for="description" class="form-label">Mô tả</label>
-                                                    <div id="quill-description" style="height:180px"></div>
-                                                    <input type="hidden" name="description" id="description">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="importPrice" class="form-label">Giá nhập</label>
-                                                    <input type="number" class="form-control" id="importPrice"
-                                                        name="importPrice" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="salePrice" class="form-label">Giá bán</label>
-                                                    <input type="number" class="form-control" id="salePrice"
-                                                        name="salePrice" required>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="category" class="form-label">Loại sản phẩm</label>
-                                                    <select class="form-select" id="category" name="category">
-                                                        <option value="">-- Chọn loại--</option>
-                                                        <% categories.forEach(function(category) { %>
-                                                            <option value="<%= category.id %>">
-                                                                <%= category.name %>
-                                                            </option>
-                                                            <% }) %>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="brand" class="form-label">Hãng</label>
-                                                    <select class="form-select" id="brand" name="brand">
-                                                        <option value="">-- Chọn hãng --</option>
-                                                        <% brands.forEach(function(brand) { %>
-                                                            <option value="<%= brand.brand_id %>">
-                                                                <%= brand.brand_name %>
-                                                            </option>
-                                                            <% }) %>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="origin" class="form-label">Xuất xứ</label>
-                                                    <input type="text" class="form-control" id="origin" name="origin">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="warranty" class="form-label">Bảo hành (tháng)</label>
-                                                    <input type="number" class="form-control" id="warranty"
-                                                        name="warranty">
-                                                </div>
-
-                                                <!-- Hình ảnh -->
-                                                <div class="col-md-12">
-                                                    <label for="images" class="form-label">Hình ảnh sản phẩm</label>
-                                                    <input class="form-control" type="file" id="images" name="images"
-                                                        multiple accept=".png,.jpg,.jpeg">
-                                                    <small class="text-muted">Chỉ chấp nhận định dạng: PNG, JPG,
-                                                        JPEG</small>
-                                                    <div id="imagePreview" class="mt-2 d-flex flex-wrap gap-2"></div>
-                                                </div>
-
-                                                <!-- Thông số kỹ thuật -->
-                                                <div class="col-md-12">
-                                                    <label for="specFile" class="form-label">Thông số kỹ thuật
-                                                        (File)</label>
-                                                    <input class="form-control" type="file" id="specFile"
-                                                        name="specFile" accept=".csv,.txt,.xlsx">
-                                                    <small class="text-muted">Hỗ trợ định dạng: CSV, TXT, Excel</small>
-
-                                                    <div id="specActions" class="mt-2" style="display: none;">
-                                                        <!-- <button type="button" class="btn btn-sm btn-outline-danger"
-                                                        onclick="clearSpecData_specFile()"> Xóa dữ liệu</button> -->
-                                                    </div>
-
-                                                    <div id="specTableContainer" class="mt-3" style="display: none;">
-                                                        <h6>Thông số kỹ thuật:</h6>
-                                                        <table class="table table-bordered table-sm">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Thuộc tính</th>
-                                                                    <th>Giá trị</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="specTableBody"></tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Hủy</button>
-                                        <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản
-                                            phẩm</button>
-                                    </div>
+                    <!-- Modal Thêm Sản Phẩm -->
+                    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Thêm Sản Phẩm Mới</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Đóng"></button>
                                 </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal chỉnh sửa sản phẩm -->
-                        <div class="modal fade" id="updateProductModal" tabindex="-1"
-                            aria-labelledby="updateProductModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Cập nhật sản phẩm</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Đóng"></button>
-                                    </div>
-
-                                    <div class="modal-body">
-                                        <form id="updateProductForm" enctype="multipart/form-data">
-                                            <input type="hidden" id="editProductId" name="id" />
-                                            <div class="col-md-12">
-                                                <label for="editProductName" class="form-label">Tên sản phẩm</label>
-                                                <input type="text" class="form-control" id="editProductName"
-                                                    name="productName" required />
-                                            </div>
-
-                                            <div class="row g-3">
-                                                <div class="col-12">
-                                                    <label for="edit-quill-description" class="form-label">Mô tả</label>
-                                                    <div id="edit-quill-description" style="height:180px"></div>
-                                                    <input type="hidden" name="description" id="editDescription">
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="editImportPrice" class="form-label">Giá nhập</label>
-                                                    <input type="number" class="form-control" id="editImportPrice"
-                                                        name="importPrice" required />
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="editSalePrice" class="form-label">Giá bán</label>
-                                                    <input type="number" class="form-control" id="editSalePrice"
-                                                        name="salePrice" required />
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="editCategory" class="form-label">Loại sản phẩm</label>
-                                                    <select class="form-select" id="editCategory" name="category">
-                                                        <option value="">-- Chọn loại--</option>
-                                                        <% categories.forEach(function(category) { %>
-                                                            <option value="<%= category.id %>">
-                                                                <%= category.name %>
-                                                            </option>
-                                                            <% }) %>
-                                                    </select>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="editBrand" class="form-label">Hãng</label>
-                                                    <select class="form-select" id="editBrand" name="brand">
-                                                        <option value="">-- Chọn nhãn hàng--</option>
-                                                        <% brands.forEach(function(brand) { %>
-                                                            <option value="<%= brand.brand_id %>">
-                                                                <%= brand.brand_name %>
-                                                            </option>
-                                                            <% }) %>
-                                                    </select>
-                                                </div>
-
-                                                <div class="col-md-6">
-                                                    <label for="editOrigin" class="form-label">Xuất xứ</label>
-                                                    <input type="text" class="form-control" id="editOrigin"
-                                                        name="origin" />
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <label for="editWarranty" class="form-label">Bảo hành
-                                                        (tháng)</label>
-                                                    <input type="number" class="form-control" id="editWarranty"
-                                                        name="warranty" />
-                                                </div>
-
-                                                <div class="col-md-12">
-                                                    <label for="editImages" class="form-label">Cập nhật hình ảnh</label>
-                                                    <input class="form-control" type="file" id="editImages"
-                                                        name="images" multiple accept=".png,.jpg,.jpeg" />
-                                                    <small class="text-muted">Chỉ chấp nhận định dạng: PNG, JPG,
-                                                        JPEG</small>
-                                                    <div id="editImagePreview" class="mt-2 d-flex flex-wrap gap-2">
-
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-12">
-                                                    <label for="editSpecFile" class="form-label">Thông số kỹ thuật
-                                                        (File)</label>
-                                                    <input class="form-control" type="file" id="editSpecFile"
-                                                        name="specFile" accept=".csv,.txt,.xlsx" />
-                                                    <small class="text-muted">Hỗ trợ định dạng: CSV, TXT, Excel</small>
-
-                                                    <div id="editSpecActions" class="mt-2" style="display: none;">
-                                                        <!-- <button type="button" class="btn btn-sm btn-outline-danger"
-                                                        onclick="clearSpecData_editSpecFile()">Xóa dữ liệu</button> -->
-                                                    </div>
-
-                                                    <div id="editSpecTableContainer" class="mt-3"
-                                                        style="display: none;">
-                                                        <h6>Thông số kỹ thuật:</h6>
-                                                        <table class="table table-bordered table-sm">
-                                                            <thead>
-                                                                <tr>
-                                                                    <th>Thuộc tính</th>
-                                                                    <th>Giá trị</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody id="editSpecTableBody"></tbody>
-                                                        </table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Hủy</button>
-                                        <button type="submit" form="updateProductForm" class="btn btn-primary">Cập
-                                            nhật</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Modal chi tiết sản phẩm -->
-                        <div class="modal fade" id="viewProductModal" tabindex="-1"
-                            aria-labelledby="viewProductModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-xl modal-dialog-scrollable">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title">Chi tiết sản phẩm</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Đóng"></button>
-
-                                    </div>
-                                    <div class="modal-body">
+                                <div class="modal-body">
+                                    <form id="addProductForm" enctype="multipart/form-data">
                                         <div class="row g-3">
-                                            <div class="col-md-6"><strong>Mã sản phẩm:</strong> <span
-                                                    id="viewId"></span>
-                                            </div>
-                                            <div class="col-md-6"><strong>Tên sản phẩm:</strong> <span
-                                                    id="viewName"></span>
-                                            </div>
-                                            <div class="col-12"><strong>Mô tả:</strong>
-                                                <p id="viewDescription" class="mb-1"></p>
-                                            </div>
-                                            <div class="col-md-6"><strong>Giá nhập:</strong> <span
-                                                    id="viewImportPrice"></span></div>
-                                            <div class="col-md-6"><strong>Giá bán:</strong> <span
-                                                    id="viewSalePrice"></span>
-                                            </div>
-                                            <div class="col-md-6"><strong>Loại:</strong> <span id="viewCategory"></span>
-                                            </div>
-                                            <div class="col-md-6"><strong>Hãng:</strong> <span id="viewBrand"></span>
-                                            </div>
-                                            <div class="col-md-6"><strong>Xuất xứ:</strong> <span
-                                                    id="viewOrigin"></span>
-                                            </div>
-                                            <div class="col-md-6"><strong>Bảo hành:</strong> <span
-                                                    id="viewWarranty"></span>
-                                                tháng</div>
-                                        </div>
-
-                                        <div class="row mt-3">
                                             <div class="col-md-12">
-                                                <strong>Hình ảnh sản phẩm:</strong>
-                                                <div id="viewImages" class="d-flex flex-wrap gap-2 mt-2"></div>
+                                                <label for="productName" class="form-label">Tên sản phẩm</label>
+                                                <input type="text" class="form-control" id="productName"
+                                                    name="productName" required>
                                             </div>
-                                        </div>
+                                            <div class="col-12">
+                                                <label for="description" class="form-label">Mô tả</label>
+                                                <div id="quill-description" style="height:180px"></div>
+                                                <input type="hidden" name="description" id="description">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="importPrice" class="form-label">Giá nhập</label>
+                                                <input type="number" class="form-control" id="importPrice"
+                                                    name="importPrice" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="salePrice" class="form-label">Giá bán</label>
+                                                <input type="number" class="form-control" id="salePrice"
+                                                    name="salePrice" required>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="category" class="form-label">Loại sản phẩm</label>
+                                                <select class="form-select" id="category" name="category">
+                                                    <option value="">-- Chọn loại--</option>
+                                                    <% categories.forEach(function(category) { %>
+                                                        <option value="<%= category.id %>">
+                                                            <%= category.name %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="brand" class="form-label">Hãng</label>
+                                                <select class="form-select" id="brand" name="brand">
+                                                    <option value="">-- Chọn hãng --</option>
+                                                    <% brands.forEach(function(brand) { %>
+                                                        <option value="<%= brand.brand_id %>">
+                                                            <%= brand.brand_name %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="origin" class="form-label">Xuất xứ</label>
+                                                <input type="text" class="form-control" id="origin" name="origin">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="warranty" class="form-label">Bảo hành (tháng)</label>
+                                                <input type="number" class="form-control" id="warranty" name="warranty">
+                                            </div>
 
-                                        <div class="row mt-3">
+                                            <!-- Hình ảnh -->
                                             <div class="col-md-12">
-                                                <strong>Thông số kỹ thuật:</strong>
-                                                <table class="table table-bordered table-sm mt-2">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>Thuộc tính</th>
-                                                            <th>Giá trị</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id="viewSpecs"></tbody>
-                                                </table>
+                                                <label for="images" class="form-label">Hình ảnh sản phẩm</label>
+                                                <input class="form-control" type="file" id="images" name="images"
+                                                    multiple accept=".png,.jpg,.jpeg">
+                                                <small class="text-muted">Chỉ chấp nhận định dạng: PNG, JPG,
+                                                    JPEG</small>
+                                                <div id="imagePreview" class="mt-2 d-flex flex-wrap gap-2"></div>
+                                            </div>
+
+                                            <!-- Thông số kỹ thuật -->
+                                            <div class="col-md-12">
+                                                <label for="specFile" class="form-label">Thông số kỹ thuật
+                                                    (File)</label>
+                                                <input class="form-control" type="file" id="specFile" name="specFile"
+                                                    accept=".csv,.txt,.xlsx">
+                                                <small class="text-muted">Hỗ trợ định dạng: CSV, TXT, Excel</small>
+
+                                                <div id="specActions" class="mt-2" style="display: none;">
+                                                    <!-- <button type="button" class="btn btn-sm btn-outline-danger"
+                                                        onclick="clearSpecData_specFile()"> Xóa dữ liệu</button> -->
+                                                </div>
+
+                                                <div id="specTableContainer" class="mt-3" style="display: none;">
+                                                    <h6>Thông số kỹ thuật:</h6>
+                                                    <table class="table table-bordered table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Thuộc tính</th>
+                                                                <th>Giá trị</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="specTableBody"></tbody>
+                                                    </table>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </form>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    <button type="submit" form="addProductForm" class="btn btn-primary">Thêm sản
+                                        phẩm</button>
                                 </div>
                             </div>
                         </div>
-                      
                     </div>
-                    <div class="table-responsive scroll-table">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="sticky-header">
-                                    <th>Mã SP</th>
-                                    <th>Tên sản phẩm</th>
-                                    <th>Loại</th>
-                                    <th>Giá nhập</th>
-                                    <th>Giá bán</th>
-                                    <th>Xuất xứ</th>
-                                    <th>Bảo hành</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% function generateProductCode(id) { const randomPart=('0000' + (id * 1237 %
-                                    10000)).slice(-4); return `${randomPart}${id}`; } %>
 
+                    <!-- Modal chỉnh sửa sản phẩm -->
+                    <div class="modal fade" id="updateProductModal" tabindex="-1"
+                        aria-labelledby="updateProductModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Cập nhật sản phẩm</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Đóng"></button>
+                                </div>
 
+                                <div class="modal-body">
+                                    <form id="updateProductForm" enctype="multipart/form-data">
+                                        <input type="hidden" id="editProductId" name="id" />
+                                        <div class="col-md-12">
+                                            <label for="editProductName" class="form-label">Tên sản phẩm</label>
+                                            <input type="text" class="form-control" id="editProductName"
+                                                name="productName" required />
+                                        </div>
 
-                                    <% if (products.length> 0) { %>
-                                        <% products.forEach((product)=> { %>
-                                            <tr id="product-<%= product.id %>"
-                                                data-category-id="<%= product.category_id %>">
+                                        <div class="row g-3">
+                                            <div class="col-12">
+                                                <label for="edit-quill-description" class="form-label">Mô tả</label>
+                                                <div id="edit-quill-description" style="height:180px"></div>
+                                                <input type="hidden" name="description" id="editDescription">
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="editImportPrice" class="form-label">Giá nhập</label>
+                                                <input type="number" class="form-control" id="editImportPrice"
+                                                    name="importPrice" required />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="editSalePrice" class="form-label">Giá bán</label>
+                                                <input type="number" class="form-control" id="editSalePrice"
+                                                    name="salePrice" required />
+                                            </div>
 
-                                                <td>
-                                                    #<%= generateProductCode(product.id) %>
-                                                </td>
+                                            <div class="col-md-6">
+                                                <label for="editCategory" class="form-label">Loại sản phẩm</label>
+                                                <select class="form-select" id="editCategory" name="category">
+                                                    <option value="">-- Chọn loại--</option>
+                                                    <% categories.forEach(function(category) { %>
+                                                        <option value="<%= category.id %>">
+                                                            <%= category.name %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="editBrand" class="form-label">Hãng</label>
+                                                <select class="form-select" id="editBrand" name="brand">
+                                                    <option value="">-- Chọn nhãn hàng--</option>
+                                                    <% brands.forEach(function(brand) { %>
+                                                        <option value="<%= brand.brand_id %>">
+                                                            <%= brand.brand_name %>
+                                                        </option>
+                                                        <% }) %>
+                                                </select>
+                                            </div>
 
-                                                <td>
-                                                    <%= product.name %>
-                                                </td>
-                                                <td>
-                                                    <%= product.category_name || 'Không rõ' %>
-                                                </td>
-                                                <td>
-                                                    <%= Number(product.import_price).toLocaleString('vi-VN') %> VNĐ
-                                                </td>
-                                                <td>
-                                                    <%= Number(product.retail_price).toLocaleString('vi-VN') %> VNĐ
-                                                </td>
-                                                <td>
-                                                    <%= product.origin %>
-                                                </td>
-                                                <td>
-                                                    <%= product.warranty %>
-                                                </td>
-                                                <td>
-                                                    <a href="#" class="btn btn-sm btn-primary viewProductBtn"
-                                                        data-bs-toggle="modal" data-bs-target="#viewProductModal"
-                                                        data-id="<%= product.id %>">
-                                                        <i class="fas fa-eye"></i>
-                                                    </a>
+                                            <div class="col-md-6">
+                                                <label for="editOrigin" class="form-label">Xuất xứ</label>
+                                                <input type="text" class="form-control" id="editOrigin" name="origin" />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label for="editWarranty" class="form-label">Bảo hành
+                                                    (tháng)</label>
+                                                <input type="number" class="form-control" id="editWarranty"
+                                                    name="warranty" />
+                                            </div>
 
-                                                    <!-- Button to trigger modal -->
-                                                    <a href="#" class="btn btn-sm btn-info editProductBtn"
-                                                        data-bs-toggle="modal" data-bs-target="#updateProductModal"
-                                                        data-id="<%= product.id %>">
-                                                        <i class="fas fa-edit"></i>
-                                                    </a>
+                                            <div class="col-md-12">
+                                                <label for="editImages" class="form-label">Cập nhật hình ảnh</label>
+                                                <input class="form-control" type="file" id="editImages" name="images"
+                                                    multiple accept=".png,.jpg,.jpeg" />
+                                                <small class="text-muted">Chỉ chấp nhận định dạng: PNG, JPG,
+                                                    JPEG</small>
+                                                <div id="editImagePreview" class="mt-2 d-flex flex-wrap gap-2">
 
-                                                    <!-- Nút xóa -->
-                                                    <button class="btn btn-sm btn-danger delete-product-btn"
-                                                        data-id="<%= product.id %>">
-                                                        <i class="fas fa-trash"></i>
-                                                    </button>
-                                                </td>
+                                                </div>
+                                            </div>
 
-                                            </tr>
+                                            <div class="col-md-12">
+                                                <label for="editSpecFile" class="form-label">Thông số kỹ thuật
+                                                    (File)</label>
+                                                <input class="form-control" type="file" id="editSpecFile"
+                                                    name="specFile" accept=".csv,.txt,.xlsx" />
+                                                <small class="text-muted">Hỗ trợ định dạng: CSV, TXT, Excel</small>
 
-                                            <% }) %>
-                                                <% } else { %>
+                                                <div id="editSpecActions" class="mt-2" style="display: none;">
+                                                    <!-- <button type="button" class="btn btn-sm btn-outline-danger"
+                                                        onclick="clearSpecData_editSpecFile()">Xóa dữ liệu</button> -->
+                                                </div>
+
+                                                <div id="editSpecTableContainer" class="mt-3" style="display: none;">
+                                                    <h6>Thông số kỹ thuật:</h6>
+                                                    <table class="table table-bordered table-sm">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>Thuộc tính</th>
+                                                                <th>Giá trị</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="editSpecTableBody"></tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    <button type="submit" form="updateProductForm" class="btn btn-primary">Cập
+                                        nhật</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Modal chi tiết sản phẩm -->
+                    <div class="modal fade" id="viewProductModal" tabindex="-1" aria-labelledby="viewProductModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-xl modal-dialog-scrollable">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Chi tiết sản phẩm</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Đóng"></button>
+
+                                </div>
+                                <div class="modal-body">
+                                    <div class="row g-3">
+                                        <div class="col-md-6"><strong>Mã sản phẩm:</strong> <span id="viewId"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Tên sản phẩm:</strong> <span id="viewName"></span>
+                                        </div>
+                                        <div class="col-12"><strong>Mô tả:</strong>
+                                            <p id="viewDescription" class="mb-1"></p>
+                                        </div>
+                                        <div class="col-md-6"><strong>Giá nhập:</strong> <span
+                                                id="viewImportPrice"></span></div>
+                                        <div class="col-md-6"><strong>Giá bán:</strong> <span id="viewSalePrice"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Loại:</strong> <span id="viewCategory"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Hãng:</strong> <span id="viewBrand"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Xuất xứ:</strong> <span id="viewOrigin"></span>
+                                        </div>
+                                        <div class="col-md-6"><strong>Bảo hành:</strong> <span id="viewWarranty"></span>
+                                            tháng</div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <strong>Hình ảnh sản phẩm:</strong>
+                                            <div id="viewImages" class="d-flex flex-wrap gap-2 mt-2"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mt-3">
+                                        <div class="col-md-12">
+                                            <strong>Thông số kỹ thuật:</strong>
+                                            <table class="table table-bordered table-sm mt-2">
+                                                <thead>
                                                     <tr>
-                                                        <td colspan="8" class="text-center">Không có sản phẩm nào.</td>
+                                                        <th>Thuộc tính</th>
+                                                        <th>Giá trị</th>
                                                     </tr>
-                                                    <% } %>
-                            </tbody>
-
-
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Categories Section -->
-                <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="v-categories-tab">
-                    <h3 class="section-title">Quản lý loại sản phẩm</h3>
-                    <div class="mb-3">
-                        <!-- Nút mở popup -->
-                        <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
-                            <i class="fas fa-plus"></i> Thêm danh mục mới
-                        </a>
-
-                        <!-- Modal Thêm mới danh mục -->
-                        <div class="modal fade" id="addCategoryModal" tabindex="-1"
-                            aria-labelledby="addCategoryModalLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="addCategoryModalLabel">Thêm loại sản phẩm</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                            aria-label="Đóng"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        <form id="addCategoryForm">
-                                            <div class="mb-3">
-                                                <label for="categoryName" class="form-label">Tên loại sản phẩm</label>
-                                                <input type="text" class="form-control" id="categoryName"
-                                                    name="cat_Name" placeholder="Nhập tên loại sản phẩm" required>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary"
-                                            data-bs-dismiss="modal">Hủy</button>
-                                        <button type="submit" form="addCategoryForm"
-                                            class="btn btn-primary">Thêm</button>
+                                                </thead>
+                                                <tbody id="viewSpecs"></tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="table-responsive scroll-table">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr class="sticky-header">
-                                    <th>Mã loại</th>
-                                    <th>Tên loại</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <% function generateCategoryCode(id) { const randomPart=('0000' + (id * 1423 %
-                                    10000)).slice(-4); return `${randomPart}${id}`; } %>
-                                    <% categories.forEach((category)=> { %>
-                                        <tr>
+                </div>
+                <div class="table-responsive scroll-table">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="sticky-header">
+                                <th>Mã SP</th>
+                                <th>Tên sản phẩm</th>
+                                <th>Loại</th>
+                                <th>Giá nhập</th>
+                                <th>Giá bán</th>
+                                <th>Xuất xứ</th>
+                                <th>Bảo hành</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% function generateProductCode(id) { const randomPart=('0000' + (id * 1237 %
+                                10000)).slice(-4); return `${randomPart}${id}`; } %>
+
+
+
+                                <% if (products.length> 0) { %>
+                                    <% products.forEach((product)=> { %>
+                                        <tr id="product-<%= product.id %>"
+                                            data-category-id="<%= product.category_id %>">
+
                                             <td>
-                                                #<%= generateCategoryCode(category.id) %>
+                                                #<%= generateProductCode(product.id) %>
+                                            </td>
+
+                                            <td>
+                                                <%= product.name %>
                                             </td>
                                             <td>
-                                                <%= category.name %>
+                                                <%= product.category_name || 'Không rõ' %>
                                             </td>
                                             <td>
-                                                <!-- Nút chỉnh sửa -->
-                                                <a href="#" class="btn btn-sm btn-info editCategoryBtn"
-                                                    data-bs-toggle="modal" data-bs-target="#updateCategoryModal"
-                                                    data-id="<%= category.id %>" data-name="<%= category.name %>">
+                                                <%= Number(product.import_price).toLocaleString('vi-VN') %> VNĐ
+                                            </td>
+                                            <td>
+                                                <%= Number(product.retail_price).toLocaleString('vi-VN') %> VNĐ
+                                            </td>
+                                            <td>
+                                                <%= product.origin %>
+                                            </td>
+                                            <td>
+                                                <%= product.warranty %>
+                                            </td>
+                                            <td>
+                                                <a href="#" class="btn btn-sm btn-primary viewProductBtn"
+                                                    data-bs-toggle="modal" data-bs-target="#viewProductModal"
+                                                    data-id="<%= product.id %>">
+                                                    <i class="fas fa-eye"></i>
+                                                </a>
+
+                                                <!-- Button to trigger modal -->
+                                                <a href="#" class="btn btn-sm btn-info editProductBtn"
+                                                    data-bs-toggle="modal" data-bs-target="#updateProductModal"
+                                                    data-id="<%= product.id %>">
                                                     <i class="fas fa-edit"></i>
                                                 </a>
 
+                                                <!-- Nút xóa -->
+                                                <button class="btn btn-sm btn-danger delete-product-btn"
+                                                    data-id="<%= product.id %>">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </td>
 
-<!-- Modal chỉnh sửa danh mục -->
+                                        </tr>
+
+                                        <% }) %>
+                                            <% } else { %>
+                                                <tr>
+                                                    <td colspan="8" class="text-center">Không có sản phẩm nào.</td>
+                                                </tr>
+                                                <% } %>
+                        </tbody>
+
+
+                    </table>
+                </div>
+            </div>
+
+            <!-- Categories Section -->
+            <div class="tab-pane fade" id="categories" role="tabpanel" aria-labelledby="v-categories-tab">
+                <h3 class="section-title">Quản lý loại sản phẩm</h3>
+                <div class="mb-3">
+                    <!-- Nút mở popup -->
+                    <a href="#" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                        <i class="fas fa-plus"></i> Thêm danh mục mới
+                    </a>
+
+                    <!-- Modal Thêm mới danh mục -->
+                    <div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+                        aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="addCategoryModalLabel">Thêm loại sản phẩm</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Đóng"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <form id="addCategoryForm">
+                                        <div class="mb-3">
+                                            <label for="categoryName" class="form-label">Tên loại sản phẩm</label>
+                                            <input type="text" class="form-control" id="categoryName" name="cat_Name"
+                                                placeholder="Nhập tên loại sản phẩm" required>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                                    <button type="submit" form="addCategoryForm" class="btn btn-primary">Thêm</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-responsive scroll-table">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="sticky-header">
+                                <th>Mã loại</th>
+                                <th>Tên loại</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% function generateCategoryCode(id) { const randomPart=('0000' + (id * 1423 %
+                                10000)).slice(-4); return `${randomPart}${id}`; } %>
+                                <% categories.forEach((category)=> { %>
+                                    <tr>
+                                        <td>
+                                            #<%= generateCategoryCode(category.id) %>
+                                        </td>
+                                        <td>
+                                            <%= category.name %>
+                                        </td>
+                                        <td>
+                                            <!-- Nút chỉnh sửa -->
+                                            <a href="#" class="btn btn-sm btn-info editCategoryBtn"
+                                                data-bs-toggle="modal" data-bs-target="#updateCategoryModal"
+                                                data-id="<%= category.id %>" data-name="<%= category.name %>">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+
+
+                                            <!-- Modal chỉnh sửa danh mục -->
                                             <div class="modal fade" id="updateCategoryModal" tabindex="-1"
                                                 aria-labelledby="updateCategoryModalLabel" aria-hidden="true">
                                                 <div class="modal-dialog modal-dialog-centered">
