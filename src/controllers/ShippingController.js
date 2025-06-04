@@ -80,7 +80,6 @@ const transporter = nodemailer.createTransport({
 const createShippingAndSendEmail = async (req, res) => {
   try {
     const {
-      shipping_date,
       delivery_method,
       shipping_status = 'Thành công',
       id_order,
@@ -96,7 +95,7 @@ const createShippingAndSendEmail = async (req, res) => {
 
     // 1. Tạo shipping
     const newShipping = {
-      shipping_date: shipping_date || new Date(),
+      shipping_date:  new Date(),
       delivery_method,
       shipping_status,
       id_order,
