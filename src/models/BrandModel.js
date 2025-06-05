@@ -71,20 +71,34 @@ Brand.updateById = (id, brand, result) => {
 };
 
 
+
 Brand.remove = (id, result) => {
-  sql.query("DELETE FROM brand WHERE brand_id = ?", [id], (err, res) => {
+  sql.query("SELECT COUNT(*) AS total FROM product WHERE brand_id = ?", [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
       return;
     }
 
-    if (res.affectedRows == 0) {
-      result({ kind: "not_found" }, null);
+    if (res[0].total > 0) {
+      result({ kind: "brand_has_products", message: "Brand đang có sản phẩm, không thể xóa." }, null);
       return;
     }
 
-    result(null, res);
+    sql.query("DELETE FROM brand WHERE brand_id = ?", [id], (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+
+      if (res.affectedRows == 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+
+      result(null, res);
+    });
   });
 };
 

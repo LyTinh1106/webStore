@@ -120,8 +120,15 @@ deleteButtons.forEach((button) => {
         );
         saveScrollAndTabAndReload();
       } else {
-        const text = await response.text();
-        showToast("Xóa thất bại: " + text, "error");
+        let msg = "Xóa thất bại!";
+        try {
+          const error = await response.json();
+          msg = error.message || msg;
+        } catch {
+          const text = await response.text();
+          msg = text || msg;
+        }
+        showToast(msg, "error");
       }
     } catch (error) {
       showToast("Đã xảy ra lỗi khi gửi yêu cầu xóa.", "error");
@@ -264,8 +271,15 @@ document.querySelectorAll(".delete-category-btn").forEach((button) => {
         );
         saveScrollAndTabAndReload();
       } else {
-        const text = await response.text();
-        showToast("Không xóa được danh mục: " + text, "error");
+        let msg = "Không xóa được danh mục!";
+        try {
+          const error = await response.json();
+          msg = error.message || msg;
+        } catch {
+          const text = await response.text();
+          msg = text || msg;
+        }
+        showToast(msg, "error");
       }
     } catch (error) {
       showToast("Đã xảy ra lỗi khi gửi yêu cầu xóa.", "error");
