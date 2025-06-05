@@ -745,7 +745,7 @@ INSERT INTO technical_specification (specs, product_id) VALUES
 ('{
   "Kết nối": "USB có dây",
   "Cảm biến": "Cảm biến quang học",
-  "DPI": "6,400 DPI",
+  "DPI": "6400 DPI",
   "Tần số lấy mẫu": "1000Hz",
   "Tốc độ tracking": "220 IPS",
   "Gia tốc": "30g",
@@ -1853,67 +1853,65 @@ INSERT INTO customer (first_name, last_name, gender, email, phone, address) VALU
   INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (137, 2, 2, 18091782);
   INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (137, 4, 1, 9413704);
   INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (138, 9, 1, 9716020);
-  INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (149, 2, 2, 18091782);
-  INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (150, 1, 2, 22043986);
-  INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (150, 8, 1, 7515392);
+  INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (139, 2, 2, 18091782);
+  INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (140, 1, 2, 22043986);
+  INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (140, 8, 1, 7515392);
 
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (151, 5, 1, 5200000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (151, 7, 2, 10000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (152, 2, 2, 15600000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (152, 8, 1, 10000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (153, 6, 1, 7800000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (153, 1, 1, 3000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (154, 4, 1, 13000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (154, 9, 2, 15500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (155, 3, 2, 9000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (155, 10, 1, 10300000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (156, 7, 1, 6500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (156, 8, 1, 17000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (157, 5, 2, 14800000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (158, 2, 2, 16750000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (158, 10, 1, 10000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (159, 3, 3, 21000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (159, 9, 1, 14400000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (160, 4, 2, 12000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (160, 8, 1, 10250000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (161, 6, 1, 7500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (161, 1, 2, 6500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (162, 5, 2, 9900000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (162, 8, 1, 10500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (163, 3, 2, 8700000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (163, 2, 1, 8000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (164, 4, 2, 13500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (164, 10, 1, 10600000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (165, 7, 1, 7000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (165, 9, 2, 15900000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (166, 6, 2, 15400000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (167, 8, 1, 10700000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (167, 5, 1, 5500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (168, 10, 2, 20600000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (168, 3, 1, 4700000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (169, 1, 1, 3000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (169, 6, 1, 7900000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (169, 7, 1, 7500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (170, 4, 1, 12800000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (170, 2, 1, 8200000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (171, 9, 2, 16500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (171, 8, 1, 10000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (172, 3, 2, 9100000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (172, 10, 1, 10400000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (173, 1, 1, 3500000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (173, 2, 2, 16400000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (174, 6, 1, 7400000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (174, 5, 1, 6000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (175, 4, 2, 12400000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (176, 9, 1, 8300000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (176, 8, 1, 10000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (177, 2, 1, 7800000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (177, 10, 1, 10200000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (178, 3, 3, 13700000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (179, 7, 2, 14900000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (179, 5, 1, 6000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (180, 8, 1, 11000000);
-INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (180, 6, 2, 15800000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (141, 5, 1, 5200000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (141, 7, 2, 10000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (142, 2, 2, 15600000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (142, 8, 1, 10000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (143, 6, 1, 7800000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (143, 1, 1, 3000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (144, 4, 1, 13000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (144, 9, 2, 15500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (145, 3, 2, 9000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (145, 10, 1, 10300000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (146, 7, 1, 6500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (146, 8, 1, 17000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (147, 5, 2, 14800000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (148, 2, 2, 16750000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (148, 10, 1, 10000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (149, 3, 3, 21000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (149, 9, 1, 14400000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (150, 4, 2, 12000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (150, 8, 1, 10250000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (151, 6, 1, 7500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (151, 1, 2, 6500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (152, 5, 2, 9900000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (152, 8, 1, 10500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (153, 3, 2, 8700000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (153, 2, 1, 8000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (154, 4, 2, 13500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (154, 10, 1, 10600000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (155, 7, 1, 7000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (155, 9, 2, 15900000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (156, 6, 2, 15400000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (157, 8, 1, 10700000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (157, 5, 1, 5500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (158, 10, 2, 20600000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (158, 3, 1, 4700000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (159, 1, 1, 3000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (159, 6, 1, 7900000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (159, 7, 1, 7500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (160, 4, 1, 12800000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (160, 2, 1, 8200000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (161, 9, 2, 16500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (161, 8, 1, 10000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (162, 3, 2, 9100000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (162, 10, 1, 10400000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (163, 1, 1, 3500000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (163, 2, 2, 16400000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (164, 6, 1, 7400000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (164, 5, 1, 6000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (165, 4, 2, 12400000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (166, 9, 1, 8300000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (166, 8, 1, 10000000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (167, 2, 1, 7800000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (167, 10, 1, 10200000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (168, 3, 3, 13700000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (169, 7, 2, 14900000);
+INSERT INTO order_detail (order_id, product_id, quantity, subtotalprice) VALUES (169, 5, 1, 6000000);
 
 INSERT INTO shipping (shipping_date, delivery_method, shipping_status, id_customer, id_order, shipping_address) VALUES
 ('2025-04-02', 'GHN', 'Thành công', 1, 1, 'Hà Nội'),
