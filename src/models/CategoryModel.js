@@ -77,20 +77,29 @@ Category.updateById = (id, category, result) => {
 
 // DELETE
 Category.remove = (id, result) => {
-  sql.query("DELETE FROM category WHERE id = ?", id, (err, res) => {
+  sql.query("SELECT COUNT(*) AS total FROM product WHERE category_id = ?", [id], (err, res) => {
     if (err) {
       console.log("error: ", err);
       result(null, err);
       return;
     }
-
-    if (res.affectedRows == 0) {
-      result({ kind: "not_found" }, null);
+    if (res[0].total > 0) {
+      result({ kind: "category_has_products", message: "Danh mục này đang có sản phẩm, không thể xóa." }, null);
       return;
     }
-
-    console.log("deleted category with id: ", id);
-    result(null, res);
+    sql.query("DELETE FROM category WHERE id = ?", [id], (err, res) => {
+      if (err) {
+        console.log("error: ", err);
+        result(null, err);
+        return;
+      }
+      if (res.affectedRows == 0) {
+        result({ kind: "not_found" }, null);
+        return;
+      }
+      console.log("deleted category with id: ", id);
+      result(null, res);
+    });
   });
 };
 

@@ -77,13 +77,15 @@ exports.deleteBrand = (req, res) => {
   Brand.remove(id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
-        res.status(404).render("error", { message: `Không tìm thấy brand với ID ${id}.` });
-      } else {
-        res.status(500).render("error", { message: "Lỗi khi xóa brand." });
-      }
-    } else {
-      return res.status(201).json({ success: true, message: "Xóa brand thành công!", brand: data });
+        return res.status(404).json({ success: false, message: `Không tìm thấy brand với ID ${id}.` });
+      } else if (err.kind === "brand_has_products") {
 
+        return res.status(400).json({ success: false, message: "Brand này đang có sản phẩm, không thể xóa!" });
+      } else {
+        return res.status(500).json({ success: false, message: "Lỗi khi xóa brand.", error: err });
+      }
     }
+    // Thành công
+    res.status(200).json({ success: true, message: "Xóa brand thành công!", brand: data });
   });
 };

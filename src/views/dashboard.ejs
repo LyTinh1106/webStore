@@ -265,7 +265,8 @@
                                                                     <% } %>
                                                 </td>
                                                 <td>
-                                                    <button type="button" class="btn btn-sm btn-primary"
+                                                    <button type="button" class="btn btn-sm btn-primary" tooltip="Xem chi tiết"
+                                                        title="Xem chi tiết đơn hàng"
                                                         data-bs-toggle="modal" data-bs-target="#orderDetailModal"
                                                         data-id="<%= order.id %>"
                                                         data-email="<%= order.account_email || order.email %>"
@@ -280,14 +281,6 @@
                                                         data-discount="<%= order.discount_value || 0 %>">
                                                         <i class="fas fa-eye"></i>
                                                     </button>
-
-                                                    <form action="/order/<%= order.id %>" method="POST"
-                                                        class="d-inline order-delete-form" data-id="<%= order.id %>">
-                                                        <button type="submit" class="btn btn-sm btn-danger">
-                                                            <i class="fas fa-trash"></i>
-                                                        </button>
-                                                    </form>
-
                                                 </td>
                                             </tr>
                                             <% }) %>

@@ -73,12 +73,13 @@ exports.deleteCategory = (req, res) => {
   Category.remove(id, (err, data) => {
     if (err) {
       if (err.kind === "not_found") {
-        res.status(404).render("error", { message: `Không tìm thấy category với ID ${id}` });
+        return res.status(404).json({ success: false, message: `Không tìm thấy category với ID ${id}` });
+      } else if (err.kind === "category_has_products") {
+        return res.status(400).json({ success: false, message: "Danh mục này đang có sản phẩm, không thể xóa!" });
       } else {
-        res.status(500).render("error", { message: "Lỗi khi xóa category." });
+        return res.status(500).json({ success: false, message: "Lỗi khi xóa category." });
       }
-    } else {
-      return res.status(201).json({ success: true, message: "Xóa category thành công!", brand: data });
     }
+    res.status(200).json({ success: true, message: "Xóa category thành công!", category: data });
   });
 };
